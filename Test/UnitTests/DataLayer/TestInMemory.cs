@@ -18,9 +18,8 @@ namespace Test.UnitTests.DataLayer
         public void TestInMemoryAcceptsComputedCol()
         {
             //SETUP
-            var options = EfInMemory.CreateNewContextOptions<DbContextComuptedCol>();
-
-            using (var context = new DbContextComuptedCol(options))
+            var options = EfInMemory.CreateNewContextOptions<DbContextComputedCol>();
+            using (var context = new DbContextComputedCol(options))
             {
                 //ATTEMPT
                 context.Database.EnsureCreated();
@@ -33,9 +32,8 @@ namespace Test.UnitTests.DataLayer
         public void TestInMemoryAcceptsComputedColButDoesntWork()
         {
             //SETUP
-            var options = EfInMemory.CreateNewContextOptions<DbContextComuptedCol>();
-
-            using (var context = new DbContextComuptedCol(options))
+            var options = EfInMemory.CreateNewContextOptions<DbContextComputedCol>();
+            using (var context = new DbContextComputedCol(options))
             {
                 context.Database.EnsureCreated();
 
@@ -53,7 +51,6 @@ namespace Test.UnitTests.DataLayer
         {
             //SETUP
             var options = EfInMemory.CreateNewContextOptions<DbContextWithSchema>();
-
             using (var context = new DbContextWithSchema(options))
             {           
                 //ATTEMPT

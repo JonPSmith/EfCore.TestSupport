@@ -16,9 +16,8 @@ namespace Test.UnitTests.DataLayer
         public void TestSqlLiteAcceptsComputedCol()
         {
             //SETUP
-            var options = SqliteInMemory.CreateOptions<DbContextComuptedCol>();
-
-            using (var context = new DbContextComuptedCol(options))
+            var options = SqliteInMemory.CreateOptions<DbContextComputedCol>();
+            using (var context = new DbContextComputedCol(options))
             {
                 //ATTEMPT
                 context.Database.EnsureCreated();
@@ -31,9 +30,8 @@ namespace Test.UnitTests.DataLayer
         public void TestSqlLiteAcceptsComputedColButDoesntWork()
         {
             //SETUP
-            var options = SqliteInMemory.CreateOptions<DbContextComuptedCol>();
-
-            using (var context = new DbContextComuptedCol(options))
+            var options = SqliteInMemory.CreateOptions<DbContextComputedCol>();
+            using (var context = new DbContextComputedCol(options))
             {
                 context.Database.EnsureCreated();
 
@@ -51,7 +49,6 @@ namespace Test.UnitTests.DataLayer
         {
             //SETUP
             var options = SqliteInMemory.CreateOptions<DbContextWithSchema>();
-
             using (var context = new DbContextWithSchema(options))
             {           
                 //ATTEMPT

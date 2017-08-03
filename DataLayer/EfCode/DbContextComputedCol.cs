@@ -6,19 +6,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataLayer.EfCode
 {
-    public class DbContextComuptedCol : DbContext
+    public class DbContextComputedCol : DbContext
     {
         public DbSet<MyEntity> MyEntities { get; set; }
 
-        public DbContextComuptedCol(
-            DbContextOptions<DbContextComuptedCol> options)      
+        public DbContextComputedCol(
+            DbContextOptions<DbContextComputedCol> options)      
             : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MyEntity>()
                 .Property(p => p.MyDateTime)
-                .HasComputedColumnSql("GetDate()");
+                .HasComputedColumnSql("getutcdate()");
         }
     }
 }
