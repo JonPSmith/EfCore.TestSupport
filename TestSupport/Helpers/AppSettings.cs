@@ -12,13 +12,16 @@ namespace TestSupport.Helpers
     {
         public const string ConnectionStringName = "DefaultConnection";
 
+        /// <summary>
+        /// This will look for a appsettings.json file in the top level of the calling assembly and read content
+        /// </summary>
+        /// <returns></returns>
         public static IConfigurationRoot GetConfiguration()
         {
             var callingProjectPath = TestFileHelpers.GetTestDataFileDirectory("", Assembly.GetCallingAssembly());
             var builder = new ConfigurationBuilder()
                 .SetBasePath(callingProjectPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)               
-                .AddEnvironmentVariables();
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
             return builder.Build();
         }
 
