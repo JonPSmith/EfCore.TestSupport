@@ -3,13 +3,13 @@
 
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using test.Helpers;
+using TestSupport.Helpers;
 using Xunit;
 using Xunit.Extensions.AssertExtensions;
 
 namespace test.UnitTests.Tests
 {
-    public class AppSettings
+    public class TestAppSettings
     {
         [Fact]
         public void GetConfigurationOk()
@@ -17,10 +17,10 @@ namespace test.UnitTests.Tests
             //SETUP
 
             //ATTEMPT
-            var config = Helpers.AppSettings.GetConfiguration();
+            var config = TestSupport.Helpers.AppSettings.GetConfiguration();
 
             //VERIFY
-            config.GetConnectionString(Helpers.AppSettings.ConnectionStringName)
+            config.GetConnectionString(TestSupport.Helpers.AppSettings.ConnectionStringName)
                 .ShouldEqual("Server=(localdb)\\mssqllocaldb;Database=EfCoreInActionDb.Test;Trusted_Connection=True;MultipleActiveResultSets=true");
         }
 
@@ -28,15 +28,15 @@ namespace test.UnitTests.Tests
         public void GetTestConnectionStringOk()
         {
             //SETUP
-            var config = Helpers.AppSettings.GetConfiguration();
-            var orgDbName = new SqlConnectionStringBuilder(config.GetConnectionString(Helpers.AppSettings.ConnectionStringName)).InitialCatalog;
+            var config = TestSupport.Helpers.AppSettings.GetConfiguration();
+            var orgDbName = new SqlConnectionStringBuilder(config.GetConnectionString(TestSupport.Helpers.AppSettings.ConnectionStringName)).InitialCatalog;
 
             //ATTEMPT
             var con = this.GetUniqueDatabaseConnectionString();
 
             //VERIFY
             var newDatabaseName = new SqlConnectionStringBuilder(con).InitialCatalog;
-            newDatabaseName.ShouldEqual ($"{orgDbName}.{typeof(AppSettings).Name}");
+            newDatabaseName.ShouldEqual ($"{orgDbName}.{typeof(TestAppSettings).Name}");
         }
 
 
@@ -44,15 +44,15 @@ namespace test.UnitTests.Tests
         public void GetTestConnectionStringWithExtraMethodNameOk()
         {
             //SETUP
-            var config = Helpers.AppSettings.GetConfiguration();
-            var orgDbName = new SqlConnectionStringBuilder(config.GetConnectionString(Helpers.AppSettings.ConnectionStringName)).InitialCatalog;
+            var config = TestSupport.Helpers.AppSettings.GetConfiguration();
+            var orgDbName = new SqlConnectionStringBuilder(config.GetConnectionString(TestSupport.Helpers.AppSettings.ConnectionStringName)).InitialCatalog;
 
             //ATTEMPT
             var con = this.GetUniqueDatabaseConnectionString("ExtraMethodName");
 
             //VERIFY
             var newDatabaseName = new SqlConnectionStringBuilder(con).InitialCatalog;
-            newDatabaseName.ShouldEqual($"{orgDbName}.{typeof(AppSettings).Name}.ExtraMethodName");
+            newDatabaseName.ShouldEqual($"{orgDbName}.{typeof(TestAppSettings).Name}.ExtraMethodName");
         }
     }
 }
