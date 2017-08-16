@@ -2,7 +2,6 @@
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
 using System.Data.SqlClient;
-using System.IO;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
 
