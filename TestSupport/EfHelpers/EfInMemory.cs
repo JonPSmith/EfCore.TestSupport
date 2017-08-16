@@ -9,11 +9,22 @@ namespace TestSupport.EfHelpers
 {
     public static class EfInMemory
     {
+        /// <summary>
+        /// This creates the options for an in-memory database with a unique name
+        /// </summary>
+        /// <typeparam name="TContext"></typeparam>
+        /// <returns></returns>
         public static DbContextOptions<TContext> CreateNewContextOptions<TContext>() where TContext : DbContext
         {
             return Guid.NewGuid().ToString().CreateNewContextOptions<TContext>();
         }
 
+        /// <summary>
+        /// This creates the options for an in-memory database, with the name given.
+        /// </summary>
+        /// <typeparam name="TContext"></typeparam>
+        /// <param name="dbName"></param>
+        /// <returns></returns>
         public static DbContextOptions<TContext> CreateNewContextOptions<TContext>(this string dbName)
             where TContext : DbContext
         {
