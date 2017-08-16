@@ -3,9 +3,10 @@
 
 using System.Data.SqlClient;
 using System.IO;
+using System.Reflection;
 using Microsoft.Extensions.Configuration;
 
-namespace test.Helpers
+namespace TestSupport.Helpers
 {
     public static class AppSettings
     {
@@ -13,9 +14,9 @@ namespace test.Helpers
 
         public static IConfigurationRoot GetConfiguration()
         {
-            var testDir = Path.Combine(TestFileHelpers.GetSolutionDirectory(), "test");
+            var callingProjectPath = TestFileHelpers.GetTestDataFileDirectory("", Assembly.GetCallingAssembly());
             var builder = new ConfigurationBuilder()
-                .SetBasePath(testDir)
+                .SetBasePath(callingProjectPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)               
                 .AddEnvironmentVariables();
             return builder.Build();
