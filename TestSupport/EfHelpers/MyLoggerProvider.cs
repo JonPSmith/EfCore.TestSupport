@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 
-namespace Test.EfHelpers
+namespace TestSupport.EfHelpers
 {
     public class MyLoggerProvider : ILoggerProvider //#A
     {

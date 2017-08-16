@@ -3,13 +3,12 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using DataLayer.EfCode;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Logging;
 
-namespace Test.EfHelpers
+namespace TestSupport.EfHelpers
 {
     public class SqliteInMemory
     {
@@ -18,17 +17,6 @@ namespace Test.EfHelpers
         public ImmutableList<string> Logs => _logs.ToImmutableList();
 
         public void ClearLogs() { _logs.Clear();}
-
-        public DbContextWithSchema GetContextWithSetup()
-        {
-            var context = new DbContextWithSchema(CreateOptions<DbContextWithSchema>());
-            //context.Database.OpenConnection();
-            context.Database.EnsureCreated();
-
-            SetupLogging(context, _logs);
-
-            return context;
-        }
 
         public static void SetupLogging(DbContext context, List<string> logs)
         {

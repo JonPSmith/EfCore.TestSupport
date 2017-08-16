@@ -5,7 +5,7 @@ using System;
 using DataLayer.EfClasses;
 using DataLayer.EfCode;
 using Microsoft.EntityFrameworkCore;
-using Test.EfHelpers;
+using TestSupport.EfHelpers;
 using Xunit;
 
 namespace Test.UnitTests.DataLayer
