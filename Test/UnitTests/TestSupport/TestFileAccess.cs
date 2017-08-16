@@ -3,7 +3,7 @@ using TestSupport.Helpers;
 using Xunit.Extensions.AssertExtensions;
 using Xunit;
 
-namespace Test.UnitTests.Tests
+namespace Test.UnitTests.TestSupport
 {
     public class TestFileAccess
     {

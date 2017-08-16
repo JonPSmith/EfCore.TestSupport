@@ -7,7 +7,7 @@ using TestSupport.Helpers;
 using Xunit;
 using Xunit.Extensions.AssertExtensions;
 
-namespace test.UnitTests.Tests
+namespace Test.UnitTests.TestSupport
 {
     public class TestAppSettings
     {
@@ -17,10 +17,10 @@ namespace test.UnitTests.Tests
             //SETUP
 
             //ATTEMPT
-            var config = TestSupport.Helpers.AppSettings.GetConfiguration();
+            var config = AppSettings.GetConfiguration();
 
             //VERIFY
-            config.GetConnectionString(TestSupport.Helpers.AppSettings.ConnectionStringName)
+            config.GetConnectionString(AppSettings.ConnectionStringName)
                 .ShouldEqual("Server=(localdb)\\mssqllocaldb;Database=EfCoreInActionDb.Test;Trusted_Connection=True;MultipleActiveResultSets=true");
         }
 
@@ -28,8 +28,8 @@ namespace test.UnitTests.Tests
         public void GetTestConnectionStringOk()
         {
             //SETUP
-            var config = TestSupport.Helpers.AppSettings.GetConfiguration();
-            var orgDbName = new SqlConnectionStringBuilder(config.GetConnectionString(TestSupport.Helpers.AppSettings.ConnectionStringName)).InitialCatalog;
+            var config = AppSettings.GetConfiguration();
+            var orgDbName = new SqlConnectionStringBuilder(config.GetConnectionString(AppSettings.ConnectionStringName)).InitialCatalog;
 
             //ATTEMPT
             var con = this.GetUniqueDatabaseConnectionString();
@@ -44,8 +44,8 @@ namespace test.UnitTests.Tests
         public void GetTestConnectionStringWithExtraMethodNameOk()
         {
             //SETUP
-            var config = TestSupport.Helpers.AppSettings.GetConfiguration();
-            var orgDbName = new SqlConnectionStringBuilder(config.GetConnectionString(TestSupport.Helpers.AppSettings.ConnectionStringName)).InitialCatalog;
+            var config = AppSettings.GetConfiguration();
+            var orgDbName = new SqlConnectionStringBuilder(config.GetConnectionString(AppSettings.ConnectionStringName)).InitialCatalog;
 
             //ATTEMPT
             var con = this.GetUniqueDatabaseConnectionString("ExtraMethodName");
