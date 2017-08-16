@@ -4,36 +4,37 @@
 using System;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.PlatformAbstractions;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
-namespace test.Helpers
+namespace TestSupport.Helpers
 {
-    internal static class TestFileHelpers
+    public static class TestFileHelpers
     {
         private const string TestFileDirectoryName = @"TestData";
 
         //-------------------------------------------------------------------
 
-        internal static string GetTestFileFilePath(string searchPattern)
+        public static string GetTestDataFilePath(string searchPattern)
         {
-            string[] fileList = GetTestFileFilesOfGivenName(searchPattern);
+            string[] fileList = GetPathFilesOfGivenName(searchPattern);
 
             if (fileList.Length != 1)
-                throw new Exception(string.Format("GetTestFileFilePath: The searchString {0} found {1} file. Either not there or ambiguous",
+                throw new Exception(string.Format("GetTestDataFilePath: The searchString {0} found {1} file. Either not there or ambiguous",
                     searchPattern, fileList.Length));
 
             return fileList[0];
         }
 
-        internal static string GetTestFileContent(string searchPattern)
+        public static string GetTestDataFileContent(string searchPattern)
         {
-            var filePath = GetTestFileFilePath(searchPattern);
+            var filePath = GetTestDataFilePath(searchPattern);
             return File.ReadAllText(filePath);
         }
 
         internal static bool TestFileDeleteIfPresent(string searchPattern)
         {
-            var fileList = GetTestFileFilesOfGivenName(searchPattern);
+            var fileList = GetPathFilesOfGivenName(searchPattern);
             if (fileList.Length == 0) return false;
             if (fileList.Length != 1)
                 throw new Exception(string.Format("TestFileDeleteIfPresent: The searchString {0} found {1} files!",
@@ -43,7 +44,7 @@ namespace test.Helpers
             return true;
         }
 
-        internal static void DeleteDirectoryAndAnyContent(string topDir)
+        public static void DeleteDirectoryAndAnyContent(string topDir)
         {
             if (!Directory.Exists(topDir)) return;
             Directory.Delete(topDir, true);
@@ -54,7 +55,7 @@ namespace test.Helpers
         /// It does NOT delete the topDir directory
         /// </summary>
         /// <param name="topDir"></param>
-        internal static void DeleteAllFilesAndSubDirsInDir(string topDir)
+        public static void DeleteAllFilesAndSubDirsInDir(string topDir)
         {
             if (!Directory.Exists(topDir)) return;
 
@@ -66,7 +67,7 @@ namespace test.Helpers
                 Directory.Delete(dir, true);
         }
 
-        internal static string[] GetTestFileFilesOfGivenName(string searchPattern = "")
+        public static string[] GetPathFilesOfGivenName(string searchPattern = "")
         {
             var directory = GetTestDataFileDirectory();
             if (searchPattern.Contains(@"\"))
@@ -81,27 +82,32 @@ namespace test.Helpers
             return fileList;
         }
 
-
         //------------------------------------------------------------------------------
 
-        public static string GetTestDataFileDirectory(string alternateTestDir = TestFileDirectoryName)
+        /// <summary>
+        /// This will return the adbsolue file path to the TestData directory in the calling method's project 
+        /// </summary>
+        /// <param name="alternateTestDir">optional. If given then it can be relative or absolute and replaes the default TestData directly</param>
+        /// <returns></returns>
+        public static string GetTestDataFileDirectory(string alternateTestDir = TestFileDirectoryName, Assembly callingAssembly = null)
         {
-            return Path.Combine(GetSolutionDirectory(), "test", alternateTestDir);
+            //see https://stackoverflow.com/questions/670566/path-combine-absolute-with-relative-path-strings
+            return Path.Combine(
+                Path.GetFullPath(
+                    GetCallingAssemblyTopLevelDirectory(callingAssembly ?? Assembly.GetCallingAssembly()) 
+                    + "\\" + alternateTestDir));
         }
 
-
-        public static string GetSolutionDirectory()
+        public static string GetCallingAssemblyTopLevelDirectory(Assembly callingAssembly = null)
         {
-            var host = new ApplicationEnvironment();
-            var pathToManipulate = host.ApplicationBasePath;
+            const string binDir = @"\bin\";
+            var pathToManipulate = (callingAssembly ?? Assembly.GetCallingAssembly()).Location;
 
-            var partToEndOn = typeof(TestFileHelpers).FullName.Split('.').First() + @"\bin\";
-            var indexOfPart = pathToManipulate.IndexOf(partToEndOn, StringComparison.OrdinalIgnoreCase);
+            var indexOfPart = pathToManipulate.IndexOf(binDir, StringComparison.OrdinalIgnoreCase)+1;
             if (indexOfPart < 0)
-                throw new Exception($"Did not find '{partToEndOn}' in the ApplicationBasePath");
+                throw new Exception($"Did not find '{binDir}' in the ApplicationBasePath");
 
-            return pathToManipulate.Substring(0, indexOfPart-1);
-
+            return pathToManipulate.Substring(0, indexOfPart - 1);
         }
     }
 }
