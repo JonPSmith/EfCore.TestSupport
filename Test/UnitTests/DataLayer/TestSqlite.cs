@@ -27,6 +27,20 @@ namespace Test.UnitTests.DataLayer
         }
 
         [Fact]
+        public void TestSqlLiteDoesSupportSchema()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<DbContextWithSchema>();
+            using (var context = new DbContextWithSchema(options))
+            {
+                //ATTEMPT
+                context.Database.EnsureCreated();
+
+                //VERIFY
+            }
+        }
+
+        [Fact]
         public void TestSqlLiteAcceptsComputedColButDoesntWork()
         {
             //SETUP
@@ -44,19 +58,5 @@ namespace Test.UnitTests.DataLayer
             }
         }
 
-        [Fact]
-        public void TestSqlLiteDoesNotSupportSchema()
-        {
-            //SETUP
-            var options = SqliteInMemory.CreateOptions<DbContextWithSchema>();
-            using (var context = new DbContextWithSchema(options))
-            {           
-                //ATTEMPT
-                var ex = Assert.Throws<NotSupportedException>(() =>  context.Database.EnsureCreated());
-
-                //VERIFY
-                Assert.StartsWith("SQLite does not support schemas. For more information", ex.Message);
-            }
-        }
     }
 }
