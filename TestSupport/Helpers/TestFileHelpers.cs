@@ -85,10 +85,12 @@ namespace TestSupport.Helpers
         //------------------------------------------------------------------------------
 
         /// <summary>
-        /// This will return the adbsolue file path to the TestData directory in the calling method's project 
+        /// This will return the absolute file path to the TestData directory in the calling method's project 
         /// </summary>
-        /// <param name="alternateTestDir">optional. If given then it can be relative or absolute and replaes the default TestData directly</param>
+        /// <param name="alternateTestDir">optional. If given then it can be relative or absolute path, which 
+        /// replaces the default TestData directly</param>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static string GetTestDataFileDirectory(string alternateTestDir = TestFileDirectoryName, Assembly callingAssembly = null)
         {
             //see https://stackoverflow.com/questions/670566/path-combine-absolute-with-relative-path-strings
@@ -98,6 +100,7 @@ namespace TestSupport.Helpers
                     + "\\" + alternateTestDir));
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)] //see https://docs.microsoft.com/en-gb/dotnet/api/system.reflection.assembly.getcallingassembly?view=netstandard-2.0#System_Reflection_Assembly_GetCallingAssembly
         public static string GetCallingAssemblyTopLevelDirectory(Assembly callingAssembly = null)
         {
             const string binDir = @"\bin\";

@@ -17,7 +17,7 @@ namespace TestSupport.Helpers
         /// <returns></returns>
         public static IConfigurationRoot GetConfiguration()
         {
-            var callingProjectPath = TestFileHelpers.GetTestDataFileDirectory("", Assembly.GetCallingAssembly());
+            var callingProjectPath = TestFileHelpers.GetCallingAssemblyTopLevelDirectory();
             var builder = new ConfigurationBuilder()
                 .SetBasePath(callingProjectPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
