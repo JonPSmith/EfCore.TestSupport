@@ -10,9 +10,9 @@ namespace TestSupport.EfHelpers
 {
     public static class LogSetupHelper
     {
-        public static List<string> SetupLogging(this DbContext context, LogLevel logLevel = LogLevel.Information)
+        public static List<LogOutput> SetupLogging(this DbContext context, LogLevel logLevel = LogLevel.Information)
         {
-            var logs = new List<string>();
+            var logs = new List<LogOutput>();
             var loggerFactory = context.GetService<ILoggerFactory>();
             loggerFactory.AddProvider(new MyLoggerProvider(logs, logLevel));
             return logs;

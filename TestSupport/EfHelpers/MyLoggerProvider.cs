@@ -9,7 +9,7 @@ namespace TestSupport.EfHelpers
 {
     public class MyLoggerProvider : ILoggerProvider
     {
-        private readonly List<string> _logs;
+        private readonly List<LogOutput> _logs;
         private readonly LogLevel _logLevel;
 
         /// <summary>
@@ -18,7 +18,7 @@ namespace TestSupport.EfHelpers
         /// </summary>
         /// <param name="logs">required: a an initialised List<string> to hold any logs that are created</string></param>
         /// <param name="logLevel">optional: the level from with you want to capture logs. Defaults to LogLevel.Information</param>
-        public MyLoggerProvider(List<string> logs, LogLevel logLevel = LogLevel.Information)
+        public MyLoggerProvider(List<LogOutput> logs, LogLevel logLevel = LogLevel.Information)
         {
             _logs = logs;
             _logLevel = logLevel;
@@ -35,10 +35,10 @@ namespace TestSupport.EfHelpers
 
         private class MyLogger : ILogger
         {
-            private readonly List<string> _logs;
+            private readonly List<LogOutput> _logs;
             private readonly LogLevel _logLevel;
 
-            public MyLogger(List<string> logs, LogLevel logLevel)
+            public MyLogger(List<LogOutput> logs, LogLevel logLevel)
             {
                 _logs = logs;
                 _logLevel = logLevel;
@@ -51,7 +51,7 @@ namespace TestSupport.EfHelpers
 
             public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
             {
-                _logs.Add(formatter(state, exception));
+                _logs.Add( new LogOutput(logLevel, eventId, formatter(state, exception)));
                 Console.WriteLine(formatter(state, exception));
             }
 
