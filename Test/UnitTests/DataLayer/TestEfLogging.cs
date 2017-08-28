@@ -54,7 +54,7 @@ namespace Test.UnitTests.DataLayer
         public void TestEfCoreLoggingWithMutipleDbContexts()
         {
             //SETUP
-            List<string> logs1;
+            List<LogOutput> logs1;
             var options1 = SqliteInMemory.CreateOptions<DbContextWithSchema>();
             using (var context = new DbContextWithSchema(options1))
             {
