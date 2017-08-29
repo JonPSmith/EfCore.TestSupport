@@ -23,7 +23,8 @@ namespace TestSupport.EfHelpers
 
             // create in-memory context
             var builder = new DbContextOptionsBuilder<T>();
-            builder.UseSqlite(connection);
+            builder.UseSqlite(connection)
+                .EnableSensitiveDataLogging();  //You get more information with this turned on.
 
             return builder.Options;
         }

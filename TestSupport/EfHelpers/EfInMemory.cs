@@ -38,7 +38,8 @@ namespace TestSupport.EfHelpers
             // InMemory database and the new service provider.
             var builder = new DbContextOptionsBuilder<TContext>();
             builder.UseInMemoryDatabase(dbName)
-                .UseInternalServiceProvider(serviceProvider);
+                .UseInternalServiceProvider(serviceProvider)
+                .EnableSensitiveDataLogging();  //You get more information with this turned on.
 
             return builder.Options;
         }
