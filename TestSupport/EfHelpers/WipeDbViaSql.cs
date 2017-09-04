@@ -120,7 +120,8 @@ namespace TestSupport.EfHelpers
             var cannotWipes = allEntities //#B
                 .SelectMany(x => x.GetForeignKeys()         //#B
                     .Where(y => y.PrincipalEntityType == x      //#B
-                                && y.DeleteBehavior == DeleteBehavior.Restrict))
+                                && (y.DeleteBehavior == DeleteBehavior.Restrict
+                                 || y.DeleteBehavior == DeleteBehavior.ClientSetNull)))
                 .ToList(); //#B
             if (cannotWipes.Any())
                 throw new InvalidOperationException(
