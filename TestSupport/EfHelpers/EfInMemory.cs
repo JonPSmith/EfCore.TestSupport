@@ -3,6 +3,7 @@
 
 using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace TestSupport.EfHelpers
@@ -13,10 +14,12 @@ namespace TestSupport.EfHelpers
         /// This creates the options for an in-memory database with a unique name
         /// </summary>
         /// <typeparam name="TContext"></typeparam>
+        /// <param name="throwOnClientServerWarning">Optional: if set to true then will throw exception if QueryClientEvaluationWarning is logged</param>
         /// <returns></returns>
-        public static DbContextOptions<TContext> CreateNewContextOptions<TContext>() where TContext : DbContext
+        public static DbContextOptions<TContext> CreateOptions<TContext>
+            (bool throwOnClientServerWarning = false) where TContext : DbContext
         {
-            return Guid.NewGuid().ToString().CreateNewContextOptions<TContext>();
+            return Guid.NewGuid().ToString().CreateOptions<TContext>();
         }
 
         /// <summary>
@@ -24,8 +27,10 @@ namespace TestSupport.EfHelpers
         /// </summary>
         /// <typeparam name="TContext"></typeparam>
         /// <param name="dbName"></param>
+        /// <param name="throwOnClientServerWarning">Optional: if set to true then will throw exception if QueryClientEvaluationWarning is logged</param>
         /// <returns></returns>
-        public static DbContextOptions<TContext> CreateNewContextOptions<TContext>(this string dbName)
+        public static DbContextOptions<TContext> CreateOptions<TContext>
+            (this string dbName, bool throwOnClientServerWarning = false)
             where TContext : DbContext
         {
             // Create a fresh service provider, and therefore a fresh 
@@ -40,6 +45,12 @@ namespace TestSupport.EfHelpers
             builder.UseInMemoryDatabase(dbName)
                 .UseInternalServiceProvider(serviceProvider)
                 .EnableSensitiveDataLogging();  //You get more information with this turned on.
+            if (throwOnClientServerWarning)
+            {
+                //This will throw an exception of a QueryClientEvaluationWarning is logged
+                builder.ConfigureWarnings(warnings =>
+                    warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
+            }
 
             return builder.Options;
         }

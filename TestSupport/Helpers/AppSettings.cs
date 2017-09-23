@@ -36,7 +36,7 @@ namespace TestSupport.Helpers
             var builder = new SqlConnectionStringBuilder(orgConnect);
 
             var extraDatabaseName = $".{typeof(T).Name}";
-            if (optionalMethodName != null) extraDatabaseName += $".{optionalMethodName}";
+            if (!string.IsNullOrEmpty(optionalMethodName)) extraDatabaseName += $".{optionalMethodName}";
 
             builder.InitialCatalog += extraDatabaseName;
 

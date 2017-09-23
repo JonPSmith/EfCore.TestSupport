@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Logging;
 
@@ -12,7 +13,13 @@ namespace TestSupport.EfHelpers
 {
     public static class SqliteInMemory
     {
-        public static DbContextOptions<T> CreateOptions<T>() where T : DbContext
+        /// <summary>
+        /// Created a Sqlite Options for in-memory database. 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="throwOnClientServerWarning">Optional: if set to true then will throw exception if QueryClientEvaluationWarning is logged</param>
+        /// <returns></returns>
+        public static DbContextOptions<T> CreateOptions<T>(bool throwOnClientServerWarning = false) where T : DbContext
         {
             //Thanks to https://www.scottbrady91.com/Entity-Framework/Entity-Framework-Core-In-Memory-Testing
             var connectionStringBuilder =
@@ -25,6 +32,12 @@ namespace TestSupport.EfHelpers
             var builder = new DbContextOptionsBuilder<T>();
             builder.UseSqlite(connection)
                 .EnableSensitiveDataLogging();  //You get more information with this turned on.
+            if (throwOnClientServerWarning)
+            {
+                //This will throw an exception of a QueryClientEvaluationWarning is logged
+                builder.ConfigureWarnings(warnings =>
+                    warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
+            }
 
             return builder.Options;
         }

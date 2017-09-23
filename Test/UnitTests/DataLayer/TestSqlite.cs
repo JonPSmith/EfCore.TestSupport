@@ -2,16 +2,37 @@
 // // Licensed under MIT licence. See License.txt in the project root for license information.
 
 using System;
+using System.Linq;
 using DataLayer.EfClasses;
 using DataLayer.EfCode;
 using Microsoft.EntityFrameworkCore;
+using Test.Helpers;
 using TestSupport.EfHelpers;
 using Xunit;
+using Xunit.Extensions.AssertExtensions;
 
 namespace Test.UnitTests.DataLayer
 {
     public class TestSqlite
     {
+
+        [Fact]
+        public void TestSqliteOk()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<EfCoreContext>();
+            using (var context = new EfCoreContext(options))
+            {
+                context.Database.EnsureCreated();
+
+                //ATTEMPT
+                context.SeedDatabaseFourBooks();
+
+                //VERIFY
+                context.Books.Count().ShouldEqual(4);
+            }
+        }
+
         [Fact]
         public void TestSqlLiteAcceptsComputedCol()
         {
