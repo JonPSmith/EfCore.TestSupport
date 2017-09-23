@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataLayer.SqlCode
+namespace TestSupport.EfHelpers
 {
     public static class ApplyScriptExtension
     {

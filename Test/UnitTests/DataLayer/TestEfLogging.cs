@@ -1,8 +1,12 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using DataLayer.EfCode;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Logging;
 using TestSupport.EfHelpers;
 using Xunit;
 using Xunit.Abstractions;
@@ -78,6 +82,55 @@ namespace Test.UnitTests.DataLayer
                 //VERIFY
                 logs.Count.ShouldBeInRange(1, 100);
                 logs1.Count.ShouldNotEqual(logs1Count); //The second DbContext methods are also logged to the first logger
+            }
+        }
+
+        private class ClientSeverTestDto
+        {
+            public string ClientSideProp { get; set; }
+        }
+
+        [Fact]
+        public void TestLogQueryClientEvaluationWarning()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<EfCoreContext>();
+            using (var context = new EfCoreContext(options))
+            {
+                context.Database.EnsureCreated();
+                var logs = context.SetupLogging();
+
+                //ATTEMPT
+                var books = context.Books.Select(x => new ClientSeverTestDto
+                {
+                    ClientSideProp = x.Price.ToString("C")
+                }).OrderBy(x => x.ClientSideProp)
+                .ToList();
+
+                //VERIFY
+                logs.Any(x => x.EventId.Name == RelationalEventId.QueryClientEvaluationWarning.Name).ShouldBeTrue();
+            }
+        }
+
+        [Fact]
+        public void TestLogQueryClientEvaluationThrowException()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<EfCoreContext>(true);
+            using (var context = new EfCoreContext(options))
+            {
+                context.Database.EnsureCreated();
+                var logs = context.SetupLogging();
+
+                //ATTEMPT
+                var ex = Assert.Throws<InvalidOperationException>( () => context.Books.Select(x => new ClientSeverTestDto
+                    {
+                        ClientSideProp = x.Price.ToString("C")
+                    }).OrderBy(x => x.ClientSideProp)
+                    .ToList());
+
+                //VERIFY
+                ex.Message.ShouldStartWith("Warning as error exception for warning 'Microsoft.EntityFrameworkCore.Query.QueryClientEvaluationWarning':");
             }
         }
     }

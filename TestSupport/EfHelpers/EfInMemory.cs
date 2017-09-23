@@ -19,14 +19,14 @@ namespace TestSupport.EfHelpers
         public static DbContextOptions<TContext> CreateOptions<TContext>
             (bool throwOnClientServerWarning = false) where TContext : DbContext
         {
-            return Guid.NewGuid().ToString().CreateOptions<TContext>();
+            return Guid.NewGuid().ToString().CreateOptions<TContext>(throwOnClientServerWarning);
         }
 
         /// <summary>
         /// This creates the options for an in-memory database, with the name given.
         /// </summary>
         /// <typeparam name="TContext"></typeparam>
-        /// <param name="dbName"></param>
+        /// <param name="dbName">name of in-memory database</param>
         /// <param name="throwOnClientServerWarning">Optional: if set to true then will throw exception if QueryClientEvaluationWarning is logged</param>
         /// <returns></returns>
         public static DbContextOptions<TContext> CreateOptions<TContext>
@@ -45,12 +45,7 @@ namespace TestSupport.EfHelpers
             builder.UseInMemoryDatabase(dbName)
                 .UseInternalServiceProvider(serviceProvider)
                 .EnableSensitiveDataLogging();  //You get more information with this turned on.
-            if (throwOnClientServerWarning)
-            {
-                //This will throw an exception of a QueryClientEvaluationWarning is logged
-                builder.ConfigureWarnings(warnings =>
-                    warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
-            }
+            builder.CheckAddThrowOnClientServerWarning(throwOnClientServerWarning);
 
             return builder.Options;
         }

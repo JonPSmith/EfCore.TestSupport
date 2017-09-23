@@ -18,12 +18,8 @@ namespace TestSupport.EfHelpers
 
             builder.UseSqlServer(connectionString)
                 .EnableSensitiveDataLogging();  //You get more information with this turned on.
-            if (throwOnClientServerWarning)
-            {
-                //This will throw an exception of a QueryClientEvaluationWarning is logged
-                builder.ConfigureWarnings(warnings =>
-                    warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
-            }
+            builder.CheckAddThrowOnClientServerWarning(throwOnClientServerWarning);
+
             return builder.Options;
         }
 
@@ -36,12 +32,8 @@ namespace TestSupport.EfHelpers
 
             builder.UseSqlServer(connectionString)
                 .EnableSensitiveDataLogging();  //You get more information with this turned on.
-            if (throwOnClientServerWarning)
-            {
-                //This will throw an exception of a QueryClientEvaluationWarning is logged
-                builder.ConfigureWarnings(warnings =>
-                    warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
-            }
+            builder.CheckAddThrowOnClientServerWarning(throwOnClientServerWarning);
+
             return builder.Options;
         }
     }
