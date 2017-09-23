@@ -29,13 +29,13 @@ namespace TestSupport.Helpers
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static string GetUniqueDatabaseConnectionString<T>(this T testClass, string optionalMethodName = null)
+        public static string GetUniqueDatabaseConnectionString(this object testClass, string optionalMethodName = null)
         {
             var config = GetConfiguration();
             var orgConnect = config.GetConnectionString(ConnectionStringName);
             var builder = new SqlConnectionStringBuilder(orgConnect);
 
-            var extraDatabaseName = $".{typeof(T).Name}";
+            var extraDatabaseName = $".{testClass.GetType().Name}";
             if (!string.IsNullOrEmpty(optionalMethodName)) extraDatabaseName += $".{optionalMethodName}";
 
             builder.InitialCatalog += extraDatabaseName;
