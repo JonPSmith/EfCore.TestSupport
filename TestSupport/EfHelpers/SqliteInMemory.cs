@@ -30,15 +30,15 @@ namespace TestSupport.EfHelpers
 
             // create in-memory context
             var builder = new DbContextOptionsBuilder<T>();
-            builder.UseSqlite(connection)
-                .EnableSensitiveDataLogging();  //You get more information with this turned on.
-            builder.CheckAddThrowOnClientServerWarning(throwOnClientServerWarning);
+            builder.UseSqlite(connection);
+            builder.ApplyOtherOptionSettings(throwOnClientServerWarning);
 
             return builder.Options;
         }
 
-        public static void CheckAddThrowOnClientServerWarning<T>(this DbContextOptionsBuilder<T> builder, bool throwOnClientServerWarning) where T : DbContext
+        internal static void ApplyOtherOptionSettings<T>(this DbContextOptionsBuilder<T> builder, bool throwOnClientServerWarning) where T : DbContext
         {
+            builder.EnableSensitiveDataLogging();  //You get more information with this turned on.
             if (throwOnClientServerWarning)
             {
                 //This will throw an exception of a QueryClientEvaluationWarning is logged

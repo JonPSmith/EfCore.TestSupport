@@ -3,7 +3,6 @@
 
 using System;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace TestSupport.EfHelpers
@@ -43,9 +42,8 @@ namespace TestSupport.EfHelpers
             // InMemory database and the new service provider.
             var builder = new DbContextOptionsBuilder<TContext>();
             builder.UseInMemoryDatabase(dbName)
-                .UseInternalServiceProvider(serviceProvider)
-                .EnableSensitiveDataLogging();  //You get more information with this turned on.
-            builder.CheckAddThrowOnClientServerWarning(throwOnClientServerWarning);
+                .UseInternalServiceProvider(serviceProvider);
+            builder.ApplyOtherOptionSettings(throwOnClientServerWarning);
 
             return builder.Options;
         }
