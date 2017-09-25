@@ -108,7 +108,7 @@ namespace Test.UnitTests.DataLayer
                 .ToList();
 
                 //VERIFY
-                logs.Any(x => x.EventId.Name == RelationalEventId.QueryClientEvaluationWarning.Name).ShouldBeTrue();
+                logs.ToList().Any(x => x.EventId.Name == RelationalEventId.QueryClientEvaluationWarning.Name).ShouldBeTrue();
             }
         }
 
