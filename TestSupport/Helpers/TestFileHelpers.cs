@@ -9,12 +9,20 @@ using System.Runtime.CompilerServices;
 
 namespace TestSupport.Helpers
 {
+    /// <summary>
+    /// A static class containing extentions methods for accessing files
+    /// </summary>
     public static class TestFileHelpers
     {
         private const string TestFileDirectoryName = @"TestData";
 
         //-------------------------------------------------------------------
 
+        /// <summary>
+        /// This returns the filepath of the file found by the searchPattern. If more than one file found that throws and exception
+        /// </summary>
+        /// <param name="searchPattern">If the search pattern starts with a @"\", then it will look in a subdirectory for the file</param>
+        /// <returns>The absolute filepath to the found file</returns>
         public static string GetTestDataFilePath(string searchPattern)
         {
             string[] fileList = GetPathFilesOfGivenName(searchPattern);
@@ -26,6 +34,11 @@ namespace TestSupport.Helpers
             return fileList[0];
         }
 
+        /// <summary>
+        /// This returns the content of the file found by the searchPattern. If more than one file found that throws and exception
+        /// </summary>
+        /// <param name="searchPattern">If the search pattern starts with a @"\", then it will look in a subdirectory for the file</param>
+        /// <returns>The content of the file as text of the found file</returns>
         public static string GetTestDataFileContent(string searchPattern)
         {
             var filePath = GetTestDataFilePath(searchPattern);
@@ -44,29 +57,39 @@ namespace TestSupport.Helpers
             return true;
         }
 
-        public static void DeleteDirectoryAndAnyContent(string topDir)
+        /// <summary>
+        /// This will delete a directory and any files inside that directory.
+        /// If no directory exists then it simply returns
+        /// </summary>
+        /// <param name="topDirPath"></param>
+        public static void DeleteDirectoryAndAnyContent(string topDirPath)
         {
-            if (!Directory.Exists(topDir)) return;
-            Directory.Delete(topDir, true);
+            if (!Directory.Exists(topDirPath)) return;
+            Directory.Delete(topDirPath, true);
         }
 
         /// <summary>
         /// This deletes all files and directories (and subdirectories) in the given topDir.
         /// It does NOT delete the topDir directory
         /// </summary>
-        /// <param name="topDir"></param>
-        public static void DeleteAllFilesAndSubDirsInDir(string topDir)
+        /// <param name="topDirPath"></param>
+        public static void DeleteAllFilesAndSubDirsInDir(string topDirPath)
         {
-            if (!Directory.Exists(topDir)) return;
+            if (!Directory.Exists(topDirPath)) return;
 
-            var files = Directory.GetFiles(topDir);
+            var files = Directory.GetFiles(topDirPath);
             foreach (var file in files)
                 File.Delete(file);
-            var dirs = Directory.GetDirectories(topDir);
+            var dirs = Directory.GetDirectories(topDirPath);
             foreach (var dir in dirs)
                 Directory.Delete(dir, true);
         }
 
+        /// <summary>
+        /// This returns all the filepaths of file that fit the search pattern
+        /// </summary>
+        /// <param name="searchPattern">If the search pattern starts with a @"\", then it will look in a subdirectory for the file</param>
+        /// <returns>array of absolute filepaths that match the filepath</returns>
         public static string[] GetPathFilesOfGivenName(string searchPattern = "")
         {
             var directory = GetTestDataFileDirectory();
@@ -89,6 +112,7 @@ namespace TestSupport.Helpers
         /// </summary>
         /// <param name="alternateTestDir">optional. If given then it can be relative or absolute path, which 
         /// replaces the default TestData directly</param>
+        /// <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static string GetTestDataFileDirectory(string alternateTestDir = TestFileDirectoryName, Assembly callingAssembly = null)
@@ -100,6 +124,11 @@ namespace TestSupport.Helpers
                     + "\\" + alternateTestDir));
         }
 
+        /// <summary>
+        /// This will return the absolute file path to the TestData directory in the calling method's project 
+        /// </summary>
+        /// <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
+        /// <returns></returns>
         [MethodImpl(MethodImplOptions.NoInlining)] //see https://docs.microsoft.com/en-gb/dotnet/api/system.reflection.assembly.getcallingassembly?view=netstandard-2.0#System_Reflection_Assembly_GetCallingAssembly
         public static string GetCallingAssemblyTopLevelDirectory(Assembly callingAssembly = null)
         {

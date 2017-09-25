@@ -32,6 +32,55 @@ namespace Test.UnitTests.TestSupport
         }
 
         [Fact]
+        public void TestGetTestDataDummyFilePath()
+        {
+            //SETUP
+
+            //ATTEMPT
+            var path = TestFileHelpers.GetTestDataFilePath("Dummy*.txt");
+
+            //VERIFY
+            path.ShouldEndWith("\\TestData\\Dummy file.txt");
+        }
+
+        [Fact]
+        public void TestGetTestDataDummyFilePathSubDirectory()
+        {
+            //SETUP
+
+            //ATTEMPT
+            var path = TestFileHelpers.GetTestDataFilePath(@"SubDirWithOneFileInIt\One file.txt");
+
+            //VERIFY
+            path.ShouldEndWith(@"SubDirWithOneFileInIt\One file.txt");
+        }
+
+
+        [Fact]
+        public void TestGetTestDataAllFilesInDir()
+        {
+            //SETUP
+
+            //ATTEMPT
+            var filePaths = TestFileHelpers.GetPathFilesOfGivenName(@"*.*");
+
+            //VERIFY
+            filePaths.Length.ShouldNotEqual(0);
+        }
+
+        [Fact]
+        public void TestGetTestDataDummyFileContext()
+        {
+            //SETUP
+
+            //ATTEMPT
+            var content = TestFileHelpers.GetTestDataFileContent("Dummy*.txt");
+
+            //VERIFY
+            content.ShouldEqual("This is the content of the dummy file");
+        }
+
+        [Fact]
         public void TestGetTestDataFileDirectoryWithRedirect()
         {
             //SETUP
