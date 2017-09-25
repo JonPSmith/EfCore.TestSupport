@@ -11,12 +11,30 @@ namespace TestSupport.EfHelpers
 {
     public static class WipeDbViaSql
     {
+        /// <summary>
+        /// This will wipe 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="maxDepth">Valuse to stop the wipe method from getting in a circular refence loop</param>
+        /// <param name="excludeTypes">This allows you to provide the Types of the table that you don't want wiped. 
+        /// Useful if you have a circular ref that WipeAllDataFromDatabase cannot handle. You then must wipe that part.</param>
+        public static void WipeAllDataFromDatabase(this DbContext context,
+            int maxDepth = 10, params Type[] excludeTypes)
+        {
+            foreach (var tableName in
+                context.GetTableNamesInOrderForWipe(maxDepth, excludeTypes))
+            {
+                context.Database
+                    .ExecuteSqlCommand(
+                        "DELETE FROM " + tableName);
+            }
+        }
 
         //NOTE: This will not handle a circular relationship: e.g. EntityA->EntityB->EntityA
-        public static IEnumerable<string>
+        private static IEnumerable<string>
             GetTableNamesInOrderForWipe //#A
-            (this DbContext context, 
-             int maxDepth = 10, params Type[] excludeTypes) //#B
+            (this DbContext context,
+                int maxDepth = 10, params Type[] excludeTypes) //#B
         {
             var allEntities = context.Model
                 .GetEntityTypes()
@@ -25,8 +43,9 @@ namespace TestSupport.EfHelpers
 
             ThrowExceptionIfCannotWipeSelfRef(allEntities); //#D
 
-            var principalsDict = allEntities             //#E
+            var principalsDict = allEntities //#E
                 .SelectMany(x => x.GetForeignKeys()
+                    .Where(y => !excludeTypes.Contains(y.PrincipalEntityType.ClrType))
                     .Select(y => y.PrincipalEntityType)).Distinct()
                 .ToDictionary(k => k, v => //#F
                     v.GetForeignKeys()
@@ -37,45 +56,45 @@ namespace TestSupport.EfHelpers
                 .Where(x => !principalsDict.ContainsKey(x)) //#I
                 .ToList(); //#I
 
-        /************************************************************************
-        #A This method looks at the relationships and returns the tables names in the right order to wipe all their rows without incurring a foreign key delete constraint
-        #B You can exclude entity classes that you need to handle yourself, for instance - any references that only contain circular references
-        #C This gets the IEntityType for all the entities, other than those that were excluded. This contains the information on how each table is built, with its relationships
-        #D This contains a check for the hierarchical (entity that references itself) case where an entity refers to itself - if the delete behavior of this foreign key is set to restrict then you cannot simply delete all the rows in one go
-        #E I extract all the principal entities from the entities we are considering ...
-        #F ... And put them in a dictionary, with the IEntityType being the key
-        #G ... I remove any self reference links as these are automatically handled
-        #H ... And the PrincipalEntityType being the value 
-        #I I start the list of entities to delete by putting all the dependant entities first, as I must delete the rows in these tables first, and the order doesn't matter
-        ************************************************************/
+            /************************************************************************
+            #A This method looks at the relationships and returns the tables names in the right order to wipe all their rows without incurring a foreign key delete constraint
+            #B You can exclude entity classes that you need to handle yourself, for instance - any references that only contain circular references
+            #C This gets the IEntityType for all the entities, other than those that were excluded. This contains the information on how each table is built, with its relationships
+            #D This contains a check for the hierarchical (entity that references itself) case where an entity refers to itself - if the delete behavior of this foreign key is set to restrict then you cannot simply delete all the rows in one go
+            #E I extract all the principal entities from the entities we are considering ...
+            #F ... And put them in a dictionary, with the IEntityType being the key
+            #G ... I remove any self reference links as these are automatically handled
+            #H ... And the PrincipalEntityType being the value 
+            #I I start the list of entities to delete by putting all the dependant entities first, as I must delete the rows in these tables first, and the order doesn't matter
+            ************************************************************/
 
-        var reversePrincipals = new List<IEntityType>(); //#A
-        int depth = 0; //#B
-        while (principalsDict.Keys.Any()) //#C
-        {
-            foreach (var principalNoLinks in
-                principalsDict
-                    .Where(x => !x.Value.Any()).ToList())//#D
+            var reversePrincipals = new List<IEntityType>(); //#A
+            int depth = 0; //#B
+            while (principalsDict.Keys.Any()) //#C
             {
-                reversePrincipals.Add(principalNoLinks.Key);//#E
-                principalsDict
-                    .Remove(principalNoLinks.Key);//#F
-                foreach (var removeLink in
-                    principalsDict.Where(x =>
-                        x.Value.Contains(principalNoLinks.Key)))//#G
+                foreach (var principalNoLinks in
+                    principalsDict
+                        .Where(x => !x.Value.Any()).ToList()) //#D
                 {
-                    removeLink.Value
-                        .Remove(principalNoLinks.Key);//#H
+                    reversePrincipals.Add(principalNoLinks.Key); //#E
+                    principalsDict
+                        .Remove(principalNoLinks.Key); //#F
+                    foreach (var removeLink in
+                        principalsDict.Where(x =>
+                            x.Value.Contains(principalNoLinks.Key))) //#G
+                    {
+                        removeLink.Value
+                            .Remove(principalNoLinks.Key); //#H
+                    }
                 }
+                if (++depth >= maxDepth) //#I
+                    ThrowExceptionMaxDepthReached(
+                        principalsDict.Keys.ToList(), depth);
             }
-            if (++depth >= maxDepth) //#I
-                ThrowExceptionMaxDepthReached(
-                    principalsDict.Keys.ToList(), depth);
+            reversePrincipals.Reverse(); //#J
+            result.AddRange(reversePrincipals); //#K
+            return result.Select(FormTableNameWithSchema); //#L
         }
-        reversePrincipals.Reverse();//#J
-        result.AddRange(reversePrincipals);//#K
-        return result.Select(FormTableNameWithSchema);//#L
-    }
         /************************************************************************
         #A I am going to produce a list of principal entities in the reverse order that they should have all rows wiped in them
         #B I keep a count of the times I have been round the loop trying to resolve the the relationships
@@ -90,25 +109,6 @@ namespace TestSupport.EfHelpers
         #K I now produce combined list with the dependants at the front and the principals at the back in the right order
         #L Finally I return a collection of table names, with a optional schema, in the right order
         * ***********************************************************************/
-
-        /// <summary>
-        /// This will wipe 
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="maxDepth">Valuse to stop the wipe method from getting in a circular refence loop</param>
-        /// <param name="excludeTypes">This allows you to provide the Types of the table that you don't want wiped. 
-        /// Useful if you have a circular ref that WipeAllDataFromDatabase cannot handle. You then must wipe that part.</param>
-        public static void WipeAllDataFromDatabase(this DbContext context, 
-            int maxDepth = 10, params Type[] excludeTypes)
-        {
-            foreach (var tableName in
-                context.GetTableNamesInOrderForWipe(maxDepth, excludeTypes))
-            {
-                context.Database
-                    .ExecuteSqlCommand(
-                        "DELETE FROM " + tableName);
-            }
-        }
 
         //------------------------------------------------
         //private methods
