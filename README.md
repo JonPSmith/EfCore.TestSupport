@@ -1,5 +1,10 @@
-# EfCoreInAction.Test
+# EfCore.TestSupport
 
-This git repo supports chapter 12 in the book [Entity Framework in Action](http://bit.ly/2m8KRAZ), 
-which is about **unit testing Entity Framework applications**.
+This git repo contains the source of the NuGet package 
+[EfCore.TestSupport](#), and various tests to check that 
+NuGet package.
+
+# Documentation
+
+... to follow.
 
