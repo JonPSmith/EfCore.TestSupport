@@ -9,15 +9,22 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace TestSupport.EfHelpers
 {
+    /// <summary>
+    /// This static class contains extention methods for quickly wiping a database using SQL commands
+    /// </summary>
     public static class WipeDbViaSql
     {
         /// <summary>
-        /// This will wipe 
+        /// This is a fast way to delete all the rows in all the tables in a database. 
+        /// Useful for unit testing where you need an empty database.
+        /// This will work out the right order to delete rows from tables to avoid a delete behavour of Restrict
+        /// from causing problems. Its not perfect (circular references can cause it problems) but it will throw
+        /// an exception if it cannot acheive a wipe of the database
         /// </summary>
         /// <param name="context"></param>
-        /// <param name="maxDepth">Valuse to stop the wipe method from getting in a circular refence loop</param>
+        /// <param name="maxDepth">Value to stop the wipe method from getting in a circular reference loop. Defaults to 10</param>
         /// <param name="excludeTypes">This allows you to provide the Types of the table that you don't want wiped. 
-        /// Useful if you have a circular ref that WipeAllDataFromDatabase cannot handle. You then must wipe that part.</param>
+        /// Useful if you have a circular ref that WipeAllDataFromDatabase cannot handle. You then must wipe that part yourself.</param>
         public static void WipeAllDataFromDatabase(this DbContext context,
             int maxDepth = 10, params Type[] excludeTypes)
         {

@@ -10,6 +10,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TestSupport.EfHelpers
 {
+    /// <summary>
+    /// Static class holding extension methods for applying SQL scripts to a database
+    /// </summary>
     public static class ApplyScriptExtension
     {
 
@@ -27,7 +30,7 @@ namespace TestSupport.EfHelpers
 
             using (var transaction = context.Database.BeginTransaction(IsolationLevel.ReadUncommitted))
             {
-                foreach (string command in commands)
+                foreach (var command in commands)
                 {
                     if (command.Length > 0)
                     {

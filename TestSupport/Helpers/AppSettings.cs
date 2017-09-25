@@ -2,13 +2,18 @@
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
 using System.Data.SqlClient;
-using System.Reflection;
 using Microsoft.Extensions.Configuration;
 
 namespace TestSupport.Helpers
 {
+    /// <summary>
+    /// This is a static method that contains extension methods to get the configuation and form useful connection name strings
+    /// </summary>
     public static class AppSettings
     {
+        /// <summary>
+        /// This is the default connection name that the AppSetting class expects
+        /// </summary>
         public const string ConnectionStringName = "DefaultConnection";
 
         /// <summary>
@@ -27,7 +32,6 @@ namespace TestSupport.Helpers
         /// <summary>
         /// This creates a unique database name based on the test class name, and an optional extra name
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public static string GetUniqueDatabaseConnectionString(this object testClass, string optionalMethodName = null)
         {

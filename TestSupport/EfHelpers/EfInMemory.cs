@@ -7,6 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace TestSupport.EfHelpers
 {
+    /// <summary>
+    /// This static class contains extention methods to use with In-Memory databases
+    /// </summary>
     public static class EfInMemory
     {
         /// <summary>
