@@ -76,21 +76,28 @@ namespace TestSupport.EfHelpers
         result.AddRange(reversePrincipals);//#K
         return result.Select(FormTableNameWithSchema);//#L
     }
-    /************************************************************************
-    #A I am going to produce a list of principal entities in the reverse order that they should have all rows wiped in them
-    #B I keep a count of the times I have been round the loop trying to resolve the the relationships
-    #C While there are entities with links to other entities I need to keep going round
-    #D Now loop through all the relationships that don't have a link to another principal (or that link has already been marked as wiped)
-    #E I mark the entity for deletion - this list is in reverse order to the order of table row wiping
-    #F I remove it from the dictionary so that it isn't looked at again
-    #G I look for every reference to this principal entity in other entity''s links ...
-    #H ... and remove the reference to that entity from any existing dependants still in the dictionary
-    #I If I have overstepped the depth limit I throw an exception, with information on what entities had still to be processed. This can happen for certain circular references.
-    #J When I get to here I have the list of entities in the reverse order to how I should wipe them, so I reverse the list
-    #K I now produce combined list with the dependants at the front and the principals at the back in the right order
-    #L Finally I return a collection of table names, with a optional schema, in the right order
-    * ***********************************************************************/
+        /************************************************************************
+        #A I am going to produce a list of principal entities in the reverse order that they should have all rows wiped in them
+        #B I keep a count of the times I have been round the loop trying to resolve the the relationships
+        #C While there are entities with links to other entities I need to keep going round
+        #D Now loop through all the relationships that don't have a link to another principal (or that link has already been marked as wiped)
+        #E I mark the entity for deletion - this list is in reverse order to the order of table row wiping
+        #F I remove it from the dictionary so that it isn't looked at again
+        #G I look for every reference to this principal entity in other entity''s links ...
+        #H ... and remove the reference to that entity from any existing dependants still in the dictionary
+        #I If I have overstepped the depth limit I throw an exception, with information on what entities had still to be processed. This can happen for certain circular references.
+        #J When I get to here I have the list of entities in the reverse order to how I should wipe them, so I reverse the list
+        #K I now produce combined list with the dependants at the front and the principals at the back in the right order
+        #L Finally I return a collection of table names, with a optional schema, in the right order
+        * ***********************************************************************/
 
+        /// <summary>
+        /// This will wipe 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="maxDepth">Valuse to stop the wipe method from getting in a circular refence loop</param>
+        /// <param name="excludeTypes">This allows you to provide the Types of the table that you don't want wiped. 
+        /// Useful if you have a circular ref that WipeAllDataFromDatabase cannot handle. You then must wipe that part.</param>
         public static void WipeAllDataFromDatabase(this DbContext context, 
             int maxDepth = 10, params Type[] excludeTypes)
         {
@@ -99,7 +106,7 @@ namespace TestSupport.EfHelpers
             {
                 context.Database
                     .ExecuteSqlCommand(
-                        $"DELETE FROM {tableName}");
+                        "DELETE FROM " + tableName);
             }
         }
 

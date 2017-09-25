@@ -38,7 +38,7 @@ namespace Test.Helpers
             return book;
         }
 
-        public static List<Book> CreateDummyBooks(int numBooks = 10, bool stepByYears = false, bool setBookId = true)
+        public static List<Book> CreateDummyBooks(int numBooks = 10)
         {
             var result = new List<Book>();
             var commonAuthor = new Author { Name = "CommonAuthor" };
@@ -51,12 +51,11 @@ namespace Test.Helpers
                 }
                 var book = new Book
                 {
-                    BookId = setBookId ? i + 1 : 0,
                     Title = $"Book{i:D4} Title",
                     Description = $"Book{i:D4} Description",
                     Price = (short)(i + 1),
                     ImageUrl = $"Image{i:D4}",
-                    PublishedOn = stepByYears ? DummyBookStartDate.AddYears(i) : DummyBookStartDate.AddDays(i),
+                    PublishedOn =  DummyBookStartDate.AddYears(i),
                     Reviews = reviews
                 };
 
