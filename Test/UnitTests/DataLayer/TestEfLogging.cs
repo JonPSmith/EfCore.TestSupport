@@ -39,7 +39,7 @@ namespace Test.UnitTests.DataLayer
                 {
                     _output.WriteLine(log.ToString());
                 }
-                logs.Count.ShouldBeInRange(11, 20);
+                logs.Count.ShouldBeInRange(11, 50);
             }
         }
 
@@ -55,7 +55,7 @@ namespace Test.UnitTests.DataLayer
                 context.Database.EnsureCreated();
 
                 //VERIFY
-                logs.Count.ShouldEqual(11);
+                logs.Count.ShouldBeInRange(11, 50);
             }
         }
 
