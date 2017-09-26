@@ -18,22 +18,36 @@ namespace TestSupport.EfHelpers
         /// <typeparam name="T"></typeparam>
         /// <param name="throwOnClientServerWarning">Optional: if set to true then will throw exception if QueryClientEvaluationWarning is logged</param>
         /// <returns></returns>
-        public static DbContextOptions<T> CreateOptions<T>(bool throwOnClientServerWarning = false) where T : DbContext
+        public static DbContextOptions<T> CreateOptions<T>
+            (bool throwOnClientServerWarning = false)  //LEAVE OUT OF BOOK LISTING
+            where T : DbContext
         {
             //Thanks to https://www.scottbrady91.com/Entity-Framework/Entity-Framework-Core-In-Memory-Testing
-            var connectionStringBuilder =
-                new SqliteConnectionStringBuilder { DataSource = ":memory:" };
-            var connectionString = connectionStringBuilder.ToString();
-            var connection = new SqliteConnection(connectionString);
-            connection.Open();                //see https://github.com/aspnet/EntityFramework/issues/6968
+            var connectionStringBuilder =         //#A
+                new SqliteConnectionStringBuilder //#A
+                    { DataSource = ":memory:" };  //#A
+            var connectionString =                  //#B
+                connectionStringBuilder.ToString(); //#B
+            var connection =                            //#C
+                new SqliteConnection(connectionString); //#C
+            connection.Open();  //#D              //see https://github.com/aspnet/EntityFramework/issues/6968
 
             // create in-memory context
-            var builder = new DbContextOptionsBuilder<T>();
-            builder.UseSqlite(connection);
-            builder.ApplyOtherOptionSettings(throwOnClientServerWarning);
+            var builder = 
+                new DbContextOptionsBuilder<T>();
+            builder.UseSqlite(connection); //E
+            builder.ApplyOtherOptionSettings(throwOnClientServerWarning); //LEAVE OUT OF BOOK LISTING
 
-            return builder.Options;
+            return builder.Options; //#F
         }
+        /****************************************************************
+        #A I need to create a SqLite connecton string with the DataSource set to ":memory:"
+        #B I turn the SqliteConnectionStringBuilder into a string 
+        #C And I form a Sqlite connection using the connection string
+        #D I must open the Sqlite connection. If I don't then the in-memeory database doesn't work
+        #E I now build a DbContextOptions<T> with the Sqlite database provider and the open connection
+        #F I return the DbContextOptions<T> to use in the creation of my application's DbContext
+         * **************************************************************/
 
         internal static void ApplyOtherOptionSettings<T>(this DbContextOptionsBuilder<T> builder, bool throwOnClientServerWarning) where T : DbContext
         {
