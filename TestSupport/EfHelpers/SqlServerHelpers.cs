@@ -30,10 +30,13 @@ namespace TestSupport.EfHelpers
         /// <param name="maxDepth">Valuse to stop the wipe method from getting in a circular refence loop</param>
         /// <param name="excludeTypes">This allows you to provide the Types of the table that you don't want wiped. 
         /// Useful if you have a circular ref that WipeAllDataFromDatabase cannot handle. You then must wipe that part.</param>
-        public static void CreateEmptyViaWipe(this DbContext context, int maxDepth = 10, params Type[] excludeTypes)
+        /// <returns>True if the database is created, false if it already existed.</returns>
+        public static bool CreateEmptyViaWipe(this DbContext context, int maxDepth = 10, params Type[] excludeTypes)
         {
-            if (!context.Database.EnsureCreated())
+            var databaseWasCreated = context.Database.EnsureCreated();
+            if (!databaseWasCreated)
                 context.WipeAllDataFromDatabase(maxDepth, excludeTypes);
+            return databaseWasCreated;
         }
 
         /// <summary>
