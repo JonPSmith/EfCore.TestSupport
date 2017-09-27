@@ -18,7 +18,7 @@ namespace Test.UnitCommands
         [RunnableInDebugOnly]  //#A
         public void DeleteAllTestDatabasesOk() //#B
         {
-            var numDeleted = SqlAdoNetHelpers //#C
+            var numDeleted = DatabaseTidyHelper //#C
                 .DeleteAllUnitTestDatabases();//#C
             _output.WriteLine(                              //#D
                 "This deleted {0} databases.", numDeleted); //#D
