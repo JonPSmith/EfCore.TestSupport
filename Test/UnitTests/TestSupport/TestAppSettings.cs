@@ -20,8 +20,8 @@ namespace Test.UnitTests.TestSupport
             var config = AppSettings.GetConfiguration();
 
             //VERIFY
-            config.GetConnectionString(AppSettings.ConnectionStringName)
-                .ShouldEqual("Server=(localdb)\\mssqllocaldb;Database=EfCoreInActionDb.Test;Trusted_Connection=True;MultipleActiveResultSets=true");
+            config.GetConnectionString(AppSettings.UnitTestConnectionStringName)
+                .ShouldEqual("Server=(localdb)\\mssqllocaldb;Database=EfCore.TestSupport-Test;Trusted_Connection=True;MultipleActiveResultSets=true");
         }
 
         [Fact]
@@ -29,7 +29,7 @@ namespace Test.UnitTests.TestSupport
         {
             //SETUP
             var config = AppSettings.GetConfiguration();
-            var orgDbName = new SqlConnectionStringBuilder(config.GetConnectionString(AppSettings.ConnectionStringName)).InitialCatalog;
+            var orgDbName = new SqlConnectionStringBuilder(config.GetConnectionString(AppSettings.UnitTestConnectionStringName)).InitialCatalog;
 
             //ATTEMPT
             var con = this.GetUniqueDatabaseConnectionString();
@@ -45,7 +45,7 @@ namespace Test.UnitTests.TestSupport
         {
             //SETUP
             var config = AppSettings.GetConfiguration();
-            var orgDbName = new SqlConnectionStringBuilder(config.GetConnectionString(AppSettings.ConnectionStringName)).InitialCatalog;
+            var orgDbName = new SqlConnectionStringBuilder(config.GetConnectionString(AppSettings.UnitTestConnectionStringName)).InitialCatalog;
 
             //ATTEMPT
             var con = this.GetUniqueDatabaseConnectionString("ExtraMethodName");

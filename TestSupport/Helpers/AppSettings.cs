@@ -1,8 +1,10 @@
 ﻿// Copyright (c) 2016 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
+using System;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Xunit.Abstractions;
 
 namespace TestSupport.Helpers
 {
@@ -14,7 +16,15 @@ namespace TestSupport.Helpers
         /// <summary>
         /// This is the default connection name that the AppSetting class expects
         /// </summary>
-        public const string ConnectionStringName = "DefaultConnection";
+        public const string UnitTestConnectionStringName = "UnitTestConnection";
+
+        /// <summary>
+        /// Your unit test database name must end with this string.
+        /// This is a safety measure to stop the DeleteAllUnitTestDatabases from deleting propduction databases
+        /// </summary>
+        public const string RequiredEndingToUnitTestDatabaseName = "-Test";
+
+        private const string AppSettingFilename = "appsettings.json";
 
         /// <summary>
         /// This will look for a appsettings.json file in the top level of the calling assembly and read content
@@ -27,7 +37,7 @@ namespace TestSupport.Helpers
                    .GetCallingAssemblyTopLevelDirectory();//#B
             var builder = new ConfigurationBuilder()               //#C
                 .SetBasePath(callingProjectPath)                   //#C
-                .AddJsonFile("appsettings.json", optional: false); //#C
+                .AddJsonFile(AppSettingFilename, optional: false); //#C
             return builder.Build(); //#D
         }
         /******************************************************************
@@ -44,8 +54,13 @@ namespace TestSupport.Helpers
         public static string GetUniqueDatabaseConnectionString(this object testClass, string optionalMethodName = null)
         {
             var config = GetConfiguration();
-            var orgConnect = config.GetConnectionString(ConnectionStringName);
+            var orgConnect = config.GetConnectionString(UnitTestConnectionStringName);
+            if (string.IsNullOrEmpty( orgConnect))
+                throw new InvalidOperationException($"You are missing a connection string of name '{UnitTestConnectionStringName}' in the {AppSettingFilename} file.");
             var builder = new SqlConnectionStringBuilder(orgConnect);
+            if (!builder.InitialCatalog.EndsWith(RequiredEndingToUnitTestDatabaseName))
+                throw new InvalidOperationException($"The database name in your connection string must end with '{RequiredEndingToUnitTestDatabaseName}', but is '{builder.InitialCatalog}'."+
+                    " This is a safety measure to help stop DeleteAllUnitTestDatabases from deleting production databases.");
 
             var extraDatabaseName = $".{testClass.GetType().Name}";
             if (!string.IsNullOrEmpty(optionalMethodName)) extraDatabaseName += $".{optionalMethodName}";
