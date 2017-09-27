@@ -19,7 +19,7 @@ namespace TestSupport.EfHelpers
         /// WARNING: This will delete multiple databases - make sure your DefaultConnection database name is unique!!!
         /// </summary>
         /// <returns>Number of databases deleted</returns>
-        public static int DeleteAllUnitTestBranchDatabases()
+        public static int DeleteAllUnitTestDatabases()
         {
             var config = AppSettings.GetConfiguration();
             var builder = new SqlConnectionStringBuilder(config.GetConnectionString(AppSettings.ConnectionStringName));
