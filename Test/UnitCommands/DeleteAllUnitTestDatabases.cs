@@ -1,8 +1,6 @@
 using TestSupport.Attributes;
 using TestSupport.EfHelpers;
-using Xunit;
 using Xunit.Abstractions;
-using Xunit.Extensions.AssertExtensions;
 
 namespace Test.UnitCommands
 {
@@ -26,8 +24,8 @@ namespace Test.UnitCommands
                 "This deleted {0} databases.", numDeleted); //#D
         }
         /****************************************************************
-        #A The [RunnableInDebugOnly] makes sure the unit command is not run by accident when the main unit tests are run. I have to click this method and run it in debug mode
-        #B This has the forat of a unit test, that is a public method which returns void
+        #A The [RunnableInDebugOnly] makes sure the unit command is not run by accident when the main unit tests are run. I must manually run this method in debug mode
+        #B This has the format of a unit test, that is a public method which returns void
         #C I call the DeleteAllUnitTestBranchDatabases method from my EcCore.TestSupport library. This returns the number of databases that it deleted
         #D I then write out how many database were deleted by this method
          * ****************************************************************/
