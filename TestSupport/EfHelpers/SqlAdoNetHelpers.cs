@@ -11,6 +11,48 @@ namespace TestSupport.EfHelpers
 {
     public static class SqlAdoNetHelpers
     {
+        //Note that there is no initial catalog
+        private const string LocalHostConnectionString = "Server=(localdb)\\mssqllocaldb;Initial Catalog=;Trusted_Connection=True;";
+
+        /// <summary>
+        /// This will delete all the databases that start with the database name in the default connection string
+        /// WARNING: This will delete multiple databases - make sure your DefaultConnection database name is unique!!!
+        /// </summary>
+        /// <returns>Number of databases deleted</returns>
+        public static int DeleteAllUnitTestBranchDatabases()
+        {
+            var config = AppSettings.GetConfiguration();
+            var builder = new SqlConnectionStringBuilder(config.GetConnectionString(AppSettings.ConnectionStringName));
+            var orgDbName = builder.InitialCatalog;
+
+            var databaseNamesToDelete = GetAllMatchingDatabases(orgDbName);
+            foreach (var databaseName in databaseNamesToDelete)
+            {
+                databaseName.DeleteDatabase();
+            }
+            return databaseNamesToDelete.Count;
+        }
+
+        public static List<string> GetAllMatchingDatabases(this string startsWith,
+            string connectionString = LocalHostConnectionString)
+        {
+            var result = new List<string>();
+
+            using (var myConn = new SqlConnection(connectionString))
+            {
+                var command = $"SELECT name FROM master.dbo.sysdatabases WHERE name LIKE '{startsWith}%'";
+                var myCommand = new SqlCommand(command, myConn);
+                myConn.Open();
+                using (var reader = myCommand.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        result.Add(reader.GetString(0));
+                    }
+                }
+            }
+            return result;
+        }
 
         public static int ExecuteRowCount(this string connectionString, string tableName, string whereClause = "")
         {
