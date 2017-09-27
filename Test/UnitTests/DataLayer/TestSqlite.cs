@@ -54,15 +54,11 @@ namespace Test.UnitTests.DataLayer
             }
             using (var context = new EfCoreContext(options))//#D
             {   
-                const string newTitle = "New title";
-
                 //ATTEMPT
-                context.Books.First().Title = newTitle; //#E
-                context.SaveChanges();                  //#E
+                var books = context.Books.ToList(); //#E
 
                 //VERIFY
-                context.Books.Select(x => x.Title)  //#F
-                    .First().ShouldEqual(newTitle); //#F
+                books.Last().Reviews.ShouldBeNull(); //#F
             }
         }
         /*************************************************************
@@ -70,9 +66,28 @@ namespace Test.UnitTests.DataLayer
         #B I create the first instance of the application's DbContext
         #C I create the database schema and then use my test method to write four books to the database
         #D I close that last instance and open a new instance of the application's DbContext. This means that the new instance does not have any tracked entities which could alter how the test runs
-        #E I load the first book, change its title and call SaveChanges to update the database
-        #F I select the Title of the First book, and check that it matches my change
+        #E I read in the books, without any includes
+        #F The last book has two reviews, so I check it is null because I didn't have an Include on the query. NOTE this would FAIL if there was one instance
          * ***********************************************************/
+
+        [Fact]
+        public void TestSqliteSingleInstanceOk()
+        {
+            //SETUP
+            var options = SqliteInMemory 
+                .CreateOptions<EfCoreContext>(); 
+            using (var context = new EfCoreContext(options)) 
+            {
+                context.Database.EnsureCreated(); 
+                context.SeedDatabaseFourBooks(); 
+
+                //ATTEMPT
+                var books = context.Books.ToList();
+
+                //VERIFY
+                books.Last().Reviews.ShouldNotBeNull();
+            }
+        }
 
         [Fact]
         public void TestSqlLiteAcceptsComputedCol()
