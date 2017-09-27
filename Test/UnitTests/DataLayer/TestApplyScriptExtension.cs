@@ -60,5 +60,31 @@ namespace Test.UnitTests.DataLayer
                 context.Authors.Count().ShouldEqual(2);
             }
         }
+
+        [Fact]
+        public void TestApplyScriptExampleOk()
+        {
+            //SETUP
+            var options = this
+                .CreateUniqueClassOptions<EfCoreContext>();
+            var filepath = TestFileHelpers      //#A
+                .GetTestDataFilePath(           //#A
+                "AddUserDefinedFunctions.sql"); //#A
+            using (var context = new EfCoreContext(options))
+            {
+                if (context.CreateEmptyViaWipe()) //#B
+                {
+                    context                             //#C
+                        .ExecuteScriptFileInTransaction(//#C
+                        filepath);                      //#C
+                }
+
+            }
+        }
+        /*********************************************************
+        #A I get the filepath of the SQL script file via my GetTestDataFilePath method
+        #B I use my CreateEmptyViaWipe to ensure the database is empty. This returns true if a new database was created
+        #C A new database was created, so I need to apply my script to the database using the ExecuteScriptFileInTransaction method
+         * *******************************************************/
     }
 }

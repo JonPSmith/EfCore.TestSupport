@@ -7,6 +7,7 @@ using System.Linq;
 using DataLayer.EfCode;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
+using Test.Helpers;
 using TestSupport.EfHelpers;
 using Xunit;
 using Xunit.Abstractions;
@@ -16,12 +17,42 @@ namespace Test.UnitTests.DataLayer
 {
     public class TestEfLogging
     {
-        private readonly ITestOutputHelper _output;
+        private readonly ITestOutputHelper _output; //#A
 
-        public TestEfLogging(ITestOutputHelper output)
+        public TestEfLogging(ITestOutputHelper output) //#B
         {
             _output = output;
         }
+
+        [Fact]
+        public void TestEfCoreLoggingExample()
+        {
+            //SETUP
+            var options = SqliteInMemory
+                .CreateOptions<EfCoreContext>();
+            using (var context = new EfCoreContext(options))
+            {
+                context.Database.EnsureCreated();
+                context.SeedDatabaseFourBooks();
+                var logs = context.SetupLogging(); //#C
+
+                //ATTEMPT
+                var books = context.Books.ToList(); //#D
+
+                //VERIFY
+                foreach (var log in logs)             //#E
+                {                                     //#E
+                    _output.WriteLine(log.ToString());//#E
+                }                                     //#E
+            }
+        }
+        /***********************************************************
+        #A In xUnit, which runs in parallel, I need to use the ITestOutputHelper to output to the unit test runner
+        #B The ITestOutputHelper is injected by the xUnit test runner
+        #C Here I set up the logging, which returns a reference to a list of LogOutput classes. This contains separate properties for the LogLevel, EventId, Message and so on
+        #D This is the query that I want to log
+        #E This outputs the logged data
+         * *********************************************************/
 
         [Fact]
         public void TestEfCoreLogging1()
@@ -113,25 +144,33 @@ namespace Test.UnitTests.DataLayer
         }
 
         [Fact]
-        public void TestLogQueryClientEvaluationThrowException()
+        public void TestQueryClientEvaluationThrowException()
         {
             //SETUP
-            var options = SqliteInMemory.CreateOptions<EfCoreContext>(true);
+            var options = SqliteInMemory
+                .CreateOptions<EfCoreContext>(true); //#A
             using (var context = new EfCoreContext(options))
             {
                 context.Database.EnsureCreated();
-                var logs = context.SetupLogging();
 
                 //ATTEMPT
-                var ex = Assert.Throws<InvalidOperationException>( () => context.Books.Select(x => new ClientSeverTestDto
+                var ex = Assert.Throws<InvalidOperationException>( //#B
+                    () => context.Books.Select(x => //#C
+                    new ClientSeverTestDto
                     {
                         ClientSideProp = x.Price.ToString("C")
-                    }).OrderBy(x => x.ClientSideProp)
+                    }).OrderBy(x => x.ClientSideProp) //#D
                     .ToList());
 
                 //VERIFY
                 ex.Message.ShouldStartWith("Warning as error exception for warning 'Microsoft.EntityFrameworkCore.Query.QueryClientEvaluationWarning':");
             }
         }
+        /*****************************************************************
+        #A I set the optional throwOnClientServerWarning parameter to true, which means that an exception will be thrown by EF Core if a QueryClientEvaluationWarning is logged
+        #B This is xUnit's assert for catching exception
+        #C This is the query that will log a QueryClientEvaluationWarning
+        #D This is the part of the query which causes the QueryClientEvaluationWarning to be logged.
+         * **************************************************************/
     }
 }
