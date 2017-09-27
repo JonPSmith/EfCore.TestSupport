@@ -13,13 +13,31 @@ using Xunit.Extensions.AssertExtensions;
 
 namespace Test.UnitTests.DataLayer
 {
-    public class TestSqlServerHelpers
+    public class TestSqlServerHelpers 
     {
         private readonly ITestOutputHelper _output;
 
         public TestSqlServerHelpers(ITestOutputHelper output)
         {
             _output = output;
+        }
+
+        [Fact]
+        public void TestExampleSqlDatabaseOk()
+        {
+            //SETUP
+            var options = this
+                .CreateUniqueClassOptions<EfCoreContext>();
+            using (var context = new EfCoreContext(options))
+            {
+                context.CreateEmptyViaWipe();
+
+                //ATTEMPT
+                context.SeedDatabaseFourBooks();
+
+                //VERIFY
+                context.Books.Count().ShouldEqual(4);
+            }
         }
 
         [Fact]
