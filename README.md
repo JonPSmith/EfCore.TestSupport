@@ -1,7 +1,7 @@
 # EfCore.TestSupport
 
 This git repo contains the source of the NuGet package 
-[EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/1.0.0), 
+[EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/), 
 and various tests to check that NuGet package.
 
 # Documentation
@@ -10,7 +10,7 @@ This netstandard2.0 library contains tools to help anyone that is unit testing a
 [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/index)
 for database access. The techniques are explained in chapter 15 of the book
 [Entity Framework in Action](http://bit.ly/2m8KRAZ).
-This readme defines the various groups and the signitures of the methods.
+This readme defines the various groups and the signatures of the methods.
 
 The various groups of tools are
 
@@ -144,3 +144,5 @@ public void TestSqlServerUniqueClassOk()
     }
 }
 ```
+
+... sorry, more needs to be added, but run out of time at the moment :(
