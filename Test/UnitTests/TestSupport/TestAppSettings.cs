@@ -36,7 +36,7 @@ namespace Test.UnitTests.TestSupport
 
             //VERIFY
             var newDatabaseName = new SqlConnectionStringBuilder(con).InitialCatalog;
-            newDatabaseName.ShouldEqual ($"{orgDbName}.{typeof(TestAppSettings).Name}");
+            newDatabaseName.ShouldEqual ($"{orgDbName}.{this.GetType().Name}");
         }
 
 
