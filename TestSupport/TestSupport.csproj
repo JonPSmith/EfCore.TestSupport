@@ -32,6 +32,7 @@
     <PackageProjectUrl>https://github.com/JonPSmith/EfCore.TestSupport</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/JonPSmith/EfCore.TestSupport/master/EfCoreTestSupportNuGetIcon128.png</PackageIconUrl>
     <RepositoryUrl></RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/JonPSmith/EfCore.TestSupport/blob/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
 
 </Project>
