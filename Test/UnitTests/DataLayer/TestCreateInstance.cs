@@ -59,17 +59,22 @@ namespace Test.UnitTests.DataLayer
         {
             //SETUP
             const string connectionString //#A
-                = "Server=(localdb)\\mssqllocaldb;Database=EfCore.TestSupport-Test-AlternateName;Trusted_Connection=True";
+                = "Server=(localdb)\\mssqllocaldb;Database=EfCore.TestSupport-Test;Trusted_Connection=True";
+            var builder = new                             //#B
+                DbContextOptionsBuilder<DbContextOnConfiguring>();//#B
+            builder.UseSqlServer(connectionString);       //#C
+            var options = builder.Options;                //#D
             //ATTEMPT
             using (var context = new DbContextOnConfiguring //#B
-                (connectionString))                         //#B
+                (options))                         //#B
             {
                 //VERIFY
                 context.Database.GetDbConnection().ConnectionString.ShouldEqual(connectionString);     
             }
             /********************************************************************
             #A This holds the connection string for the database to be used for the unit test
-            #B I then use the application's DbContext constructor that takes a connection string as a parameter
+            #B I set up the options I want to use
+            #C I then provide the options to the DbContext via is new, one-parameter constructor
              * ******************************************************************/
         }
 

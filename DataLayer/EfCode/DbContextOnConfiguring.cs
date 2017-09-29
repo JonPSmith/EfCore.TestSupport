@@ -8,31 +8,32 @@ namespace DataLayer.EfCode
 {
     public class DbContextOnConfiguring : DbContext
     {
-        private readonly string connectionString //#A
+        private const string ConnectionString
             = "Server=(localdb)\\mssqllocaldb;Database=EfCore.TestSupport-Test-OnConfiguring;Trusted_Connection=True";
 
-        public DbContextOnConfiguring(string connectionString) //#B
-        {
-            this.connectionString = connectionString;
+        protected override void OnConfiguring(             
+            DbContextOptionsBuilder optionsBuilder)        
+        {      
+            if (!optionsBuilder.IsConfigured)    //#A
+            {
+                optionsBuilder
+                    .UseSqlServer(ConnectionString);  
+            }          
         }
 
-        public DbContextOnConfiguring() //#C
-        {
-        }
+        public DbContextOnConfiguring(               //#B
+            DbContextOptions<DbContextOnConfiguring> //#B
+            options)                                 //#B
+            : base(options) { }                      //#B
 
-        protected override void OnConfiguring(             //#D
-            DbContextOptionsBuilder optionsBuilder)        //#D
-        {                                                  //#D
-            optionsBuilder.UseSqlServer(connectionString); //#D
-            base.OnConfiguring(optionsBuilder);            //#D
-        }                                                  //#D
+        public DbContextOnConfiguring() { } //#C
+
 
         public DbSet<MyEntity> MyEntities { get; set; }
     }
     /***********************************************************************
-    #A I change the connectionString from a constant to a variable, so that the unit test can alter it
-    #B I add a constructor that will set a new connection string. This is what my unit test will use
-    #C I have to add a parameterless constructor so that the application can create an instance
-    #D I don't have to change the OnConfiguring method at all. It now uses the variable connectionString instead of the constant connectionString.
+    #A I change the OnConfigured method to only run its normal setup code if the options aren't already configured
+    #B I then add the same constructor-based options settings that the ASP.NET Core version has, which allows me to set any options I want
+    #C I need to add a public, parameterless constructor so that this DbContext will work normally with the application
      * ********************************************************************/
 }
