@@ -1,12 +1,12 @@
 # EfCore.TestSupport
 
 This git repo contains the source of the NuGet package 
-[EfCore.TestSupport](#), and various tests to check that 
-NuGet package.
+[EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/1.0.0), 
+and various tests to check that NuGet package.
 
 # Documentation
 
-This netstandard2.0 library contains tools to help anyone that iis unit testing applications that use
+This netstandard2.0 library contains tools to help anyone that is unit testing applications that use
 [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/index)
 for database access. The techniques are explained in chapter 15 of the book
 [Entity Framework in Action](http://bit.ly/2m8KRAZ).
@@ -91,8 +91,7 @@ You can place any setting for your unit tests
 The method `GetUniqueDatabaseConnectionString()` is an extention method on an object.
 It uses that object's name to form a connection string based on the `UnitTestConnection` in 
 you `appsettings.json` file, but where the database name from the `UnitTestConnection` 
-connection string has the name of the object added as a suffix. See the test code below
-(Note: the class the unit test is in is called `TestAppSettings`)
+connection string has the name of the object added as a suffix. See the test code below.
 
 ```c#
 [Fact]
@@ -107,7 +106,7 @@ public void GetTestConnectionStringOk()
 
     //VERIFY
     var newDatabaseName = new SqlConnectionStringBuilder(con).InitialCatalog;
-    newDatabaseName.ShouldEqual ($"{orgDbName}.{typeof(TestAppSettings).Name}");
+    newDatabaseName.ShouldEqual ($"{orgDbName}.{this.GetType().Name}");
 }
 ```
 
