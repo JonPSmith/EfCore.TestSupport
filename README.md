@@ -1,6 +1,6 @@
 # EfCore.TestSupport
 
-This git repo contains the source of the  
+This git repo contains the source of the
 [EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/), 
 and various tests to check that NuGet package.
 
@@ -15,7 +15,7 @@ for database access. This readme defines the various groups, with links to the d
 *NOTE: The techniques are explained in much more details in chapter 15 of the book
 [Entity Framework in Action](http://bit.ly/2m8KRAZ).*
 
-The various groups of tools are
+The various groups of tools are:
 
 1. Helpers to create an in-memory Sqlite database for unit testing  
 See [Sqlite in memory test database](https://github.com/JonPSmith/EfCore.TestSupport/wiki/1.-Sqlite-in-memory-test-database).
