@@ -3,7 +3,6 @@
 
 using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -35,6 +34,26 @@ namespace TestSupport.Helpers
         }
 
         /// <summary>
+        /// This returns all the filepaths of file that fit the search pattern
+        /// </summary>
+        /// <param name="searchPattern">If the search pattern starts with a @"\", then it will look in a subdirectory for the file</param>
+        /// <returns>array of absolute filepaths that match the filepath</returns>
+        public static string[] GetFilePaths(string searchPattern = "")
+        {
+            var directory = GetTestDataDir();
+            if (searchPattern.Contains(@"\"))
+            {
+                //Has subdirectory in search pattern, so change directory
+                directory = Path.Combine(directory, searchPattern.Substring(0, searchPattern.LastIndexOf('\\')));
+                searchPattern = searchPattern.Substring(searchPattern.LastIndexOf('\\') + 1);
+            }
+
+            string[] fileList = Directory.GetFiles(directory, searchPattern);
+
+            return fileList;
+        }
+
+        /// <summary>
         /// This returns the content of the file found by the searchPattern. If more than one file found that throws and exception
         /// </summary>
         /// <param name="searchPattern">If the search pattern starts with a @"\", then it will look in a subdirectory for the file</param>
@@ -45,7 +64,12 @@ namespace TestSupport.Helpers
             return File.ReadAllText(filePath);
         }
 
-        internal static bool TestFileDeleteIfPresent(string searchPattern)
+        /// <summary>
+        /// This will ensure that a file in the TestData directory is deleted
+        /// </summary>
+        /// <param name="searchPattern"></param>
+        /// <returns></returns>
+        public static bool EnsureFileDeleted(string searchPattern)
         {
             var fileList = GetFilePaths(searchPattern);
             if (fileList.Length == 0) return false;
@@ -83,26 +107,6 @@ namespace TestSupport.Helpers
             var dirs = Directory.GetDirectories(topDirPath);
             foreach (var dir in dirs)
                 Directory.Delete(dir, true);
-        }
-
-        /// <summary>
-        /// This returns all the filepaths of file that fit the search pattern
-        /// </summary>
-        /// <param name="searchPattern">If the search pattern starts with a @"\", then it will look in a subdirectory for the file</param>
-        /// <returns>array of absolute filepaths that match the filepath</returns>
-        public static string[] GetFilePaths(string searchPattern = "")
-        {
-            var directory = GetTestDataDir();
-            if (searchPattern.Contains(@"\"))
-            {
-                //Has subdirectory in search pattern, so change directory
-                directory = Path.Combine(directory, searchPattern.Substring(0, searchPattern.LastIndexOf('\\')));
-                searchPattern = searchPattern.Substring(searchPattern.LastIndexOf('\\')+1);
-            }
-
-            string[] fileList = Directory.GetFiles(directory, searchPattern);
-
-            return fileList;
         }
 
         //------------------------------------------------------------------------------
