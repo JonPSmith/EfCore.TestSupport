@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DataLayer.EfCode;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Logging;
 using Test.Helpers;
 using TestSupport.EfHelpers;
 using Xunit;
@@ -40,7 +39,7 @@ namespace Test.UnitTests.DataLayer
                 var books = context.Books.ToList(); //#D
 
                 //VERIFY
-                foreach (var log in logs)             //#E
+                foreach (var log in logs.ToList()) //This stops the 'bleed' problem
                 {                                     //#E
                     _output.WriteLine(log.ToString());//#E
                 }                                     //#E
@@ -66,7 +65,7 @@ namespace Test.UnitTests.DataLayer
                 context.Database.EnsureCreated();
 
                 //VERIFY
-                foreach (var log in logs)
+                foreach (var log in logs.ToList()) //This stops the 'bleed' problem
                 {
                     _output.WriteLine(log.ToString());
                 }
