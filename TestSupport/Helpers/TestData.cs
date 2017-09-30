@@ -12,7 +12,7 @@ namespace TestSupport.Helpers
     /// <summary>
     /// A static class containing extentions methods for accessing files
     /// </summary>
-    public static class TestFileHelpers
+    public static class TestData
     {
         private const string TestFileDirectoryName = @"TestData";
 
@@ -23,9 +23,9 @@ namespace TestSupport.Helpers
         /// </summary>
         /// <param name="searchPattern">If the search pattern starts with a @"\", then it will look in a subdirectory for the file</param>
         /// <returns>The absolute filepath to the found file</returns>
-        public static string GetTestDataFilePath(string searchPattern)
+        public static string GetFilePath(string searchPattern)
         {
-            string[] fileList = GetPathFilesOfGivenName(searchPattern);
+            string[] fileList = GetFilePaths(searchPattern);
 
             if (fileList.Length != 1)
                 throw new Exception(string.Format("GetTestDataFilePath: The searchString {0} found {1} file. Either not there or ambiguous",
@@ -39,15 +39,15 @@ namespace TestSupport.Helpers
         /// </summary>
         /// <param name="searchPattern">If the search pattern starts with a @"\", then it will look in a subdirectory for the file</param>
         /// <returns>The content of the file as text of the found file</returns>
-        public static string GetTestDataFileContent(string searchPattern)
+        public static string GetFileContent(string searchPattern)
         {
-            var filePath = GetTestDataFilePath(searchPattern);
+            var filePath = GetFilePath(searchPattern);
             return File.ReadAllText(filePath);
         }
 
         internal static bool TestFileDeleteIfPresent(string searchPattern)
         {
-            var fileList = GetPathFilesOfGivenName(searchPattern);
+            var fileList = GetFilePaths(searchPattern);
             if (fileList.Length == 0) return false;
             if (fileList.Length != 1)
                 throw new Exception(string.Format("TestFileDeleteIfPresent: The searchString {0} found {1} files!",
@@ -90,9 +90,9 @@ namespace TestSupport.Helpers
         /// </summary>
         /// <param name="searchPattern">If the search pattern starts with a @"\", then it will look in a subdirectory for the file</param>
         /// <returns>array of absolute filepaths that match the filepath</returns>
-        public static string[] GetPathFilesOfGivenName(string searchPattern = "")
+        public static string[] GetFilePaths(string searchPattern = "")
         {
-            var directory = GetTestDataFileDirectory();
+            var directory = GetTestDataDir();
             if (searchPattern.Contains(@"\"))
             {
                 //Has subdirectory in search pattern, so change directory
@@ -115,22 +115,22 @@ namespace TestSupport.Helpers
         /// <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static string GetTestDataFileDirectory(string alternateTestDir = TestFileDirectoryName, Assembly callingAssembly = null)
+        public static string GetTestDataDir(string alternateTestDir = TestFileDirectoryName, Assembly callingAssembly = null)
         {
             //see https://stackoverflow.com/questions/670566/path-combine-absolute-with-relative-path-strings
             return Path.Combine(
                 Path.GetFullPath(
-                    GetCallingAssemblyTopLevelDirectory(callingAssembly ?? Assembly.GetCallingAssembly()) 
+                    GetCallingAssemblyTopLevelDir(callingAssembly ?? Assembly.GetCallingAssembly()) 
                     + "\\" + alternateTestDir));
         }
 
         /// <summary>
-        /// This will return the absolute file path to the TestData directory in the calling method's project 
+        /// This will return the absolute file path of the calling assembly, or the assembly provided 
         /// </summary>
         /// <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.NoInlining)] //see https://docs.microsoft.com/en-gb/dotnet/api/system.reflection.assembly.getcallingassembly?view=netstandard-2.0#System_Reflection_Assembly_GetCallingAssembly
-        public static string GetCallingAssemblyTopLevelDirectory(Assembly callingAssembly = null)
+        public static string GetCallingAssemblyTopLevelDir(Assembly callingAssembly = null)
         {
             const string binDir = @"\bin\";
             var pathToManipulate = (callingAssembly ?? Assembly.GetCallingAssembly()).Location;

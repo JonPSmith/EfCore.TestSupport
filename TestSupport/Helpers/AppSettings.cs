@@ -33,16 +33,15 @@ namespace TestSupport.Helpers
         public static IConfigurationRoot GetConfiguration() //#A
         {
             var callingProjectPath =                      //#B
-                TestFileHelpers                           //#B
-                   .GetCallingAssemblyTopLevelDirectory();//#B
+                TestData.GetCallingAssemblyTopLevelDir(); //#B
             var builder = new ConfigurationBuilder()               //#C
                 .SetBasePath(callingProjectPath)                   //#C
                 .AddJsonFile(AppSettingFilename, optional: false); //#C
             return builder.Build(); //#D
         }
         /******************************************************************
-        #A This method returns an IConfigurationRoot, form which I can use methods, such as GetConnectionString("ConnectionName"), to access the configation information
-        #B In my TestSupport library I have a method that returns the absolute path of the calling assembly's top level directory. That will be the assembly that you ar running your tests in
+        #A This method returns an IConfigurationRoot, form which I can use methods, such as GetConnectionString("ConnectionName"), to access the configuration information
+        #B In my TestSupport library I have a method that returns the absolute path of the calling assembly's top level directory. That will be the assembly that you are running your tests in
         #C I then use ASP.NET Core's ConfigurationBuilder to read that appsettings.json file
         #D Finally I call the Build() method, which returns the IConfigurationRoot type
          * ***************************************************************/

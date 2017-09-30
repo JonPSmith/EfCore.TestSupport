@@ -30,7 +30,7 @@ namespace Test.UnitTests.DataLayer
         {
             //SETUP
             var options = this.CreateUniqueClassOptions<EfCoreContext>();
-            var filepath = TestFileHelpers.GetTestDataFilePath("Script01 - Add row to Authors table.sql");
+            var filepath = TestData.GetFilePath("Script01 - Add row to Authors table.sql");
             using (var context = new EfCoreContext(options))
             {
                 context.CreateEmptyViaWipe();
@@ -48,7 +48,7 @@ namespace Test.UnitTests.DataLayer
         {
             //SETUP
             var options = this.CreateUniqueClassOptions<EfCoreContext>();
-            var filepath = TestFileHelpers.GetTestDataFilePath("Script02 - Add two rows to Authors table.sql");
+            var filepath = TestData.GetFilePath("Script02 - Add two rows to Authors table.sql");
             using (var context = new EfCoreContext(options))
             {
                 context.CreateEmptyViaWipe();
@@ -67,8 +67,8 @@ namespace Test.UnitTests.DataLayer
             //SETUP
             var options = this
                 .CreateUniqueClassOptions<EfCoreContext>();
-            var filepath = TestFileHelpers      //#A
-                .GetTestDataFilePath(           //#A
+            var filepath = TestData      //#A
+                .GetFilePath(           //#A
                 "AddUserDefinedFunctions.sql"); //#A
             using (var context = new EfCoreContext(options))
             {

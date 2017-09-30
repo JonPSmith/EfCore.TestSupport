@@ -13,7 +13,7 @@ namespace Test.UnitCommands
             _output = output;
         }
 
-        //Run this method to wipe ALL the test database for the current branch
+        //Run this method to wipe ALL the test databases using your appsetting.json connection string
         //You need to run it in debug mode - that stops it being run when you "run all" unit tests
         [RunnableInDebugOnly]  //#A
         public void DeleteAllTestDatabasesOk() //#B

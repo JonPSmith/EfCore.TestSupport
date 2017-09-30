@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Test.UnitTests.TestSupport
 {
-    public class TestFileAccess
+    public class TestFileData
     {
         [Fact]
         public void TestGetCallerTopLevelDirectory()
@@ -13,7 +13,7 @@ namespace Test.UnitTests.TestSupport
             //SETUP
 
             //ATTEMPT
-            var path = TestFileHelpers.GetCallingAssemblyTopLevelDirectory();
+            var path = TestData.GetCallingAssemblyTopLevelDir();
 
             //VERIFY
             path.ShouldEndWith(this.GetType().Namespace.Split('.').First());
@@ -25,7 +25,7 @@ namespace Test.UnitTests.TestSupport
             //SETUP
 
             //ATTEMPT
-            var path = TestFileHelpers.GetTestDataFileDirectory();
+            var path = TestData.GetTestDataDir();
 
             //VERIFY
             path.ShouldEndWith(this.GetType().Namespace.Split('.').First() + "\\TestData");
@@ -37,7 +37,7 @@ namespace Test.UnitTests.TestSupport
             //SETUP
 
             //ATTEMPT
-            var path = TestFileHelpers.GetTestDataFilePath("Dummy*.txt");
+            var path = TestData.GetFilePath("Dummy*.txt");
 
             //VERIFY
             path.ShouldEndWith("\\TestData\\Dummy file.txt");
@@ -49,7 +49,7 @@ namespace Test.UnitTests.TestSupport
             //SETUP
 
             //ATTEMPT
-            var path = TestFileHelpers.GetTestDataFilePath(@"SubDirWithOneFileInIt\One file.txt");
+            var path = TestData.GetFilePath(@"SubDirWithOneFileInIt\One file.txt");
 
             //VERIFY
             path.ShouldEndWith(@"SubDirWithOneFileInIt\One file.txt");
@@ -62,7 +62,7 @@ namespace Test.UnitTests.TestSupport
             //SETUP
 
             //ATTEMPT
-            var filePaths = TestFileHelpers.GetPathFilesOfGivenName(@"*.*");
+            var filePaths = TestData.GetFilePaths(@"*.*");
 
             //VERIFY
             filePaths.Length.ShouldNotEqual(0);
@@ -74,7 +74,7 @@ namespace Test.UnitTests.TestSupport
             //SETUP
 
             //ATTEMPT
-            var content = TestFileHelpers.GetTestDataFileContent("Dummy*.txt");
+            var content = TestData.GetFileContent("Dummy*.txt");
 
             //VERIFY
             content.ShouldEqual("This is the content of the dummy file");
@@ -86,7 +86,7 @@ namespace Test.UnitTests.TestSupport
             //SETUP
 
             //ATTEMPT
-            var path = TestFileHelpers.GetTestDataFileDirectory("..\\TestSupport");
+            var path = TestData.GetTestDataDir("..\\TestSupport");
 
             //VERIFY
             path.ShouldEndWith("\\TestSupport");

@@ -6,11 +6,14 @@ and various tests to check that NuGet package.
 
 # Documentation
 
-This netstandard2.0 library contains tools to help anyone that is unit testing applications that use
+This netstandard2.0 library contains tools to help you unit test an application that uses
 [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/index)
-for database access. The techniques are explained in chapter 15 of the book
-[Entity Framework in Action](http://bit.ly/2m8KRAZ).
-This readme defines the various groups and the signatures of the methods.
+for database access. This readme defines the various groups and the signatures of the methods.
+
+*NOTE: The techniques are explained in chapter 15 of the book
+[Entity Framework in Action](http://bit.ly/2m8KRAZ).*
+
+
 
 The various groups of tools are
 
