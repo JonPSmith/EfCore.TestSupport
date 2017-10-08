@@ -15,6 +15,9 @@ for database access. This readme defines the various groups, with links to the d
 *NOTE: The techniques are explained in much more details in chapter 15 of the book
 [Entity Framework in Action](http://bit.ly/2m8KRAZ).*
 
+Here is an image covering just a few of the methods, in **bold** available in this library.
+![Examples of libray methods in use](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/Example-of-various-test-features.png)
+
 The various groups of tools are:
 
 1. Helpers to create an in-memory Sqlite database for unit testing  
