@@ -22,7 +22,7 @@ namespace TestSupport.Helpers
         /// Your unit test database name must end with this string.
         /// This is a safety measure to stop the DeleteAllUnitTestDatabases from deleting propduction databases
         /// </summary>
-        public const string RequiredEndingToUnitTestDatabaseName = "-Test";
+        public const string RequiredEndingToUnitTestDatabaseName = "Test";
 
         private const string AppSettingFilename = "appsettings.json";
 
