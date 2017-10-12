@@ -27,15 +27,19 @@ namespace TestSupport.EfHelpers
         /// This will ensure an empty database by using the WipeAllDataFromDatabase method
         /// </summary>
         /// <param name="context"></param>
+        /// <param name="addBracketsAndSchema">Optional: normally it only uses the table name, but for cases where you have multiple schemas,
+        /// or a table name that needs brackets the you can set to to true. Deafult is false</param>
         /// <param name="maxDepth">Valuse to stop the wipe method from getting in a circular refence loop</param>
         /// <param name="excludeTypes">This allows you to provide the Types of the table that you don't want wiped. 
         /// Useful if you have a circular ref that WipeAllDataFromDatabase cannot handle. You then must wipe that part.</param>
         /// <returns>True if the database is created, false if it already existed.</returns>
-        public static bool CreateEmptyViaWipe(this DbContext context, int maxDepth = 10, params Type[] excludeTypes)
+        public static bool CreateEmptyViaWipe(this DbContext context,
+            bool addBracketsAndSchema = false,
+            int maxDepth = 10, params Type[] excludeTypes)
         {
             var databaseWasCreated = context.Database.EnsureCreated();
             if (!databaseWasCreated)
-                context.WipeAllDataFromDatabase(maxDepth, excludeTypes);
+                context.WipeAllDataFromDatabase(addBracketsAndSchema, maxDepth, excludeTypes);
             return databaseWasCreated;
         }
 

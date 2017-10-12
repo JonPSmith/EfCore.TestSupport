@@ -44,7 +44,7 @@ namespace Test.UnitTests.DataLayer
                 context.SeedDatabaseFourBooks();
 
                 //ATTEMPT
-                context.WipeAllDataFromDatabase(10, typeof(Author));
+                context.WipeAllDataFromDatabase(false, 10, typeof(Author));
 
                 //VERIFY
                 context.Books.Count().ShouldEqual(0);

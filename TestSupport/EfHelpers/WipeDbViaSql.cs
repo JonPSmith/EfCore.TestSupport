@@ -22,14 +22,17 @@ namespace TestSupport.EfHelpers
         /// an exception if it cannot acheive a wipe of the database
         /// </summary>
         /// <param name="context"></param>
+        /// <param name="addBracketsAndSchema">Optional: normally it only uses the table name, but for cases where you have multiple schemas,
+        /// or a table name that needs brackets the you can set to to true. Deafult is false</param>
         /// <param name="maxDepth">Value to stop the wipe method from getting in a circular reference loop. Defaults to 10</param>
         /// <param name="excludeTypes">This allows you to provide the Types of the table that you don't want wiped. 
         /// Useful if you have a circular ref that WipeAllDataFromDatabase cannot handle. You then must wipe that part yourself.</param>
         public static void WipeAllDataFromDatabase(this DbContext context,
+            bool addBracketsAndSchema = false,
             int maxDepth = 10, params Type[] excludeTypes)
         {
             foreach (var tableName in
-                context.GetTableNamesInOrderForWipe(maxDepth, excludeTypes))
+                context.GetTableNamesInOrderForWipe(addBracketsAndSchema, maxDepth, excludeTypes))
             {
                 context.Database
                     .ExecuteSqlCommand(
@@ -41,6 +44,7 @@ namespace TestSupport.EfHelpers
         private static IEnumerable<string>
             GetTableNamesInOrderForWipe //#A
             (this DbContext context,
+                bool addBracketsAndSchema,
                 int maxDepth = 10, params Type[] excludeTypes) //#B
         {
             var allEntities = context.Model
@@ -100,7 +104,7 @@ namespace TestSupport.EfHelpers
             }
             reversePrincipals.Reverse(); //#J
             result.AddRange(reversePrincipals); //#K
-            return result.Select(FormTableNameWithSchema); //#L
+            return result.Select(x => FormTableNameWithSchema(x, addBracketsAndSchema)); //#L
         }
         /************************************************************************
         #A I am going to produce a list of principal entities in the reverse order that they should have all rows wiped in them
@@ -120,13 +124,15 @@ namespace TestSupport.EfHelpers
         //------------------------------------------------
         //private methods
 
-        private static string FormTableNameWithSchema(IEntityType entityType)
+        private static string FormTableNameWithSchema(IEntityType entityType, bool addBracketsAndSchema)
         {
             var relational = entityType.Relational();
-            return "[" + (relational.Schema == null
+            return addBracketsAndSchema 
+                ? "[" + (relational.Schema == null
                        ? ""
                        : relational.Schema + "].[")
-                   + relational.TableName + "]";
+                   + relational.TableName + "]"
+                : relational.TableName;
         }
 
         private static void ThrowExceptionIfCannotWipeSelfRef(List<IEntityType> allEntities)
