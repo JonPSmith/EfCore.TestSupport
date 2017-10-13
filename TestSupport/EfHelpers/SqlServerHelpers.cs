@@ -4,6 +4,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using TestSupport.Helpers;
 
 namespace TestSupport.EfHelpers
@@ -45,21 +46,6 @@ namespace TestSupport.EfHelpers
 
         /// <summary>
         /// This creates the DbContextOptions  options for a SQL server database, 
-        /// where the database name is formed using the appsetting's DefaultConnection with the class name as a prefix.
-        /// That is, the database is unique to the object provided
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="callingClass">this should be this, i.e. the class you are in</param>
-        /// <param name="throwOnClientServerWarning">Optional: if set to true then will throw exception if QueryClientEvaluationWarning is logged</param>
-        /// <returns></returns>
-        public static DbContextOptions<T> CreateUniqueClassOptions<T>(this object callingClass, 
-            bool throwOnClientServerWarning = false) where T : DbContext
-        {
-            return CreateOptionWithDatabaseName<T>(callingClass, throwOnClientServerWarning);
-        }
-
-        /// <summary>
-        /// This creates the DbContextOptions  options for a SQL server database, 
         /// where the database name is formed using the appsetting's DefaultConnection with the class name and the calling method's name as as a prefix.
         /// That is, the database is unique to the calling method.
         /// </summary>
@@ -75,19 +61,67 @@ namespace TestSupport.EfHelpers
             return CreateOptionWithDatabaseName<T>(callingClass, throwOnClientServerWarning, callingMember);
         }
 
+        /// <summary>
+        /// This creates the DbContextOptions  options for a SQL server database, 
+        /// where the database name is formed using the appsetting's DefaultConnection with the class name as a prefix.
+        /// That is, the database is unique to the object provided
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="callingClass">this should be this, i.e. the class you are in</param>
+        /// <param name="throwOnClientServerWarning">Optional: if set to true then will throw exception if QueryClientEvaluationWarning is logged</param>
+        /// <returns></returns>
+        public static DbContextOptions<T>
+            CreateUniqueClassOptions<T>( //#A
+                this object callingClass, //#B
+                bool throwOnClientServerWarning = false) //#C
+            where T : DbContext
+        {
+            return CreateOptionWithDatabaseName<T>         //#D
+                (callingClass, throwOnClientServerWarning);//#D
+        }
+
         //------------------------------------
         //private methods
 
-        private static DbContextOptions<T> CreateOptionWithDatabaseName<T>(object callingClass, 
-            bool throwOnClientServerWarning, string callingMember = null) where T : DbContext
+        private static DbContextOptions<T> 
+            CreateOptionWithDatabaseName<T>(  //#E
+                object callingClass,            //#F
+                bool throwOnClientServerWarning,//#F 
+                string callingMember = null)    //#F
+            where T : DbContext
         {
-            var connectionString = callingClass.GetUniqueDatabaseConnectionString(callingMember);
-            var builder = new DbContextOptionsBuilder<T>();
+            var connectionString = callingClass     //#G
+                .GetUniqueDatabaseConnectionString( //#G
+                    callingMember);                 //#G
+            var builder =                          //#H
+                new DbContextOptionsBuilder<T>();  //#H
+            builder.UseSqlServer(connectionString);//#H
+            builder.ApplyOtherOptionSettings(      //#I
+                throwOnClientServerWarning);       //#I
 
-            builder.UseSqlServer(connectionString);
-            builder.ApplyOtherOptionSettings(throwOnClientServerWarning);
-
-            return builder.Options;
+            return builder.Options; //#J
         }
+
+        internal static void ApplyOtherOptionSettings<T>(this DbContextOptionsBuilder<T> builder, 
+                bool throwOnClientServerWarning) 
+            where T : DbContext
+        {
+            builder.EnableSensitiveDataLogging();
+            if (throwOnClientServerWarning)
+            {
+                builder.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
+            }
+        }
+        /*******************************************************************
+        #A This extension method will return options for a SQL Server database with a name starting with database name in the original connection string in the appsettings.json file, but with the name of the class of the instance provided in the first parameter
+        #B It is expected that the object instance provided will be 'this', that is, the class in which the unit test is running
+        #C By default it won't throw an exception if a QueryClientEvaluationWarning is logged. You can turn this on if you want that to happen
+        #D I now call a private method that is shared between this method and the CreateUniqueMethodOptions options
+        #E This is the methods that builds the SQL Server part of the options, with the correct database name
+        #F These parameters are passed from the CreateUniqueClassOptions. For CreateUniqueClassOptions the calling method is left as null
+        #G This is the AppSettings's extension method. It will return the connection string from the appsetting.json file, but with the database name modified with the callingClass's type name as a suffix
+        #H This sets up the OptionsBuilder and creates a SQL Server database provider with the connection string
+        #I I how call a general method used on all my option builders. This enables sensitive logging so that you get more information, and, if the throwOnClientServerWarning is true, it configures the warning to throw on a QueryClientEvaluationWarning being logged
+         * ******************************************************************/
     }
 }

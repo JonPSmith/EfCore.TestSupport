@@ -48,16 +48,5 @@ namespace TestSupport.EfHelpers
         #E I now build a DbContextOptions<T> with the Sqlite database provider and the open connection
         #F I return the DbContextOptions<T> to use in the creation of my application's DbContext
          * **************************************************************/
-
-        internal static void ApplyOtherOptionSettings<T>(this DbContextOptionsBuilder<T> builder, bool throwOnClientServerWarning) where T : DbContext
-        {
-            builder.EnableSensitiveDataLogging();  //You get more information with this turned on.
-            if (throwOnClientServerWarning)
-            {
-                //This will throw an exception of a QueryClientEvaluationWarning is logged
-                builder.ConfigureWarnings(warnings =>
-                    warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
-            }
-        }
     }
 }
