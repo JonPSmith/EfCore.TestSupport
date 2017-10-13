@@ -1,0 +1,15 @@
+﻿Information: Executed DbCommand (1ms) [Parameters=[@p0='?', @p1='?', @p2='?', @p3='?' (Size = 4000), @p4='?', @p5='?' (Size = 100)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+DELETE FROM [Review]
+WHERE [ReviewId] = @p0;
+SELECT @@ROWCOUNT;
+
+DELETE FROM [Review]
+WHERE [ReviewId] = @p1;
+SELECT @@ROWCOUNT;
+
+INSERT INTO [Review] ([BookId], [Comment], [NumStars], [VoterName])
+VALUES (@p2, @p3, @p4, @p5);
+SELECT [ReviewId]
+FROM [Review]
+WHERE @@ROWCOUNT = 1 AND [ReviewId] = scope_identity();

@@ -1,0 +1,15 @@
+﻿Information: Executed DbCommand (0ms) [Parameters=[@__twoReviewBookId_0='?'], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [b].[BookId], [b].[Description], [b].[ImageUrl], [b].[Price], [b].[PublishedOn], [b].[Publisher], [b].[SoftDeleted], [b].[Title]
+FROM [Books] AS [b]
+WHERE ([b].[SoftDeleted] = 0) AND ([b].[BookId] = @__twoReviewBookId_0)
+ORDER BY [b].[BookId]
+Information: Executed DbCommand (2ms) [Parameters=[@__twoReviewBookId_0='?'], CommandType='Text', CommandTimeout='30']
+SELECT [p.Reviews].[ReviewId], [p.Reviews].[BookId], [p.Reviews].[Comment], [p.Reviews].[NumStars], [p.Reviews].[VoterName]
+FROM [Review] AS [p.Reviews]
+INNER JOIN (
+    SELECT TOP(1) [b0].[BookId]
+    FROM [Books] AS [b0]
+    WHERE ([b0].[SoftDeleted] = 0) AND ([b0].[BookId] = @__twoReviewBookId_0)
+    ORDER BY [b0].[BookId]
+) AS [t] ON [p.Reviews].[BookId] = [t].[BookId]
+ORDER BY [t].[BookId]

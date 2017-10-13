@@ -1,0 +1,7 @@
+﻿Warning,SensitiveDataLoggingEnabledWarning: Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data, this mode should only be enabled during development.
+Information,CommandExecuted: Executed DbCommand (10ms) [Parameters=[@p0='' (DbType = String), @p1='' (DbType = String), @p2='0' (DbType = String), @p3='01/01/0001 00:00:00' (DbType = String), @p4='' (DbType = String), @p5='False' (DbType = String), @p6='The person's boss said, "What's that about?"' (Nullable = false)], CommandType='Text', CommandTimeout='30']
+INSERT INTO "Books" ("Description", "ImageUrl", "Price", "PublishedOn", "Publisher", "SoftDeleted", "Title")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6);
+SELECT "BookId"
+FROM "Books"
+WHERE changes() = 1 AND "BookId" = last_insert_rowid();

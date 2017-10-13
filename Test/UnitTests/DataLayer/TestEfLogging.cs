@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DataLayer.EfClasses;
 using DataLayer.EfCode;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Test.Helpers;
@@ -52,6 +53,29 @@ namespace Test.UnitTests.DataLayer
         #D This is the query that I want to log
         #E This outputs the logged data
          * *********************************************************/
+
+        [Fact]
+        public void TestEfCoreLoggingStringWithBadValues()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<EfCoreContext>();
+            using (var context = new EfCoreContext(options))
+            {
+                context.Database.EnsureCreated();
+
+                //ATTEMPT
+                var logs = context.SetupLogging();
+                context.Books.Count();
+                context.Add(new Book {Title = "The person's boss said, \"What's that about?\""});
+                context.SaveChanges();
+
+                //VERIFY
+                foreach (var log in logs.ToList()) //This stops the 'bleed' problem
+                {
+                    _output.WriteLine(log.ToString());
+                }
+            }
+        }
 
         [Fact]
         public void TestEfCoreLogging1()
