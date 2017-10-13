@@ -74,7 +74,7 @@ namespace Test.UnitTests.DataLayer
         public void TestCreateEmptyViaDeleteOk()
         {
             //SETUP
-            var options = this.CreateUniqueClassOptions<EfCoreContext>();
+            var options = this.CreateUniqueMethodOptions<EfCoreContext>();
             using (var context = new EfCoreContext(options))
             {
                 context.Database.EnsureCreated();
@@ -97,7 +97,7 @@ namespace Test.UnitTests.DataLayer
         public void TestCreateEmptyViaWipe()
         {
             //SETUP
-            var options = this.CreateUniqueClassOptions<EfCoreContext>();
+            var options = this.CreateUniqueMethodOptions<EfCoreContext>();
             using (var context = new EfCoreContext(options))
             {
                 context.Database.EnsureCreated();
