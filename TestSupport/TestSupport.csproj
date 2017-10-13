@@ -21,11 +21,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>EfCore.TestSupport</PackageId>
-    <PackageVersion>1.0.1</PackageVersion>
+    <PackageVersion>1.0.2</PackageVersion>
     <Authors>Jon P Smith</Authors>
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Improved names on TestData methods</PackageReleaseNotes>
+    <PackageReleaseNotes>- Improved WipeDbViaSql to work with databases that don't use brackets around table names
+- Changed required suffix to test database name to "Test" to allow for databases that don't support hyphen in names</PackageReleaseNotes>
     <Copyright>Copyright (c) 2017 Jon P Smith. Licenced under MIT licence</Copyright>
     <PackageTags>Entity Framework Core, xUnit</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -33,9 +34,9 @@
     <PackageIconUrl>https://raw.githubusercontent.com/JonPSmith/EfCore.TestSupport/master/EfCoreTestSupportNuGetIcon128.png</PackageIconUrl>
     <RepositoryUrl></RepositoryUrl>
     <PackageLicenseUrl>https://github.com/JonPSmith/EfCore.TestSupport/blob/master/LICENSE</PackageLicenseUrl>
-    <Version>1.0.1</Version>
-    <AssemblyVersion>1.0.0.1</AssemblyVersion>
-    <FileVersion>1.0.0.1</FileVersion>
+    <Version>1.0.2</Version>
+    <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <FileVersion>1.0.2.0</FileVersion>
   </PropertyGroup>
 
 </Project>
