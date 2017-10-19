@@ -18,6 +18,6 @@
             "isTestCommand": true,
             "showOutput": "always",
             "problemMatcher": "$msCompile"
-          }
+        }
     ]
 }
