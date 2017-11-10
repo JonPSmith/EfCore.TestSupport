@@ -103,7 +103,7 @@ namespace TestSupport.EfSchemeCompare
             foreach (var entityIdx in entityType.GetIndexes())
             {
                 var entityIdxprops = entityIdx.Properties;
-                var logger = new CompareLogger(CompareType.ForeignKey, entityIdxprops.CombinedColNames(), log.SubLogs);
+                var logger = new CompareLogger(CompareType.Index, entityIdxprops.CombinedColNames(), log.SubLogs);
                 var constraintName = entityIdx.Relational().Name;
                 if (indexDict.ContainsKey(constraintName))
                 {
