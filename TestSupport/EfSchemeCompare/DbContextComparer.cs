@@ -85,13 +85,14 @@ namespace TestSupport.EfSchemeCompare
                             error = true;
                         }
                     }
-                    error |= logger.CheckDifferent(entityFKey.DeleteBehavior.ToString(), fKeyDict[constraintName].OnDelete.ConvertNullableReferentialAction(), "delete behavour");
+                    error |= logger.CheckDifferent(entityFKey.DeleteBehavior.ToString(), 
+                        fKeyDict[constraintName].OnDelete.ConvertNullableReferentialAction(), CompareAttributes.DeleteBehaviour);
                     if (!error)
                         logger.MarkAsOk(constraintName);
                 }
                 else
                 {
-                    logger.NotInDatabase(constraintName, "constraint name");
+                    logger.NotInDatabase(constraintName, CompareAttributes.ConstraintName);
                 }
             }
         }
@@ -102,7 +103,7 @@ namespace TestSupport.EfSchemeCompare
             foreach (var entityIdx in entityType.GetIndexes())
             {
                 var entityIdxprops = entityIdx.Properties;
-                var logger = new CompareLogger(CompareType.ForeignKey, entityIdxprops.CombinedColNames(), log.SubLogs);
+                var logger = new CompareLogger(CompareType.Index, entityIdxprops.CombinedColNames(), log.SubLogs);
                 var constraintName = entityIdx.Relational().Name;
                 if (indexDict.ContainsKey(constraintName))
                 {
@@ -118,13 +119,14 @@ namespace TestSupport.EfSchemeCompare
                             error = true;
                         } 
                     }
-                    error |= logger.CheckDifferent(entityIdx.IsUnique.ToString(), indexDict[constraintName].IsUnique.ToString(), "unique");
+                    error |= logger.CheckDifferent(entityIdx.IsUnique.ToString(), 
+                        indexDict[constraintName].IsUnique.ToString(), CompareAttributes.Unique);
                     if (!error)
                         logger.MarkAsOk(constraintName);
                 }
                 else
                 {
-                    logger.NotInDatabase(constraintName, "constraint name");
+                    logger.NotInDatabase(constraintName, CompareAttributes.ConstraintName);
                 }
             }
         }
@@ -141,7 +143,8 @@ namespace TestSupport.EfSchemeCompare
                 {
                     var error = ComparePropertyToColumn(logger, property, columnDict[pRel.ColumnName]);
                     //check for primary key
-                    error |= logger.CheckDifferent(property.IsPrimaryKey().ToString(), primaryKeyDict.ContainsKey(pRel.ColumnName).ToString(), "primary key");
+                    error |= logger.CheckDifferent(property.IsPrimaryKey().ToString(), 
+                        primaryKeyDict.ContainsKey(pRel.ColumnName).ToString(), CompareAttributes.PrimaryKey);
 
                     if (!error)
                     {
@@ -158,11 +161,11 @@ namespace TestSupport.EfSchemeCompare
 
         private bool ComparePropertyToColumn(CompareLogger logger, IProperty property, DatabaseColumn column)
         {
-            var error = logger.CheckDifferent(property.Relational().ColumnType, column.StoreType, "column type");
-            error |= logger.CheckDifferent(property.IsNullable.NullableAsString(), column.IsNullable.NullableAsString(), "nullability");
-            error |= logger.CheckDifferent(property.Relational().DefaultValueSql, column.DefaultValueSql, "sql default value");
-            error |= logger.CheckDifferent(property.Relational().ComputedColumnSql, column.ComputedColumnSql, "computed column");
-            error |= logger.CheckDifferent(property.ValueGenerated.ToString(), column.ValueGenerated.ConvertNullableValueGenerated(), "value generated");
+            var error = logger.CheckDifferent(property.Relational().ColumnType, column.StoreType, CompareAttributes.ColumnType);
+            error |= logger.CheckDifferent(property.IsNullable.NullableAsString(), column.IsNullable.NullableAsString(), CompareAttributes.Nullability);
+            error |= logger.CheckDifferent(property.Relational().DefaultValueSql, column.DefaultValueSql, CompareAttributes.DefaultValueSql);
+            error |= logger.CheckDifferent(property.Relational().ComputedColumnSql, column.ComputedColumnSql, CompareAttributes.ComputedColumnSql);
+            error |= logger.CheckDifferent(property.ValueGenerated.ToString(), column.ValueGenerated.ConvertNullableValueGenerated(), CompareAttributes.ValueGenerated);
             return error;
         }
 

@@ -24,12 +24,12 @@ namespace TestSupport.EfSchemeCompare.Internal
 
         public CompareLog MarkAsOk(string expected, string name = null)
         {
-            var log = new CompareLog(_type, CompareState.Ok, name ?? _defaultName, null, expected, null);
+            var log = new CompareLog(_type, CompareState.Ok, name ?? _defaultName, CompareAttributes.NotSet, expected, null);
             _compareLogs.Add(log);
             return log;
         }
 
-        public bool CheckDifferent(string expected, string found, string attribute, string name = null)
+        public bool CheckDifferent(string expected, string found, CompareAttributes attribute, string name = null)
         {
             if (expected != found && expected?.Replace(" ", "") != found?.Replace(" ", ""))
             {
@@ -39,17 +39,17 @@ namespace TestSupport.EfSchemeCompare.Internal
             return false;
         }
 
-        public void Different(string expected, string found, string attribute, string name = null)
+        public void Different(string expected, string found, CompareAttributes attribute, string name = null)
         {
             _compareLogs.Add(new CompareLog(_type, CompareState.Different, name ?? _defaultName, attribute, expected, found));
         }
 
-        public void NotInDatabase(string expected, string attribute = null, string name = null)
+        public void NotInDatabase(string expected, CompareAttributes attribute = CompareAttributes.NotSet, string name = null)
         {
-            _compareLogs.Add(new CompareLog(_type, CompareState.NotInDatabase, name ?? _defaultName, null, expected, null));
+            _compareLogs.Add(new CompareLog(_type, CompareState.NotInDatabase, name ?? _defaultName, attribute, expected, null));
         }
 
-        public void ExtraInDatabase(string found, string attribute, string name = null)
+        public void ExtraInDatabase(string found, CompareAttributes attribute, string name = null)
         {
             _compareLogs.Add(new CompareLog(_type, CompareState.ExtraInDatabase, name ?? _defaultName, attribute, null, found));
         }
