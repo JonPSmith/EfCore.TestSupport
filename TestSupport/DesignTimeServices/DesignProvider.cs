@@ -18,6 +18,7 @@ namespace TestSupport.DesignTimeServices
     public static class DesignProvider
     {
         private const string SqlServerProviderName = "Microsoft.EntityFrameworkCore.SqlServer";
+        private const string SqliteProviderName = "Microsoft.EntityFrameworkCore.Sqlite";
 
         public static ServiceProvider GetDesignTimeProvider(this DbContext context)
         {
@@ -71,6 +72,8 @@ namespace TestSupport.DesignTimeServices
 
             if (providerName == SqlServerProviderName)
                 return DatabaseProviders.SqlServer;
+            if (providerName == SqliteProviderName)
+                return DatabaseProviders.Sqlite;
 
             throw new InvalidOperationException("This is not a database provider that we currently support.");
 

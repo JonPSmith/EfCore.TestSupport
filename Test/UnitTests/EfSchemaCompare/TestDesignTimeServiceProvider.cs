@@ -11,7 +11,7 @@ using Xunit;
 using Xunit.Abstractions;
 using Xunit.Extensions.AssertExtensions;
 
-namespace TryModelCompare.UnitTests
+namespace Test.UnitTests.EfSchemaCompare
 {
     public class TestDesignTimeServiceProvider
     {
@@ -52,7 +52,7 @@ namespace TryModelCompare.UnitTests
 
 
         [Fact]
-        public void GetDesignTimeServiceProvider()
+        public void GetDesignTimeServiceProviderSqlServer()
         {
             //SETUP
             using (var context = new EfCoreContext(_options))
@@ -67,7 +67,24 @@ namespace TryModelCompare.UnitTests
         }
 
         [Fact]
-        public void GetIDatabaseModelFactory()
+        public void GetDesignTimeServiceProviderSqlite()
+        {
+            //SETUP
+            var options = SqliteInMemory
+                .CreateOptions<EfCoreContext>();
+            using (var context = new EfCoreContext(options))
+            {
+                //ATTEMPT 
+                var service = context.GetDesignTimeProvider();
+
+                //VERIFY
+                service.ShouldNotBeNull();
+                service.ShouldBeType<ServiceProvider>();
+            }
+        }
+
+        [Fact]
+        public void GetIDatabaseModelFactorySqlServer()
         {
             //SETUP
             using (var context = new EfCoreContext(_options))
@@ -80,6 +97,25 @@ namespace TryModelCompare.UnitTests
                 //VERIFY
                 factory.ShouldNotBeNull();
                 factory.ShouldBeType<SqlServerDatabaseModelFactory>();
+            }
+        }
+
+        [Fact]
+        public void GetIDatabaseModelFactorySqlite()
+        {
+            //SETUP
+            var options = SqliteInMemory
+                .CreateOptions<EfCoreContext>();
+            using (var context = new EfCoreContext(options))
+            {
+                var serviceProvider = context.GetDesignTimeProvider();
+
+                //ATTEMPT 
+                var factory = serviceProvider.GetService<IDatabaseModelFactory>();
+
+                //VERIFY
+                factory.ShouldNotBeNull();
+                factory.ShouldBeType<SqliteDatabaseModelFactory>();
             }
         }
 
