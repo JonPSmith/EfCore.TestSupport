@@ -3,16 +3,24 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using TestSupport.EfSchemeCompare.Internal;
 
 namespace TestSupport.EfSchemeCompare
 {
     public enum CompareType { NoSet, DbContext, Table, Column, ForeignKey, Index}
     public enum CompareState { NoSet, Ok, Different, NotInDatabase, ExtraInDatabase }
+    public enum CompareAttributes { NotSet,
+        //column items
+        ColumnType, Nullability, DefaultValueSql, ComputedColumnSql, ValueGenerated,
+        //keys - primary, foreign, alternative
+        PrimaryKey, ConstraintName, Unique, DeleteBehaviour,
+        //Others
+    }
     public class CompareLog
     {
         public List<CompareLog> SubLogs { get; } = new List<CompareLog>();
 
-        internal CompareLog(CompareType type, CompareState state, string name, string attribute, string expected, string found)
+        internal CompareLog(CompareType type, CompareState state, string name, CompareAttributes attribute, string expected, string found)
         {
             Type = type;
             State = state;
@@ -26,17 +34,17 @@ namespace TestSupport.EfSchemeCompare
         public CompareType Type { get; }
         public CompareState State { get; }
         public string Name { get; }
-        public string Attribute { get; }
+        public CompareAttributes Attribute { get; }
 
         public string Expected { get; }
         public string Found { get; }
 
         public override string ToString()
         {
-            //Typical output would be: Column 'Id', SQL type is Different : Expected = varchar(20), Found = nvarchar(20)
+            //Typical output would be: Column 'Id', column type is Different : Expected = varchar(20), Found = nvarchar(20)
             var result = $"{Type} '{Name}'";
-            if (Attribute != null)
-                result += $", {Attribute}";
+            if (Attribute != CompareAttributes.NotSet)
+                result += $", {Attribute.SplitCamelCaseToLower()}";
             result += $" is {State}";
             if (State == CompareState.Ok)
                 return result;

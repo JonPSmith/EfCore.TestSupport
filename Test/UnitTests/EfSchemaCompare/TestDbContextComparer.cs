@@ -30,32 +30,6 @@ namespace Test.UnitTests.EfSchemaCompare
         }
 
         [Fact]
-        public void CompareSelfTestDbContext()
-        {
-            //SETUP
-            var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
-            var factory = serviceProvider.GetService<IDatabaseModelFactory>();
-
-            using (var context = new EfCoreContext(_options))
-            {
-                context.Database.EnsureCreated();
-
-                var database = factory.Create(_connectionString, new string[] { }, new string[] { });
-                var handler = new DbContextComparer(context);
-
-                //ATTEMPT
-                handler.CompareModelToDatabase(database);
-
-                //VERIFY
-                handler.Logs.Count.ShouldEqual(1);
-                foreach (var log in CompareLog.AllResultsIndented(handler.Logs))
-                {
-                    _output.WriteLine(log);
-                }
-            }
-        }
-
-        [Fact]
         public void CompareSelfTestEfCoreContext()
         {
             //SETUP
