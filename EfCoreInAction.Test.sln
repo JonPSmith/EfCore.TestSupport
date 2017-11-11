@@ -1,12 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BizLogic", "BizLogic\BizLogic.csproj", "{94818AD9-F995-4D08-968F-08BCFD758EA0}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BizDbAccess", "BizDbAccess\BizDbAccess.csproj", "{7BF05B91-7DC1-45B8-9D12-1EE64BA60645}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataLayer\DataLayer.csproj", "{2451DCF6-EA52-434D-8A97-D23F4A8C6A72}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{373D1B7B-69C9-4BD5-9D9B-9CD746A38447}"
@@ -27,14 +23,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{94818AD9-F995-4D08-968F-08BCFD758EA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{94818AD9-F995-4D08-968F-08BCFD758EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{94818AD9-F995-4D08-968F-08BCFD758EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{94818AD9-F995-4D08-968F-08BCFD758EA0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7BF05B91-7DC1-45B8-9D12-1EE64BA60645}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7BF05B91-7DC1-45B8-9D12-1EE64BA60645}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7BF05B91-7DC1-45B8-9D12-1EE64BA60645}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7BF05B91-7DC1-45B8-9D12-1EE64BA60645}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2451DCF6-EA52-434D-8A97-D23F4A8C6A72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2451DCF6-EA52-434D-8A97-D23F4A8C6A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2451DCF6-EA52-434D-8A97-D23F4A8C6A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
