@@ -13,7 +13,7 @@ namespace TestSupport.EfSchemeCompare
         //column items
         ColumnType, Nullability, DefaultValueSql, ComputedColumnSql, ValueGenerated,
         //keys - primary, foreign, alternative
-        PrimaryKey, ConstraintName, Unique, DeleteBehaviour,
+        PrimaryKey, PrimaryKeyConstraintName, ConstraintName, Unique, DeleteBehaviour,
         //Others
     }
     public class CompareLog
