@@ -66,7 +66,7 @@ namespace Test.UnitTests.DataLayer
                 //VERIFY
                 var builder = new SqlConnectionStringBuilder(context.Database.GetDbConnection().ConnectionString);
                 builder.InitialCatalog
-                    .ShouldEndWith($"{GetType().Name}.{nameof(TestSqlServerUniqueMethodOk)}" );
+                    .ShouldEndWith($"{GetType().Name}_{nameof(TestSqlServerUniqueMethodOk)}" );
             }
         }
 

@@ -36,9 +36,23 @@ namespace Test.UnitTests.TestSupport
 
             //VERIFY
             var newDatabaseName = new SqlConnectionStringBuilder(con).InitialCatalog;
-            newDatabaseName.ShouldEqual ($"{orgDbName}.{this.GetType().Name}");
+            newDatabaseName.ShouldEqual ($"{orgDbName}_{this.GetType().Name}");
         }
 
+        [Fact]
+        public void GetTestConnectionStringDifferentSeperatorOk()
+        {
+            //SETUP
+            var config = AppSettings.GetConfiguration();
+            var orgDbName = new SqlConnectionStringBuilder(config.GetConnectionString(AppSettings.UnitTestConnectionStringName)).InitialCatalog;
+
+            //ATTEMPT
+            var con = this.GetUniqueDatabaseConnectionString(null, '.');
+
+            //VERIFY
+            var newDatabaseName = new SqlConnectionStringBuilder(con).InitialCatalog;
+            newDatabaseName.ShouldEqual($"{orgDbName}.{this.GetType().Name}");
+        }
 
         [Fact]
         public void GetTestConnectionStringWithExtraMethodNameOk()
@@ -52,7 +66,7 @@ namespace Test.UnitTests.TestSupport
 
             //VERIFY
             var newDatabaseName = new SqlConnectionStringBuilder(con).InitialCatalog;
-            newDatabaseName.ShouldEqual($"{orgDbName}.{typeof(TestAppSettings).Name}.ExtraMethodName");
+            newDatabaseName.ShouldEqual($"{orgDbName}_{typeof(TestAppSettings).Name}_ExtraMethodName");
         }
     }
 }
