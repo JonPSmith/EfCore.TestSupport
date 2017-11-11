@@ -42,11 +42,14 @@ namespace TestSupport.EfSchemeCompare
                 var logger = new CompareLogger(CompareType.Table, entityType.Relational().FormSchemaTable(), _logs.Last().SubLogs);
                 if (tableDict.ContainsKey(eRel.TableName))
                 {
+                    var databaseTable = tableDict[eRel.TableName];
                     //Checks for table matching
                     var log = logger.MarkAsOk(eRel.TableName);
-                    CompareColumns(log, entityType, tableDict[eRel.TableName]);
-                    CompareForeignKeys(log, entityType, tableDict[eRel.TableName]);
-                    CompareIndexes(log, entityType, tableDict[eRel.TableName]);
+                    logger.CheckDifferent(entityType.FindPrimaryKey().Relational().Name, databaseTable.PrimaryKey.Name,
+                        CompareAttributes.PrimaryKeyConstraintName);
+                    CompareColumns(log, entityType, databaseTable);
+                    CompareForeignKeys(log, entityType, databaseTable);
+                    CompareIndexes(log, entityType, databaseTable);
                 }
                 else
                 {
@@ -134,7 +137,7 @@ namespace TestSupport.EfSchemeCompare
         private void CompareColumns(CompareLog log, IEntityType entityType, DatabaseTable table)
         {
             var columnDict = table.Columns.ToDictionary(x => x.Name);
-            var primaryKeyDict = table.PrimaryKey.Columns.ToDictionary(x => x.Name);
+            var primaryKeyDict = table.PrimaryKey.Columns.ToDictionary(x => x.Name);           
             foreach (var property in entityType.GetProperties())
             {
                 var pRel = property.Relational();

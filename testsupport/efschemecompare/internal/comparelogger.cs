@@ -39,11 +39,6 @@ namespace TestSupport.EfSchemeCompare.Internal
             return false;
         }
 
-        public void Different(string expected, string found, CompareAttributes attribute, string name = null)
-        {
-            _compareLogs.Add(new CompareLog(_type, CompareState.Different, name ?? _defaultName, attribute, expected, found));
-        }
-
         public void NotInDatabase(string expected, CompareAttributes attribute = CompareAttributes.NotSet, string name = null)
         {
             _compareLogs.Add(new CompareLog(_type, CompareState.NotInDatabase, name ?? _defaultName, attribute, expected, null));
