@@ -1,18 +1,19 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
-using TestSupport.EfSchemeCompare.Internal;
 
-namespace TestSupport.EfSchemeCompare
+[assembly: InternalsVisibleTo("Test")]
+
+namespace TestSupport.EfSchemeCompare.Internal
 {
-    public class DbContextComparer
+    internal class DbContextComparer
     {
         private readonly IModel _model;
         private readonly string _dbContextName;

@@ -1,15 +1,13 @@
 using System.Linq;
-using DataLayer.BookApp.Configurations;
-using DataLayer.MyEntityDb;
 using DataLayer.MyEntityDb.EfCompareDbs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using Microsoft.Extensions.DependencyInjection;
-using Test.Helpers;
 using TestSupport.DesignTimeServices;
 using TestSupport.EfHelpers;
 using TestSupport.EfSchemeCompare;
+using TestSupport.EfSchemeCompare.Internal;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Extensions.AssertExtensions;

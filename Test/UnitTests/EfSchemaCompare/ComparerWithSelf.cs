@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TestSupport.DesignTimeServices;
 using TestSupport.EfHelpers;
 using TestSupport.EfSchemeCompare;
+using TestSupport.EfSchemeCompare.Internal;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Extensions.AssertExtensions;
