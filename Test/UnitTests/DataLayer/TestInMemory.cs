@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using DataLayer.BookApp;
 using DataLayer.MyEntityDb;
+using DataLayer.MyEntityDb.EfCompareDbs;
 using Test.Helpers;
 using TestSupport.EfHelpers;
 using Xunit;
@@ -35,8 +36,8 @@ namespace Test.UnitTests.DataLayer
         public void TestInMemoryAcceptsComputedCol()
         {
             //SETUP
-            var options = EfInMemory.CreateOptions<DbContextComputedCol>();
-            using (var context = new DbContextComputedCol(options))
+            var options = EfInMemory.CreateOptions<MyEntityComputedColDbContext>();
+            using (var context = new MyEntityComputedColDbContext(options))
             {
                 //ATTEMPT
                 context.Database.EnsureCreated();
@@ -49,8 +50,8 @@ namespace Test.UnitTests.DataLayer
         public void TestInMemoryAcceptsComputedColButDoesntWork()
         {
             //SETUP
-            var options = EfInMemory.CreateOptions<DbContextComputedCol>();
-            using (var context = new DbContextComputedCol(options))
+            var options = EfInMemory.CreateOptions<MyEntityComputedColDbContext>();
+            using (var context = new MyEntityComputedColDbContext(options))
             {
                 context.Database.EnsureCreated();
 
@@ -59,7 +60,7 @@ namespace Test.UnitTests.DataLayer
                 context.SaveChanges();
 
                 //VERIFY
-                context.MyEntities.First().MyDateTime.ShouldEqual(new DateTime());
+                context.Set<MyEntity>().First().MyDateTime.ShouldEqual(new DateTime());
             }
         }
 

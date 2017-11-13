@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using DataLayer.BookApp;
 using DataLayer.MyEntityDb;
+using DataLayer.MyEntityDb.EfCompareDbs;
 using Microsoft.EntityFrameworkCore;
 using Test.Helpers;
 using TestSupport.EfHelpers;
@@ -93,8 +94,8 @@ namespace Test.UnitTests.DataLayer
         public void TestSqlLiteAcceptsComputedCol()
         {
             //SETUP
-            var options = SqliteInMemory.CreateOptions<DbContextComputedCol>();
-            using (var context = new DbContextComputedCol(options))
+            var options = SqliteInMemory.CreateOptions<MyEntityComputedColDbContext>();
+            using (var context = new MyEntityComputedColDbContext(options))
             {
                 //ATTEMPT
                 context.Database.EnsureCreated();
@@ -121,8 +122,8 @@ namespace Test.UnitTests.DataLayer
         public void TestSqlLiteAcceptsComputedColButDoesntWork()
         {
             //SETUP
-            var options = SqliteInMemory.CreateOptions<DbContextComputedCol>();
-            using (var context = new DbContextComputedCol(options))
+            var options = SqliteInMemory.CreateOptions<MyEntityComputedColDbContext>();
+            using (var context = new MyEntityComputedColDbContext(options))
             {
                 context.Database.EnsureCreated();
 

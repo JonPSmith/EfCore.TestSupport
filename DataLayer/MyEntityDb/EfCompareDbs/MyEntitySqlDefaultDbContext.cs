@@ -4,19 +4,19 @@
 using DataLayer.MyEntityDb.ModelBuilders;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataLayer.MyEntityDb
+namespace DataLayer.MyEntityDb.EfCompareDbs
 {
-    public class DbContextComputedCol : DbContext
+    public class MyEntitySqlDefaultDbContext : DbContext
     {
-        public DbSet<MyEntity> MyEntities { get; set; }
-
-        public DbContextComputedCol(
-            DbContextOptions<DbContextComputedCol> options)      
+        public MyEntitySqlDefaultDbContext(
+            DbContextOptions<MyEntitySqlDefaultDbContext> options)      
             : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            ComputedCol.Build(modelBuilder);
+            AddMyEntity.Build(modelBuilder);
+            modelBuilder.Entity<MyEntity>()
+                .Property(p => p.MyInt).HasDefaultValueSql("123");
         }
     }
 }

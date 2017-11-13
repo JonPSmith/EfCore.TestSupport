@@ -125,9 +125,9 @@ namespace TestSupport.EfSchemeCompare
             if (State == CompareState.Ok)
                 return result;
 
-            result += $". Expected = {Expected}";
-            if (Found != null)
-                result += $" , Found = {Found}";
+            result += $". Expected = {Expected ?? "<null>"}";
+            if (Found != null || State == CompareState.Different)
+                result += $", Found = {Found ?? "<null>"}";
             return result;
         }
         private static string FormFullRefError(CompareLog log, Stack<string> parents)
