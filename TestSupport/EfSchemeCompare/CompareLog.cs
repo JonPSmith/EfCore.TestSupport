@@ -7,13 +7,15 @@ using TestSupport.EfSchemeCompare.Internal;
 
 namespace TestSupport.EfSchemeCompare
 {
-    public enum CompareType { NoSet, DbContext, Table, Column, ForeignKey, Index}
+    public enum CompareType { NoSet, DbContext, Entity, Property, ForeignKey, Index}
     public enum CompareState { NoSet, Ok, Different, NotInDatabase, ExtraInDatabase }
     public enum CompareAttributes { NotSet,
         //column items
         ColumnType, Nullability, DefaultValueSql, ComputedColumnSql, ValueGenerated,
+        //Tables
+        TableName,
         //keys - primary, foreign, alternative
-        PrimaryKey, PrimaryKeyConstraintName, ConstraintName, Unique, DeleteBehaviour,
+        PrimaryKey, PrimaryKeyConstraintName, IndexConstraintName, ForeignKeyIndexConstraintName, Unique, DeleteBehaviour,
         //Others
     }
     public class CompareLog
@@ -42,14 +44,13 @@ namespace TestSupport.EfSchemeCompare
         public override string ToString()
         {
             //Typical output would be: Column 'Id', column type is Different : Expected = varchar(20), Found = nvarchar(20)
-            var result = $"{Type} '{Name}'";
+            var result = $"{State.SplitCamelCaseToUpper()}: {Type} '{Name}'";
             if (Attribute != CompareAttributes.NotSet)
                 result += $", {Attribute.SplitCamelCaseToLower()}";
-            result += $" is {State}";
             if (State == CompareState.Ok)
                 return result;
 
-            result += $" : Expected = {Expected}";
+            result += $". Expected = {Expected}";
             if (Found != null)
                 result += $" , Found = {Found}";
             return result;
@@ -125,10 +126,10 @@ namespace TestSupport.EfSchemeCompare
         //private
         private static string FormFullRefError(CompareLog log, Stack<string> parents)
         {
-            string result = "ERROR: ";
+            string result = "";
             if (parents.Any())
                 result += string.Join("->", parents.ToArray().Reverse()) + "->";
-            return result + log.ToString();
+            return result + log;
         }
     }  
     

@@ -54,5 +54,10 @@ namespace TestSupport.EfSchemeCompare.Internal
         {
             return val.ToString().SplitCamelCase().ToLower();
         }
+
+        public static string SplitCamelCaseToUpper(this Enum val)
+        {
+            return val.ToString().SplitCamelCase().ToUpper();
+        }
     }
 }

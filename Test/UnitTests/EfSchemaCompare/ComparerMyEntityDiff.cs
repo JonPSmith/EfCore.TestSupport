@@ -1,3 +1,4 @@
+using System.Linq;
 using DataLayer.BookApp.Configurations;
 using DataLayer.MyEntityDb.EfCompareDbs;
 using Microsoft.EntityFrameworkCore;
@@ -68,10 +69,8 @@ namespace Test.UnitTests.EfSchemaCompare
 
                 //VERIFY
                 CompareLog.HadErrors(handler.Logs).ShouldBeTrue();
-                foreach (var log in CompareLog.ListAllErrors(handler.Logs))
-                {
-                    _output.WriteLine(log);
-                }
+                CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
+                    "NOT IN DATABASE: Entity 'MyEntity', table name. Expected = MySchema.MyEntities");
             }
         }
 
