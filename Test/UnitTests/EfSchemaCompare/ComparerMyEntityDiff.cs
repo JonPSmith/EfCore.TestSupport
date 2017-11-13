@@ -74,5 +74,25 @@ namespace Test.UnitTests.EfSchemaCompare
             }
         }
 
+        [Fact]
+        public void CompareExtraProperty()
+        {
+            //SETUP
+            var optionsBuilder = new DbContextOptionsBuilder<MyEntityExtraPropDbContext>();
+            optionsBuilder.UseSqlServer(connectionString);
+            using (var context = new MyEntityExtraPropDbContext(optionsBuilder.Options))
+            {
+                var handler = new DbContextComparer(context.Model, context.GetType().Name);
+
+                //ATTEMPT
+                handler.CompareModelToDatabase(_databaseModel);
+
+                //VERIFY
+                CompareLog.HadErrors(handler.Logs).ShouldBeTrue();
+                CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
+                    "NOT IN DATABASE: MyEntity->Property 'ShadowProp', column name. Expected = ShadowProp");
+            }
+        }
+
     }
 }

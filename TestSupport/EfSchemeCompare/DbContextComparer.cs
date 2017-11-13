@@ -157,7 +157,7 @@ namespace TestSupport.EfSchemeCompare
                 }
                 else
                 {
-                    logger.NotInDatabase(pRel.ColumnName);
+                    logger.NotInDatabase(pRel.ColumnName, CompareAttributes.ColumnName);
                 }
             }
         }

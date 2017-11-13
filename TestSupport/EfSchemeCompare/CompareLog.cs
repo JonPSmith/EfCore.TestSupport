@@ -11,7 +11,7 @@ namespace TestSupport.EfSchemeCompare
     public enum CompareState { NoSet, Ok, Different, NotInDatabase, ExtraInDatabase }
     public enum CompareAttributes { NotSet,
         //column items
-        ColumnType, Nullability, DefaultValueSql, ComputedColumnSql, ValueGenerated,
+        ColumnName, ColumnType, Nullability, DefaultValueSql, ComputedColumnSql, ValueGenerated,
         //Tables
         TableName,
         //keys - primary, foreign, alternative
@@ -43,17 +43,8 @@ namespace TestSupport.EfSchemeCompare
 
         public override string ToString()
         {
-            //Typical output would be: Column 'Id', column type is Different : Expected = varchar(20), Found = nvarchar(20)
-            var result = $"{State.SplitCamelCaseToUpper()}: {Type} '{Name}'";
-            if (Attribute != CompareAttributes.NotSet)
-                result += $", {Attribute.SplitCamelCaseToLower()}";
-            if (State == CompareState.Ok)
-                return result;
-
-            result += $". Expected = {Expected}";
-            if (Found != null)
-                result += $" , Found = {Found}";
-            return result;
+            //Typical output would be: DIFFERENT: Column 'Id', column type. Expected = varchar(20), Found = nvarchar(20)
+            return ToStringDifferentStart($"{State.SplitCamelCaseToUpper()}: ");
         }
 
         public static IEnumerable<string> AllResultsIndented(IReadOnlyList<CompareLog> logs, string indent = "")
@@ -124,12 +115,27 @@ namespace TestSupport.EfSchemeCompare
 
         //-------------------------------------------------------
         //private
+
+        private string ToStringDifferentStart(string start)
+        {
+            //Typical output would be: Column 'Id', column type is Different : Expected = varchar(20), Found = nvarchar(20)
+            var result = $"{start}{Type} '{Name}'";
+            if (Attribute != CompareAttributes.NotSet)
+                result += $", {Attribute.SplitCamelCaseToLower()}";
+            if (State == CompareState.Ok)
+                return result;
+
+            result += $". Expected = {Expected}";
+            if (Found != null)
+                result += $" , Found = {Found}";
+            return result;
+        }
         private static string FormFullRefError(CompareLog log, Stack<string> parents)
         {
-            string result = "";
+            string start = $"{log.State.SplitCamelCaseToUpper()}: ";
             if (parents.Any())
-                result += string.Join("->", parents.ToArray().Reverse()) + "->";
-            return result + log;
+                start += string.Join("->", parents.ToArray().Reverse()) + "->";
+            return log.ToStringDifferentStart(start);
         }
     }  
     
