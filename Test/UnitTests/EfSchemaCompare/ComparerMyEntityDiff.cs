@@ -46,10 +46,10 @@ namespace Test.UnitTests.EfSchemaCompare
                 var handler = new DbContextComparer(model, context.GetType().Name);
 
                 //ATTEMPT
-                handler.CompareModelToDatabase(_databaseModel);
+                var hasErrors = handler.CompareModelToDatabase(_databaseModel);
 
                 //VERIFY
-                CompareLog.HadErrors(handler.Logs).ShouldBeFalse();
+                hasErrors.ShouldBeFalse();
             }
         }
 
@@ -64,10 +64,10 @@ namespace Test.UnitTests.EfSchemaCompare
                 var handler = new DbContextComparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
-                handler.CompareModelToDatabase(_databaseModel);
+                var hasErrors = handler.CompareModelToDatabase(_databaseModel);
 
                 //VERIFY
-                CompareLog.HadErrors(handler.Logs).ShouldBeTrue();
+                hasErrors.ShouldBeTrue();
                 CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
                     "NOT IN DATABASE: Entity 'MyEntity', table name. Expected = MySchema.MyEntities");
             }
@@ -84,10 +84,10 @@ namespace Test.UnitTests.EfSchemaCompare
                 var handler = new DbContextComparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
-                handler.CompareModelToDatabase(_databaseModel);
+                var hasErrors = handler.CompareModelToDatabase(_databaseModel);
 
                 //VERIFY
-                CompareLog.HadErrors(handler.Logs).ShouldBeTrue();
+                hasErrors.ShouldBeTrue();
                 CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
                     "NOT IN DATABASE: MyEntity->Property 'ShadowProp', column name. Expected = ShadowProp");
             }
@@ -104,10 +104,10 @@ namespace Test.UnitTests.EfSchemaCompare
                 var handler = new DbContextComparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
-                handler.CompareModelToDatabase(_databaseModel);
+                var hasErrors = handler.CompareModelToDatabase(_databaseModel);
 
                 //VERIFY
-                CompareLog.HadErrors(handler.Logs).ShouldBeTrue();
+                hasErrors.ShouldBeTrue();
                 CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
                     "NOT IN DATABASE: MyEntity->Property 'MyInt', column name. Expected = OtherColName");
             }
@@ -124,10 +124,10 @@ namespace Test.UnitTests.EfSchemaCompare
                 var handler = new DbContextComparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
-                handler.CompareModelToDatabase(_databaseModel);
+                var hasErrors = handler.CompareModelToDatabase(_databaseModel);
 
                 //VERIFY
-                CompareLog.HadErrors(handler.Logs).ShouldBeTrue();
+                hasErrors.ShouldBeTrue();
                 CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
                     "DIFFERENT: MyEntity->Property 'MyString', nullability. Expected = NOT NULL, Found = NULL");
             }
@@ -144,10 +144,10 @@ namespace Test.UnitTests.EfSchemaCompare
                 var handler = new DbContextComparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
-                handler.CompareModelToDatabase(_databaseModel);
+                var hasErrors = handler.CompareModelToDatabase(_databaseModel);
 
                 //VERIFY
-                CompareLog.HadErrors(handler.Logs).ShouldBeTrue();
+                hasErrors.ShouldBeTrue();
                 CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
                     "DIFFERENT: MyEntity->Property 'MyString', column type. Expected = varchar(max), Found = nvarchar(max)");
             }
@@ -164,10 +164,10 @@ namespace Test.UnitTests.EfSchemaCompare
                 var handler = new DbContextComparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
-                handler.CompareModelToDatabase(_databaseModel);
+                var hasErrors = handler.CompareModelToDatabase(_databaseModel);
 
                 //VERIFY
-                CompareLog.HadErrors(handler.Logs).ShouldBeTrue();
+                hasErrors.ShouldBeTrue();
                 var errors = CompareLog.ListAllErrors(handler.Logs).ToList();
                 errors.Count.ShouldEqual(2);
                 errors[0].ShouldEqual(
@@ -197,10 +197,10 @@ namespace Test.UnitTests.EfSchemaCompare
                 var handler = new DbContextComparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
-                handler.CompareModelToDatabase(localDatabaseModel);
+                var hasErrors = handler.CompareModelToDatabase(localDatabaseModel);
 
                 //VERIFY
-                CompareLog.HadErrors(handler.Logs).ShouldBeTrue();
+                hasErrors.ShouldBeTrue();
                 var errors = CompareLog.ListAllErrors(handler.Logs).ToList();
                 errors.Count.ShouldEqual(3);
                 errors[0].ShouldEqual(
@@ -223,10 +223,10 @@ namespace Test.UnitTests.EfSchemaCompare
                 var handler = new DbContextComparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
-                handler.CompareModelToDatabase(_databaseModel);
+                var hasErrors = handler.CompareModelToDatabase(_databaseModel);
 
                 //VERIFY
-                CompareLog.HadErrors(handler.Logs).ShouldBeTrue();
+                hasErrors.ShouldBeTrue();
                 var errors = CompareLog.ListAllErrors(handler.Logs).ToList();
                 errors.Count.ShouldEqual(2);
                 errors[0].ShouldEqual(
@@ -256,10 +256,10 @@ namespace Test.UnitTests.EfSchemaCompare
                 var handler = new DbContextComparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
-                handler.CompareModelToDatabase(localDatabaseModel);
+                var hasErrors = handler.CompareModelToDatabase(localDatabaseModel);
 
                 //VERIFY
-                CompareLog.HadErrors(handler.Logs).ShouldBeTrue();
+                hasErrors.ShouldBeTrue();
                 CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
                     "DIFFERENT: MyEntity->Property 'MyInt', default value sql. Expected = <null>, Found = ((123))");
             }

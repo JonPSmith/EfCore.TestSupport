@@ -7,7 +7,13 @@ using TestSupport.EfSchemeCompare.Internal;
 
 namespace TestSupport.EfSchemeCompare
 {
-    public enum CompareType { NoSet, DbContext, Entity, Property, ForeignKey, Index}
+    public enum CompareType { NoSet,
+        //Software side
+        DbContext, Entity, Property,
+        //Database side (used for ExtraInDatabase)
+        Table, Column,
+        //Used for both
+        ForeignKey, Index}
     public enum CompareState { NoSet, Ok, Different, NotInDatabase, ExtraInDatabase }
     public enum CompareAttributes { NotSet,
         //column items
@@ -87,30 +93,6 @@ namespace TestSupport.EfSchemeCompare
                     if (doPushPop) parentNames.Pop();
                 }
             }
-        }
-
-        /// <summary>
-        /// This returns true if there were any errors in the Logs
-        /// </summary>
-        /// <param name="logs"></param>
-        /// <returns></returns>
-        public static bool HadErrors(IReadOnlyList<CompareLog> logs)
-        {
-            foreach (var log in logs)
-            {
-                if (log.State == CompareState.Ok)
-                {
-                    if (log.SubLogs.Any())
-                    {
-                        return HadErrors(log.SubLogs);
-                    }
-                }
-                else
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         //-------------------------------------------------------

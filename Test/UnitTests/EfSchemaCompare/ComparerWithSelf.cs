@@ -43,10 +43,10 @@ namespace Test.UnitTests.EfSchemaCompare
                 var handler = new DbContextComparer(context.Model, nameof(EfCoreContext));
 
                 //ATTEMPT
-                handler.CompareModelToDatabase(database);
+                var hasErrors = handler.CompareModelToDatabase(database);
 
                 //VERIFY
-                CompareLog.HadErrors(handler.Logs).ShouldBeFalse();
+                hasErrors.ShouldBeFalse();
                 foreach (var log in CompareLog.AllResultsIndented(handler.Logs))
                 {
                     _output.WriteLine(log);
