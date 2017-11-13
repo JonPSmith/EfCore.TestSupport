@@ -39,7 +39,7 @@ namespace TestSupport.EfSchemeCompare
             foreach (var entityType in _model.GetEntityTypes())
             {
                 var eRel = entityType.Relational();
-                var logger = new CompareLogger(CompareType.Table, entityType.Relational().FormSchemaTable(), _logs.Last().SubLogs);
+                var logger = new CompareLogger(CompareType.Entity, entityType.ClrType.Name, _logs.Last().SubLogs);
                 if (tableDict.ContainsKey(eRel.TableName))
                 {
                     var databaseTable = tableDict[eRel.TableName];
@@ -53,7 +53,7 @@ namespace TestSupport.EfSchemeCompare
                 }
                 else
                 {
-                    logger.NotInDatabase(entityType.Relational().FormSchemaTable());
+                    logger.NotInDatabase(entityType.Relational().FormSchemaTable(), CompareAttributes.TableName);
                 }
             }
         }
@@ -95,7 +95,7 @@ namespace TestSupport.EfSchemeCompare
                 }
                 else
                 {
-                    logger.NotInDatabase(constraintName, CompareAttributes.ConstraintName);
+                    logger.NotInDatabase(constraintName, CompareAttributes.ForeignKeyIndexConstraintName);
                 }
             }
         }
@@ -129,7 +129,7 @@ namespace TestSupport.EfSchemeCompare
                 }
                 else
                 {
-                    logger.NotInDatabase(constraintName, CompareAttributes.ConstraintName);
+                    logger.NotInDatabase(constraintName, CompareAttributes.IndexConstraintName);
                 }
             }
         }
@@ -141,7 +141,7 @@ namespace TestSupport.EfSchemeCompare
             foreach (var property in entityType.GetProperties())
             {
                 var pRel = property.Relational();
-                var logger = new CompareLogger(CompareType.Column, property.Relational().ColumnName, log.SubLogs);
+                var logger = new CompareLogger(CompareType.Property, property.Name, log.SubLogs);
                 if (columnDict.ContainsKey(pRel.ColumnName))
                 {
                     var error = ComparePropertyToColumn(logger, property, columnDict[pRel.ColumnName]);
