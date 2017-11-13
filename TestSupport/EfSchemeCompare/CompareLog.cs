@@ -3,6 +3,8 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using TestSupport.EfSchemeCompare.Internal;
 
 namespace TestSupport.EfSchemeCompare
@@ -11,7 +13,7 @@ namespace TestSupport.EfSchemeCompare
         //Software side
         DbContext, Entity, Property,
         //Database side (used for ExtraInDatabase)
-        Table, Column,
+        Database, Table, Column,
         //Used for both
         ForeignKey, Index}
     public enum CompareState { NoSet, Ok, Different, NotInDatabase, ExtraInDatabase }
@@ -24,10 +26,12 @@ namespace TestSupport.EfSchemeCompare
         PrimaryKey, PrimaryKeyConstraintName, IndexConstraintName, ForeignKeyIndexConstraintName, Unique, DeleteBehaviour,
         //Others
     }
+
     public class CompareLog
     {
         public List<CompareLog> SubLogs { get; } = new List<CompareLog>();
 
+        [JsonConstructor]
         internal CompareLog(CompareType type, CompareState state, string name, CompareAttributes attribute, string expected, string found)
         {
             Type = type;
@@ -107,7 +111,8 @@ namespace TestSupport.EfSchemeCompare
             if (State == CompareState.Ok)
                 return result;
 
-            result += $". Expected = {Expected ?? "<null>"}";
+            if (State != CompareState.ExtraInDatabase)
+                result += $". Expected = {Expected ?? "<null>"}";
             if (Found != null || State == CompareState.Different)
                 result += $", Found = {Found ?? "<null>"}";
             return result;

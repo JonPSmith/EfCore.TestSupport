@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using TestSupport.DesignTimeServices;
 using TestSupport.EfHelpers;
 using TestSupport.EfSchemeCompare;
@@ -50,6 +52,9 @@ namespace Test.UnitTests.EfSchemaCompare
 
                 //VERIFY
                 hasErrors.ShouldBeFalse();
+                //var settings = new JsonSerializerSettings();
+                //settings.Converters.Add(new StringEnumConverter ());
+                //var json = JsonConvert.SerializeObject(handler.Logs, settings);
             }
         }
 
