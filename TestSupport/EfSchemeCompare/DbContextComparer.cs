@@ -15,24 +15,24 @@ namespace TestSupport.EfSchemeCompare
     public class DbContextComparer
     {
         private readonly IModel _model;
-        private readonly Type _contextType;
+        private readonly string _dbContextName;
 
         private readonly List<CompareLog> _logs = new List<CompareLog>();
 
         public IReadOnlyList<CompareLog> Logs => _logs.ToImmutableList();
 
-        public DbContextComparer(DbContext context)
+        public DbContextComparer(IModel model, string dbContextName)
         {
-            _model = context.Model;
-            _contextType = context.GetType();
+            _model = model;
+            _dbContextName = dbContextName;
         }
 
         public void CompareModelToDatabase(DatabaseModel databaseModel)
         {
-            var dbLogger = new CompareLogger(CompareType.DbContext, _contextType.Name, _logs);
+            var dbLogger = new CompareLogger(CompareType.DbContext, _dbContextName, _logs);
 
             //Check things about the database, such as sequences
-            dbLogger.MarkAsOk(_contextType.Name);
+            dbLogger.MarkAsOk(_dbContextName);
             CheckDatabaseOk(_logs.Last(), _model.Relational(), databaseModel);
 
             var tableDict = databaseModel.Tables.ToDictionary(x => x.Name);

@@ -11,12 +11,12 @@ using Xunit.Extensions.AssertExtensions;
 
 namespace Test.UnitTests.EfSchemaCompare
 {
-    public class TestDbContextComparer
+    public class ComparerWithSelf
     {
         private readonly ITestOutputHelper _output;
         private readonly DbContextOptions<EfCoreContext> _options;
         private readonly string _connectionString;
-        public TestDbContextComparer(ITestOutputHelper output)
+        public ComparerWithSelf(ITestOutputHelper output)
         {
             _output = output;
             _options = this
@@ -39,13 +39,13 @@ namespace Test.UnitTests.EfSchemaCompare
             using (var context = new EfCoreContext(_options))
             {
                 var database = factory.Create(_connectionString, new string[] { }, new string[] { });
-                var handler = new DbContextComparer(context);
+                var handler = new DbContextComparer(context.Model, nameof(EfCoreContext));
 
                 //ATTEMPT
                 handler.CompareModelToDatabase(database);
 
                 //VERIFY
-                handler.Logs.Count.ShouldEqual(1);
+                CompareLog.HadErrors(handler.Logs).ShouldBeFalse();
                 foreach (var log in CompareLog.AllResultsIndented(handler.Logs))
                 {
                     _output.WriteLine(log);

@@ -69,6 +69,67 @@ namespace TestSupport.EfSchemeCompare
                 }
             }
         }
+
+        public static IEnumerable<string> ListAllErrors(IReadOnlyList<CompareLog> logs, Stack<string> parentNames = null)
+        {
+            //This only includes the DbContext if there were mutiple DbContexts at the top layer
+            var firstCall = parentNames == null;
+            var doPushPop = !(firstCall && logs.Count == 1);
+            if (firstCall)
+            {
+                parentNames = new Stack<string>();                 
+            }
+
+            foreach (var log in logs)
+            {
+
+                if (log.State != CompareState.Ok)
+                    yield return FormFullRefError(log, parentNames);
+                if (log.SubLogs.Any())
+                {
+                    if (doPushPop) parentNames.Push(log.Name);
+                    foreach (var errors in ListAllErrors(log.SubLogs, parentNames))
+                    {
+                        yield return errors;
+                    }
+                    if (doPushPop) parentNames.Pop();
+                }
+            }
+        }
+
+        /// <summary>
+        /// This returns true if there were any errors in the Logs
+        /// </summary>
+        /// <param name="logs"></param>
+        /// <returns></returns>
+        public static bool HadErrors(IReadOnlyList<CompareLog> logs)
+        {
+            foreach (var log in logs)
+            {
+                if (log.State == CompareState.Ok)
+                {
+                    if (log.SubLogs.Any())
+                    {
+                        return HadErrors(log.SubLogs);
+                    }
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        //-------------------------------------------------------
+        //private
+        private static string FormFullRefError(CompareLog log, Stack<string> parents)
+        {
+            string result = "ERROR: ";
+            if (parents.Any())
+                result += string.Join("->", parents.ToArray().Reverse()) + "->";
+            return result + log.ToString();
+        }
     }  
     
 }
