@@ -2,7 +2,7 @@
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
 using System.Linq;
-using DataLayer.EfCode;
+using DataLayer.BookApp;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Scaffolding.Internal;

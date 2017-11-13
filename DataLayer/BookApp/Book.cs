@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace DataLayer.EfClasses
+namespace DataLayer.BookApp
 {
     public class Book                        
     {

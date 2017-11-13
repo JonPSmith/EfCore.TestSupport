@@ -3,8 +3,8 @@
 
 using System;
 using System.Linq;
-using DataLayer.EfClasses;
-using DataLayer.EfCode;
+using DataLayer.BookApp;
+using DataLayer.MyEntityDb;
 using Test.Helpers;
 using TestSupport.EfHelpers;
 using Xunit;

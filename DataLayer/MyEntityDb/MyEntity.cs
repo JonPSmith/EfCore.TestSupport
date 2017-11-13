@@ -3,12 +3,18 @@
 
 using System;
 
-namespace DataLayer.EfClasses
+namespace DataLayer.MyEntityDb
 {
     public class MyEntity
     {
+        private int _backingField;
+
         public int MyEntityId { get; set; }
 
         public DateTime MyDateTime { get; set; }
+
+        public int MyInt { get; set; }
+
+        public string MyString { get; set; }
     }
 }

@@ -3,8 +3,7 @@
 
 using System.Data.SqlClient;
 using System.Linq;
-using DataLayer.EfClasses;
-using DataLayer.EfCode;
+using DataLayer.BookApp;
 using Microsoft.EntityFrameworkCore;
 using Test.Helpers;
 using TestSupport.EfHelpers;

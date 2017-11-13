@@ -2,8 +2,7 @@
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
 using System.Linq;
-using DataLayer.EfClasses;
-using DataLayer.EfCode;
+using DataLayer.BookApp;
 using Test.Helpers;
 using TestSupport.EfHelpers;
 using Xunit;

@@ -4,8 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataLayer.EfClasses;
-using DataLayer.EfCode;
+using DataLayer.BookApp;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Test.Helpers;
 using TestSupport.EfHelpers;

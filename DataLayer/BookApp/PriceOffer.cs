@@ -3,7 +3,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace DataLayer.EfClasses
+namespace DataLayer.BookApp
 {
     public class PriceOffer
     {
