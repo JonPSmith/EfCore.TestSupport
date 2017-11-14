@@ -93,7 +93,7 @@ namespace TestSupport.EfSchemeCompare.Internal
                         }
                     }
                     error |= logger.CheckDifferent(entityFKey.DeleteBehavior.ToString(), 
-                        fKeyDict[constraintName].OnDelete.ConvertNullableReferentialAction(), CompareAttributes.DeleteBehaviour);
+                        fKeyDict[constraintName].OnDelete.ConvertReferentialActionToDeleteBehavior(entityFKey.DeleteBehavior), CompareAttributes.DeleteBehaviour);
                     if (!error)
                         logger.MarkAsOk(constraintName);
                 }

@@ -40,8 +40,13 @@ namespace TestSupport.EfSchemeCompare.Internal
             return valGen?.ToString() ?? ValueGenerated.Never.ToString();
         }
 
-        public static string ConvertNullableReferentialAction(this ReferentialAction? refAct)
+        public static string ConvertReferentialActionToDeleteBehavior(this ReferentialAction? refAct, DeleteBehavior entityBehavior)
         {
+            if ((entityBehavior == DeleteBehavior.ClientSetNull || entityBehavior == DeleteBehavior.Restrict)
+                && refAct == ReferentialAction.NoAction)
+                //A no action constrait can map to either ClientSetNull or Restrict
+                return entityBehavior.ToString();
+
             return refAct?.ToString() ?? ReferentialAction.NoAction.ToString();
         }
 
