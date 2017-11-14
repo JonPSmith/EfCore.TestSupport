@@ -15,7 +15,7 @@ namespace TestSupport.EfSchemeCompare
         //Database side (used for ExtraInDatabase)
         Database, Table, Column,
         //Used for both
-        ForeignKey, Index}
+        PrimaryKey, ForeignKey, Index}
     public enum CompareState { NoSet, Ok, Different, NotInDatabase, ExtraInDatabase }
     public enum CompareAttributes { NotSet,
         //column items
@@ -23,7 +23,7 @@ namespace TestSupport.EfSchemeCompare
         //Tables
         TableName,
         //keys - primary, foreign, alternative
-        PrimaryKey, PrimaryKeyConstraintName, IndexConstraintName, ForeignKeyIndexConstraintName, Unique, DeleteBehaviour,
+        PrimaryKey, ConstraintName, IndexConstraintName, Unique, DeleteBehaviour,
         //Others
     }
 
@@ -111,10 +111,14 @@ namespace TestSupport.EfSchemeCompare
             if (State == CompareState.Ok)
                 return result;
 
+            var sep = ". F";
             if (State != CompareState.ExtraInDatabase)
+            {
                 result += $". Expected = {Expected ?? "<null>"}";
+                sep = ", f";
+            }
             if (Found != null || State == CompareState.Different)
-                result += $", Found = {Found ?? "<null>"}";
+                result += $"{sep}ound = {Found ?? "<null>"}";
             return result;
         }
         private static string FormFullRefError(CompareLog log, Stack<string> parents)

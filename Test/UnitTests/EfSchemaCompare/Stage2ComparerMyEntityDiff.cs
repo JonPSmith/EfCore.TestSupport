@@ -21,22 +21,20 @@ namespace Test.UnitTests.EfSchemaCompare
     public class Stage2ComparerMyEntityDiff
     {
         private readonly ITestOutputHelper _output;
-        private readonly string _connectionString;
-        private readonly DbContextOptions<MyEntityDbContext> _options;
         private readonly DatabaseModel _databaseModel;
         public Stage2ComparerMyEntityDiff(ITestOutputHelper output)
         {
             _output = output;
-            _options = this
+            var options = this
                 .CreateUniqueClassOptions<MyEntityDbContext>();
             var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
             var factory = serviceProvider.GetService<IDatabaseModelFactory>();
 
-            using (var context = new MyEntityDbContext(_options))
+            using (var context = new MyEntityDbContext(options))
             {
-                _connectionString = context.Database.GetDbConnection().ConnectionString;
+                var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
-                _databaseModel = factory.Create(_connectionString, new string[] { }, new string[] { });
+                _databaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
             }
         }
 
@@ -56,7 +54,7 @@ namespace Test.UnitTests.EfSchemaCompare
         }
 
         [Fact]
-        public void ExtrasMissingTableNoErrors()
+        public void ExtrasTable()
         {
             //SETUP
             var jArray = JArray.Parse(TestData.GetFileContent("DbContextCompareLog01*.json"));
@@ -74,7 +72,44 @@ namespace Test.UnitTests.EfSchemaCompare
                 "EXTRA IN DATABASE: Table 'DiffTableName', table name");
         }
 
+        [Fact]
+        public void ExtrasProperty()
+        {
+            //SETUP
+            var jArray = JArray.Parse(TestData.GetFileContent("DbContextCompareLog01*.json"));
+            jArray[0]["SubLogs"][0]["SubLogs"][0]["Expected"] = "DiffPropName";
+            var firstStageLogs = JsonConvert.DeserializeObject<List<CompareLog>>(jArray.ToString());
 
+            var handler = new ExtraInDatabaseComparer(_databaseModel);
+
+            //ATTEMPT
+            var hasErrors = handler.CompareLogsToDatabase(firstStageLogs);
+
+            //VERIFY
+            hasErrors.ShouldBeTrue();
+            CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
+                "EXTRA IN DATABASE: Table 'MyEntites', column name. Found = DiffPropName");
+        }
+
+        [Fact]
+        public void ExtraIndexConstaint()
+        {
+            //SETUP
+            var jArray = JArray.Parse(TestData.GetFileContent("DbContextCompareLog01*.json"));
+            jArray[0]["SubLogs"][0]["SubLogs"][4]["Expected"] = "DiffConstraintName";
+            jArray[0]["SubLogs"][0]["SubLogs"][4]["Type"] = "Index";
+            var firstStageLogs = JsonConvert.DeserializeObject<List<CompareLog>>(jArray.ToString());
+
+            var handler = new ExtraInDatabaseComparer(_databaseModel);
+
+            //ATTEMPT
+            var hasErrors = handler.CompareLogsToDatabase(firstStageLogs);
+
+            //VERIFY
+            hasErrors.ShouldBeTrue();
+            CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
+                "EXTRA IN DATABASE: Table 'MyEntites', index constraint name. Found = DiffConstraintName");
+        }
 
     }
 }

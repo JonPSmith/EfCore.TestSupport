@@ -48,7 +48,7 @@ namespace TestSupport.EfSchemeCompare.Internal
                     //Checks for table matching
                     var log = logger.MarkAsOk(eRel.TableName);
                     logger.CheckDifferent(entityType.FindPrimaryKey().Relational().Name, databaseTable.PrimaryKey.Name,
-                        CompareAttributes.PrimaryKeyConstraintName);
+                        CompareAttributes.ConstraintName);
                     CompareColumns(log, entityType, databaseTable);
                     CompareForeignKeys(log, entityType, databaseTable);
                     CompareIndexes(log, entityType, databaseTable);
@@ -98,7 +98,7 @@ namespace TestSupport.EfSchemeCompare.Internal
                 }
                 else
                 {
-                    logger.NotInDatabase(constraintName, CompareAttributes.ForeignKeyIndexConstraintName);
+                    logger.NotInDatabase(constraintName, CompareAttributes.ConstraintName);
                 }
             }
         }
@@ -132,7 +132,7 @@ namespace TestSupport.EfSchemeCompare.Internal
                 }
                 else
                 {
-                    logger.NotInDatabase(constraintName, CompareAttributes.IndexConstraintName);
+                    logger.NotInDatabase(constraintName, CompareAttributes.ConstraintName);
                 }
             }
         }
@@ -140,29 +140,49 @@ namespace TestSupport.EfSchemeCompare.Internal
         private void CompareColumns(CompareLog log, IEntityType entityType, DatabaseTable table)
         {
             var columnDict = table.Columns.ToDictionary(x => x.Name);
-            var primaryKeyDict = table.PrimaryKey.Columns.ToDictionary(x => x.Name);           
+            var primaryKeyDict = table.PrimaryKey.Columns.ToDictionary(x => x.Name);
+
+            var efPKeyConstraintName = entityType.FindPrimaryKey().Relational().Name;
+            bool pKeyError = false;
+            var pKeyLogger = new CompareLogger(CompareType.PrimaryKey, efPKeyConstraintName, log.SubLogs, 
+                () =>
+                {
+                    pKeyError = true;  //extra set of pKeyError
+                    return _hasErrors = true;
+                });
+            pKeyLogger.CheckDifferent(efPKeyConstraintName, table.PrimaryKey.Name, CompareAttributes.ConstraintName);
             foreach (var property in entityType.GetProperties())
             {
                 var pRel = property.Relational();
-                var logger = new CompareLogger(CompareType.Property, property.Name, log.SubLogs, () => _hasErrors = true);
+                var colLogger = new CompareLogger(CompareType.Property, property.Name, log.SubLogs, () => _hasErrors = true);
+
                 if (columnDict.ContainsKey(pRel.ColumnName))
                 {
-                    var error = ComparePropertyToColumn(logger, property, columnDict[pRel.ColumnName]);
+                    var error = ComparePropertyToColumn(colLogger, property, columnDict[pRel.ColumnName]);
                     //check for primary key
-                    error |= logger.CheckDifferent(property.IsPrimaryKey().ToString(), 
-                        primaryKeyDict.ContainsKey(pRel.ColumnName).ToString(), CompareAttributes.PrimaryKey);
+                    if (property.IsPrimaryKey())
+                    {
+                        if (!primaryKeyDict.ContainsKey(pRel.ColumnName))
+                        {
+                            pKeyLogger.NotInDatabase(pRel.ColumnName, CompareAttributes.ColumnName);
+                            error = true;
+                        }
+                        //we ignore the extra key, as that is found by the second pass
+                    }
 
                     if (!error)
                     {
                         //There were no errors noted, so we mark it as OK
-                        logger.MarkAsOk(pRel.ColumnName);
+                        colLogger.MarkAsOk(pRel.ColumnName);
                     }
                 }
                 else
                 {
-                    logger.NotInDatabase(pRel.ColumnName, CompareAttributes.ColumnName);
+                    colLogger.NotInDatabase(pRel.ColumnName, CompareAttributes.ColumnName);
                 }
             }
+            if (!pKeyError)
+                pKeyLogger.MarkAsOk(efPKeyConstraintName);
         }
 
         private bool ComparePropertyToColumn(CompareLogger logger, IProperty property, DatabaseColumn column)

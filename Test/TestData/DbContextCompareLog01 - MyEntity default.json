@@ -1,58 +1,67 @@
 ﻿[
-	{
-		"SubLogs": [
-			{
-				"SubLogs": [
-					{
-						"SubLogs": [],
-						"Type": "Property",
-						"State": "Ok",
-						"Name": "MyEntityId",
-						"Attribute": "NotSet",
-						"Expected": "MyEntityId",
-						"Found": null
-					},
-					{
-						"SubLogs": [],
-						"Type": "Property",
-						"State": "Ok",
-						"Name": "MyDateTime",
-						"Attribute": "NotSet",
-						"Expected": "MyDateTime",
-						"Found": null
-					},
-					{
-						"SubLogs": [],
-						"Type": "Property",
-						"State": "Ok",
-						"Name": "MyInt",
-						"Attribute": "NotSet",
-						"Expected": "MyInt",
-						"Found": null
-					},
-					{
-						"SubLogs": [],
-						"Type": "Property",
-						"State": "Ok",
-						"Name": "MyString",
-						"Attribute": "NotSet",
-						"Expected": "MyString",
-						"Found": null
-					}
-				],
-				"Type": "Entity",
-				"State": "Ok",
-				"Name": "MyEntity",
-				"Attribute": "NotSet",
-				"Expected": "MyEntites",
-				"Found": null
-			}
-		],
-		"Type": "DbContext",
-		"State": "Ok",
-		"Name": "MyEntityDbContext",
-		"Attribute": "NotSet",
-		"Expected": "MyEntityDbContext",
-		"Found": null
-	}
+  {
+    "SubLogs": [
+      {
+        "SubLogs": [
+          {
+            "SubLogs": [],
+            "Type": "Property",
+            "State": "Ok",
+            "Name": "MyEntityId",
+            "Attribute": "NotSet",
+            "Expected": "MyEntityId",
+            "Found": null
+          },
+          {
+            "SubLogs": [],
+            "Type": "Property",
+            "State": "Ok",
+            "Name": "MyDateTime",
+            "Attribute": "NotSet",
+            "Expected": "MyDateTime",
+            "Found": null
+          },
+          {
+            "SubLogs": [],
+            "Type": "Property",
+            "State": "Ok",
+            "Name": "MyInt",
+            "Attribute": "NotSet",
+            "Expected": "MyInt",
+            "Found": null
+          },
+          {
+            "SubLogs": [],
+            "Type": "Property",
+            "State": "Ok",
+            "Name": "MyString",
+            "Attribute": "NotSet",
+            "Expected": "MyString",
+            "Found": null
+          },
+          {
+            "SubLogs": [],
+            "Type": "PrimaryKey",
+            "State": "Ok",
+            "Name": "PK_MyEntites",
+            "Attribute": "NotSet",
+            "Expected": "PK_MyEntites",
+            "Found": null
+          }
+        ],
+        "Type": "Entity",
+        "State": "Ok",
+        "Name": "MyEntity",
+        "Attribute": "NotSet",
+        "Expected": "MyEntites",
+        "Found": null
+      }
+    ],
+    "Type": "DbContext",
+    "State": "Ok",
+    "Name": "MyEntityDbContext",
+    "Attribute": "NotSet",
+    "Expected": "MyEntityDbContext",
+    "Found": null
+  }
 ]

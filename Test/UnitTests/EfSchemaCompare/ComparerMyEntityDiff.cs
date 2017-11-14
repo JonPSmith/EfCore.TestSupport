@@ -52,9 +52,9 @@ namespace Test.UnitTests.EfSchemaCompare
 
                 //VERIFY
                 hasErrors.ShouldBeFalse();
-                //var settings = new JsonSerializerSettings();
-                //settings.Converters.Add(new StringEnumConverter ());
-                //var json = JsonConvert.SerializeObject(handler.Logs, settings);
+                var settings = new JsonSerializerSettings();
+                settings.Converters.Add(new StringEnumConverter());
+                var json = JsonConvert.SerializeObject(handler.Logs, settings);
             }
         }
 
@@ -158,6 +158,31 @@ namespace Test.UnitTests.EfSchemaCompare
             }
         }
 
+        [Fact]
+        public void CompareDiffPrimaryKey()
+        {
+            //SETUP
+            var optionsBuilder = new DbContextOptionsBuilder<MyEntityDiffPKeyDbContext>();
+            optionsBuilder.UseSqlServer(_connectionString);
+            using (var context = new MyEntityDiffPKeyDbContext(optionsBuilder.Options))
+            {
+                var handler = new DbContextComparer(context.Model, context.GetType().Name);
+
+                //ATTEMPT
+                var hasErrors = handler.CompareModelToDatabase(_databaseModel);
+
+                //VERIFY
+                hasErrors.ShouldBeTrue();
+                var errors = CompareLog.ListAllErrors(handler.Logs).ToList();
+                errors.Count.ShouldEqual(3);
+                errors[0].ShouldEqual(
+                    "DIFFERENT: MyEntity->Property 'MyInt', value generated. Expected = OnAdd, Found = Never");
+                errors[1].ShouldEqual(
+                    "NOT IN DATABASE: MyEntity->PrimaryKey 'PK_MyEntites', column name. Expected = MyInt");
+                errors[2].ShouldEqual(
+                    "DIFFERENT: MyEntity->Property 'MyEntityId', value generated. Expected = Never, Found = OnAdd");
+            }
+        }
         [Fact]
         public void ComparePropertyComputedColName()
         {
