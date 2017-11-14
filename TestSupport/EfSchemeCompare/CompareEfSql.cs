@@ -50,6 +50,7 @@ namespace TestSupport.EfSchemeCompare
             //No errors, so its worth running the second phase
             var stage2Comparer = new Stage2Comparer(databaseModel);
             hasErrors = stage2Comparer.CompareLogsToDatabase(_logs);
+            _logs.AddRange(stage2Comparer.Logs);
             return hasErrors;
         }
 

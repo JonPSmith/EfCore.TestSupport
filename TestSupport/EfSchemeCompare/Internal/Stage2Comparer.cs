@@ -34,11 +34,11 @@ namespace TestSupport.EfSchemeCompare.Internal
 
         private void LookForUnusedTables(IReadOnlyList<CompareLog> firstStageLogs, CompareLogger logger)
         {
-                     var tableDict = _databaseModel.Tables.ToDictionary(x => x.Name);
+            var databaseTableNames = _databaseModel.Tables.Select(x => x.Name);
             var allEntityTableNames = firstStageLogs.SelectMany(p => p.SubLogs)
                 .Where(x => x.State == CompareState.Ok && x.Type == CompareType.Entity)
-                .Select(p => p.Expected).OrderBy(p => p).Distinct();
-            var tablesNotUsed = allEntityTableNames.Where(p => !tableDict.ContainsKey(p));
+                .Select(p => p.Expected).OrderBy(p => p).Distinct().ToList();
+            var tablesNotUsed = databaseTableNames.Where(p => !allEntityTableNames.Contains(p));
 
             foreach (var tableName in tablesNotUsed)
             {

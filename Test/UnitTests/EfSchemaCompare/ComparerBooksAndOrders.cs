@@ -43,8 +43,6 @@ namespace Test.UnitTests.EfSchemaCompare
             }
         }
 
-
-
         [Fact]
         public void CompareViaConnection()
         {
@@ -93,6 +91,28 @@ namespace Test.UnitTests.EfSchemaCompare
                     "NOT IN DATABASE: Entity 'LineItem', table name. Expected = LineItem");
                 errors[1].ShouldEqual(
                     "NOT IN DATABASE: Entity 'Order', table name. Expected = Orders");
+            }
+        }
+
+        [Fact]
+        public void CompareBookAgainstBookOrderDatabase()
+        {
+            //SETUP
+            using (var context = new BookContext(GetBookContextOptions()))
+            {
+                var comparer = new CompareEfSql();
+
+                //ATTEMPT
+                var hasErrors = comparer.CompareEfWithDb(context, _connectionString);
+
+                //VERIFY
+                hasErrors.ShouldBeTrue();
+                var errors = CompareLog.ListAllErrors(comparer.Logs).ToList();
+                errors.Count.ShouldEqual(2);
+                errors[0].ShouldEqual(
+                    "EXTRA IN DATABASE: Table 'Orders', table name");
+                errors[1].ShouldEqual(
+                    "EXTRA IN DATABASE: Table 'LineItem', table name");
             }
         }
     }
