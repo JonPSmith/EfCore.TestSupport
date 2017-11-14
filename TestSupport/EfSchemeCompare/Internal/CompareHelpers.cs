@@ -32,14 +32,29 @@ namespace TestSupport.EfSchemeCompare.Internal
             return string.Join(",", properties.Select(x => x.Relational().ColumnName));
         }
 
-        public static string ConvertNullableValueGenerated(this ValueGenerated? valGen)
+        //The scaffold does not set the correct ValueGenerated for a column that has a sql default value
+        public static string ConvertNullableValueGenerated(this ValueGenerated? valGen, string sqlDefault)
         {
+            if (valGen == null && sqlDefault != null)
+                return ValueGenerated.OnAdd.ToString();
             return valGen?.ToString() ?? ValueGenerated.Never.ToString();
         }
 
         public static string ConvertNullableReferentialAction(this ReferentialAction? refAct)
         {
             return refAct?.ToString() ?? ReferentialAction.NoAction.ToString();
+        }
+
+        public static string RemoveUnnecessaryBrackets(this string val)
+        {
+            if (val == null) return null;
+
+            while (val.Length > 1 && val[0] == '(' && val[val.Length-1] == ')')
+            {
+                val = val.Substring(1, val.Length - 2);
+            }
+
+            return val;
         }
 
         //--------------------------------------------------------------

@@ -182,13 +182,45 @@ namespace Test.UnitTests.EfSchemaCompare
             }
         }
 
+        private DbContextOptions<MyEntityComputedColDbContext> GetComputedColDbOptions()
+        {
+            var options = this.CreateUniqueMethodOptions<MyEntityComputedColDbContext>();
+            return options;
+        }
+
+        [Fact]
+        public void ComparePropertyComputedColSelf()
+        {
+            //SETUP
+            var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
+            var factory = serviceProvider.GetService<IDatabaseModelFactory>();
+            var options = GetComputedColDbOptions();
+            using (var context = new MyEntityComputedColDbContext(options))
+            {
+                var connectionString = context.Database.GetDbConnection().ConnectionString;
+                context.Database.EnsureCreated();
+                var localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+
+                var handler = new DbContextComparer(context.Model, context.GetType().Name);
+
+                //ATTEMPT
+                var hasErrors = handler.CompareModelToDatabase(localDatabaseModel);
+
+                //VERIFY
+                hasErrors.ShouldBeTrue();
+                //The setting of a computed col changed the column type
+                CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
+                    "DIFFERENT: MyEntity->Property 'MyDateTime', column type. Expected = datetime2, Found = datetime");
+            }
+        }
+
         [Fact]
         public void ComparePropertyComputedColNameReversed()
         {
             //SETUP
             var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
             var factory = serviceProvider.GetService<IDatabaseModelFactory>();
-            var options = this.CreateUniqueMethodOptions<MyEntityComputedColDbContext>();
+            var options = GetComputedColDbOptions();
             DatabaseModel localDatabaseModel;
             using (var context = new MyEntityComputedColDbContext(options))
             {
@@ -211,7 +243,7 @@ namespace Test.UnitTests.EfSchemaCompare
                 errors[0].ShouldEqual(
                     "DIFFERENT: MyEntity->Property 'MyDateTime', column type. Expected = datetime2, Found = datetime");
                 errors[1].ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyDateTime', computed column sql. Expected = <null>, Found = (getutcdate())");
+                    "DIFFERENT: MyEntity->Property 'MyDateTime', computed column sql. Expected = <null>, Found = getutcdate()");
                 errors[2].ShouldEqual(
                     "DIFFERENT: MyEntity->Property 'MyDateTime', value generated. Expected = Never, Found = OnAddOrUpdate");
             }
@@ -241,13 +273,45 @@ namespace Test.UnitTests.EfSchemaCompare
             }
         }
 
+
+        private DbContextOptions<MyEntitySqlDefaultDbContext> GetDefaultSqlDbOptions()
+        {
+            var options = this.CreateUniqueMethodOptions<MyEntitySqlDefaultDbContext>();
+            return options;
+        }
+
+        [Fact]
+        public void ComparePropertySqlDefaultSelf()
+        {
+            //SETUP
+            var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
+            var factory = serviceProvider.GetService<IDatabaseModelFactory>();
+            var options = GetDefaultSqlDbOptions();
+            using (var context = new MyEntitySqlDefaultDbContext(options))
+            {
+                var connectionString = context.Database.GetDbConnection().ConnectionString;
+                context.Database.EnsureCreated();
+                var localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+
+                var handler = new DbContextComparer(context.Model, context.GetType().Name);
+
+                //ATTEMPT
+                var hasErrors = handler.CompareModelToDatabase(localDatabaseModel);
+
+                //VERIFY
+                hasErrors.ShouldBeFalse();
+                //CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
+                //    "DIFFERENT: Property 'MyInt', value generated. Expected = OnAdd, Found = Never");
+            }
+        }
+
         [Fact]
         public void ComparePropertySqlDefaultReversed()
         {
             //SETUP
             var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
             var factory = serviceProvider.GetService<IDatabaseModelFactory>();
-            var options = this.CreateUniqueMethodOptions<MyEntitySqlDefaultDbContext>();
+            var options = GetDefaultSqlDbOptions();
             DatabaseModel localDatabaseModel;
             using (var context = new MyEntitySqlDefaultDbContext(options))
             {
@@ -265,8 +329,12 @@ namespace Test.UnitTests.EfSchemaCompare
 
                 //VERIFY
                 hasErrors.ShouldBeTrue();
-                CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyInt', default value sql. Expected = <null>, Found = ((123))");
+                var errors = CompareLog.ListAllErrors(handler.Logs).ToList();
+                errors.Count.ShouldEqual(2);
+                errors[0].ShouldEqual(
+                    "DIFFERENT: MyEntity->Property 'MyInt', default value sql. Expected = <null>, Found = 123");
+                errors[1].ShouldEqual(
+                    "DIFFERENT: MyEntity->Property 'MyInt', value generated. Expected = Never, Found = OnAdd");
             }
         }
 

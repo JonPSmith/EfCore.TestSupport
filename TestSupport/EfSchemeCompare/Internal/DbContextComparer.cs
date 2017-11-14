@@ -169,9 +169,11 @@ namespace TestSupport.EfSchemeCompare.Internal
         {
             var error = logger.CheckDifferent(property.Relational().ColumnType, column.StoreType, CompareAttributes.ColumnType);
             error |= logger.CheckDifferent(property.IsNullable.NullableAsString(), column.IsNullable.NullableAsString(), CompareAttributes.Nullability);
-            error |= logger.CheckDifferent(property.Relational().DefaultValueSql, column.DefaultValueSql, CompareAttributes.DefaultValueSql);
-            error |= logger.CheckDifferent(property.Relational().ComputedColumnSql, column.ComputedColumnSql, CompareAttributes.ComputedColumnSql);
-            error |= logger.CheckDifferent(property.ValueGenerated.ToString(), column.ValueGenerated.ConvertNullableValueGenerated(), CompareAttributes.ValueGenerated);
+            error |= logger.CheckDifferent(property.Relational().DefaultValueSql.RemoveUnnecessaryBrackets(), 
+                column.DefaultValueSql.RemoveUnnecessaryBrackets(), CompareAttributes.DefaultValueSql);
+            error |= logger.CheckDifferent(property.Relational().ComputedColumnSql.RemoveUnnecessaryBrackets(), 
+                column.ComputedColumnSql.RemoveUnnecessaryBrackets(), CompareAttributes.ComputedColumnSql);
+            error |= logger.CheckDifferent(property.ValueGenerated.ToString(), column.ValueGenerated.ConvertNullableValueGenerated(column.DefaultValueSql), CompareAttributes.ValueGenerated);
             return error;
         }
 
