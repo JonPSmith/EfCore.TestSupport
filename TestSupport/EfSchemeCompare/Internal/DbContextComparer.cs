@@ -160,14 +160,18 @@ namespace TestSupport.EfSchemeCompare.Internal
                 {
                     var error = ComparePropertyToColumn(colLogger, property, columnDict[pRel.ColumnName]);
                     //check for primary key
-                    if (property.IsPrimaryKey())
+                    if (property.IsPrimaryKey() != primaryKeyDict.ContainsKey(pRel.ColumnName))
                     {
                         if (!primaryKeyDict.ContainsKey(pRel.ColumnName))
                         {
                             pKeyLogger.NotInDatabase(pRel.ColumnName, CompareAttributes.ColumnName);
                             error = true;
                         }
-                        //we ignore the extra key, as that is found by the second pass
+                        else
+                        {
+                            pKeyLogger.ExtraInDatabase(pRel.ColumnName, CompareAttributes.ColumnName,
+                                table.PrimaryKey.Name);
+                        }
                     }
 
                     if (!error)
