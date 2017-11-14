@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using TestSupport.DesignTimeServices;
 using TestSupport.EfHelpers;
@@ -19,13 +18,13 @@ using Xunit.Extensions.AssertExtensions;
 
 namespace Test.UnitTests.EfSchemaCompare
 {
-    public class ExtraDatabaseComparerMyEntityDiff
+    public class Stage2ComparerMyEntityDiff
     {
         private readonly ITestOutputHelper _output;
         private readonly string _connectionString;
         private readonly DbContextOptions<MyEntityDbContext> _options;
         private readonly DatabaseModel _databaseModel;
-        public ExtraDatabaseComparerMyEntityDiff(ITestOutputHelper output)
+        public Stage2ComparerMyEntityDiff(ITestOutputHelper output)
         {
             _output = output;
             _options = this
