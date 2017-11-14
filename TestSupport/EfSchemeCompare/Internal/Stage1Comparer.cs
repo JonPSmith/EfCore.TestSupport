@@ -76,8 +76,8 @@ namespace TestSupport.EfSchemeCompare.Internal
             foreach (var entityFKey in entityType.GetForeignKeys())
             {
                 var entityFKeyprops = entityFKey.Properties;
-                var logger = new CompareLogger(CompareType.ForeignKey, entityFKeyprops.CombinedColNames(), log.SubLogs, () => _hasErrors = true);
                 var constraintName = entityFKey.Relational().Name;
+                var logger = new CompareLogger(CompareType.ForeignKey, constraintName, log.SubLogs, () => _hasErrors = true);
                 if (fKeyDict.ContainsKey(constraintName))
                 {       
                     //Now check every foreign key
