@@ -4,6 +4,7 @@
 using System;
 using System.Linq;
 using DataLayer.BookApp;
+using DataLayer.EfCode.BookApp;
 using Test.Helpers;
 using TestSupport.EfHelpers;
 using Xunit;

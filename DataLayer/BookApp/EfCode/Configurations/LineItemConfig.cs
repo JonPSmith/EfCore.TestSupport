@@ -4,15 +4,16 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DataLayer.BookApp.Configurations
+namespace DataLayer.BookApp.EfCode.Configurations
 {
-    public class PriceOfferConfig : IEntityTypeConfiguration<PriceOffer>
+    public class LineItemConfig : IEntityTypeConfiguration<LineItem>
     {
         public void Configure
-            (EntityTypeBuilder<PriceOffer> entity)
+            (EntityTypeBuilder<LineItem> entity)
         {
-            entity.Property(p => p.NewPrice)
-                .HasColumnType("decimal(9,2)");
+            entity.HasOne(p => p.ChosenBook)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict); //#A
         }
     }
 }

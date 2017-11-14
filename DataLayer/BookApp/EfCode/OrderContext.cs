@@ -1,16 +1,16 @@
 ﻿// // Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // // Licensed under MIT licence. See License.txt in the project root for license information.
 
-using DataLayer.BookApp.Configurations;
+using DataLayer.BookApp.EfCode.Configurations;
 using Microsoft.EntityFrameworkCore;
+using DataLayer.BookApp;
 
-namespace DataLayer.BookApp
+namespace DataLayer.EfCode.BookApp
 {
     public class OrderContext : DbContext
     {
         public DbSet<Book> Books { get; set; } //#A
         public DbSet<Order> Orders { get; set; }
-        //public DbSet<AddressO> Addresses { get; set; }
 
         public OrderContext(
             DbContextOptions<OrderContext> options)      
