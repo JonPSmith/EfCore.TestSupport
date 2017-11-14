@@ -44,7 +44,7 @@ namespace Test.UnitTests.EfSchemaCompare
             //SETUP
             var firstStageLogs =
                 JsonConvert.DeserializeObject<List<CompareLog>>(TestData.GetFileContent("DbContextCompareLog01*.json"));
-            var handler = new ExtraInDatabaseComparer(_databaseModel);
+            var handler = new Stage2Comparer(_databaseModel);
 
             //ATTEMPT
             var hasErrors = handler.CompareLogsToDatabase(firstStageLogs);
@@ -61,7 +61,7 @@ namespace Test.UnitTests.EfSchemaCompare
             jArray[0]["SubLogs"][0]["Expected"] = "DiffTableName";
             var firstStageLogs = JsonConvert.DeserializeObject<List<CompareLog>>(jArray.ToString());
 
-            var handler = new ExtraInDatabaseComparer(_databaseModel);
+            var handler = new Stage2Comparer(_databaseModel);
 
             //ATTEMPT
             var hasErrors = handler.CompareLogsToDatabase(firstStageLogs);
@@ -80,7 +80,7 @@ namespace Test.UnitTests.EfSchemaCompare
             jArray[0]["SubLogs"][0]["SubLogs"][0]["Expected"] = "DiffPropName";
             var firstStageLogs = JsonConvert.DeserializeObject<List<CompareLog>>(jArray.ToString());
 
-            var handler = new ExtraInDatabaseComparer(_databaseModel);
+            var handler = new Stage2Comparer(_databaseModel);
 
             //ATTEMPT
             var hasErrors = handler.CompareLogsToDatabase(firstStageLogs);
@@ -100,7 +100,7 @@ namespace Test.UnitTests.EfSchemaCompare
             jArray[0]["SubLogs"][0]["SubLogs"][4]["Type"] = "Index";
             var firstStageLogs = JsonConvert.DeserializeObject<List<CompareLog>>(jArray.ToString());
 
-            var handler = new ExtraInDatabaseComparer(_databaseModel);
+            var handler = new Stage2Comparer(_databaseModel);
 
             //ATTEMPT
             var hasErrors = handler.CompareLogsToDatabase(firstStageLogs);

@@ -13,12 +13,12 @@ using Xunit.Extensions.AssertExtensions;
 
 namespace Test.UnitTests.EfSchemaCompare
 {
-    public class ComparerWithSelf
+    public class Stage1ComparerBooksDiff
     {
         private readonly ITestOutputHelper _output;
         private readonly DbContextOptions<BookContext> _options;
         private readonly string _connectionString;
-        public ComparerWithSelf(ITestOutputHelper output)
+        public Stage1ComparerBooksDiff(ITestOutputHelper output)
         {
             _output = output;
             _options = this
@@ -41,7 +41,7 @@ namespace Test.UnitTests.EfSchemaCompare
             using (var context = new BookContext(_options))
             {
                 var database = factory.Create(_connectionString, new string[] { }, new string[] { });
-                var handler = new DbContextComparer(context.Model, nameof(BookContext));
+                var handler = new Stage1Comparer(context.Model, nameof(BookContext));
 
                 //ATTEMPT
                 var hasErrors = handler.CompareModelToDatabase(database);

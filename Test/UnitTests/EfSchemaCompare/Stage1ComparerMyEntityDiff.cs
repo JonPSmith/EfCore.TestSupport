@@ -16,13 +16,13 @@ using Xunit.Extensions.AssertExtensions;
 
 namespace Test.UnitTests.EfSchemaCompare
 {
-    public class ComparerMyEntityDiff
+    public class Stage1ComparerMyEntityDiff
     {
         private readonly ITestOutputHelper _output;
         private readonly string _connectionString;
         private readonly DbContextOptions<MyEntityDbContext> _options;
         private readonly DatabaseModel _databaseModel;
-        public ComparerMyEntityDiff(ITestOutputHelper output)
+        public Stage1ComparerMyEntityDiff(ITestOutputHelper output)
         {
             _output = output;
             _options = this
@@ -45,7 +45,7 @@ namespace Test.UnitTests.EfSchemaCompare
             using (var context = new MyEntityDbContext(_options))
             {
                 var model = context.Model;
-                var handler = new DbContextComparer(model, context.GetType().Name);
+                var handler = new Stage1Comparer(model, context.GetType().Name);
 
                 //ATTEMPT
                 var hasErrors = handler.CompareModelToDatabase(_databaseModel);
@@ -66,7 +66,7 @@ namespace Test.UnitTests.EfSchemaCompare
             optionsBuilder.UseSqlServer(_connectionString);
             using (var context = new MyEntitySetSchemaDbContext(optionsBuilder.Options))
             {
-                var handler = new DbContextComparer(context.Model, context.GetType().Name);
+                var handler = new Stage1Comparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
                 var hasErrors = handler.CompareModelToDatabase(_databaseModel);
@@ -86,7 +86,7 @@ namespace Test.UnitTests.EfSchemaCompare
             optionsBuilder.UseSqlServer(_connectionString);
             using (var context = new MyEntityExtraPropDbContext(optionsBuilder.Options))
             {
-                var handler = new DbContextComparer(context.Model, context.GetType().Name);
+                var handler = new Stage1Comparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
                 var hasErrors = handler.CompareModelToDatabase(_databaseModel);
@@ -106,7 +106,7 @@ namespace Test.UnitTests.EfSchemaCompare
             optionsBuilder.UseSqlServer(_connectionString);
             using (var context = new MyEntityPropertyDiffColDbContext(optionsBuilder.Options))
             {
-                var handler = new DbContextComparer(context.Model, context.GetType().Name);
+                var handler = new Stage1Comparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
                 var hasErrors = handler.CompareModelToDatabase(_databaseModel);
@@ -126,7 +126,7 @@ namespace Test.UnitTests.EfSchemaCompare
             optionsBuilder.UseSqlServer(_connectionString);
             using (var context = new MyEntityPropertyDiffNullDbContext(optionsBuilder.Options))
             {
-                var handler = new DbContextComparer(context.Model, context.GetType().Name);
+                var handler = new Stage1Comparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
                 var hasErrors = handler.CompareModelToDatabase(_databaseModel);
@@ -146,7 +146,7 @@ namespace Test.UnitTests.EfSchemaCompare
             optionsBuilder.UseSqlServer(_connectionString);
             using (var context = new MyEntityPropertyDiffTypeDbContext(optionsBuilder.Options))
             {
-                var handler = new DbContextComparer(context.Model, context.GetType().Name);
+                var handler = new Stage1Comparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
                 var hasErrors = handler.CompareModelToDatabase(_databaseModel);
@@ -166,7 +166,7 @@ namespace Test.UnitTests.EfSchemaCompare
             optionsBuilder.UseSqlServer(_connectionString);
             using (var context = new MyEntityDiffPKeyDbContext(optionsBuilder.Options))
             {
-                var handler = new DbContextComparer(context.Model, context.GetType().Name);
+                var handler = new Stage1Comparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
                 var hasErrors = handler.CompareModelToDatabase(_databaseModel);
@@ -193,7 +193,7 @@ namespace Test.UnitTests.EfSchemaCompare
             optionsBuilder.UseSqlServer(_connectionString);
             using (var context = new MyEntityComputedColDbContext(optionsBuilder.Options))
             {
-                var handler = new DbContextComparer(context.Model, context.GetType().Name);
+                var handler = new Stage1Comparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
                 var hasErrors = handler.CompareModelToDatabase(_databaseModel);
@@ -228,7 +228,7 @@ namespace Test.UnitTests.EfSchemaCompare
                 context.Database.EnsureCreated();
                 var localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
 
-                var handler = new DbContextComparer(context.Model, context.GetType().Name);
+                var handler = new Stage1Comparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
                 var hasErrors = handler.CompareModelToDatabase(localDatabaseModel);
@@ -258,7 +258,7 @@ namespace Test.UnitTests.EfSchemaCompare
 
             using (var context = new MyEntityDbContext(_options))
             {
-                var handler = new DbContextComparer(context.Model, context.GetType().Name);
+                var handler = new Stage1Comparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
                 var hasErrors = handler.CompareModelToDatabase(localDatabaseModel);
@@ -284,7 +284,7 @@ namespace Test.UnitTests.EfSchemaCompare
             optionsBuilder.UseSqlServer(_connectionString);
             using (var context = new MyEntitySqlDefaultDbContext(optionsBuilder.Options))
             {
-                var handler = new DbContextComparer(context.Model, context.GetType().Name);
+                var handler = new Stage1Comparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
                 var hasErrors = handler.CompareModelToDatabase(_databaseModel);
@@ -320,7 +320,7 @@ namespace Test.UnitTests.EfSchemaCompare
                 context.Database.EnsureCreated();
                 var localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
 
-                var handler = new DbContextComparer(context.Model, context.GetType().Name);
+                var handler = new Stage1Comparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
                 var hasErrors = handler.CompareModelToDatabase(localDatabaseModel);
@@ -349,7 +349,7 @@ namespace Test.UnitTests.EfSchemaCompare
 
             using (var context = new MyEntityDbContext(_options))
             {
-                var handler = new DbContextComparer(context.Model, context.GetType().Name);
+                var handler = new Stage1Comparer(context.Model, context.GetType().Name);
 
                 //ATTEMPT
                 var hasErrors = handler.CompareModelToDatabase(localDatabaseModel);

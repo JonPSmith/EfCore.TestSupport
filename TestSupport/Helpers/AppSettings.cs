@@ -30,13 +30,13 @@ namespace TestSupport.Helpers
         /// This will look for a appsettings.json file in the top level of the calling assembly and read content
         /// </summary>
         /// <returns></returns>
-        public static IConfigurationRoot GetConfiguration() //#A
+        public static IConfigurationRoot GetConfiguration(string settingsFilename = AppSettingFilename) //#A
         {
             var callingProjectPath =                      //#B
                 TestData.GetCallingAssemblyTopLevelDir(); //#B
             var builder = new ConfigurationBuilder()               //#C
                 .SetBasePath(callingProjectPath)                   //#C
-                .AddJsonFile(AppSettingFilename, optional: false); //#C
+                .AddJsonFile(settingsFilename, optional: false); //#C
             return builder.Build(); //#D
         }
         /******************************************************************

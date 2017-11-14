@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 
 namespace TestSupport.EfSchemeCompare.Internal
 {
-    internal class ExtraInDatabaseComparer
+    internal class Stage2Comparer
     {
         private readonly DatabaseModel _databaseModel;
 
@@ -17,7 +17,7 @@ namespace TestSupport.EfSchemeCompare.Internal
         private readonly List<CompareLog> _logs = new List<CompareLog>();
         public IReadOnlyList<CompareLog> Logs => _logs.ToImmutableList();
 
-        public ExtraInDatabaseComparer(DatabaseModel databaseModel)
+        public Stage2Comparer(DatabaseModel databaseModel)
         {
             _databaseModel = databaseModel;
         }

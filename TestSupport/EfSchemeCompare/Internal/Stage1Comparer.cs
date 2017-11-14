@@ -13,20 +13,21 @@ using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 
 namespace TestSupport.EfSchemeCompare.Internal
 {
-    internal class DbContextComparer
+    internal class Stage1Comparer
     {
         private readonly IModel _model;
         private readonly string _dbContextName;
 
         private bool _hasErrors;
 
-        private readonly List<CompareLog> _logs = new List<CompareLog>();
+        private readonly List<CompareLog> _logs;
         public IReadOnlyList<CompareLog> Logs => _logs.ToImmutableList();
 
-        public DbContextComparer(IModel model, string dbContextName)
+        public Stage1Comparer(IModel model, string dbContextName, List<CompareLog> logs = null)
         {
             _model = model;
             _dbContextName = dbContextName;
+            _logs = logs ?? new List<CompareLog>();
         }
 
         public bool CompareModelToDatabase(DatabaseModel databaseModel)
