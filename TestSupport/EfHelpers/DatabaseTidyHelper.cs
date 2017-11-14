@@ -25,7 +25,7 @@ namespace TestSupport.EfHelpers
             var builder = new SqlConnectionStringBuilder(config.GetConnectionString(AppSettings.UnitTestConnectionStringName));
             var orgDbName = builder.InitialCatalog;
 
-            var databaseNamesToDelete = GetAllMatchingDatabases($"{orgDbName}.");
+            var databaseNamesToDelete = GetAllMatchingDatabases($"{orgDbName}");
             foreach (var databaseName in databaseNamesToDelete)
             {
                 databaseName.DeleteDatabase();
