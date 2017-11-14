@@ -27,8 +27,8 @@ namespace Test.UnitTests.DataLayer
         {
             //SETUP
             var options = this
-                .CreateUniqueClassOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options))
+                .CreateUniqueClassOptions<BookContext>();
+            using (var context = new BookContext(options))
             {
                 context.CreateEmptyViaWipe();
                 var logs = context.SetupLogging();

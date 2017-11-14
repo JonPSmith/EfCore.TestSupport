@@ -17,8 +17,8 @@ namespace Test.UnitTests.DataLayer
         public void TestWipeDbViaSqlOk()
         {
             //SETUP
-            var options = SqliteInMemory.CreateOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options))
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();
                 context.SeedDatabaseFourBooks();
@@ -36,8 +36,8 @@ namespace Test.UnitTests.DataLayer
         public void TestWipeDbViaSqlNotAuthorsOk()
         {
             //SETUP
-            var options = SqliteInMemory.CreateOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options))
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();
                 context.SeedDatabaseFourBooks();

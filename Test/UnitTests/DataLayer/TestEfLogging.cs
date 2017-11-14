@@ -28,8 +28,8 @@ namespace Test.UnitTests.DataLayer
         {
             //SETUP
             var options = SqliteInMemory
-                .CreateOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options))
+                .CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();
                 context.SeedDatabaseFourBooks();
@@ -57,8 +57,8 @@ namespace Test.UnitTests.DataLayer
         public void TestEfCoreLoggingStringWithBadValues()
         {
             //SETUP
-            var options = SqliteInMemory.CreateOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options))
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();
 
@@ -80,8 +80,8 @@ namespace Test.UnitTests.DataLayer
         public void TestEfCoreLogging1()
         {
             //SETUP
-            var options = SqliteInMemory.CreateOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options))
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
             {
                 //ATTEMPT
                 var logs = context.SetupLogging();
@@ -100,8 +100,8 @@ namespace Test.UnitTests.DataLayer
         public void TestEfCoreLogging2()
         {
             //SETUP
-            var options = SqliteInMemory.CreateOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options))
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
             {
                 //ATTEMPT
                 var logs = context.SetupLogging();
@@ -117,16 +117,16 @@ namespace Test.UnitTests.DataLayer
         {
             //SETUP
             List<LogOutput> logs1;
-            var options1 = SqliteInMemory.CreateOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options1))
+            var options1 = SqliteInMemory.CreateOptions<BookContext>();
+            using (var context = new BookContext(options1))
             {
                 //ATTEMPT
                 logs1 = context.SetupLogging();
                 context.Database.EnsureCreated();
             }
             var logs1Count = logs1.Count;
-            var options2 = SqliteInMemory.CreateOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options2))
+            var options2 = SqliteInMemory.CreateOptions<BookContext>();
+            using (var context = new BookContext(options2))
             {
                 //ATTEMPT
                 var logs = context.SetupLogging();
@@ -147,8 +147,8 @@ namespace Test.UnitTests.DataLayer
         public void TestLogQueryClientEvaluationWarning()
         {
             //SETUP
-            var options = SqliteInMemory.CreateOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options))
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();
                 var logs = context.SetupLogging();
@@ -170,8 +170,8 @@ namespace Test.UnitTests.DataLayer
         {
             //SETUP
             var options = SqliteInMemory
-                .CreateOptions<EfCoreContext>(true); //#A
-            using (var context = new EfCoreContext(options))
+                .CreateOptions<BookContext>(true); //#A
+            using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();
 

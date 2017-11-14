@@ -19,8 +19,8 @@ namespace Test.UnitTests.DataLayer
         public void TestInMemoryOk()
         {
             //SETUP
-            var options = EfInMemory.CreateOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options))
+            var options = EfInMemory.CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();
 

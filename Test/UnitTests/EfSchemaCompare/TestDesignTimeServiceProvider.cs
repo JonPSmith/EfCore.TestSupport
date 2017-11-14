@@ -17,15 +17,15 @@ namespace Test.UnitTests.EfSchemaCompare
     {
 
         private readonly ITestOutputHelper _output;
-        private readonly DbContextOptions<EfCoreContext> _options;
+        private readonly DbContextOptions<BookContext> _options;
         private readonly string _connectionString;
         public TestDesignTimeServiceProvider(ITestOutputHelper output)
         {
             _output = output;
             _options = this
-                .CreateUniqueClassOptions<EfCoreContext>();
+                .CreateUniqueClassOptions<BookContext>();
 
-            using (var context = new EfCoreContext(_options))
+            using (var context = new BookContext(_options))
             {
                 _connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
@@ -36,10 +36,10 @@ namespace Test.UnitTests.EfSchemaCompare
         public void GetDatabaseProvider()
         {
             //SETUP
-            var optionsBuilder = new DbContextOptionsBuilder<EfCoreContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<BookContext>();
             optionsBuilder.UseSqlServer(_connectionString);
 
-            using (var context = new EfCoreContext(_options))
+            using (var context = new BookContext(_options))
             {
                 //ATTEMPT 
                 var dbProvider = context.GetService<IDatabaseProvider>();
@@ -55,7 +55,7 @@ namespace Test.UnitTests.EfSchemaCompare
         public void GetDesignTimeServiceProviderSqlServer()
         {
             //SETUP
-            using (var context = new EfCoreContext(_options))
+            using (var context = new BookContext(_options))
             {
                 //ATTEMPT 
                 var service = context.GetDesignTimeProvider();
@@ -71,8 +71,8 @@ namespace Test.UnitTests.EfSchemaCompare
         {
             //SETUP
             var options = SqliteInMemory
-                .CreateOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options))
+                .CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
             {
                 //ATTEMPT 
                 var service = context.GetDesignTimeProvider();
@@ -87,7 +87,7 @@ namespace Test.UnitTests.EfSchemaCompare
         public void GetIDatabaseModelFactorySqlServer()
         {
             //SETUP
-            using (var context = new EfCoreContext(_options))
+            using (var context = new BookContext(_options))
             {
                 var serviceProvider = context.GetDesignTimeProvider();
 
@@ -105,8 +105,8 @@ namespace Test.UnitTests.EfSchemaCompare
         {
             //SETUP
             var options = SqliteInMemory
-                .CreateOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options))
+                .CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
             {
                 var serviceProvider = context.GetDesignTimeProvider();
 

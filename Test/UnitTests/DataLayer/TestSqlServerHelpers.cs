@@ -27,8 +27,8 @@ namespace Test.UnitTests.DataLayer
         {
             //SETUP
             var options = this
-                .CreateUniqueClassOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options))
+                .CreateUniqueClassOptions<BookContext>();
+            using (var context = new BookContext(options))
             {
                 context.CreateEmptyViaWipe();
 
@@ -45,8 +45,8 @@ namespace Test.UnitTests.DataLayer
         {
             //SETUP
             //ATTEMPT
-            var options = this.CreateUniqueClassOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options))
+            var options = this.CreateUniqueClassOptions<BookContext>();
+            using (var context = new BookContext(options))
             {
                 //VERIFY
                 var builder = new SqlConnectionStringBuilder(context.Database.GetDbConnection().ConnectionString);
@@ -59,8 +59,8 @@ namespace Test.UnitTests.DataLayer
         {
             //SETUP
             //ATTEMPT
-            var options = this.CreateUniqueMethodOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options))
+            var options = this.CreateUniqueMethodOptions<BookContext>();
+            using (var context = new BookContext(options))
             {
 
                 //VERIFY
@@ -74,13 +74,13 @@ namespace Test.UnitTests.DataLayer
         public void TestCreateEmptyViaDeleteOk()
         {
             //SETUP
-            var options = this.CreateUniqueMethodOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options))
+            var options = this.CreateUniqueMethodOptions<BookContext>();
+            using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();
                 context.SeedDatabaseFourBooks();
             }
-            using (var context = new EfCoreContext(options))
+            using (var context = new BookContext(options))
             {
                 //ATTEMPT
                 using (new TimeThings(_output, "Time to delete and create the database"))
@@ -97,13 +97,13 @@ namespace Test.UnitTests.DataLayer
         public void TestCreateEmptyViaWipe()
         {
             //SETUP
-            var options = this.CreateUniqueMethodOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options))
+            var options = this.CreateUniqueMethodOptions<BookContext>();
+            using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();
                 context.SeedDatabaseDummyBooks(100);
             }
-            using (var context = new EfCoreContext(options))
+            using (var context = new BookContext(options))
             {
                 //ATTEMPT
                 using(new TimeThings(_output, "Time to wipe the database"))

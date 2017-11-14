@@ -18,8 +18,8 @@ namespace Test.UnitTests.DataLayer
         {
             //SETUP
             var options = SqliteInMemory
-                .CreateOptions<EfCoreContext>();
-            using (var context = new EfCoreContext(options))
+                .CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();  //#A
                 context.SeedDatabaseFourBooks();   //#A
@@ -47,13 +47,13 @@ namespace Test.UnitTests.DataLayer
         {
             //SETUP
             var options = SqliteInMemory         //#A
-                .CreateOptions<EfCoreContext>(); //#A
-            using (var context = new EfCoreContext(options))//#B
+                .CreateOptions<BookContext>(); //#A
+            using (var context = new BookContext(options))//#B
             {
                 context.Database.EnsureCreated();
                 context.SeedDatabaseFourBooks(); //#C
             }
-            using (var context = new EfCoreContext(options))//#D
+            using (var context = new BookContext(options))//#D
             {
                 //ATTEMPT
                 var book = context.Books.Last();              //#E

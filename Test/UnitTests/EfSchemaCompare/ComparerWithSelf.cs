@@ -15,15 +15,15 @@ namespace Test.UnitTests.EfSchemaCompare
     public class ComparerWithSelf
     {
         private readonly ITestOutputHelper _output;
-        private readonly DbContextOptions<EfCoreContext> _options;
+        private readonly DbContextOptions<BookContext> _options;
         private readonly string _connectionString;
         public ComparerWithSelf(ITestOutputHelper output)
         {
             _output = output;
             _options = this
-                .CreateUniqueClassOptions<EfCoreContext>();
+                .CreateUniqueClassOptions<BookContext>();
 
-            using (var context = new EfCoreContext(_options))
+            using (var context = new BookContext(_options))
             {
                 _connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
@@ -37,10 +37,10 @@ namespace Test.UnitTests.EfSchemaCompare
             var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
             var factory = serviceProvider.GetService<IDatabaseModelFactory>();
 
-            using (var context = new EfCoreContext(_options))
+            using (var context = new BookContext(_options))
             {
                 var database = factory.Create(_connectionString, new string[] { }, new string[] { });
-                var handler = new DbContextComparer(context.Model, nameof(EfCoreContext));
+                var handler = new DbContextComparer(context.Model, nameof(BookContext));
 
                 //ATTEMPT
                 var hasErrors = handler.CompareModelToDatabase(database);

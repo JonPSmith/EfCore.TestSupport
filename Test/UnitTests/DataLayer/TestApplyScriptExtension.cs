@@ -29,9 +29,9 @@ namespace Test.UnitTests.DataLayer
         public void TestApplyScriptOneCommandToDatabaseOk()
         {
             //SETUP
-            var options = this.CreateUniqueClassOptions<EfCoreContext>();
+            var options = this.CreateUniqueClassOptions<BookContext>();
             var filepath = TestData.GetFilePath("Script01 - Add row to Authors table.sql");
-            using (var context = new EfCoreContext(options))
+            using (var context = new BookContext(options))
             {
                 context.CreateEmptyViaWipe();
 
@@ -47,9 +47,9 @@ namespace Test.UnitTests.DataLayer
         public void TestApplyScriptTwoCommandsToDatabaseOk()
         {
             //SETUP
-            var options = this.CreateUniqueClassOptions<EfCoreContext>();
+            var options = this.CreateUniqueClassOptions<BookContext>();
             var filepath = TestData.GetFilePath("Script02 - Add two rows to Authors table.sql");
-            using (var context = new EfCoreContext(options))
+            using (var context = new BookContext(options))
             {
                 context.CreateEmptyViaWipe();
 
@@ -66,11 +66,11 @@ namespace Test.UnitTests.DataLayer
         {
             //SETUP
             var options = this
-                .CreateUniqueClassOptions<EfCoreContext>();
+                .CreateUniqueClassOptions<BookContext>();
             var filepath = TestData      //#A
                 .GetFilePath(           //#A
                 "AddUserDefinedFunctions.sql"); //#A
-            using (var context = new EfCoreContext(options))
+            using (var context = new BookContext(options))
             {
                 if (context.CreateEmptyViaWipe()) //#B
                 {

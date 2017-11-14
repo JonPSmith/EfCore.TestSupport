@@ -23,10 +23,10 @@ namespace Test.UnitTests.DataLayer
             const string connectionString //#A
                 = "Server=(localdb)\\mssqllocaldb;Database=EfCore.TestSupport-Test;Trusted_Connection=True";
             var builder = new                             //#B
-                DbContextOptionsBuilder<EfCoreContext>(); //#B
+                DbContextOptionsBuilder<BookContext>(); //#B
             builder.UseSqlServer(connectionString);       //#C
             var options = builder.Options;                //#D
-            using (var context = new EfCoreContext(options)) //#E
+            using (var context = new BookContext(options)) //#E
             {
                 //VERIFY
                 context.Database.GetDbConnection().ConnectionString.ShouldEqual(connectionString);

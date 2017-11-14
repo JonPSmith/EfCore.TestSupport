@@ -23,9 +23,9 @@ namespace Test.UnitTests.EfSchemaCompare
         {
             _output = output;
             var options = this
-                .CreateUniqueClassOptions<EfCoreContext>();
+                .CreateUniqueClassOptions<BookContext>();
 
-            using (var context = new EfCoreContext(options))
+            using (var context = new BookContext(options))
             {
                 _connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
@@ -59,7 +59,7 @@ namespace Test.UnitTests.EfSchemaCompare
 
             //ATTEMPT 
             var entities = model?.GetEntityTypes();
-            var entity = model?.GetEntityTypes().FirstOrDefault(x => x.Name == nameof(EfCoreContext.Books));
+            var entity = model?.GetEntityTypes().FirstOrDefault(x => x.Name == nameof(BookContext.Books));
 
             //VERIFY
             entity.ShouldNotBeNull();
