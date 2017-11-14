@@ -134,7 +134,7 @@ namespace Test.UnitTests.EfSchemaCompare
                 //VERIFY
                 hasErrors.ShouldBeTrue();
                 CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyString', nullability. Expected = NOT NULL, Found = NULL");
+                    "DIFFERENT: MyEntity->Property 'MyString', nullability. Expected = NOT NULL, found = NULL");
             }
         }
 
@@ -154,7 +154,7 @@ namespace Test.UnitTests.EfSchemaCompare
                 //VERIFY
                 hasErrors.ShouldBeTrue();
                 CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyString', column type. Expected = varchar(max), Found = nvarchar(max)");
+                    "DIFFERENT: MyEntity->Property 'MyString', column type. Expected = varchar(max), found = nvarchar(max)");
             }
         }
 
@@ -176,11 +176,11 @@ namespace Test.UnitTests.EfSchemaCompare
                 var errors = CompareLog.ListAllErrors(handler.Logs).ToList();
                 errors.Count.ShouldEqual(3);
                 errors[0].ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyInt', value generated. Expected = OnAdd, Found = Never");
+                    "DIFFERENT: MyEntity->Property 'MyInt', value generated. Expected = OnAdd, found = Never");
                 errors[1].ShouldEqual(
                     "NOT IN DATABASE: MyEntity->PrimaryKey 'PK_MyEntites', column name. Expected = MyInt");
                 errors[2].ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyEntityId', value generated. Expected = Never, Found = OnAdd");
+                    "DIFFERENT: MyEntity->Property 'MyEntityId', value generated. Expected = Never, found = OnAdd");
             }
         }
         [Fact]
@@ -201,9 +201,9 @@ namespace Test.UnitTests.EfSchemaCompare
                 var errors = CompareLog.ListAllErrors(handler.Logs).ToList();
                 errors.Count.ShouldEqual(2);
                 errors[0].ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyDateTime', computed column sql. Expected = getutcdate(), Found = <null>");
+                    "DIFFERENT: MyEntity->Property 'MyDateTime', computed column sql. Expected = getutcdate(), found = <null>");
                 errors[1].ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyDateTime', value generated. Expected = OnAddOrUpdate, Found = Never");
+                    "DIFFERENT: MyEntity->Property 'MyDateTime', value generated. Expected = OnAddOrUpdate, found = Never");
             }
         }
 
@@ -235,7 +235,7 @@ namespace Test.UnitTests.EfSchemaCompare
                 hasErrors.ShouldBeTrue();
                 //The setting of a computed col changed the column type
                 CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyDateTime', column type. Expected = datetime2, Found = datetime");
+                    "DIFFERENT: MyEntity->Property 'MyDateTime', column type. Expected = datetime2, found = datetime");
             }
         }
 
@@ -266,11 +266,11 @@ namespace Test.UnitTests.EfSchemaCompare
                 var errors = CompareLog.ListAllErrors(handler.Logs).ToList();
                 errors.Count.ShouldEqual(3);
                 errors[0].ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyDateTime', column type. Expected = datetime2, Found = datetime");
+                    "DIFFERENT: MyEntity->Property 'MyDateTime', column type. Expected = datetime2, found = datetime");
                 errors[1].ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyDateTime', computed column sql. Expected = <null>, Found = getutcdate()");
+                    "DIFFERENT: MyEntity->Property 'MyDateTime', computed column sql. Expected = <null>, found = getutcdate()");
                 errors[2].ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyDateTime', value generated. Expected = Never, Found = OnAddOrUpdate");
+                    "DIFFERENT: MyEntity->Property 'MyDateTime', value generated. Expected = Never, found = OnAddOrUpdate");
             }
         }
 
@@ -292,9 +292,9 @@ namespace Test.UnitTests.EfSchemaCompare
                 var errors = CompareLog.ListAllErrors(handler.Logs).ToList();
                 errors.Count.ShouldEqual(2);
                 errors[0].ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyInt', default value sql. Expected = 123, Found = <null>");
+                    "DIFFERENT: MyEntity->Property 'MyInt', default value sql. Expected = 123, found = <null>");
                 errors[1].ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyInt', value generated. Expected = OnAdd, Found = Never");
+                    "DIFFERENT: MyEntity->Property 'MyInt', value generated. Expected = OnAdd, found = Never");
             }
         }
 
@@ -326,7 +326,7 @@ namespace Test.UnitTests.EfSchemaCompare
                 //VERIFY
                 hasErrors.ShouldBeFalse();
                 //CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
-                //    "DIFFERENT: Property 'MyInt', value generated. Expected = OnAdd, Found = Never");
+                //    "DIFFERENT: Property 'MyInt', value generated. Expected = OnAdd, found = Never");
             }
         }
 
@@ -357,9 +357,9 @@ namespace Test.UnitTests.EfSchemaCompare
                 var errors = CompareLog.ListAllErrors(handler.Logs).ToList();
                 errors.Count.ShouldEqual(2);
                 errors[0].ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyInt', default value sql. Expected = <null>, Found = 123");
+                    "DIFFERENT: MyEntity->Property 'MyInt', default value sql. Expected = <null>, found = 123");
                 errors[1].ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyInt', value generated. Expected = Never, Found = OnAdd");
+                    "DIFFERENT: MyEntity->Property 'MyInt', value generated. Expected = Never, found = OnAdd");
             }
         }
 
