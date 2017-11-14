@@ -69,7 +69,7 @@ namespace Test.UnitTests.EfSchemaCompare
             //VERIFY
             hasErrors.ShouldBeTrue();
             CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
-                "EXTRA IN DATABASE: Table 'DiffTableName', table name");
+                "EXTRA IN DATABASE: Table 'MyEntites', table name");
         }
 
         [Fact]
