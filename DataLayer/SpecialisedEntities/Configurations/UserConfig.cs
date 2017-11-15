@@ -6,17 +6,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DataLayer.SpecialisedEntities.Configurations
 {
-    public class BookSummaryConfig : IEntityTypeConfiguration<BookSummary>
+    public class UserConfig : IEntityTypeConfiguration<User>
     {
         public void Configure
-            (EntityTypeBuilder<BookSummary> entity)
+            (EntityTypeBuilder<User> entity)
         {
-            entity.HasKey(p => p.BookSummaryId);
-
             entity
-                .HasOne(e => e.Details).WithOne()
-                .HasForeignKey<BookDetail>(e => e.BookDetailId);
-            entity.ToTable("Books");
+                .OwnsOne(e => e.HomeAddress)
+                .ToTable("Addresses");
         }
     }
 }

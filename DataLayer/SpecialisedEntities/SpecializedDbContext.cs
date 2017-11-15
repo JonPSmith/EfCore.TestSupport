@@ -6,14 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataLayer.SpecialisedEntities
 {
-    public class SpecializedDbCotext : DbContext
+    public class SpecializedDbContext : DbContext
     {
         public DbSet<BookSummary> BookSummaries { get; set; }
         public DbSet<OrderInfo> Orders { get; set; }
         public DbSet<Payment> Payments { get; set; }
 
-
-        public SpecializedDbCotext(DbContextOptions<SpecializedDbCotext> options)      
+        public SpecializedDbContext(DbContextOptions<SpecializedDbContext> options)      
             : base(options) {}
 
         protected override void OnModelCreating

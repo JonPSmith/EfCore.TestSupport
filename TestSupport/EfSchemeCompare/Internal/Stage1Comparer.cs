@@ -159,26 +159,29 @@ namespace TestSupport.EfSchemeCompare.Internal
 
                 if (columnDict.ContainsKey(pRel.ColumnName))
                 {
-                    var error = ComparePropertyToColumn(colLogger, property, columnDict[pRel.ColumnName]);
-                    //check for primary key
-                    if (property.IsPrimaryKey() != primaryKeyDict.ContainsKey(pRel.ColumnName))
+                    if (!IgnorePrimaryKeyFoundInOwnedTypes(entityType.DefiningEntityType, table, property, entityType.FindPrimaryKey()))
                     {
-                        if (!primaryKeyDict.ContainsKey(pRel.ColumnName))
+                        var error = ComparePropertyToColumn(colLogger, property, columnDict[pRel.ColumnName]);
+                        //check for primary key
+                        if (property.IsPrimaryKey() != primaryKeyDict.ContainsKey(pRel.ColumnName))
                         {
-                            pKeyLogger.NotInDatabase(pRel.ColumnName, CompareAttributes.ColumnName);
-                            error = true;
+                            if (!primaryKeyDict.ContainsKey(pRel.ColumnName))
+                            {
+                                pKeyLogger.NotInDatabase(pRel.ColumnName, CompareAttributes.ColumnName);
+                                error = true;
+                            }
+                            else
+                            {
+                                pKeyLogger.ExtraInDatabase(pRel.ColumnName, CompareAttributes.ColumnName,
+                                    table.PrimaryKey.Name);
+                            }
                         }
-                        else
-                        {
-                            pKeyLogger.ExtraInDatabase(pRel.ColumnName, CompareAttributes.ColumnName,
-                                table.PrimaryKey.Name);
-                        }
-                    }
 
-                    if (!error)
-                    {
-                        //There were no errors noted, so we mark it as OK
-                        colLogger.MarkAsOk(pRel.ColumnName);
+                        if (!error)
+                        {
+                            //There were no errors noted, so we mark it as OK
+                            colLogger.MarkAsOk(pRel.ColumnName);
+                        }
                     }
                 }
                 else
@@ -190,6 +193,22 @@ namespace TestSupport.EfSchemeCompare.Internal
                 pKeyLogger.MarkAsOk(efPKeyConstraintName);
         }
 
+        private bool IgnorePrimaryKeyFoundInOwnedTypes(IEntityType entityTypeDefiningEntityType, DatabaseTable table, 
+            IProperty property, IKey primaryKey)
+        {
+            if (entityTypeDefiningEntityType == null ||
+                entityTypeDefiningEntityType.Relational().TableName != table.Name)
+                //if not a owned table, or the owned tabl has its own table then carry on
+                return false;
+
+            //Now we know that its an owned table, and it has a primary key which matches the table
+            if (!primaryKey.Properties.Contains(property))
+                return false;
+
+            //It is a primary key so don't consider it as that is checked in the rest of the code
+            return true;
+        }
+
         private bool ComparePropertyToColumn(CompareLogger logger, IProperty property, DatabaseColumn column)
         {
             var error = logger.CheckDifferent(property.Relational().ColumnType, column.StoreType, CompareAttributes.ColumnType);
@@ -198,7 +217,8 @@ namespace TestSupport.EfSchemeCompare.Internal
                 column.DefaultValueSql.RemoveUnnecessaryBrackets(), CompareAttributes.DefaultValueSql);
             error |= logger.CheckDifferent(property.Relational().ComputedColumnSql.RemoveUnnecessaryBrackets(), 
                 column.ComputedColumnSql.RemoveUnnecessaryBrackets(), CompareAttributes.ComputedColumnSql);
-            error |= logger.CheckDifferent(property.ValueGenerated.ToString(), column.ValueGenerated.ConvertNullableValueGenerated(column.DefaultValueSql), CompareAttributes.ValueGenerated);
+            error |= logger.CheckDifferent(property.ValueGenerated.ToString(), 
+                column.ValueGenerated.ConvertNullableValueGenerated(column.DefaultValueSql), CompareAttributes.ValueGenerated);
             return error;
         }
 
