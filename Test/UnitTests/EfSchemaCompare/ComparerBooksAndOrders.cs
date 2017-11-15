@@ -161,14 +161,36 @@ namespace Test.UnitTests.EfSchemaCompare
         public void CompareBookThenOrderAgainstBookOrderDatabase()
         {
             //SETUP
-            var options = this.CreateUniqueMethodOptions<OrderContext>();
-            using (var context1 = new BookContext(GetBookContextOptions()))
-            using (var context2 = new OrderContext(options))
+            var options1 = GetBookContextOptions();
+            var options2 = this.CreateUniqueMethodOptions<OrderContext>();
+            var connectionStringName = "BookOrderConnection";
+            using (var context1 = new BookContext(options1))
+            using (var context2 = new OrderContext(options2))
             {
                 var comparer = new CompareEfSql();
 
                 //ATTEMPT
                 var hasErrors = comparer.CompareEfWithDb(_connectionString, context1, context2);
+
+                //VERIFY
+                hasErrors.ShouldBeFalse(comparer.GetAllErrors);
+            }
+        }
+
+        [Fact]
+        public void CompareBookThenOrderAgainstBookOrderDatabaseViaAppSettings()
+        {
+            //SETUP
+            var options1 = GetBookContextOptions();
+            var options2 = this.CreateUniqueMethodOptions<OrderContext>();
+            const string connectionStringName = "BookOrderConnection";
+            using (var context1 = new BookContext(options1))
+            using (var context2 = new OrderContext(options2))
+            {
+                var comparer = new CompareEfSql();
+
+                //ATTEMPT
+                var hasErrors = comparer.CompareEfWithDb(connectionStringName, context1, context2);
 
                 //VERIFY
                 hasErrors.ShouldBeFalse(comparer.GetAllErrors);
