@@ -156,5 +156,23 @@ namespace Test.UnitTests.EfSchemaCompare
                 ex.Message.ShouldEqual("The TablesToIgnoreCommaDelimited config property contains a table name of 'BadTableName', which was not found in the database");
             }
         }
+
+        [Fact]
+        public void CompareBookThenOrderAgainstBookOrderDatabase()
+        {
+            //SETUP
+            var options = this.CreateUniqueMethodOptions<OrderContext>();
+            using (var context1 = new BookContext(GetBookContextOptions()))
+            using (var context2 = new OrderContext(options))
+            {
+                var comparer = new CompareEfSql();
+
+                //ATTEMPT
+                var hasErrors = comparer.CompareEfWithDb(_connectionString, context1, context2);
+
+                //VERIFY
+                hasErrors.ShouldBeFalse(comparer.GetAllErrors);
+            }
+        }
     }
 }
