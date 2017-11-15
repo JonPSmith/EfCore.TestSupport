@@ -1,11 +1,14 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using TestSupport.EfSchemeCompare.Internal;
+
+[assembly: InternalsVisibleTo("Test")]
 
 namespace TestSupport.EfSchemeCompare
 {
@@ -16,17 +19,19 @@ namespace TestSupport.EfSchemeCompare
         //Software side
         DbContext, Entity, Property,
         //Database side (used for ExtraInDatabase)
-        Table,
+        Database, Table, Column,
         //Used for both
         PrimaryKey, ForeignKey, Index}
     /// <summary>
     /// This defines the result of a comparision
     /// </summary>
-    public enum CompareState { NoSet, Ok, Different, NotInDatabase, ExtraInDatabase }
+    public enum CompareState { Debug, Ok, Different, NotInDatabase, ExtraInDatabase }
     /// <summary>
     /// This contains extra information on what exactly was compared
     /// </summary>
     public enum CompareAttributes { NotSet,
+        //This is used to match any attribute for the ignore list
+        MatchAnything,
         //column items
         ColumnName, ColumnType, Nullability, DefaultValueSql, ComputedColumnSql, ValueGenerated,
         //Tables
@@ -45,10 +50,11 @@ namespace TestSupport.EfSchemeCompare
         /// Because an EF Core DbContext has a hierarchy then the logs are also in a hierarchy
         /// For EF Core this is DbContext->Entity classes->Properties
         /// </summary>
-        public List<CompareLog> SubLogs { get; } = new List<CompareLog>();
+        public List<CompareLog> SubLogs { get; }
 
         [JsonConstructor]
-        internal CompareLog(CompareType type, CompareState state, string name, CompareAttributes attribute, string expected, string found)
+        public CompareLog(CompareType type, CompareState state, string name, 
+            CompareAttributes attribute = CompareAttributes.MatchAnything, string expected = null, string found = null)
         {
             Type = type;
             State = state;
@@ -56,6 +62,7 @@ namespace TestSupport.EfSchemeCompare
             Attribute = attribute;
             Expected = expected;
             Found = found;
+            SubLogs = new List<CompareLog>();
         }
 
         /// <summary>
@@ -122,12 +129,12 @@ namespace TestSupport.EfSchemeCompare
         /// <returns></returns>
         public static IEnumerable<string> ListAllErrors(IReadOnlyList<CompareLog> logs, Stack<string> parentNames = null)
         {
-            //This only includes the DbContext if there were mutiple DbContexts at the top layer
+            //This only includes the DbContext if there were multiple DbContexts at the top layer
             var firstCall = parentNames == null;
-            var doPushPop = !(firstCall && logs.Count == 1);
+            var doPushPop = !(firstCall && logs.GroupBy(x => x.Type).Count() < 2);
             if (firstCall)
             {
-                parentNames = new Stack<string>();                 
+                parentNames = new Stack<string>();  
             }
 
             foreach (var log in logs)
@@ -147,8 +154,77 @@ namespace TestSupport.EfSchemeCompare
             }
         }
 
+
+        public static CompareLog DecodeCompareTextToCompareLog(string str)
+        {
+            var indexOfColon = str.IndexOf(':');
+            var indexOfArrow = str.IndexOf("->", StringComparison.Ordinal);
+            if (indexOfArrow < 0)
+                indexOfArrow = indexOfColon - 1;
+            var indexOfFirstQuote = str.IndexOf('\'');
+            var indexOfSecondQuote = str.Substring(indexOfFirstQuote + 1).IndexOf('\'') + indexOfFirstQuote + 1;
+
+            var state = (CompareState)Enum.Parse(typeof(CompareState), str.Substring(0, indexOfColon).Replace(" ", ""), true);
+            var type = (CompareType)Enum.Parse(typeof(CompareType), str.Substring(indexOfArrow + 2, indexOfFirstQuote - indexOfArrow - 3));
+            var name = str.Substring(indexOfFirstQuote + 1, indexOfSecondQuote - indexOfFirstQuote - 1);
+            var attribute = CompareAttributes.NotSet;
+            string expected = null;
+            string found = null;
+            if (str.Length - 1 > indexOfSecondQuote)
+            {
+                var charIndex = indexOfSecondQuote + 1;
+                //we have more information
+                if (str[charIndex] == ',')
+                {
+                    var indexFullStop = str.Substring(charIndex).IndexOf('.') + charIndex; //warning, dot can be in name
+                    attribute = (CompareAttributes)Enum.Parse(typeof(CompareAttributes), 
+                        str.Substring(charIndex + 1, indexFullStop - charIndex - 1).Replace(" ",""), true);
+                    charIndex = indexFullStop;
+                }
+                if (str.Substring(charIndex, 3) == ". E")
+                {
+                    var endCharIndex = str.Substring(charIndex + 3).IndexOf(", f");
+                    endCharIndex = endCharIndex < 0 ? str.Length : endCharIndex + charIndex + 3;
+                    var startOfString = charIndex + nameof(Expected).Length + 5;
+                    expected = ReplaceNullTokenWithNull(str.Substring(startOfString, endCharIndex - startOfString));
+                    charIndex = endCharIndex;
+                }
+                if (charIndex + 3 < str.Length && str.Substring(charIndex+1, 2).Equals(" F", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    var startOfString = charIndex + nameof(Found).Length + 5;
+                    found = ReplaceNullTokenWithNull( str.Substring(startOfString));
+                }
+            }
+
+            return new CompareLog(type, state, name, attribute, expected, found);
+        }
+
+        //-------------------------------------------------------
+        //internal
+
+        internal bool ShouldIIgnoreThisLog(IReadOnlyList<CompareLog> ignoreList)
+        {
+            return ignoreList.Any() && ignoreList.Any(ShouldBeIgnored);
+        }
+
         //-------------------------------------------------------
         //private
+
+        private bool ShouldBeIgnored(CompareLog ignoreItem)
+        {
+            if (ignoreItem.Type != Type || ignoreItem.State != State)
+                return false;
+
+            return (ignoreItem.Attribute == CompareAttributes.MatchAnything || ignoreItem.Attribute == Attribute)
+                     && (ignoreItem.Name == null || ignoreItem.Name == Name)
+                     && (ignoreItem.Expected == null || ignoreItem.Expected == Expected)
+                     && (ignoreItem.Found == null || ignoreItem.Found == Found);
+        }
+
+        private static string ReplaceNullTokenWithNull(string str)
+        {
+            return str == "<null>" ? null : str;
+        }
 
         private string ToStringDifferentStart(string start)
         {
@@ -176,6 +252,7 @@ namespace TestSupport.EfSchemeCompare
                 start += string.Join("->", parents.ToArray().Reverse()) + "->";
             return log.ToStringDifferentStart(start);
         }
+
     }  
     
 }

@@ -17,22 +17,23 @@ namespace TestSupport.EfSchemeCompare.Internal
     {
         private readonly IModel _model;
         private readonly string _dbContextName;
-
+        private readonly IReadOnlyList<CompareLog> _ignoreList;
         private bool _hasErrors;
 
         private readonly List<CompareLog> _logs;
         public IReadOnlyList<CompareLog> Logs => _logs.ToImmutableList();
 
-        public Stage1Comparer(IModel model, string dbContextName, List<CompareLog> logs = null)
+        public Stage1Comparer(IModel model, string dbContextName, List<CompareLog> logs = null, IReadOnlyList<CompareLog> ignoreList = null)
         {
             _model = model;
             _dbContextName = dbContextName;
             _logs = logs ?? new List<CompareLog>();
+            _ignoreList = ignoreList ?? new List<CompareLog>();
         }
 
         public bool CompareModelToDatabase(DatabaseModel databaseModel)
         {
-            var dbLogger = new CompareLogger(CompareType.DbContext, _dbContextName, _logs, () => _hasErrors = true);
+            var dbLogger = new CompareLogger(CompareType.DbContext, _dbContextName, _logs, _ignoreList, () => _hasErrors = true);
 
             //Check things about the database, such as sequences
             dbLogger.MarkAsOk(_dbContextName);
@@ -42,7 +43,7 @@ namespace TestSupport.EfSchemeCompare.Internal
             foreach (var entityType in _model.GetEntityTypes())
             {
                 var eRel = entityType.Relational();
-                var logger = new CompareLogger(CompareType.Entity, entityType.ClrType.Name, _logs.Last().SubLogs, () => _hasErrors = true);
+                var logger = new CompareLogger(CompareType.Entity, entityType.ClrType.Name, _logs.Last().SubLogs, _ignoreList, () => _hasErrors = true);
                 if (tableDict.ContainsKey(eRel.TableName))
                 {
                     var databaseTable = tableDict[eRel.TableName];
@@ -77,7 +78,9 @@ namespace TestSupport.EfSchemeCompare.Internal
             {
                 var entityFKeyprops = entityFKey.Properties;
                 var constraintName = entityFKey.Relational().Name;
-                var logger = new CompareLogger(CompareType.ForeignKey, constraintName, log.SubLogs, () => _hasErrors = true);
+                var logger = new CompareLogger(CompareType.ForeignKey, constraintName, log.SubLogs, _ignoreList, () => _hasErrors = true);
+                if (IgnoreForeignKeyIfInSameTable(entityType, table))
+                    continue;
                 if (fKeyDict.ContainsKey(constraintName))
                 {       
                     //Now check every foreign key
@@ -104,13 +107,24 @@ namespace TestSupport.EfSchemeCompare.Internal
             }
         }
 
+        private bool IgnoreForeignKeyIfInSameTable(IEntityType entityType, DatabaseTable table)
+        {
+            if (entityType.DefiningEntityType == null ||
+                entityType.DefiningEntityType.Relational().TableName != table.Name)
+                //if not a owned table, or the owned table has its own table then carry on
+                return false;
+
+            //It is a foreign key that links to to the same entity, so we ignore 
+            return true;
+        }
+
         private void CompareIndexes(CompareLog log, IEntityType entityType, DatabaseTable table)
         {
             var indexDict = table.Indexes.ToDictionary(x => x.Name);
             foreach (var entityIdx in entityType.GetIndexes())
             {
                 var entityIdxprops = entityIdx.Properties;
-                var logger = new CompareLogger(CompareType.Index, entityIdxprops.CombinedColNames(), log.SubLogs, () => _hasErrors = true);
+                var logger = new CompareLogger(CompareType.Index, entityIdxprops.CombinedColNames(), log.SubLogs, _ignoreList, () => _hasErrors = true);
                 var constraintName = entityIdx.Relational().Name;
                 if (indexDict.ContainsKey(constraintName))
                 {
@@ -145,7 +159,7 @@ namespace TestSupport.EfSchemeCompare.Internal
 
             var efPKeyConstraintName = entityType.FindPrimaryKey().Relational().Name;
             bool pKeyError = false;
-            var pKeyLogger = new CompareLogger(CompareType.PrimaryKey, efPKeyConstraintName, log.SubLogs, 
+            var pKeyLogger = new CompareLogger(CompareType.PrimaryKey, efPKeyConstraintName, log.SubLogs, _ignoreList,
                 () =>
                 {
                     pKeyError = true;  //extra set of pKeyError
@@ -155,7 +169,7 @@ namespace TestSupport.EfSchemeCompare.Internal
             foreach (var property in entityType.GetProperties())
             {
                 var pRel = property.Relational();
-                var colLogger = new CompareLogger(CompareType.Property, property.Name, log.SubLogs, () => _hasErrors = true);
+                var colLogger = new CompareLogger(CompareType.Property, property.Name, log.SubLogs, _ignoreList, () => _hasErrors = true);
 
                 if (columnDict.ContainsKey(pRel.ColumnName))
                 {

@@ -15,16 +15,18 @@ namespace TestSupport.EfSchemeCompare.Internal
         private bool _hasErrors;
 
         private readonly List<CompareLog> _logs = new List<CompareLog>();
+        private readonly IReadOnlyList<CompareLog> _ignoreList;
         public IReadOnlyList<CompareLog> Logs => _logs.ToImmutableList();
 
-        public Stage2Comparer(DatabaseModel databaseModel)
+        public Stage2Comparer(DatabaseModel databaseModel, IReadOnlyList<CompareLog> ignoreList = null)
         {
             _databaseModel = databaseModel;
+            _ignoreList = ignoreList ?? new List<CompareLog>();
         }
 
         public bool CompareLogsToDatabase(IReadOnlyList<CompareLog> firstStageLogs)
         {
-            var logger = new CompareLogger(CompareType.Table, null, _logs, () => _hasErrors = true);
+            var logger = new CompareLogger(CompareType.Table, null, _logs, _ignoreList, () => _hasErrors = true);
             LookForUnusedTables(firstStageLogs, logger);
             LookForUnusedColumns(firstStageLogs, logger);
             LookForUnusedIndexes(firstStageLogs, logger);

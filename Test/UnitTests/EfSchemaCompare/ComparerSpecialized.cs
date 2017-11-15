@@ -28,11 +28,29 @@ namespace Test.UnitTests.EfSchemaCompare
         }
 
         [Fact]
-        public void CompareViaContext()
+        public void CompareSpecializedDbContext()
         {
             //SETUP
             using (var context = new SpecializedDbContext(_options))
             {
+                var comparer = new CompareEfSql();
+
+                //ATTEMPT
+                var hasErrors = comparer.CompareEfWithDb(context);
+
+                //VERIFY
+                hasErrors.ShouldBeFalse(comparer.GetAllErrors);
+            }
+        }
+
+        [Fact]
+        public void CompareOwnedWithKeyDbContext()
+        {
+            //SETUP
+            var options = this.CreateUniqueMethodOptions<OwnedWithKeyDbContext>();
+            using (var context = new OwnedWithKeyDbContext(options))
+            {
+                context.Database.EnsureCreated();
                 var comparer = new CompareEfSql();
 
                 //ATTEMPT

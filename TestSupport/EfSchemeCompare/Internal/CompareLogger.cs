@@ -10,16 +10,18 @@ namespace TestSupport.EfSchemeCompare.Internal
 
     internal class CompareLogger
     {
-        private readonly IList<CompareLog> _compareLogs;
         private readonly CompareType _type;
         private readonly string _defaultName;
+        private readonly IList<CompareLog> _compareLogs;
+        private readonly IReadOnlyList<CompareLog> _ignoreList;
         private readonly Func<bool> _setErrorHasHappened;
 
-        public CompareLogger(CompareType type, string defaultName, IList<CompareLog> compareLogs, Func<bool> setErrorHasHappened)
+        public CompareLogger(CompareType type, string defaultName, IList<CompareLog> compareLogs, IReadOnlyList<CompareLog> ignoreList, Func<bool> setErrorHasHappened)
         {
             _type = type;
             _defaultName = defaultName;
             _compareLogs = compareLogs;
+            _ignoreList = ignoreList ?? new List<CompareLog>();
             _setErrorHasHappened = setErrorHasHappened;
         }
 
@@ -34,8 +36,7 @@ namespace TestSupport.EfSchemeCompare.Internal
         {
             if (expected != found && expected?.Replace(" ", "") != found?.Replace(" ", ""))
             {
-                _compareLogs.Add(new CompareLog(_type, CompareState.Different, name ?? _defaultName, attribute, expected, found));
-                _setErrorHasHappened();
+                AddToLogsIfNotIgnored(new CompareLog(_type, CompareState.Different, name ?? _defaultName, attribute, expected, found));
                 return true;
             }
             return false;
@@ -43,20 +44,29 @@ namespace TestSupport.EfSchemeCompare.Internal
 
         public void Different(string expected, string found, CompareAttributes attribute, string name = null)
         {
-            _compareLogs.Add(new CompareLog(_type, CompareState.Different, name ?? _defaultName, attribute, expected, found));
-            _setErrorHasHappened();
+            AddToLogsIfNotIgnored(new CompareLog(_type, CompareState.Different, name ?? _defaultName, attribute, expected, found));
         }
 
         public void NotInDatabase(string expected, CompareAttributes attribute = CompareAttributes.NotSet, string name = null)
         {
-            _compareLogs.Add(new CompareLog(_type, CompareState.NotInDatabase, name ?? _defaultName, attribute, expected, null));
-            _setErrorHasHappened();
+            AddToLogsIfNotIgnored(new CompareLog(_type, CompareState.NotInDatabase, name ?? _defaultName, attribute, expected, null));
         }
 
         public void ExtraInDatabase(string found, CompareAttributes attribute, string name = null)
         {
-            _compareLogs.Add(new CompareLog(_type, CompareState.ExtraInDatabase, name ?? _defaultName, attribute, null, found));
-            _setErrorHasHappened();
+            AddToLogsIfNotIgnored(new CompareLog(_type, CompareState.ExtraInDatabase, name ?? _defaultName, attribute, null, found));
+        }
+
+        //------------------------------------------------------
+        //private methods
+
+        private void AddToLogsIfNotIgnored(CompareLog log)
+        {
+            if (!log.ShouldIIgnoreThisLog(_ignoreList))
+            {
+                _compareLogs.Add(log);
+                _setErrorHasHappened();
+            }
         }
     }
 }
