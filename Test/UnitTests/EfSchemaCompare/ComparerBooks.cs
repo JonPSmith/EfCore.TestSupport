@@ -51,7 +51,7 @@ namespace Test.UnitTests.EfSchemaCompare
                 var comparer = new CompareEfSql();
 
                 //ATTEMPT
-                var hasErrors = comparer.CompareEfWithDb(context, _connectionString);
+                var hasErrors = comparer.CompareEfWithDb(_connectionString, context);
 
                 //VERIFY
                 hasErrors.ShouldBeFalse(comparer.GetAllErrors);

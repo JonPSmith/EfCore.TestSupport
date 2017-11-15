@@ -52,7 +52,7 @@ namespace Test.UnitTests.EfSchemaCompare
                 var comparer = new CompareEfSql();
 
                 //ATTEMPT
-                var hasErrors = comparer.CompareEfWithDb(context, _connectionString);
+                var hasErrors = comparer.CompareEfWithDb(_connectionString, context);
 
                 //VERIFY
                 hasErrors.ShouldBeFalse(comparer.GetAllErrors);
@@ -81,7 +81,7 @@ namespace Test.UnitTests.EfSchemaCompare
                 var comparer = new CompareEfSql();
 
                 //ATTEMPT
-                var hasErrors = comparer.CompareEfWithDb(context, connectionString);
+                var hasErrors = comparer.CompareEfWithDb(connectionString, context);
 
                 //VERIFY
                 hasErrors.ShouldBeTrue();
@@ -103,7 +103,7 @@ namespace Test.UnitTests.EfSchemaCompare
                 var comparer = new CompareEfSql();
 
                 //ATTEMPT
-                var hasErrors = comparer.CompareEfWithDb(context, _connectionString);
+                var hasErrors = comparer.CompareEfWithDb(_connectionString, context);
 
                 //VERIFY
                 hasErrors.ShouldBeTrue();

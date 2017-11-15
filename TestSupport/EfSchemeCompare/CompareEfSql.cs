@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using Microsoft.EntityFrameworkCore;
@@ -33,18 +34,41 @@ namespace TestSupport.EfSchemeCompare
         public IReadOnlyList<CompareLog> Logs => _logs.ToImmutableList();
 
         /// <summary>
-        /// This will compare a single DbContext against a database. It returns true if there were errors
+        /// This will compare one or more DbContext against database pointed to the first DbContext.
         /// </summary>
-        /// <param name="context">This must be a valid instance of a DbContext</param>
-        /// <param name="configOrConnectionString">Optional: If provided it should either be a 
-        /// connection string or the name of a connection string in the appsetting.json file.
-        /// If null, then it uses the connection string in your DbContext</param>
-        /// <returns></returns>
-        public bool CompareEfWithDb(DbContext context, string configOrConnectionString = null)
+        /// <param name="dbContexts">One or more dbContext instances to be compared with the database</param>
+        /// <returns>true if any errors found, otherwise false</returns>
+        public bool CompareEfWithDb(params DbContext[] dbContexts)
         {
-            var stage1Comparer = new Stage1Comparer(context.Model, context.GetType().Name, _logs);
-            var databaseModel = GetDatabaseModelViaScaffolder(context, configOrConnectionString);
-            var hasErrors = stage1Comparer.CompareModelToDatabase(databaseModel);
+            if (dbContexts == null) throw new ArgumentNullException(nameof(dbContexts));
+            if (dbContexts.Length == 0)
+                throw new ArgumentException("You must provide at least one DbContext instance.", nameof(dbContexts));
+            return CompareEfWithDb(dbContexts[0].Database.GetDbConnection().ConnectionString, dbContexts);
+        }
+
+        /// <summary>
+        /// This will compare one or more DbContext against database pointed to by the configOrConnectionString.
+        /// </summary>
+        /// <param name="configOrConnectionString">This should either be a 
+        /// connection string or the name of a connection string in the appsetting.json file.
+        /// </param>
+        /// <param name="dbContexts">One or more dbContext instances to be compared with the database</param>
+        /// <returns>true if any errors found, otherwise false</returns>
+        public bool CompareEfWithDb(string configOrConnectionString, params DbContext[] dbContexts )
+        {
+            if (configOrConnectionString == null) throw new ArgumentNullException(nameof(configOrConnectionString));
+            if (dbContexts == null) throw new ArgumentNullException(nameof(dbContexts));
+            if (dbContexts.Length == 0)
+                throw new ArgumentException("You must provide at least one DbContext instance.", nameof(dbContexts));
+
+            var databaseModel = GetDatabaseModelViaScaffolder(dbContexts[0], configOrConnectionString);
+            bool hasErrors = false;
+            foreach (var context in dbContexts)
+            {
+                var stage1Comparer = new Stage1Comparer(context.Model, context.GetType().Name, _logs);
+                hasErrors |= stage1Comparer.CompareModelToDatabase(databaseModel);
+            }
+
             if (hasErrors) return true;
 
             //No errors, so its worth running the second phase
