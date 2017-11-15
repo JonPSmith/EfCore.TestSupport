@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using DataLayer.EfCode.BookApp;
 using Microsoft.EntityFrameworkCore;
@@ -95,7 +96,7 @@ namespace Test.UnitTests.EfSchemaCompare
         }
 
         [Fact]
-        public void CompareBookAgainstBookOrderDatabase()
+        public void CompareBookAgainstBookOrderDatabaseHasErrors()
         {
             //SETUP
             using (var context = new BookContext(GetBookContextOptions()))
@@ -113,6 +114,46 @@ namespace Test.UnitTests.EfSchemaCompare
                     "EXTRA IN DATABASE: Table 'Orders', table name");
                 errors[1].ShouldEqual(
                     "EXTRA IN DATABASE: Table 'LineItem', table name");
+            }
+        }
+
+        [Fact]
+        public void CompareBookAgainstBookOrderDatabaseIgnoreTables()
+        {
+            //SETUP
+            using (var context = new BookContext(GetBookContextOptions()))
+            {
+                var config = new CompareEfSqlConfig
+                {
+                    TablesToIgnoreCommaDelimited = "Orders,LineItem"
+                };
+                var comparer = new CompareEfSql(config);
+
+                //ATTEMPT
+                var hasErrors = comparer.CompareEfWithDb(_connectionString, context);
+
+                //VERIFY
+                hasErrors.ShouldBeFalse(comparer.GetAllErrors);
+            }
+        }
+
+        [Fact]
+        public void CompareEfSqlConfigBadTableToIgnore()
+        {
+            //SETUP
+            using (var context = new BookContext(GetBookContextOptions()))
+            {
+                var config = new CompareEfSqlConfig
+                {
+                    TablesToIgnoreCommaDelimited = "BadTableName"
+                };
+                var comparer = new CompareEfSql(config);
+
+                //ATTEMPT
+                var ex = Assert.Throws<InvalidOperationException>( () => comparer.CompareEfWithDb(_connectionString, context));
+
+                //VERIFY
+                ex.Message.ShouldEqual("The TablesToIgnoreCommaDelimited config property contains a table name of 'BadTableName', which was not found in the database");
             }
         }
     }

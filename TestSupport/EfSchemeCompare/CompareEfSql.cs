@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
@@ -20,7 +21,19 @@ namespace TestSupport.EfSchemeCompare
     /// </summary>
     public class CompareEfSql
     {
+        private readonly CompareEfSqlConfig _config;
+
         private readonly List<CompareLog> _logs = new List<CompareLog>();
+
+        /// <summary>
+        /// This creates the comparer class that you use for comparing EF Core DbContexts to a database
+        /// </summary>
+        /// <param name="config"></param>
+        public CompareEfSql(CompareEfSqlConfig config = null)
+        {
+            _config = config ?? new CompareEfSqlConfig();
+        }
+
         /// <summary>
         /// This returns a single string containing all the errors found
         /// Each error is on a separate line
@@ -81,7 +94,7 @@ namespace TestSupport.EfSchemeCompare
         //------------------------------------------------------
         //private methods
 
-        private static DatabaseModel GetDatabaseModelViaScaffolder(DbContext context, string configOrConnectionString)
+        private  DatabaseModel GetDatabaseModelViaScaffolder(DbContext context, string configOrConnectionString)
         {
             var serviceProvider = context.GetDesignTimeProvider();
             var factory = serviceProvider.GetService<IDatabaseModelFactory>();
@@ -89,7 +102,34 @@ namespace TestSupport.EfSchemeCompare
                 ? context.Database.GetDbConnection().ConnectionString
                 : GetConfigurationOrActualString(configOrConnectionString);
 
-            return factory.Create(connectionString, new string[] { }, new string[] { });
+            var databaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+            RemoveAnyTabletoIgnore(databaseModel);
+            return databaseModel;
+        }
+
+        private void RemoveAnyTabletoIgnore(DatabaseModel databaseModel)
+        {
+            if (_config.TablesToIgnoreCommaDelimited != null)
+            {
+                var tablesToRemove = new List<DatabaseTable>();
+                foreach (var tableToIgnore in _config.TablesToIgnoreCommaDelimited.Split(',').Select(x => x.Trim()))
+                {
+                    var split = tableToIgnore.Split('.').Select(x => x.Trim()).ToArray();
+                    var schema = split.Length == 1 ? databaseModel.DefaultSchema : split[0];
+                    var tableName = split.Length == 1 ? split[0] : split[1];
+                    var tableToRemove = databaseModel.Tables
+                        .SingleOrDefault(x => x.Schema.Equals(schema, StringComparison.InvariantCultureIgnoreCase)
+                                           && x.Name.Equals(tableName, StringComparison.InvariantCultureIgnoreCase));
+                    if (tableToRemove == null)
+                        throw new InvalidOperationException(
+                            $"The TablesToIgnoreCommaDelimited config property contains a table name of '{tableToIgnore}', which was not found in the database");
+                    tablesToRemove.Add(tableToRemove);
+                }
+                foreach (var tableToRemove in tablesToRemove)
+                {
+                    databaseModel.Tables.Remove(tableToRemove);
+                }
+            }
         }
 
         private static string GetConfigurationOrActualString(string configOrConnectionString)
