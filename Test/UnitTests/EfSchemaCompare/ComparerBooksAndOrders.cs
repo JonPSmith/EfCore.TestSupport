@@ -163,7 +163,6 @@ namespace Test.UnitTests.EfSchemaCompare
             //SETUP
             var options1 = GetBookContextOptions();
             var options2 = this.CreateUniqueMethodOptions<OrderContext>();
-            var connectionStringName = "BookOrderConnection";
             using (var context1 = new BookContext(options1))
             using (var context2 = new OrderContext(options2))
             {

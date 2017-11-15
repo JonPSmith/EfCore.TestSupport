@@ -16,6 +16,7 @@ for database access. This readme defines the various groups, with links to the d
 [Entity Framework in Action](http://bit.ly/2m8KRAZ).*
 
 Here is an image covering just a few of the methods, in **bold** available in this library.  
+ 
 ![Examples of libray methods in use](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/Example-of-various-test-features.png)
 
 The various groups of tools are:

@@ -13,18 +13,34 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace TestSupport.DesignTimeServices
 {
+    /// <summary>
+    /// This defines the database providers that the DesignProvider currently supports
+    /// </summary>
     public enum DatabaseProviders { SqlServer, Sqlite}
 
+    /// <summary>
+    /// This static class contains the methods to return a design-time service provider
+    /// </summary>
     public static class DesignProvider
     {
         private const string SqlServerProviderName = "Microsoft.EntityFrameworkCore.SqlServer";
         private const string SqliteProviderName = "Microsoft.EntityFrameworkCore.Sqlite";
 
+        /// <summary>
+        /// This returns design-time service provider for the database provider you are using in the DbContext
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns>A service provider that conatins the design-time services</returns>
         public static ServiceProvider GetDesignTimeProvider(this DbContext context)
         {
             return GetDesignTimeProvider(context.DecodeDatabaseProvider());
         }
 
+        /// <summary>
+        /// This returns design-time service provider for the database provider you have selected from the enum
+        /// </summary>
+        /// <param name="databaseProvider"></param>
+        /// <returns>A service provider that conatins the design-time services</returns>
         public static ServiceProvider GetDesignTimeProvider(this DatabaseProviders databaseProvider)
         {
             var errors = new List<string>();

@@ -9,14 +9,23 @@ using TestSupport.EfSchemeCompare.Internal;
 
 namespace TestSupport.EfSchemeCompare
 {
+    /// <summary>
+    /// This is used to define what is being compared
+    /// </summary>
     public enum CompareType { NoSet,
         //Software side
         DbContext, Entity, Property,
         //Database side (used for ExtraInDatabase)
-        Database, Table, Column,
+        Table,
         //Used for both
         PrimaryKey, ForeignKey, Index}
+    /// <summary>
+    /// This defines the result of a comparision
+    /// </summary>
     public enum CompareState { NoSet, Ok, Different, NotInDatabase, ExtraInDatabase }
+    /// <summary>
+    /// This contains extra information on what exactly was compared
+    /// </summary>
     public enum CompareAttributes { NotSet,
         //column items
         ColumnName, ColumnType, Nullability, DefaultValueSql, ComputedColumnSql, ValueGenerated,
@@ -27,8 +36,15 @@ namespace TestSupport.EfSchemeCompare
         //Others
     }
 
+    /// <summary>
+    /// This holds the log of each compare done
+    /// </summary>
     public class CompareLog
     {
+        /// <summary>
+        /// Because an EF Core DbContext has a hierarchy then the logs are also in a hierarchy
+        /// For EF Core this is DbContext->Entity classes->Properties
+        /// </summary>
         public List<CompareLog> SubLogs { get; } = new List<CompareLog>();
 
         [JsonConstructor]
@@ -42,21 +58,47 @@ namespace TestSupport.EfSchemeCompare
             Found = found;
         }
 
-        //Name holds the type of 
+        /// <summary>
+        /// This holds what it is comparing
+        /// </summary>
         public CompareType Type { get; }
+        /// <summary>
+        /// This holds the result of the comparison
+        /// </summary>
         public CompareState State { get; }
+        /// <summary>
+        /// This holds the name of the primary thing it is comparing, e.g. MyEntity, MyProperty
+        /// </summary>
         public string Name { get; }
+        /// <summary>
+        /// This contains extra information to define exactly what is being compared, for instance the ColumnName that a property is mapped to
+        /// </summary>
         public CompareAttributes Attribute { get; }
-
+        /// <summary>
+        /// This holds what EF Core expects to see
+        /// </summary>
         public string Expected { get; }
+        /// <summary>
+        /// This holds what was found in the database
+        /// </summary>
         public string Found { get; }
 
+        /// <summary>
+        /// This provides a human-readable version of a CompareLog
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             //Typical output would be: DIFFERENT: Column 'Id', column type. Expected = varchar(20), Found = nvarchar(20)
             return ToStringDifferentStart($"{State.SplitCamelCaseToUpper()}: ");
         }
 
+        /// <summary>
+        /// This returns all the logs, with an indentation for each level in the hierarchy
+        /// </summary>
+        /// <param name="logs"></param>
+        /// <param name="indent"></param>
+        /// <returns></returns>
         public static IEnumerable<string> AllResultsIndented(IReadOnlyList<CompareLog> logs, string indent = "")
         {
             foreach (var log in logs)
@@ -72,6 +114,12 @@ namespace TestSupport.EfSchemeCompare
             }
         }
 
+        /// <summary>
+        /// This returns a string per error, in human-readable form
+        /// </summary>
+        /// <param name="logs"></param>
+        /// <param name="parentNames"></param>
+        /// <returns></returns>
         public static IEnumerable<string> ListAllErrors(IReadOnlyList<CompareLog> logs, Stack<string> parentNames = null)
         {
             //This only includes the DbContext if there were mutiple DbContexts at the top layer
