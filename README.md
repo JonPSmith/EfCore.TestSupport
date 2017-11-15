@@ -20,21 +20,25 @@ Here is an image covering just a few of the methods, in **bold** available in th
 
 The various groups of tools are:
 
-1. Helpers to create an in-memory Sqlite database for unit testing  
+1. Helpers to create an in-memory Sqlite database for unit testing.  
 See [Sqlite in memory test database](https://github.com/JonPSmith/EfCore.TestSupport/wiki/1.-Sqlite-in-memory-test-database).
-2. Helpers to create an InMemory database for unit testing  
+2. Helpers to create an InMemory database for unit testing.  
 See [EF InMemory test database](https://github.com/JonPSmith/EfCore.TestSupport/wiki/2.-EF-InMemory-test-database).
-3. Helpers to create connection strings with a unique database name  
+3. Helpers to create connection strings with a unique database name.  
 See [Creating connection strings](https://github.com/JonPSmith/EfCore.TestSupport/wiki/3.-Creating-connection-strings).
-4. Helpers for creating unique SQL Server databases for unit testing  
+4. Helpers for creating unique SQL Server databases for unit testing.  
 See [Create SQL Server databases](https://github.com/JonPSmith/EfCore.TestSupport/wiki/4.-Create-SQL-Server-databases).
-5. Helpers for creating an empty database, and deleting SQL unit test databases  
+5. Helpers for creating an empty database, and deleting SQL unit test databases.  
 See [Quickly create empty databases](https://github.com/JonPSmith/EfCore.TestSupport/wiki/5.-Quickly-create-empty-database).
-6. Various tools for getting test data, or file paths to test data  
+6. Various tools for getting test data, or file paths to test data.  
 See [Test Data tools](https://github.com/JonPSmith/EfCore.TestSupport/wiki/6.-Test-Data-tools).
-7. A tool for applying a SQL script file to a EF Core database  
+7. A tool for applying a SQL script file to a EF Core database.  
 See [Run SQL Script](https://github.com/JonPSmith/EfCore.TestSupport/wiki/7.-Run-SQL-Script).
-8. Tools for capturing EF Core logging  
+8. Tools for capturing EF Core logging.  
 See [Capture EF Core logging](https://github.com/JonPSmith/EfCore.TestSupport/wiki/8.-Capture-EF-Core-logging).
+9. Tool to compare EF Core's view of the database with an actual database.  
+See [EfSchemaCompare](https://github.com/JonPSmith/EfCore.TestSupport/wiki/9.-EfSchemaCompare).  
+*NOTE: This is on beta release - it works, but I haven't tested all the possible EF Core mappings.*
+
 
 
