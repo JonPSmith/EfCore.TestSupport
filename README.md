@@ -39,7 +39,6 @@ See [Run SQL Script](https://github.com/JonPSmith/EfCore.TestSupport/wiki/7.-Run
 See [Capture EF Core logging](https://github.com/JonPSmith/EfCore.TestSupport/wiki/8.-Capture-EF-Core-logging).
 9. Tool to compare EF Core's view of the database with an actual database.  
 See [EfSchemaCompare](https://github.com/JonPSmith/EfCore.TestSupport/wiki/9.-EfSchemaCompare).  
-*NOTE: This is on beta release - it works, but I haven't tested all the possible EF Core mappings.*
 
 
 

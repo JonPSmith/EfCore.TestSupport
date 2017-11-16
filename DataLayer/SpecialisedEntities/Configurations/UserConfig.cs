@@ -11,6 +11,8 @@ namespace DataLayer.SpecialisedEntities.Configurations
         public void Configure
             (EntityTypeBuilder<User> entity)
         {
+            entity.HasAlternateKey(p => p.Email);
+
             entity
                 .OwnsOne(e => e.HomeAddress)
                 .ToTable("Addresses");
