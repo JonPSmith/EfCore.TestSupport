@@ -78,14 +78,14 @@ namespace TestSupport.EfSchemeCompare
             bool hasErrors = false;
             foreach (var context in dbContexts)
             {
-                var stage1Comparer = new Stage1Comparer(context.Model, context.GetType().Name, _logs);
+                var stage1Comparer = new Stage1Comparer(context.Model, context.GetType().Name, _logs, _config.LogsToIgnore);
                 hasErrors |= stage1Comparer.CompareModelToDatabase(databaseModel);
             }
 
             if (hasErrors) return true;
 
             //No errors, so its worth running the second phase
-            var stage2Comparer = new Stage2Comparer(databaseModel);
+            var stage2Comparer = new Stage2Comparer(databaseModel, _config.LogsToIgnore);
             hasErrors = stage2Comparer.CompareLogsToDatabase(_logs);
             _logs.AddRange(stage2Comparer.Logs);
             return hasErrors;

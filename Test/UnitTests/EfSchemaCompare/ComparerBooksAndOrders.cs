@@ -118,6 +118,24 @@ namespace Test.UnitTests.EfSchemaCompare
         }
 
         [Fact]
+        public void CompareBookAgainstBookOrderDatabaseSurpressExtraInDatabaseTables()
+        {
+            //SETUP
+            using (var context = new BookContext(GetBookContextOptions()))
+            {
+                var config = new CompareEfSqlConfig();
+                config.AddIgnoreCompareLog(new CompareLog(CompareType.Table, CompareState.ExtraInDatabase, null));
+                var comparer = new CompareEfSql(config);
+
+                //ATTEMPT
+                var hasErrors = comparer.CompareEfWithDb(_connectionString, context);
+
+                //VERIFY
+                hasErrors.ShouldBeFalse(comparer.GetAllErrors);
+            }
+        }
+
+        [Fact]
         public void CompareBookAgainstBookOrderDatabaseIgnoreTables()
         {
             //SETUP
