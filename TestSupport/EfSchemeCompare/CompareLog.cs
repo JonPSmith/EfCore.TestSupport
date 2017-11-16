@@ -52,6 +52,15 @@ namespace TestSupport.EfSchemeCompare
         /// </summary>
         public List<CompareLog> SubLogs { get; }
 
+        /// <summary>
+        /// This constuctor either creates a new log (used internally) or allows the user to create a log for ignore matching
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="state"></param>
+        /// <param name="name"></param>
+        /// <param name="attribute"></param>
+        /// <param name="expected"></param>
+        /// <param name="found"></param>
         [JsonConstructor]
         public CompareLog(CompareType type, CompareState state, string name, 
             CompareAttributes attribute = CompareAttributes.MatchAnything, string expected = null, string found = null)
