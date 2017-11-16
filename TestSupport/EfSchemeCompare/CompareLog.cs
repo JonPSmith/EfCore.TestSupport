@@ -154,9 +154,12 @@ namespace TestSupport.EfSchemeCompare
             }
         }
 
+        //-------------------------------------------------------
+        //internal
 
-        public static CompareLog DecodeCompareTextToCompareLog(string str)
+        internal static CompareLog DecodeCompareTextToCompareLog(string str)
         {
+            str = str.Trim();
             var indexOfColon = str.IndexOf(':');
             var indexOfArrow = str.IndexOf("->", StringComparison.Ordinal);
             if (indexOfArrow < 0)
@@ -198,9 +201,6 @@ namespace TestSupport.EfSchemeCompare
 
             return new CompareLog(type, state, name, attribute, expected, found);
         }
-
-        //-------------------------------------------------------
-        //internal
 
         internal bool ShouldIIgnoreThisLog(IReadOnlyList<CompareLog> ignoreList)
         {

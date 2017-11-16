@@ -25,6 +25,8 @@ namespace Test.UnitTests.EfSchemaCompare
             const string logStr2 =
                 @"DIFFERENT: BookSummary->Property 'BookSummaryId', value generated. Expected = OnAdd, found = Never";
             const string logStr3 = @"OK: DbContext 'BookContext'";
+            const string logStr4 =
+                @"NOT IN DATABASE: BookDetail->ForeignKey 'FK_Books_Books_BookSummaryId', constraint name. Expected = FK_Books_Books_BookSummaryId";
 
             //ATTEMPT
 
@@ -32,6 +34,7 @@ namespace Test.UnitTests.EfSchemaCompare
             CompareLog.DecodeCompareTextToCompareLog(logStr1).ToString().ShouldEqual(logStr1.Replace("BookDetail->",""));
             CompareLog.DecodeCompareTextToCompareLog(logStr2).ToString().ShouldEqual(logStr2.Replace("BookSummary->", ""));
             CompareLog.DecodeCompareTextToCompareLog(logStr3).ToString().ShouldEqual(logStr3);
+            CompareLog.DecodeCompareTextToCompareLog(logStr4).ToString().ShouldEqual(logStr4.Replace("BookDetail->", ""));
         }
 
         private class CompareIgnoreLogs : IEnumerable<object[]>
