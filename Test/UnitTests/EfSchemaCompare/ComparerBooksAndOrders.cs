@@ -111,9 +111,9 @@ namespace Test.UnitTests.EfSchemaCompare
                 var errors = CompareLog.ListAllErrors(comparer.Logs).ToList();
                 errors.Count.ShouldEqual(2);
                 errors[0].ShouldEqual(
-                    "EXTRA IN DATABASE: Table 'Orders', table name");
+                    "EXTRA IN DATABASE: EfCore.TestSupport-Test_ComparerBooksAndOrders->Table 'Orders'");
                 errors[1].ShouldEqual(
-                    "EXTRA IN DATABASE: Table 'LineItem', table name");
+                    "EXTRA IN DATABASE: EfCore.TestSupport-Test_ComparerBooksAndOrders->Table 'LineItem'");
             }
         }
 

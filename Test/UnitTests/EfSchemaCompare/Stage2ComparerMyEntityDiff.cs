@@ -88,7 +88,7 @@ namespace Test.UnitTests.EfSchemaCompare
             //VERIFY
             hasErrors.ShouldBeTrue();
             CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
-                "EXTRA IN DATABASE: Table 'MyEntites', column name. Found = DiffPropName");
+                "EXTRA IN DATABASE: Column 'MyEntites', column name. Found = DiffPropName");
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace Test.UnitTests.EfSchemaCompare
             //VERIFY
             hasErrors.ShouldBeTrue();
             CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
-                "EXTRA IN DATABASE: Table 'MyEntites', index constraint name. Found = DiffConstraintName");
+                "EXTRA IN DATABASE: Index 'MyEntites', index constraint name. Found = DiffConstraintName");
         }
 
     }
