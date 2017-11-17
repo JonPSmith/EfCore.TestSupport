@@ -41,7 +41,7 @@
           },
           {
             "SubLogs": [],
-            "Type": "PrimaryKey",
+            "Type": "Index",
             "State": "Ok",
             "Name": "PK_MyEntites",
             "Attribute": "NotSet",

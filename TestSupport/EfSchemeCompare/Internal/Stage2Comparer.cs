@@ -54,16 +54,21 @@ namespace TestSupport.EfSchemeCompare.Internal
         {
             var logger = new CompareLogger(CompareType.Column, null, log.SubLogs, _ignoreList, () => _hasErrors = true);
             var tableDict = _databaseModel.Tables.ToDictionary(x => x.Name);
+            //because of table splitting and TPH we need to groups properties by table name to correctly say what columns are missed
+            var entityColsGrouped = firstStageLogs.SelectMany(p => p.SubLogs)
+                .Where(x => x.State == CompareState.Ok && x.Type == CompareType.Entity)
+                .GroupBy(x => x.Expected, y => y.SubLogs
+                    .Where(x => x.State == CompareState.Ok && x.Type == CompareType.Property)
+                    .Select(p => p.Expected));
+            var entityColsByTableDict = entityColsGrouped.ToDictionary(x => x.Key, y => y.SelectMany(x => x.ToList()));
+
             foreach (var entityLog in firstStageLogs.SelectMany(p => p.SubLogs)
                 .Where(x => x.State == CompareState.Ok && x.Type == CompareType.Entity))
             {
                 if (tableDict.ContainsKey(entityLog.Expected))
                 {
-                    var colDict = tableDict[entityLog.Expected].Columns.ToDictionary(x => x.Name);
-                    var allEfColNames = entityLog.SubLogs
-                        .Where(x => x.State == CompareState.Ok && x.Type == CompareType.Property)
-                        .Select(p => p.Expected).OrderBy(p => p).Distinct();
-                    var colsNotUsed = allEfColNames.Where(p => !colDict.ContainsKey(p));
+                    var dbColNames = tableDict[entityLog.Expected].Columns.Select(x => x.Name);
+                    var colsNotUsed = dbColNames.Where(p => !entityColsByTableDict[entityLog.Expected].Contains(p));
                     foreach (var colName in colsNotUsed)
                     {
                         logger.ExtraInDatabase(colName, CompareAttributes.ColumnName, entityLog.Expected);
@@ -81,11 +86,11 @@ namespace TestSupport.EfSchemeCompare.Internal
             {
                 if (tableDict.ContainsKey(entityLog.Expected))
                 {
-                    var indexCol = tableDict[entityLog.Expected].Indexes.ToDictionary(x => x.Name);
+                    var indexCol = tableDict[entityLog.Expected].Indexes.Select(x => x.Name);
                     var allEfIndexNames = entityLog.SubLogs
                         .Where(x => x.State == CompareState.Ok && x.Type == CompareType.Index)
-                        .Select(p => p.Expected).OrderBy(p => p).Distinct();
-                    var indexesNotUsed = allEfIndexNames.Where(p => !indexCol.ContainsKey(p));
+                        .Select(p => p.Expected).OrderBy(p => p).Distinct().ToList();
+                    var indexesNotUsed = indexCol.Where(p => !allEfIndexNames.Contains(p));
                     foreach (var indexName in indexesNotUsed)
                     {
                         logger.ExtraInDatabase(indexName, CompareAttributes.IndexConstraintName, entityLog.Expected);

@@ -88,28 +88,35 @@ namespace Test.UnitTests.EfSchemaCompare
             //VERIFY
             hasErrors.ShouldBeTrue();
             CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
-                "EXTRA IN DATABASE: Column 'MyEntites', column name. Found = DiffPropName");
+                "EXTRA IN DATABASE: Column 'MyEntites', column name. Found = MyEntityId");
         }
 
         [Fact]
         public void ExtraIndexConstaint()
         {
             //SETUP
-            var jArray = JArray.Parse(TestData.GetFileContent("DbContextCompareLog01*.json"));
-            jArray[0]["SubLogs"][0]["SubLogs"][4]["Expected"] = "DiffConstraintName";
-            jArray[0]["SubLogs"][0]["SubLogs"][4]["Type"] = "Index";
-            var firstStageLogs = JsonConvert.DeserializeObject<List<CompareLog>>(jArray.ToString());
+            var firstStageLogs = JsonConvert.DeserializeObject<List<CompareLog>>(
+                TestData.GetFileContent("DbContextCompareLog01*.json"));
 
-            var handler = new Stage2Comparer(_databaseModel);
+            var options = this.CreateUniqueMethodOptions<MyEntityIndexAddedDbContext>();
+            using (var context = new MyEntityIndexAddedDbContext(options))
+            {
+                var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
+                var factory = serviceProvider.GetService<IDatabaseModelFactory>();
+                var connectionString = context.Database.GetDbConnection().ConnectionString;
 
-            //ATTEMPT
-            var hasErrors = handler.CompareLogsToDatabase(firstStageLogs);
+                context.Database.EnsureCreated();
+                var databaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+                var handler = new Stage2Comparer(databaseModel);
 
-            //VERIFY
-            hasErrors.ShouldBeTrue();
-            CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
-                "EXTRA IN DATABASE: Index 'MyEntites', index constraint name. Found = DiffConstraintName");
+                //ATTEMPT
+                var hasErrors = handler.CompareLogsToDatabase(firstStageLogs);
+
+                //VERIFY
+                hasErrors.ShouldBeTrue();
+                CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
+                    "EXTRA IN DATABASE: Index 'MyEntites', index constraint name. Found = IX_MyEntites_MyInt");
+            }
         }
-
     }
 }
