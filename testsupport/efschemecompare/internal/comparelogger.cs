@@ -14,9 +14,9 @@ namespace TestSupport.EfSchemeCompare.Internal
         private readonly string _defaultName;
         private readonly IList<CompareLog> _compareLogs;
         private readonly IReadOnlyList<CompareLog> _ignoreList;
-        private readonly Func<bool> _setErrorHasHappened;
+        private readonly Action _setErrorHasHappened;
 
-        public CompareLogger(CompareType type, string defaultName, IList<CompareLog> compareLogs, IReadOnlyList<CompareLog> ignoreList, Func<bool> setErrorHasHappened)
+        public CompareLogger(CompareType type, string defaultName, IList<CompareLog> compareLogs, IReadOnlyList<CompareLog> ignoreList, Action setErrorHasHappened)
         {
             _type = type;
             _defaultName = defaultName;
