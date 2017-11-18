@@ -96,7 +96,8 @@ namespace TestSupport.EfSchemeCompare.Internal
                         }
                     }
                     error |= logger.CheckDifferent(entityFKey.DeleteBehavior.ToString(), 
-                        fKeyDict[constraintName].OnDelete.ConvertReferentialActionToDeleteBehavior(entityFKey.DeleteBehavior), CompareAttributes.DeleteBehaviour);
+                        fKeyDict[constraintName].OnDelete.ConvertReferentialActionToDeleteBehavior(entityFKey.DeleteBehavior), 
+                            CompareAttributes.DeleteBehaviour);
                     if (!error)
                         logger.MarkAsOk(constraintName);
                 }
@@ -114,7 +115,7 @@ namespace TestSupport.EfSchemeCompare.Internal
                 //if not a owned table, or the owned table has its own table then carry on
                 return false;
 
-            //It is a foreign key that links to to the same entity, so we ignore 
+            //It is a foreign key that links back to the same entity, so we ignore 
             return true;
         }
 
@@ -163,7 +164,7 @@ namespace TestSupport.EfSchemeCompare.Internal
                 () =>
                 {
                     pKeyError = true;  //extra set of pKeyError
-                    return _hasErrors = true;
+                    _hasErrors = true;
                 });
             pKeyLogger.CheckDifferent(efPKeyConstraintName, table.PrimaryKey.Name, CompareAttributes.ConstraintName);
             foreach (var property in entityType.GetProperties())

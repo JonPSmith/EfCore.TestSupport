@@ -24,7 +24,7 @@ namespace Test.UnitTests.EfSchemaCompare
             bool errorLogged = false;
             var logs = new List<CompareLog>();
             var logger = new CompareLogger(CompareType.Entity, "Test", logs, null,
-                () => { return errorLogged = true; });
+                () => { errorLogged = true; });
 
             //ATTEMPT
             logger.MarkAsOk("MyValue");
@@ -42,7 +42,7 @@ namespace Test.UnitTests.EfSchemaCompare
             bool errorLogged = false;
             var logs = new List<CompareLog>();
             var logger = new CompareLogger(CompareType.Entity, "Test", logs, null,
-                () => { return errorLogged = true; });
+                () => { errorLogged = true; });
 
             //ATTEMPT
             logger.Different("MyValue", "OtherValue", CompareAttributes.ColumnName);
@@ -60,7 +60,7 @@ namespace Test.UnitTests.EfSchemaCompare
             bool errorLogged = false;
             var logs = new List<CompareLog>();
             var logger = new CompareLogger(CompareType.Entity, "Test", logs, null,
-                () => { return errorLogged = true; });
+                () => { errorLogged = true; });
 
             //ATTEMPT
             logger.NotInDatabase("MyValue");
@@ -78,7 +78,7 @@ namespace Test.UnitTests.EfSchemaCompare
             bool errorLogged = false;
             var logs = new List<CompareLog>();
             var logger = new CompareLogger(CompareType.Entity, "Test", logs, null,
-                () => { return errorLogged = true; });
+                () => { errorLogged = true; });
 
             //ATTEMPT
             logger.ExtraInDatabase("MyValue", CompareAttributes.ColumnName);
@@ -101,7 +101,7 @@ namespace Test.UnitTests.EfSchemaCompare
 
             //ATTEMPT
             var logger = new CompareLogger(CompareType.Entity, "Test", logs, config.LogsToIgnore,
-                () => { return errorLogged = true; });
+                () => { errorLogged = true; });
             logger.NotInDatabase("MyValue");
 
             //VERIFY
