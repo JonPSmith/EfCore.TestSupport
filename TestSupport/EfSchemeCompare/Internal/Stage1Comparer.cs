@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 
 [assembly: InternalsVisibleTo("Test")]
@@ -79,7 +80,7 @@ namespace TestSupport.EfSchemeCompare.Internal
                 var entityFKeyprops = entityFKey.Properties;
                 var constraintName = entityFKey.Relational().Name;
                 var logger = new CompareLogger(CompareType.ForeignKey, constraintName, log.SubLogs, _ignoreList, () => _hasErrors = true);
-                if (IgnoreForeignKeyIfInSameTable(entityType, table))
+                if (IgnoreForeignKeyIfInSameTable(entityType, entityFKeyprops, table))
                     continue;
                 if (fKeyDict.ContainsKey(constraintName))
                 {       
@@ -108,15 +109,19 @@ namespace TestSupport.EfSchemeCompare.Internal
             }
         }
 
-        private bool IgnoreForeignKeyIfInSameTable(IEntityType entityType, DatabaseTable table)
+        private bool IgnoreForeignKeyIfInSameTable(IEntityType entityType, IReadOnlyList<IProperty> keyProperties, DatabaseTable table)
         {
-            if (entityType.DefiningEntityType == null ||
-                entityType.DefiningEntityType.Relational().TableName != table.Name)
-                //if not a owned table, or the owned table has its own table then carry on
-                return false;
+            if (entityType.DefiningEntityType != null &&
+                entityType.DefiningEntityType.Relational().TableName == table.Name)
+                //if a owned table, and the owned entity's table matches this table then ignore
+                return true;
 
-            //It is a foreign key that links back to the same entity, so we ignore 
-            return true;
+            if (keyProperties.All(x => x.DeclaringEntityType.Relational().TableName == table.Name))
+                //If all the declaring entity type of the foreign key are all in this table, then we ignore this (table splitting case)
+                return true;
+
+            //Otherwise we should not ignore it
+            return false;
         }
 
         private void CompareIndexes(CompareLog log, IEntityType entityType, DatabaseTable table)
