@@ -41,10 +41,8 @@ namespace Test.UnitTests.EfSchemaCompare
                 //VERIFY
                 hasErrors.ShouldBeTrue();
                 var errors = CompareLog.ListAllErrors(comparer.Logs).ToList();
-                errors.Count.ShouldEqual(2);
+                errors.Count.ShouldEqual(1);
                 errors[0].ShouldEqual(
-                    "NOT IN DATABASE: BookDetail->ForeignKey 'FK_Books_Books_BookSummaryId', constraint name. Expected = FK_Books_Books_BookSummaryId");
-                errors[1].ShouldEqual(
                     "DIFFERENT: BookSummary->Property 'BookSummaryId', value generated. Expected = OnAdd, found = Never");
             }
         }
