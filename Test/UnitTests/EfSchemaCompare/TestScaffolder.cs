@@ -5,6 +5,7 @@ using System.Linq;
 using DataLayer.BookApp;
 using DataLayer.EfCode.BookApp;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +39,7 @@ namespace Test.UnitTests.EfSchemaCompare
         public void GetDatabaseModel()
         {
             //SETUP
-            var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
+            var serviceProvider = new SqlServerDesignTimeServices().GetDesignTimeProvider();
             var factory = serviceProvider.GetService<IDatabaseModelFactory>();
 
             //ATTEMPT 
@@ -53,7 +54,7 @@ namespace Test.UnitTests.EfSchemaCompare
         public void GetScalarEntityInModel()
         {
             //SETUP
-            var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
+            var serviceProvider = new SqlServerDesignTimeServices().GetDesignTimeProvider();
             var factory = serviceProvider.GetService<IScaffoldingModelFactory>();
 
             var model = factory.Create(_connectionString, new string[] { }, new string[] { }, false);

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using Microsoft.Extensions.Configuration;
@@ -69,12 +70,42 @@ namespace TestSupport.EfSchemeCompare
         /// <returns>true if any errors found, otherwise false</returns>
         public bool CompareEfWithDb(string configOrConnectionString, params DbContext[] dbContexts )
         {
+            if (dbContexts == null) throw new ArgumentNullException(nameof(dbContexts));
+            if (dbContexts.Length == 0)
+                throw new ArgumentException("You must provide at least one DbContext instance.", nameof(dbContexts));
+
+            var designTimeService = dbContexts[0].GetDesignTimeService();
+            return FinishRestOfCompare(configOrConnectionString, dbContexts, designTimeService);
+        }
+
+
+        /// <summary>
+        /// This will compare one or more DbContext against database pointed to by the configOrConnectionString 
+        /// using the DesignTimeServices type for T 
+        /// </summary>
+        /// <typeparam name="T">Must be the design time provider for the database provider you want to use, e.g. MySqlDesignTimeServices</typeparam>
+        /// <param name="configOrConnectionString">This should either be a 
+        /// connection string or the name of a connection string in the appsetting.json file.
+        /// </param>
+        /// <param name="dbContexts">One or more dbContext instances to be compared with the database</param>
+        /// <returns>true if any errors found, otherwise false</returns>
+        public bool CompareEfWithDb<T>(string configOrConnectionString, params DbContext[] dbContexts) where T: IDesignTimeServices, new()
+        {
             if (configOrConnectionString == null) throw new ArgumentNullException(nameof(configOrConnectionString));
             if (dbContexts == null) throw new ArgumentNullException(nameof(dbContexts));
             if (dbContexts.Length == 0)
                 throw new ArgumentException("You must provide at least one DbContext instance.", nameof(dbContexts));
 
-            var databaseModel = GetDatabaseModelViaScaffolder(dbContexts[0], configOrConnectionString);
+            var designTimeService = new T();
+            return FinishRestOfCompare(configOrConnectionString, dbContexts, designTimeService);
+        }
+
+        //------------------------------------------------------
+        //private methods
+
+        private bool FinishRestOfCompare(string configOrConnectionString, DbContext[] dbContexts, IDesignTimeServices designTimeService)
+        {
+            var databaseModel = GetDatabaseModelViaScaffolder(dbContexts[0], configOrConnectionString, designTimeService);
             bool hasErrors = false;
             foreach (var context in dbContexts)
             {
@@ -91,12 +122,9 @@ namespace TestSupport.EfSchemeCompare
             return hasErrors;
         }
 
-        //------------------------------------------------------
-        //private methods
-
-        private  DatabaseModel GetDatabaseModelViaScaffolder(DbContext context, string configOrConnectionString)
+        private  DatabaseModel GetDatabaseModelViaScaffolder(DbContext context, string configOrConnectionString, IDesignTimeServices designTimeService)
         {
-            var serviceProvider = context.GetDesignTimeProvider();
+            var serviceProvider = designTimeService.GetDesignTimeProvider();
             var factory = serviceProvider.GetService<IDatabaseModelFactory>();
             var connectionString = configOrConnectionString == null
                 ? context.Database.GetDbConnection().ConnectionString

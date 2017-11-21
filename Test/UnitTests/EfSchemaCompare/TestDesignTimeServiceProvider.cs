@@ -1,6 +1,7 @@
 using DataLayer.BookApp;
 using DataLayer.EfCode.BookApp;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
@@ -34,12 +35,9 @@ namespace Test.UnitTests.EfSchemaCompare
         }
 
         [Fact]
-        public void GetDatabaseProvider()
+        public void GetDatabaseProviderSqlServer()
         {
             //SETUP
-            var optionsBuilder = new DbContextOptionsBuilder<BookContext>();
-            optionsBuilder.UseSqlServer(_connectionString);
-
             using (var context = new BookContext(_options))
             {
                 //ATTEMPT 
@@ -51,6 +49,21 @@ namespace Test.UnitTests.EfSchemaCompare
             }
         }
 
+        [Fact]
+        public void GetDatabaseProviderSqlite()
+        {
+            //SETUP
+            var optionsBuilder = SqliteInMemory.CreateOptions<BookContext>();
+            using (var context = new BookContext(optionsBuilder))
+            {
+                //ATTEMPT 
+                var dbProvider = context.GetService<IDatabaseProvider>();
+
+                //VERIFY
+                dbProvider.ShouldNotBeNull();
+                dbProvider.Name.ShouldEqual("Microsoft.EntityFrameworkCore.Sqlite");
+            }
+        }
 
         [Fact]
         public void GetDesignTimeServiceProviderSqlServer()
@@ -59,11 +72,11 @@ namespace Test.UnitTests.EfSchemaCompare
             using (var context = new BookContext(_options))
             {
                 //ATTEMPT 
-                var service = context.GetDesignTimeProvider();
+                var service = context.GetDesignTimeService();
 
                 //VERIFY
                 service.ShouldNotBeNull();
-                service.ShouldBeType<ServiceProvider>();
+                service.ShouldBeType<SqlServerDesignTimeServices>();
             }
         }
 
@@ -76,11 +89,11 @@ namespace Test.UnitTests.EfSchemaCompare
             using (var context = new BookContext(options))
             {
                 //ATTEMPT 
-                var service = context.GetDesignTimeProvider();
+                var service = context.GetDesignTimeService();
 
                 //VERIFY
                 service.ShouldNotBeNull();
-                service.ShouldBeType<ServiceProvider>();
+                service.ShouldBeType<SqliteDesignTimeServices>();
             }
         }
 
@@ -90,7 +103,8 @@ namespace Test.UnitTests.EfSchemaCompare
             //SETUP
             using (var context = new BookContext(_options))
             {
-                var serviceProvider = context.GetDesignTimeProvider();
+                var dtService = context.GetDesignTimeService();
+                var serviceProvider = dtService.GetDesignTimeProvider();
 
                 //ATTEMPT 
                 var factory = serviceProvider.GetService<IDatabaseModelFactory>();
@@ -109,7 +123,8 @@ namespace Test.UnitTests.EfSchemaCompare
                 .CreateOptions<BookContext>();
             using (var context = new BookContext(options))
             {
-                var serviceProvider = context.GetDesignTimeProvider();
+                var dtService = context.GetDesignTimeService();
+                var serviceProvider = dtService.GetDesignTimeProvider();
 
                 //ATTEMPT 
                 var factory = serviceProvider.GetService<IDatabaseModelFactory>();
@@ -124,7 +139,7 @@ namespace Test.UnitTests.EfSchemaCompare
         public void GetIScaffoldingModelFactory()
         {
             //SETUP
-            var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
+            var serviceProvider = new SqlServerDesignTimeServices().GetDesignTimeProvider();
 
             //ATTEMPT 
             var factory = serviceProvider.GetService<IScaffoldingModelFactory>();

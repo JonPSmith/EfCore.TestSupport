@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DataLayer.MyEntityDb.EfCompareDbs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +28,7 @@ namespace Test.UnitTests.EfSchemaCompare
             _output = output;
             var options = this
                 .CreateUniqueClassOptions<MyEntityDbContext>();
-            var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
+            var serviceProvider = new SqlServerDesignTimeServices().GetDesignTimeProvider();
             var factory = serviceProvider.GetService<IDatabaseModelFactory>();
 
             using (var context = new MyEntityDbContext(options))
@@ -101,7 +102,8 @@ namespace Test.UnitTests.EfSchemaCompare
             var options = this.CreateUniqueMethodOptions<MyEntityIndexAddedDbContext>();
             using (var context = new MyEntityIndexAddedDbContext(options))
             {
-                var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
+                var dtService = context.GetDesignTimeService();
+                var serviceProvider = dtService.GetDesignTimeProvider();
                 var factory = serviceProvider.GetService<IDatabaseModelFactory>();
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
 

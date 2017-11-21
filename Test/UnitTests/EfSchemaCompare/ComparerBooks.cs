@@ -1,5 +1,6 @@
 using DataLayer.EfCode.BookApp;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design.Internal;
 using TestSupport.EfHelpers;
 using TestSupport.EfSchemeCompare;
 using Xunit;
@@ -52,6 +53,22 @@ namespace Test.UnitTests.EfSchemaCompare
 
                 //ATTEMPT
                 var hasErrors = comparer.CompareEfWithDb(_connectionString, context);
+
+                //VERIFY
+                hasErrors.ShouldBeFalse(comparer.GetAllErrors);
+            }
+        }
+
+        [Fact]
+        public void CompareViaType()
+        {
+            //SETUP
+            using (var context = new BookContext(_options))
+            {
+                var comparer = new CompareEfSql();
+
+                //ATTEMPT
+                var hasErrors = comparer.CompareEfWithDb<SqlServerDesignTimeServices>(_connectionString, context);
 
                 //VERIFY
                 hasErrors.ShouldBeFalse(comparer.GetAllErrors);

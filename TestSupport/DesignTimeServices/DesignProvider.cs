@@ -14,11 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 namespace TestSupport.DesignTimeServices
 {
     /// <summary>
-    /// This defines the database providers that the DesignProvider currently supports
-    /// </summary>
-    public enum DatabaseProviders { SqlServer, Sqlite}
-
-    /// <summary>
     /// This static class contains the methods to return a design-time service provider
     /// </summary>
     public static class DesignProvider
@@ -27,21 +22,32 @@ namespace TestSupport.DesignTimeServices
         private const string SqliteProviderName = "Microsoft.EntityFrameworkCore.Sqlite";
 
         /// <summary>
-        /// This returns design-time service provider for the database provider you are using in the DbContext
+        /// This returns the correct instance of the design time service for the current DbContext
         /// </summary>
         /// <param name="context"></param>
-        /// <returns>A service provider that conatins the design-time services</returns>
-        public static ServiceProvider GetDesignTimeProvider(this DbContext context)
+        /// <returns></returns>
+        public static IDesignTimeServices GetDesignTimeService(this DbContext context)
         {
-            return GetDesignTimeProvider(context.DecodeDatabaseProvider());
+            var dbProvider = context.GetService<IDatabaseProvider>();
+            if (dbProvider == null)
+                throw new InvalidOperationException("Cound not find a database provider service.");
+
+            var providerName = dbProvider.Name;
+
+            if (providerName == SqlServerProviderName)
+                return new SqlServerDesignTimeServices();
+            if (providerName == SqliteProviderName)
+                return new SqliteDesignTimeServices();
+
+            throw new InvalidOperationException("This is not a database provider that we currently support.");
         }
 
         /// <summary>
-        /// This returns design-time service provider for the database provider you have selected from the enum
+        /// This returns a DesignTimeProvider for the design time service instance that you provided
         /// </summary>
-        /// <param name="databaseProvider"></param>
-        /// <returns>A service provider that conatins the design-time services</returns>
-        public static ServiceProvider GetDesignTimeProvider(this DatabaseProviders databaseProvider)
+        /// <param name="designTimeService">This should be an instance of rhe design time service for the database provider</param>
+        /// <returns></returns>
+        public static ServiceProvider GetDesignTimeProvider(this IDesignTimeServices designTimeService)
         {
             var errors = new List<string>();
             var warnings = new List<string>();
@@ -56,43 +62,8 @@ namespace TestSupport.DesignTimeServices
                 .AddSingleton<IOperationReporter, OperationReporter>()
                 .AddSingleton<IOperationReportHandler, OperationReportHandler>();
 
-            switch (databaseProvider)
-            {
-                case DatabaseProviders.SqlServer:
-                {
-                    var designProvider = new SqlServerDesignTimeServices();
-                    designProvider.ConfigureDesignTimeServices(serviceCollection);
-                    return serviceCollection.BuildServiceProvider();
-                }
-                case DatabaseProviders.Sqlite:
-                {
-                    var designProvider = new SqliteDesignTimeServices();
-                    designProvider.ConfigureDesignTimeServices(serviceCollection);
-                    return serviceCollection.BuildServiceProvider();
-                }
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(databaseProvider), databaseProvider, null);
-            }
-        }
-
-        //----------------------------------------------
-        //private methods
-
-        private static DatabaseProviders DecodeDatabaseProvider(this DbContext context)
-        {
-            var dbProvider = context.GetService<IDatabaseProvider>();
-            if (dbProvider == null)
-                throw new InvalidOperationException("Cound not find a database provider service.");
-
-            var providerName = dbProvider.Name;
-
-            if (providerName == SqlServerProviderName)
-                return DatabaseProviders.SqlServer;
-            if (providerName == SqliteProviderName)
-                return DatabaseProviders.Sqlite;
-
-            throw new InvalidOperationException("This is not a database provider that we currently support.");
-
+            designTimeService.ConfigureDesignTimeServices(serviceCollection);
+            return serviceCollection.BuildServiceProvider();
         }
     }
 }

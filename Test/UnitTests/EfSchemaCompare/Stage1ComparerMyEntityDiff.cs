@@ -1,6 +1,7 @@
 using System.Linq;
 using DataLayer.MyEntityDb.EfCompareDbs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +28,7 @@ namespace Test.UnitTests.EfSchemaCompare
             _output = output;
             _options = this
                 .CreateUniqueClassOptions<MyEntityDbContext>();
-            var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
+            var serviceProvider = new SqlServerDesignTimeServices().GetDesignTimeProvider();
             var factory = serviceProvider.GetService<IDatabaseModelFactory>();
 
             using (var context = new MyEntityDbContext(_options))
@@ -219,11 +220,12 @@ namespace Test.UnitTests.EfSchemaCompare
         public void ComparePropertyComputedColSelf()
         {
             //SETUP
-            var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
-            var factory = serviceProvider.GetService<IDatabaseModelFactory>();
             var options = GetComputedColDbOptions();
             using (var context = new MyEntityComputedColDbContext(options))
             {
+                var dtService = context.GetDesignTimeService();
+                var serviceProvider = dtService.GetDesignTimeProvider();
+                var factory = serviceProvider.GetService<IDatabaseModelFactory>();
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
                 var localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
@@ -245,12 +247,13 @@ namespace Test.UnitTests.EfSchemaCompare
         public void ComparePropertyComputedColNameReversed()
         {
             //SETUP
-            var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
-            var factory = serviceProvider.GetService<IDatabaseModelFactory>();
             var options = GetComputedColDbOptions();
             DatabaseModel localDatabaseModel;
             using (var context = new MyEntityComputedColDbContext(options))
             {
+                var dtService = context.GetDesignTimeService();
+                var serviceProvider = dtService.GetDesignTimeProvider();
+                var factory = serviceProvider.GetService<IDatabaseModelFactory>();
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
                 localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
@@ -311,11 +314,12 @@ namespace Test.UnitTests.EfSchemaCompare
         public void ComparePropertySqlDefaultSelf()
         {
             //SETUP
-            var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
-            var factory = serviceProvider.GetService<IDatabaseModelFactory>();
             var options = GetDefaultSqlDbOptions();
             using (var context = new MyEntitySqlDefaultDbContext(options))
             {
+                var dtService = context.GetDesignTimeService();
+                var serviceProvider = dtService.GetDesignTimeProvider();
+                var factory = serviceProvider.GetService<IDatabaseModelFactory>();
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
                 var localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
@@ -336,12 +340,13 @@ namespace Test.UnitTests.EfSchemaCompare
         public void ComparePropertySqlDefaultReversed()
         {
             //SETUP
-            var serviceProvider = DatabaseProviders.SqlServer.GetDesignTimeProvider();
-            var factory = serviceProvider.GetService<IDatabaseModelFactory>();
             var options = GetDefaultSqlDbOptions();
             DatabaseModel localDatabaseModel;
             using (var context = new MyEntitySqlDefaultDbContext(options))
             {
+                var dtService = context.GetDesignTimeService();
+                var serviceProvider = dtService.GetDesignTimeProvider();
+                var factory = serviceProvider.GetService<IDatabaseModelFactory>();
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
                 localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
