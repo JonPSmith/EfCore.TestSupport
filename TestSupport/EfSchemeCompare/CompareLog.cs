@@ -16,6 +16,7 @@ namespace TestSupport.EfSchemeCompare
     /// This is used to define what is being compared
     /// </summary>
     public enum CompareType { NoSet,
+        MatchAnything,
         //Software side
         DbContext, Entity, Property,
         //Database side (used for ExtraInDatabase)
@@ -221,13 +222,14 @@ namespace TestSupport.EfSchemeCompare
 
         private bool ShouldBeIgnored(CompareLog ignoreItem)
         {
-            if (ignoreItem.Type != Type || ignoreItem.State != State)
+            if (ignoreItem.State != State)
                 return false;
 
-            return (ignoreItem.Attribute == CompareAttributes.MatchAnything || ignoreItem.Attribute == Attribute)
-                     && (ignoreItem.Name == null || ignoreItem.Name == Name)
-                     && (ignoreItem.Expected == null || ignoreItem.Expected == Expected)
-                     && (ignoreItem.Found == null || ignoreItem.Found == Found);
+            return (ignoreItem.Type == CompareType.MatchAnything || ignoreItem.Type == Type)
+                && (ignoreItem.Attribute == CompareAttributes.MatchAnything || ignoreItem.Attribute == Attribute)
+                && (ignoreItem.Name == null || ignoreItem.Name == Name)
+                && (ignoreItem.Expected == null || ignoreItem.Expected == Expected)
+                && (ignoreItem.Found == null || ignoreItem.Found == Found);
         }
 
         private static string ReplaceNullTokenWithNull(string str)

@@ -41,6 +41,7 @@ namespace Test.UnitTests.EfSchemaCompare
         {
             private readonly List<object[]> _data = new List<object[]>
             {
+                new object[] {new CompareLog(CompareType.MatchAnything, CompareState.Different, null), true},
                 new object[] {new CompareLog(CompareType.Column, CompareState.Different, null), true},
                 new object[] {new CompareLog(CompareType.Column, CompareState.Different, "Name"), true},
                 new object[] {new CompareLog(CompareType.Column, CompareState.Different, "DiffName"), false},
