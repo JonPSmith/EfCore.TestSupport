@@ -68,6 +68,22 @@ namespace Test.UnitTests.EfSchemaCompare
                 var comparer = new CompareEfSql();
 
                 //ATTEMPT
+                var hasErrors = comparer.CompareEfWithDb<SqlServerDesignTimeServices>(context);
+
+                //VERIFY
+                hasErrors.ShouldBeFalse(comparer.GetAllErrors);
+            }
+        }
+
+        [Fact]
+        public void CompareViaTypeWithConnection()
+        {
+            //SETUP
+            using (var context = new BookContext(_options))
+            {
+                var comparer = new CompareEfSql();
+
+                //ATTEMPT
                 var hasErrors = comparer.CompareEfWithDb<SqlServerDesignTimeServices>(_connectionString, context);
 
                 //VERIFY

@@ -61,6 +61,22 @@ namespace TestSupport.EfSchemeCompare
         }
 
         /// <summary>
+        /// This will compare one or more DbContext against database pointed to the first DbContext
+        /// using the DesignTimeServices type for T.
+        /// </summary>
+        /// <typeparam name="T">Must be the design time provider for the database provider you want to use, e.g. MySqlDesignTimeServices</typeparam>
+        /// <param name="dbContexts">One or more dbContext instances to be compared with the database</param>
+        /// <returns>true if any errors found, otherwise false</returns>
+        public bool CompareEfWithDb<T>(params DbContext[] dbContexts) where T : IDesignTimeServices, new()
+        {
+            if (dbContexts == null) throw new ArgumentNullException(nameof(dbContexts));
+            if (dbContexts.Length == 0)
+                throw new ArgumentException("You must provide at least one DbContext instance.", nameof(dbContexts));
+            var designTimeService = new T();
+            return FinishRestOfCompare(dbContexts[0].Database.GetDbConnection().ConnectionString, dbContexts, designTimeService);
+        }
+
+        /// <summary>
         /// This will compare one or more DbContext against database pointed to by the configOrConnectionString.
         /// </summary>
         /// <param name="configOrConnectionString">This should either be a 
