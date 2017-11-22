@@ -7,6 +7,7 @@ using DataLayer.BookApp;
 using DataLayer.EfCode.BookApp;
 using Microsoft.EntityFrameworkCore;
 using Test.Helpers;
+using TestSupport.Attributes;
 using TestSupport.EfHelpers;
 using Xunit;
 using Xunit.Abstractions;
@@ -91,6 +92,26 @@ namespace Test.UnitTests.DataLayer
 
                 //VERIFY
                 context.Books.Count().ShouldEqual(0);
+            }
+        }
+
+        [RunnableInDebugOnly]
+        public void TestCreateDbToGetLogsOk()
+        {
+            //SETUP
+            var options = this.CreateUniqueMethodOptions<BookContext>();
+            using (var context = new BookContext(options))
+            {
+                //ATTEMPT
+                var logs = context.SetupLogging();
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+
+                //VERIFY
+                foreach (var log in logs.ToList())
+                {
+                    _output.WriteLine(log.ToString());
+                }
             }
         }
 
