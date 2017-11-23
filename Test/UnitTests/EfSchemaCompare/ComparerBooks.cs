@@ -33,12 +33,18 @@ namespace Test.UnitTests.EfSchemaCompare
             //SETUP
             using (var context = new BookContext(_options))
             {
+                context.Database.EnsureCreated();
                 var comparer = new CompareEfSql();
 
                 //ATTEMPT
+                //This will compare EF Core model of the database 
+                //with the database that the context's connection points to
                 var hasErrors = comparer.CompareEfWithDb(context);
 
                 //VERIFY
+                //The CompareEfWithDb method returns true if there were errors. 
+                //The comparer.GetAllErrors property returns a string
+                //where each error is on a separate line
                 hasErrors.ShouldBeFalse(comparer.GetAllErrors);
             }
         }
@@ -52,10 +58,13 @@ namespace Test.UnitTests.EfSchemaCompare
                 var comparer = new CompareEfSql();
 
                 //ATTEMPT
-                var hasErrors = comparer.CompareEfWithDb(_connectionString, context);
+                using (new TimeThings(_output, "Time to compare simple database"))
+                {
+                    var hasErrors = comparer.CompareEfWithDb(_connectionString, context);
 
-                //VERIFY
-                hasErrors.ShouldBeFalse(comparer.GetAllErrors);
+                    //VERIFY
+                    hasErrors.ShouldBeFalse(comparer.GetAllErrors);
+                }
             }
         }
 
