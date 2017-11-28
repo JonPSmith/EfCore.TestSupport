@@ -234,11 +234,12 @@ namespace TestSupport.EfSchemeCompare.Internal
 
         private bool ComparePropertyToColumn(CompareLogger logger, IProperty property, DatabaseColumn column)
         {
-            var error = logger.CheckDifferent(property.Relational().ColumnType, column.StoreType, CompareAttributes.ColumnType);
+            var pRel = property.Relational();
+            var error = logger.CheckDifferent(pRel.ColumnType, column.StoreType, CompareAttributes.ColumnType);
             error |= logger.CheckDifferent(property.IsNullable.NullableAsString(), column.IsNullable.NullableAsString(), CompareAttributes.Nullability);
-            error |= logger.CheckDifferent(property.Relational().DefaultValueSql.RemoveUnnecessaryBrackets(), 
+            error |= logger.CheckDifferent((pRel.DefaultValueSql ?? pRel.DefaultValue?.ToString()).RemoveUnnecessaryBrackets(), 
                 column.DefaultValueSql.RemoveUnnecessaryBrackets(), CompareAttributes.DefaultValueSql);
-            error |= logger.CheckDifferent(property.Relational().ComputedColumnSql.RemoveUnnecessaryBrackets(), 
+            error |= logger.CheckDifferent(pRel.ComputedColumnSql.RemoveUnnecessaryBrackets(), 
                 column.ComputedColumnSql.RemoveUnnecessaryBrackets(), CompareAttributes.ComputedColumnSql);
             error |= logger.CheckDifferent(property.ValueGenerated.ToString(), 
                 column.ValueGenerated.ConvertNullableValueGenerated(column.DefaultValueSql), CompareAttributes.ValueGenerated);
