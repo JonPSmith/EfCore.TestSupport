@@ -175,14 +175,12 @@ namespace Test.UnitTests.EfSchemaCompare
                 //VERIFY
                 hasErrors.ShouldBeTrue();
                 var errors = CompareLog.ListAllErrors(handler.Logs).ToList();
-                errors.Count.ShouldEqual(4);
+                errors.Count.ShouldEqual(3);
                 errors[0].ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyInt', value generated. Expected = OnAdd, found = Never");
-                errors[1].ShouldEqual(
                     "NOT IN DATABASE: MyEntity->PrimaryKey 'PK_MyEntites', column name. Expected = MyInt");
-                errors[2].ShouldEqual(
+                errors[1].ShouldEqual(
                     "DIFFERENT: MyEntity->Property 'MyEntityId', value generated. Expected = Never, found = OnAdd");
-                errors[3].ShouldEqual(
+                errors[2].ShouldEqual(
                     "EXTRA IN DATABASE: MyEntity->PrimaryKey 'PK_MyEntites', column name. Found = MyEntityId");
             }
         }

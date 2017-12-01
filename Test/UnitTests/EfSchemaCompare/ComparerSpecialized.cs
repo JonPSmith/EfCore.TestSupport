@@ -39,31 +39,6 @@ namespace Test.UnitTests.EfSchemaCompare
                 var hasErrors = comparer.CompareEfWithDb(context);
 
                 //VERIFY
-                hasErrors.ShouldBeTrue();
-                var errors = CompareLog.ListAllErrors(comparer.Logs).ToList();
-                errors.Count.ShouldEqual(1);
-                errors[0].ShouldEqual(
-                    "DIFFERENT: BookSummary->Property 'BookSummaryId', value generated. Expected = OnAdd, found = Never");
-            }
-        }
-
-        [Fact]
-        public void CompareSpecializedDbContextSupressErrors()
-        {
-            //SETUP
-            var errorString =
-@"NOT IN DATABASE: BookDetail->ForeignKey 'FK_Books_Books_BookSummaryId', constraint name. Expected = FK_Books_Books_BookSummaryId
-DIFFERENT: BookSummary->Property 'BookSummaryId', value generated. Expected = OnAdd, found = Never";
-            using (var context = new SpecializedDbContext(_options))
-            {
-                var config = new CompareEfSqlConfig();
-                config.IgnoreTheseErrors(errorString);
-                var comparer = new CompareEfSql(config);
-
-                //ATTEMPT
-                var hasErrors = comparer.CompareEfWithDb(context);
-
-                //VERIFY
                 hasErrors.ShouldBeFalse(comparer.GetAllErrors);
             }
         }

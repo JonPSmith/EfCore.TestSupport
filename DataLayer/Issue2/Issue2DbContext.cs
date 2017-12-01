@@ -8,7 +8,8 @@ namespace DataLayer.Issue2
     public class Issue2DbContext : DbContext
     {
         public DbSet<NormativeReference> NormativeReferences { get; set; }
-        public DbSet<NormativeReferenceGuid> NormativeReferenceGuids { get; set; }
+        public DbSet<PrimaryKeyGuid> PrimaryKeyGuids { get; set; }
+        public DbSet<PrincipalEntity> PrincipalEntities { get; set; }
 
         public Issue2DbContext(
             DbContextOptions<Issue2DbContext> options)      

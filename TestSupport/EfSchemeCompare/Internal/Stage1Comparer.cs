@@ -241,9 +241,20 @@ namespace TestSupport.EfSchemeCompare.Internal
                 column.DefaultValueSql.RemoveUnnecessaryBrackets(), CompareAttributes.DefaultValueSql);
             error |= logger.CheckDifferent(pRel.ComputedColumnSql.RemoveUnnecessaryBrackets(), 
                 column.ComputedColumnSql.RemoveUnnecessaryBrackets(), CompareAttributes.ComputedColumnSql);
-            error |= logger.CheckDifferent(property.ValueGenerated.ToString(), 
-                column.ValueGenerated.ConvertNullableValueGenerated(column.DefaultValueSql), CompareAttributes.ValueGenerated);
+            error |= CheckValueGenerated(logger, property, column);
             return error;
+        }
+
+        private bool CheckValueGenerated(CompareLogger logger, IProperty property, DatabaseColumn column)
+        {
+            var colValGen = column.ValueGenerated.ConvertNullableValueGenerated(column.DefaultValueSql);
+            if (colValGen == ValueGenerated.Never.ToString()
+                //There is a case where the property is part of the primary key and the key is not set in the database
+                && property.ValueGenerated == ValueGenerated.OnAdd
+                && property.IsKey())
+                return false;
+            return logger.CheckDifferent(property.ValueGenerated.ToString(),
+                colValGen, CompareAttributes.ValueGenerated);
         }
 
     }

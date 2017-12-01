@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DataLayer.Issue2
 {
-    public class NormativeReferenceGuid
+    public class PrimaryKeyGuid
     {
         [Key, MaxLength(50)]
         public Guid NormativeReferenceGuidId { get; set; }
