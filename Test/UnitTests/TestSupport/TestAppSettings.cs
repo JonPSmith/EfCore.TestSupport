@@ -68,5 +68,31 @@ namespace Test.UnitTests.TestSupport
             var newDatabaseName = new SqlConnectionStringBuilder(con).InitialCatalog;
             newDatabaseName.ShouldEqual($"{orgDbName}_{typeof(TestAppSettings).Name}_ExtraMethodName");
         }
+
+        [Fact]
+        public void GetMyIntOk()
+        {
+            //SETUP
+            var config = AppSettings.GetConfiguration();
+
+            //ATTEMPT
+            var myData = config["MyInt"];
+
+            //VERIFY
+            myData.ShouldEqual("1");
+        }
+
+        [Fact]
+        public void GetMyInnerIntOk()
+        {
+            //SETUP
+            var config = AppSettings.GetConfiguration();
+
+            //ATTEMPT
+            var myData = config["MyObject:MyInnerInt"];
+
+            //VERIFY
+            myData.ShouldEqual("2");
+        }
     }
 }
