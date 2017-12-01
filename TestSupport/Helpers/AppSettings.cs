@@ -36,7 +36,7 @@ namespace TestSupport.Helpers
                 TestData.GetCallingAssemblyTopLevelDir(); //#B
             var builder = new ConfigurationBuilder()               //#C
                 .SetBasePath(callingProjectPath)                   //#C
-                .AddJsonFile(settingsFilename, optional: false); //#C
+                .AddJsonFile(settingsFilename, optional: true); //#C
             return builder.Build(); //#D
         }
         /******************************************************************

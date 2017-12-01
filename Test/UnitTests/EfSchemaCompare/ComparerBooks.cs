@@ -1,6 +1,7 @@
 using DataLayer.EfCode.BookApp;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design.Internal;
+using TestSupport.Attributes;
 using TestSupport.EfHelpers;
 using TestSupport.EfSchemeCompare;
 using Xunit;
@@ -97,6 +98,43 @@ namespace Test.UnitTests.EfSchemaCompare
 
                 //VERIFY
                 hasErrors.ShouldBeFalse(comparer.GetAllErrors);
+            }
+        }
+
+        [Fact]
+        public void CompareBadConnection()
+        {
+            //SETUP
+            using (var context = new BookContext(_options))
+            {
+                var comparer = new CompareEfSql();
+
+                //ATTEMPT
+
+                var ex = Assert.Throws<System.ArgumentException>(() =>
+                comparer.CompareEfWithDb("bad connection string", context));
+
+                //VERIFY
+                ex.Message.ShouldEqual("Format of the initialization string does not conform to specification starting at index 0.");
+            }
+        }
+
+        [RunnableInDebugOnly]
+        public void CompareConnectionBadDatabase()
+        {
+            //SETUP
+            var badDatabaseConnection =
+                "Server=(localdb)\\mssqllocaldb;Database=BadDatabaseName;Trusted_Connection=True;MultipleActiveResultSets=true";
+            using (var context = new BookContext(_options))
+            {
+                var comparer = new CompareEfSql();
+
+                //ATTEMPT
+                var ex = Assert.Throws<System.Data.SqlClient.SqlException>(() =>
+                    comparer.CompareEfWithDb(badDatabaseConnection, context));
+
+                //VERIFY
+                ex.Message.ShouldStartWith("Cannot open database \"BadDatabaseName\" requested by the login. The login failed");
             }
         }
 
