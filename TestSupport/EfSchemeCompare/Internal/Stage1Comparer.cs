@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -245,13 +246,21 @@ namespace TestSupport.EfSchemeCompare.Internal
             return error;
         }
 
+        //thanks to https://stackoverflow.com/questions/1749966/c-sharp-how-to-determine-whether-a-type-is-a-number
+        private static HashSet<Type> IntegerTypes = new HashSet<Type>
+        {
+            typeof(byte), typeof(sbyte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong)
+        };
+
         private bool CheckValueGenerated(CompareLogger logger, IProperty property, DatabaseColumn column)
         {
             var colValGen = column.ValueGenerated.ConvertNullableValueGenerated(column.DefaultValueSql);
             if (colValGen == ValueGenerated.Never.ToString()
                 //There is a case where the property is part of the primary key and the key is not set in the database
                 && property.ValueGenerated == ValueGenerated.OnAdd
-                && property.IsKey())
+                && property.IsKey()
+                //We assume that a integer of some form should be provided by the database
+                && !IntegerTypes.Contains(property.ClrType))
                 return false;
             return logger.CheckDifferent(property.ValueGenerated.ToString(),
                 colValGen, CompareAttributes.ValueGenerated);
