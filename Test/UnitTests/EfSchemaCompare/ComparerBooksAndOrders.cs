@@ -2,8 +2,10 @@ using System;
 using System.Linq;
 using DataLayer.EfCode.BookApp;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using TestSupport.EfHelpers;
 using TestSupport.EfSchemeCompare;
+using TestSupport.Helpers;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Extensions.AssertExtensions;
@@ -193,6 +195,39 @@ namespace Test.UnitTests.EfSchemaCompare
                 hasErrors.ShouldBeFalse(comparer.GetAllErrors);
             }
         }
+
+        [Fact]
+        public void CompareDatabaseViaConnectionName()
+        {
+            //SETUP
+            const string connectionStringName = "BookOrderConnection"; //#A
+            //!!!!!!!!!! LEAVE OUT OF BOOK - START
+            var connectionString = AppSettings.GetConfiguration().GetConnectionString(connectionStringName);
+            var optionsBuilder = new DbContextOptionsBuilder<BookOrderContext>();
+            optionsBuilder.UseSqlServer(connectionString);
+            var options = optionsBuilder.Options;
+            //!!!!!!!!!! LEAVE OUT OF BOOK - END
+            //... I left out the option building part to save space
+            using (var context = new BookOrderContext(options)) //#B
+            {
+                var comparer = new CompareEfSql(); //#C
+
+                //ATTEMPT
+                bool hasErrors = comparer.CompareEfWithDb //#D
+                    (connectionStringName, context);     //#D
+
+                //VERIFY
+                hasErrors.ShouldBeFalse(comparer.GetAllErrors); //#E
+            }
+        }
+        /************************************************************
+        #A I have added connection string called "BookOrderConnection" to my unit tests's appsettings.json file. This points to my development database
+        #B I create an instance of my applictaion's DbContext, which will contain the latest entity classes and EF Core configuration
+        #C I create the CompareEfSql. It can have various configurations set, but in this case I use the default seetings
+        #D I use the version of the CompareEfWithDb method that takes a connection string, or a connection string name. In this case I am providing a connection string name, which it looks up in the appsettings.json file
+        #E The hasErrors variable will be true if there were differences. If there are the ShouldBeFalse fluent assert will fail and output the string given in the parameter. The comparer.GetAllErrors property returns a string, with each difference on a separate line
+         * **********************************************************/
+
 
         [Fact]
         public void CompareBookThenOrderAgainstBookOrderDatabaseViaAppSettings()

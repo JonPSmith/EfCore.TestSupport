@@ -8,6 +8,7 @@ using DataLayer.BookApp;
 using DataLayer.EfCode.BookApp;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Test.Helpers;
+using TestSupport.Attributes;
 using TestSupport.EfHelpers;
 using Xunit;
 using Xunit.Abstractions;
@@ -195,5 +196,33 @@ namespace Test.UnitTests.DataLayer
         #C This is the query that will log a QueryClientEvaluationWarning
         #D This is the part of the query which causes the QueryClientEvaluationWarning to be logged.
          * **************************************************************/
+
+        [RunnableInDebugOnly] //#A
+        public void CaptureSqlEfCoreCreatesDatabase()
+        {
+            //SETUP
+            var options = this.
+                CreateUniqueClassOptions<BookContext>();
+            using (var context = new BookContext(options))
+            {
+                var logs = context.SetupLogging(); //#B
+
+                //ATTEMPT
+                context.Database.EnsureDeleted(); //#C
+                context.Database.EnsureCreated(); //#C
+
+                //VERIFY
+                foreach (var log in logs.ToList()) //This stops the 'bleed' problem
+                {                                     //#D
+                    _output.WriteLine(log.Message);   //#D
+                }                                     //#D
+            }
+        }
+        /*************************************************************************
+        #A I don't need this to run every time, so I add the RunnableInDebugOnly attribute so that it doesn't get run in the normal unit test run
+        #B I set up the logging before the database is created
+        #C This combination ensures a new database is created that matches the current EF Core's database Model
+        #D I output only the Message part of the logging, so that I can cut-and-paste the SQL out of the logged data
+         * *********************************************************************/
     }
 }
