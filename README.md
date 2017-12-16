@@ -2,7 +2,10 @@
 
 This git repo contains the source of the
 [EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/), 
-and various tests to check that NuGet package.
+and various tests to check the EfCore.TestSupport 
+[NuGet package](https://www.nuget.org/packages/EfCore.TestSupport/).
+
+This project is open-source (MIT licence).
 
 # Documentation
 
