@@ -106,7 +106,7 @@ namespace Test.UnitTests.DataLayer
         }
 
         [Fact]
-        public void TestSqlLiteDoesSupportSchema()
+        public void TestSqlLiteDoesAcceptSchema()
         {
             //SETUP
             var options = SqliteInMemory.CreateOptions<DbContextWithSchema>();
