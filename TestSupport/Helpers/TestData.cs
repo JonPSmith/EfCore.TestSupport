@@ -139,11 +139,11 @@ namespace TestSupport.Helpers
             const string binDir = @"\bin\";
             var pathToManipulate = (callingAssembly ?? Assembly.GetCallingAssembly()).Location;
 
-            var indexOfPart = pathToManipulate.IndexOf(binDir, StringComparison.OrdinalIgnoreCase)+1;
+            var indexOfPart = pathToManipulate.IndexOf(binDir, StringComparison.OrdinalIgnoreCase);
             if (indexOfPart <= 0)
                 throw new Exception($"Did not find '{binDir}' in the assembly. Do you need to provide the callingAssembly parameter?");
 
-            return pathToManipulate.Substring(0, indexOfPart - 1);
+            return pathToManipulate.Substring(0, indexOfPart);
         }
     }
 }
