@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using TestSupport.Helpers;
 
@@ -21,7 +22,7 @@ namespace TestSupport.EfHelpers
         /// <returns>Number of databases deleted</returns>
         public static int DeleteAllUnitTestDatabases()
         {
-            var config = AppSettings.GetConfiguration();
+            var config = AppSettings.GetConfiguration(Assembly.GetCallingAssembly());
             var builder = new SqlConnectionStringBuilder(config.GetConnectionString(AppSettings.UnitTestConnectionStringName));
             var orgDbName = builder.InitialCatalog;
 

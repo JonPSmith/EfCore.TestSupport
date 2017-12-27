@@ -27,6 +27,7 @@
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
+      - Bug Fix: The TestData.GetCallingAssemblyTopLevelDir was not given the caling assembly in some cases
       - Change: Made the ValueGenerated test assume that the database will create an integer key
     </PackageReleaseNotes>
     <Copyright>Copyright (c) 2017 Jon P Smith. Licenced under MIT licence</Copyright>

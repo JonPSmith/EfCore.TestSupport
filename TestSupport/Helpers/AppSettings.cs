@@ -3,8 +3,8 @@
 
 using System;
 using System.Data.SqlClient;
+using System.Reflection;
 using Microsoft.Extensions.Configuration;
-using Xunit.Abstractions;
 
 namespace TestSupport.Helpers
 {
@@ -30,10 +30,10 @@ namespace TestSupport.Helpers
         /// This will look for a appsettings.json file in the top level of the calling assembly and read content
         /// </summary>
         /// <returns></returns>
-        public static IConfigurationRoot GetConfiguration(string settingsFilename = AppSettingFilename) //#A
+        public static IConfigurationRoot GetConfiguration(Assembly callingAssembly = null, string settingsFilename = AppSettingFilename) //#A
         {
             var callingProjectPath =                      //#B
-                TestData.GetCallingAssemblyTopLevelDir(); //#B
+                TestData.GetCallingAssemblyTopLevelDir(callingAssembly ?? Assembly.GetCallingAssembly()); //#B
             var builder = new ConfigurationBuilder()               //#C
                 .SetBasePath(callingProjectPath)                   //#C
                 .AddJsonFile(settingsFilename, optional: true); //#C
@@ -55,7 +55,7 @@ namespace TestSupport.Helpers
         /// <returns></returns>
         public static string GetUniqueDatabaseConnectionString(this object testClass, string optionalMethodName = null, char seperator = '_')
         {
-            var config = GetConfiguration();
+            var config = GetConfiguration(Assembly.GetAssembly(testClass.GetType()));
             var orgConnect = config.GetConnectionString(UnitTestConnectionStringName);
             if (string.IsNullOrEmpty( orgConnect))
                 throw new InvalidOperationException($"You are missing a connection string of name '{UnitTestConnectionStringName}' in the {AppSettingFilename} file.");

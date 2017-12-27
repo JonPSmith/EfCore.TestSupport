@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Reflection;
 using TestSupport.Helpers;
 using Xunit.Extensions.AssertExtensions;
 using Xunit;

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Scaffolding;
@@ -22,6 +23,7 @@ namespace TestSupport.EfSchemeCompare
     /// </summary>
     public class CompareEfSql
     {
+        private readonly Assembly _callingAssembly;
         private readonly CompareEfSqlConfig _config;
 
         private readonly List<CompareLog> _logs = new List<CompareLog>();
@@ -32,6 +34,7 @@ namespace TestSupport.EfSchemeCompare
         /// <param name="config"></param>
         public CompareEfSql(CompareEfSqlConfig config = null)
         {
+            _callingAssembly = Assembly.GetCallingAssembly();
             _config = config ?? new CompareEfSqlConfig();
         }
 
@@ -176,9 +179,9 @@ namespace TestSupport.EfSchemeCompare
             }
         }
 
-        private static string GetConfigurationOrActualString(string configOrConnectionString)
+        private string GetConfigurationOrActualString(string configOrConnectionString)
         {
-            var config = AppSettings.GetConfiguration();
+            var config = AppSettings.GetConfiguration(_callingAssembly);
             var connectionFromConfigFile = config.GetConnectionString(configOrConnectionString);
             return connectionFromConfigFile ?? configOrConnectionString;
         }
