@@ -141,7 +141,7 @@ namespace TestSupport.Helpers
 
             var indexOfPart = pathToManipulate.IndexOf(binDir, StringComparison.OrdinalIgnoreCase)+1;
             if (indexOfPart <= 0)
-                throw new Exception($"Did not find '{binDir}' in the ApplicationBasePath");
+                throw new Exception($"Did not find '{binDir}' in the assembly. Do you need to provide the callingAssembly parameter?");
 
             return pathToManipulate.Substring(0, indexOfPart - 1);
         }

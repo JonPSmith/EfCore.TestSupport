@@ -1,5 +1,7 @@
+using System;
 using System.Linq;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using TestSupport.Helpers;
 using Xunit.Extensions.AssertExtensions;
 using Xunit;
@@ -18,6 +20,19 @@ namespace Test.UnitTests.TestSupport
 
             //VERIFY
             path.ShouldEndWith(this.GetType().Namespace.Split('.').First());
+        }
+
+
+        [Fact]
+        public void TestGetCallerTopLevelDirectoryNuGetAssembly()
+        {
+            //SETUP
+
+            //ATTEMPT
+            var ex = Assert.Throws<Exception>(() => TestData.GetCallingAssemblyTopLevelDir(Assembly.GetAssembly(typeof(DbContext))));
+
+            //VERIFY
+            ex.Message.ShouldEqual(@"Did not find '\bin\' in the assembly. Do you need to provide the callingAssembly parameter?");
         }
 
         [Fact]
