@@ -16,10 +16,10 @@ namespace TestSupport.EfHelpers
         /// This creates the options for an in-memory database with a unique name
         /// </summary>
         /// <typeparam name="TContext"></typeparam>
-        /// <param name="throwOnClientServerWarning">Optional: if set to true then will throw exception if QueryClientEvaluationWarning is logged</param>
+        /// <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
         /// <returns></returns>
         public static DbContextOptions<TContext> CreateOptions<TContext>
-            (bool throwOnClientServerWarning = false) where TContext : DbContext
+            (bool throwOnClientServerWarning = true) where TContext : DbContext
         {
             return Guid.NewGuid().ToString().CreateOptions<TContext>(throwOnClientServerWarning);
         }
@@ -29,10 +29,10 @@ namespace TestSupport.EfHelpers
         /// </summary>
         /// <typeparam name="TContext"></typeparam>
         /// <param name="dbName">name of in-memory database</param>
-        /// <param name="throwOnClientServerWarning">Optional: if set to true then will throw exception if QueryClientEvaluationWarning is logged</param>
+        /// <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
         /// <returns></returns>
         public static DbContextOptions<TContext> CreateOptions<TContext>
-            (this string dbName, bool throwOnClientServerWarning = false)
+            (this string dbName, bool throwOnClientServerWarning = true)
             where TContext : DbContext
         {
             // Create a fresh service provider, and therefore a fresh 

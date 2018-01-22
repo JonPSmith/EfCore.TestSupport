@@ -51,11 +51,11 @@ namespace TestSupport.EfHelpers
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="callingClass">this should be this, i.e. the class you are in</param>
-        /// <param name="throwOnClientServerWarning">Optional: if set to true then will throw exception if QueryClientEvaluationWarning is logged</param>
+        /// <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
         /// <param name="callingMember">Do not use: this is filled in by compiler</param>
         /// <returns></returns>
         public static DbContextOptions<T> CreateUniqueMethodOptions<T>(this object callingClass,
-            bool throwOnClientServerWarning = false,
+            bool throwOnClientServerWarning = true,
             [CallerMemberName] string callingMember = "") where T : DbContext
         {
             return CreateOptionWithDatabaseName<T>(callingClass, throwOnClientServerWarning, callingMember);
@@ -68,12 +68,12 @@ namespace TestSupport.EfHelpers
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="callingClass">this should be this, i.e. the class you are in</param>
-        /// <param name="throwOnClientServerWarning">Optional: if set to true then will throw exception if QueryClientEvaluationWarning is logged</param>
+        /// <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
         /// <returns></returns>
         public static DbContextOptions<T>
             CreateUniqueClassOptions<T>( //#A
                 this object callingClass, //#B
-                bool throwOnClientServerWarning = false) //#C
+                bool throwOnClientServerWarning = true) //#C
             where T : DbContext
         {
             return CreateOptionWithDatabaseName<T>         //#D
@@ -115,7 +115,7 @@ namespace TestSupport.EfHelpers
         /*******************************************************************
         #A This extension method will return options for a SQL Server database with a name starting with database name in the original connection string in the appsettings.json file, but with the name of the class of the instance provided in the first parameter
         #B It is expected that the object instance provided will be 'this', that is, the class in which the unit test is running
-        #C By default it won't throw an exception if a QueryClientEvaluationWarning is logged. You can turn this on if you want that to happen
+        #C By default it will throw an exception if a QueryClientEvaluationWarning is logged. You can turn this off if you do not want that to happen
         #D I now call a private method that is shared between this method and the CreateUniqueMethodOptions options
         #E This is the methods that builds the SQL Server part of the options, with the correct database name
         #F These parameters are passed from the CreateUniqueClassOptions. For CreateUniqueClassOptions the calling method is left as null

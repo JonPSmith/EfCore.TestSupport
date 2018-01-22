@@ -16,10 +16,10 @@ namespace TestSupport.EfHelpers
         /// Created a Sqlite Options for in-memory database. 
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="throwOnClientServerWarning">Optional: if set to true then will throw exception if QueryClientEvaluationWarning is logged</param>
+        /// <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
         /// <returns></returns>
         public static DbContextOptions<T> CreateOptions<T>
-            (bool throwOnClientServerWarning = false)  //LEAVE OUT OF BOOK LISTING
+            (bool throwOnClientServerWarning = true)
             where T : DbContext
         {
             //Thanks to https://www.scottbrady91.com/Entity-Framework/Entity-Framework-Core-In-Memory-Testing

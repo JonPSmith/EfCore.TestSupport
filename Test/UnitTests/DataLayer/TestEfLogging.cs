@@ -149,7 +149,7 @@ namespace Test.UnitTests.DataLayer
         public void TestLogQueryClientEvaluationWarning()
         {
             //SETUP
-            var options = SqliteInMemory.CreateOptions<BookContext>();
+            var options = SqliteInMemory.CreateOptions<BookContext>(false);
             using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();
@@ -172,7 +172,7 @@ namespace Test.UnitTests.DataLayer
         {
             //SETUP
             var options = SqliteInMemory
-                .CreateOptions<BookContext>(true); //#A
+                .CreateOptions<BookContext>(); //#A
             using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();
