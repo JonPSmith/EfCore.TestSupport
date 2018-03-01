@@ -29,6 +29,8 @@ namespace TestSupport.Helpers
         /// <summary>
         /// This will look for a appsettings.json file in the top level of the calling assembly and read content
         /// </summary>
+        /// <param name="callingAssembly">If called by an internal method you must provide the other calling assembly</param>
+        /// <param name="settingsFilename">This allows you to open a json configuration file of this given name</param>
         /// <returns></returns>
         public static IConfigurationRoot GetConfiguration(Assembly callingAssembly = null, string settingsFilename = AppSettingFilename) //#A
         {
@@ -42,7 +44,7 @@ namespace TestSupport.Helpers
         /******************************************************************
         #A This method returns an IConfigurationRoot, form which I can use methods, such as GetConnectionString("ConnectionName"), to access the configuration information
         #B In my TestSupport library I have a method that returns the absolute path of the calling assembly's top level directory. That will be the assembly that you are running your tests in
-        #C I then use ASP.NET Core's ConfigurationBuilder to read that appsettings.json file
+        #C I then use ASP.NET Core's ConfigurationBuilder to read that appsettings.json file. It is optional, so no error is thrown if the configuration file doesn’t exist
         #D Finally I call the Build() method, which returns the IConfigurationRoot type
          * ***************************************************************/
 
