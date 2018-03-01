@@ -1,0 +1,51 @@
+# Release notes
+
+## 1.2.0
+- Feature: Allows any 2.* version of EF Core
+- Feature: Only loads the required parts of the xUnit libraries
+- Bug fix: Fixed problem with using TestData methods on non-windows systems (Path.DirectorySeparatorChar)
+- Bug fix: TestData didn't find the correct directory
+
+## 1.2.0
+
+- BREAKING CHANGE: The SqlServerHelpers, SqliteInMemory, and EfInMemory option setting extensions now default to throwing an exception if a Microsoft.EntityFrameworkCore.Query.QueryClientEvaluationWarning is logged
+
+## 1.1.5
+- Bug Fix: Gives useful error message if TestData.GetCallingAssemblyTopLevelDir does not find /bin/ file
+
+## 1.1.4
+- Bug Fix: The TestData.GetCallingAssemblyTopLevelDir was not given the caling assembly in some cases
+- Change: Made the ValueGenerated test assume that the database will create an integer key
+
+## 1.1.3
+- Bug Fix: Fixed issue #2 - primary key may not be set in database
+- Bug Fix: Fixed issue #3 - wrong error on sql default value
+- Change: The appsetting.json file is now not required - you get an error about a connection string not being in the appsetting.json file if you use any of the commands that need a appsetting.json file.
+
+## 1.1.2
+- Added feature: Now the EfSchemaCompare feature will work with any database provider
+- Change: I made the CompareLog 'ignore errors' feature more open - now you can match any type (see wiki)
+- Bug fix: With the help of the EF Core team I fixed the table splitting error I had (see EF Core issue #10345)
+
+## 1.1.1
+- Fixed bug in EfSchemaCompare - wasn't handling table spitting properly in stage2
+
+## 1.1.0
+- New feature: EfSchemaCompare to compare EF Core's view of the database with an actual database.
+
+## 1.0.2
+- Improved WipeDbViaSql to work with databases that don't use brackets around table names
+- Changed required suffix to test database name to "Test" to allow for databases that don't support hyphen in names
+
+## 1.0.1
+- Feature - Improved names on TestData methods
+
+## 1.0.0
+- First Release
+
+
+
+
+
+
+
