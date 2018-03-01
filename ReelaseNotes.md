@@ -1,6 +1,6 @@
 # Release notes
 
-## 1.2.0
+## 1.3.0
 - Feature: Allows any 2.* version of EF Core
 - Feature: Only loads the required parts of the xUnit libraries
 - Bug fix: Fixed problem with using TestData methods on non-windows systems (Path.DirectorySeparatorChar)
