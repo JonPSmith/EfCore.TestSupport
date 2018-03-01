@@ -71,6 +71,18 @@ namespace Test.UnitTests.TestSupport
             path.ShouldEndWith(@"SubDirWithOneFileInIt\One file.txt");
         }
 
+        [Fact]
+        public void TestGetTestDataDummyFileAltTestDataDir()
+        {
+            //SETUP
+
+            //ATTEMPT
+            var path = TestData.GetFilePath(@"\AltTestDataDir\Alt dummy file.txt");
+
+            //VERIFY
+            path.ShouldEndWith(@"\AltTestDataDir\Alt dummy file.txt");
+        }
+
 
         [Fact]
         public void TestGetTestDataAllFilesInDir()

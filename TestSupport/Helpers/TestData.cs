@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -21,10 +22,12 @@ namespace TestSupport.Helpers
         /// This returns the filepath of the file found by the searchPattern. If more than one file found that throws and exception
         /// </summary>
         /// <param name="searchPattern">If the search pattern starts with a @"\", then it will look in a subdirectory for the file</param>
+        /// <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
         /// <returns>The absolute filepath to the found file</returns>
-        public static string GetFilePath(string searchPattern)
+        public static string GetFilePath(string searchPattern, Assembly callingAssembly = null)
         {
-            string[] fileList = GetFilePaths(searchPattern);
+            callingAssembly = callingAssembly ?? Assembly.GetCallingAssembly();
+            string[] fileList = GetFilePaths(searchPattern, callingAssembly);
 
             if (fileList.Length != 1)
                 throw new Exception(string.Format("GetTestDataFilePath: The searchString {0} found {1} file. Either not there or ambiguous",
@@ -36,17 +39,23 @@ namespace TestSupport.Helpers
         /// <summary>
         /// This returns all the filepaths of file that fit the search pattern
         /// </summary>
-        /// <param name="searchPattern">If the search pattern starts with a @"\", then it will look in a subdirectory for the file</param>
+        /// <param name="searchPattern">If the search pattern starts with a @"\", then it will look for an alternate testdata directory</param>
+        /// <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
         /// <returns>array of absolute filepaths that match the filepath</returns>
-        public static string[] GetFilePaths(string searchPattern = "")
+        public static string[] GetFilePaths(string searchPattern = "", Assembly callingAssembly = null)
         {
-            var directory = GetTestDataDir();
-            if (searchPattern.Contains(@"\"))
+            callingAssembly = callingAssembly ?? Assembly.GetCallingAssembly();
+            string testDir = null;
+            if (searchPattern.Any() && searchPattern[0] == Path.DirectorySeparatorChar)
             {
-                //Has subdirectory in search pattern, so change directory
-                directory = Path.Combine(directory, searchPattern.Substring(0, searchPattern.LastIndexOf('\\')));
-                searchPattern = searchPattern.Substring(searchPattern.LastIndexOf('\\') + 1);
+                //has alternate test directory name, so set that and remove from search string
+                var indexNextDirSep = searchPattern.Substring(1).IndexOf(Path.DirectorySeparatorChar);
+                if (indexNextDirSep < 0 )
+                    throw new InvalidOperationException(@"Your search pattern started with an alternative directory, but did have a closing directory separator.");
+                testDir = searchPattern.Substring(1, indexNextDirSep);
+                searchPattern = searchPattern.Substring(indexNextDirSep + 2);
             }
+            var directory = GetTestDataDir(testDir, callingAssembly);
 
             string[] fileList = Directory.GetFiles(directory, searchPattern);
 
@@ -57,10 +66,12 @@ namespace TestSupport.Helpers
         /// This returns the content of the file found by the searchPattern. If more than one file found that throws and exception
         /// </summary>
         /// <param name="searchPattern">If the search pattern starts with a @"\", then it will look in a subdirectory for the file</param>
+        /// <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
         /// <returns>The content of the file as text of the found file</returns>
-        public static string GetFileContent(string searchPattern)
+        public static string GetFileContent(string searchPattern, Assembly callingAssembly = null)
         {
-            var filePath = GetFilePath(searchPattern);
+            callingAssembly = callingAssembly ?? Assembly.GetCallingAssembly();
+            var filePath = GetFilePath(searchPattern, callingAssembly);
             return File.ReadAllText(filePath);
         }
 
@@ -68,10 +79,12 @@ namespace TestSupport.Helpers
         /// This will ensure that a file in the TestData directory is deleted
         /// </summary>
         /// <param name="searchPattern"></param>
+        /// <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
         /// <returns></returns>
-        public static bool EnsureFileDeleted(string searchPattern)
+        public static bool EnsureFileDeleted(string searchPattern, Assembly callingAssembly = null)
         {
-            var fileList = GetFilePaths(searchPattern);
+            callingAssembly = callingAssembly ?? Assembly.GetCallingAssembly();
+            var fileList = GetFilePaths(searchPattern, callingAssembly);
             if (fileList.Length == 0) return false;
             if (fileList.Length != 1)
                 throw new Exception(string.Format("TestFileDeleteIfPresent: The searchString {0} found {1} files!",
@@ -119,13 +132,14 @@ namespace TestSupport.Helpers
         /// <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static string GetTestDataDir(string alternateTestDir = TestFileDirectoryName, Assembly callingAssembly = null)
+        public static string GetTestDataDir(string alternateTestDir = null, Assembly callingAssembly = null)
         {
+            alternateTestDir = alternateTestDir ?? TestFileDirectoryName;
             //see https://stackoverflow.com/questions/670566/path-combine-absolute-with-relative-path-strings
             return Path.Combine(
                 Path.GetFullPath(
                     GetCallingAssemblyTopLevelDir(callingAssembly ?? Assembly.GetCallingAssembly()) 
-                    + "\\" + alternateTestDir));
+                    + Path.DirectorySeparatorChar + alternateTestDir));
         }
 
         /// <summary>
@@ -136,7 +150,7 @@ namespace TestSupport.Helpers
         [MethodImpl(MethodImplOptions.NoInlining)] //see https://docs.microsoft.com/en-gb/dotnet/api/system.reflection.assembly.getcallingassembly?view=netstandard-2.0#System_Reflection_Assembly_GetCallingAssembly
         public static string GetCallingAssemblyTopLevelDir(Assembly callingAssembly = null)
         {
-            const string binDir = @"\bin\";
+            var binDir = $"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}";
             var pathToManipulate = (callingAssembly ?? Assembly.GetCallingAssembly()).Location;
 
             var indexOfPart = pathToManipulate.IndexOf(binDir, StringComparison.OrdinalIgnoreCase);
