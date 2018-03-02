@@ -7,7 +7,7 @@ and various tests to check the EfCore.TestSupport
 
 This project is open-source (MIT licence).
 
-See [Release Notes](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/ReelaseNotes.md)
+See [Release Notes](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/ReleaseNotes.md)
 for information on changes.
 
 # Documentation
