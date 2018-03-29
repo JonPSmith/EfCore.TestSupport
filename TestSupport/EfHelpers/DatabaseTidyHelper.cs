@@ -24,9 +24,8 @@ namespace TestSupport.EfHelpers
         {
             var config = AppSettings.GetConfiguration(Assembly.GetCallingAssembly());
             var builder = new SqlConnectionStringBuilder(config.GetConnectionString(AppSettings.UnitTestConnectionStringName));
-            var orgDbName = builder.InitialCatalog;
 
-            var databaseNamesToDelete = GetAllMatchingDatabases($"{orgDbName}");
+            var databaseNamesToDelete = GetAllMatchingDatabases(builder);
             foreach (var databaseName in databaseNamesToDelete)
             {
                 databaseName.DeleteDatabase();
@@ -37,17 +36,16 @@ namespace TestSupport.EfHelpers
         /// <summary>
         /// This returns all the matching databases that start with the startsWith parameter 
         /// </summary>
-        /// <param name="startsWith"></param>
-        /// <param name="connectionString"></param>
+        /// <param name="builder"></param>
         /// <returns></returns>
-        public static List<string> GetAllMatchingDatabases(this string startsWith,
-            string connectionString = LocalHostConnectionString)
+        private static List<string> GetAllMatchingDatabases(SqlConnectionStringBuilder builder)
         {
             var result = new List<string>();
-
-            using (var myConn = new SqlConnection(connectionString))
+            var orgDbName = builder.InitialCatalog;
+            builder.InitialCatalog = "";
+            using (var myConn = new SqlConnection(builder.ToString()))
             {
-                var command = $"SELECT name FROM master.dbo.sysdatabases WHERE name LIKE '{startsWith}%'";
+                var command = $"SELECT name FROM master.dbo.sysdatabases WHERE name LIKE '{orgDbName}%'";
                 var myCommand = new SqlCommand(command, myConn);
                 myConn.Open();
                 using (var reader = myCommand.ExecuteReader())
