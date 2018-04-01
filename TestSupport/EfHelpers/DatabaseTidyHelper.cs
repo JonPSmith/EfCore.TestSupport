@@ -10,11 +10,11 @@ using TestSupport.Helpers;
 
 namespace TestSupport.EfHelpers
 {
+    /// <summary>
+    /// Extension methods for deleting all the databases used in the unit test
+    /// </summary>
     public static class DatabaseTidyHelper
     {
-        //Note that there is no initial catalog
-        private const string LocalHostConnectionString = "Server=(localdb)\\mssqllocaldb;Initial Catalog=;Trusted_Connection=True;";
-
         /// <summary>
         /// This will delete all the databases that start with the database name in the default connection string
         /// WARNING: This will delete multiple databases - make sure your DefaultConnection database name is unique!!!
@@ -24,11 +24,13 @@ namespace TestSupport.EfHelpers
         {
             var config = AppSettings.GetConfiguration(Assembly.GetCallingAssembly());
             var builder = new SqlConnectionStringBuilder(config.GetConnectionString(AppSettings.UnitTestConnectionStringName));
+            var orgDbName = builder.InitialCatalog;
+            builder.InitialCatalog = "";
 
-            var databaseNamesToDelete = GetAllMatchingDatabases(builder);
+            var databaseNamesToDelete = GetAllMatchingDatabases(orgDbName, builder.ToString());
             foreach (var databaseName in databaseNamesToDelete)
             {
-                databaseName.DeleteDatabase();
+                databaseName.DeleteDatabase(builder.ToString());
             }
             return databaseNamesToDelete.Count;
         }
@@ -38,12 +40,12 @@ namespace TestSupport.EfHelpers
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        private static List<string> GetAllMatchingDatabases(SqlConnectionStringBuilder builder)
+        private static List<string> GetAllMatchingDatabases(string orgDbName, string connectionString)
         {
             var result = new List<string>();
-            var orgDbName = builder.InitialCatalog;
-            builder.InitialCatalog = "";
-            using (var myConn = new SqlConnection(builder.ToString()))
+
+
+            using (var myConn = new SqlConnection(connectionString))
             {
                 var command = $"SELECT name FROM master.dbo.sysdatabases WHERE name LIKE '{orgDbName}%'";
                 var myCommand = new SqlCommand(command, myConn);
@@ -59,11 +61,11 @@ namespace TestSupport.EfHelpers
             return result;
         }
 
-        private static void DeleteDatabase(this string databaseName)
+        private static void DeleteDatabase(this string databaseName, string connectionString)
         {
-            if (LocalHostConnectionString.ExecuteRowCount("sys.databases", $"WHERE [Name] = '{databaseName}'") == 1)
-                LocalHostConnectionString.ExecuteNonQuery("DROP DATABASE [" + databaseName + "]");
-            if (LocalHostConnectionString.ExecuteRowCount("sys.databases", $"WHERE [Name] = '{databaseName}'") == 1)
+            if (connectionString.ExecuteRowCount("sys.databases", $"WHERE [Name] = '{databaseName}'") == 1)
+                connectionString.ExecuteNonQuery("DROP DATABASE [" + databaseName + "]");
+            if (connectionString.ExecuteRowCount("sys.databases", $"WHERE [Name] = '{databaseName}'") == 1)
                 //it failed
                 throw new InvalidOperationException($"Failed to deleted {databaseName}. Did you have SSMS open or something?");
         }
