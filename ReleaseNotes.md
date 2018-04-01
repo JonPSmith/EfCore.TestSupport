@@ -1,5 +1,10 @@
 # Release notes
 
+## 1.3.1
+- Package: EntityFrameworkCore libraies updated to version 2.0.2, and specific versions defined to match with SqlClient
+- Bug fix: DeleteAllUnitTestDatabases directly referenced LocalDB, which meant it couldn't be used with other databases. This is fixed.
+- Feature: TimeThings now allows you to input the number of runs being timed and gives you average time per run
+
 ## 1.3.0
 - Bug fix: Fixed problem with using TestData methods on non-windows systems (Path.DirectorySeparatorChar) - Thanks to Henrik Blick for pointing this out
 - Bug fix: TestData didn't find the correct directory
