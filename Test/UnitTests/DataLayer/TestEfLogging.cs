@@ -167,36 +167,6 @@ namespace Test.UnitTests.DataLayer
             }
         }
 
-        [Fact]
-        public void TestQueryClientEvaluationThrowException()
-        {
-            //SETUP
-            var options = SqliteInMemory
-                .CreateOptions<BookContext>(); //#A
-            using (var context = new BookContext(options))
-            {
-                context.Database.EnsureCreated();
-
-                //ATTEMPT
-                var ex = Assert.Throws<InvalidOperationException>( //#B
-                    () => context.Books.Select(x => //#C
-                    new ClientSeverTestDto
-                    {
-                        ClientSideProp = x.Price.ToString("C")
-                    }).OrderBy(x => x.ClientSideProp) //#D
-                    .ToList());
-
-                //VERIFY
-                ex.Message.ShouldStartWith("Warning as error exception for warning 'Microsoft.EntityFrameworkCore.Query.QueryClientEvaluationWarning':");
-            }
-        }
-        /*****************************************************************
-        #A I set the optional throwOnClientServerWarning parameter to true, which means that an exception will be thrown by EF Core if a QueryClientEvaluationWarning is logged
-        #B This is xUnit's assert for catching exception
-        #C This is the query that will log a QueryClientEvaluationWarning
-        #D This is the part of the query which causes the QueryClientEvaluationWarning to be logged.
-         * **************************************************************/
-
         [RunnableInDebugOnly] //#A
         public void CaptureSqlEfCoreCreatesDatabase()
         {

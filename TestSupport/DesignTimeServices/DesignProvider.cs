@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Design.Internal;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
+using Microsoft.EntityFrameworkCore.Sqlite.Design.Internal;
+using Microsoft.EntityFrameworkCore.SqlServer.Design.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -49,16 +51,9 @@ namespace TestSupport.DesignTimeServices
         /// <returns></returns>
         public static ServiceProvider GetDesignTimeProvider(this IDesignTimeServices designTimeService)
         {
-            var errors = new List<string>();
-            var warnings = new List<string>();
-            var reporter = new OperationReporter(
-                new OperationReportHandler(
-                    m => errors.Add(m),
-                    m => warnings.Add(m)));
-
             // Add base services for scaffolding
             var serviceCollection = new ServiceCollection()
-                .AddScaffolding(reporter)
+                .AddEntityFrameworkDesignTimeServices()
                 .AddSingleton<IOperationReporter, OperationReporter>()
                 .AddSingleton<IOperationReportHandler, OperationReportHandler>();
 

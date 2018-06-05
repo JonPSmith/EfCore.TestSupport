@@ -1,13 +1,10 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
-using System.Linq;
-using DataLayer.BookApp;
 using DataLayer.EfCode.BookApp;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.EntityFrameworkCore.Scaffolding;
-using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
+using Microsoft.EntityFrameworkCore.SqlServer.Design.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using TestSupport.DesignTimeServices;
 using TestSupport.EfHelpers;
@@ -47,24 +44,6 @@ namespace Test.UnitTests.EfSchemaCompare
 
             //VERIFY
             model.ShouldNotBeNull();
-        }
-
-
-        [Fact]
-        public void GetScalarEntityInModel()
-        {
-            //SETUP
-            var serviceProvider = new SqlServerDesignTimeServices().GetDesignTimeProvider();
-            var factory = serviceProvider.GetService<IScaffoldingModelFactory>();
-
-            var model = factory.Create(_connectionString, new string[] { }, new string[] { }, false);
-
-            //ATTEMPT 
-            var entities = model?.GetEntityTypes();
-            var entity = model?.GetEntityTypes().FirstOrDefault(x => x.Name == nameof(BookContext.Books));
-
-            //VERIFY
-            entity.ShouldNotBeNull();
         }
 
     }

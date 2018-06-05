@@ -1,6 +1,6 @@
 using DataLayer.EfCode.BookApp;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design.Internal;
+using Microsoft.EntityFrameworkCore.SqlServer.Design.Internal;
 using TestSupport.Attributes;
 using TestSupport.EfHelpers;
 using TestSupport.EfSchemeCompare;
