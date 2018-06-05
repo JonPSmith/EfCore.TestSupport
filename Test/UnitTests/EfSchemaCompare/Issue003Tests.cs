@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
+using System.Linq;
 using DataLayer.Issue3;
 using TestSupport.EfHelpers;
 using TestSupport.EfSchemeCompare;
@@ -26,7 +27,11 @@ namespace Test.UnitTests.EfSchemaCompare
                 var hasErrors = comparer.CompareEfWithDb(context);
 
                 //VERIFY
-                hasErrors.ShouldBeFalse(comparer.GetAllErrors);
+                hasErrors.ShouldBeTrue(comparer.GetAllErrors);
+                var errors = CompareLog.ListAllErrors(comparer.Logs).ToList();
+                errors.Count.ShouldEqual(1);
+                errors[0].ShouldEqual(
+                    "DIFFERENT: Parameter->Property 'ValueAggregationTypeId', default value sql. Expected = Invariable, found = CONVERT([tinyint],(1))");
             }
         }
 

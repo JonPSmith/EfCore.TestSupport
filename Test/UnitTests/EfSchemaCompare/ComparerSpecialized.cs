@@ -39,28 +39,6 @@ namespace Test.UnitTests.EfSchemaCompare
                 var hasErrors = comparer.CompareEfWithDb(context);
 
                 //VERIFY
-                hasErrors.ShouldBeTrue();
-                var errors = CompareLog.ListAllErrors(comparer.Logs).ToList();
-                errors.Count.ShouldEqual(1);
-                errors[0].ShouldEqual(
-                    "DIFFERENT: BookSummary->Property 'BookSummaryId', value generated. Expected = OnAdd, found = Never");
-            }
-        }
-
-        [Fact]
-        public void CompareSpecializedDbContextSuppressError()
-        {
-            //SETUP
-            using (var context = new SpecializedDbContext(_options))
-            {
-                var config = new CompareEfSqlConfig();
-                config.IgnoreTheseErrors("DIFFERENT: BookSummary->Property 'BookSummaryId', value generated. Expected = OnAdd, found = Never");
-                var comparer = new CompareEfSql(config);
-
-                //ATTEMPT
-                var hasErrors = comparer.CompareEfWithDb(context);
-
-                //VERIFY
                 hasErrors.ShouldBeFalse(comparer.GetAllErrors);
             }
         }
