@@ -1,5 +1,8 @@
 # Release notes
 
+## 1.4.0
+- Package: Updated to .NET Core 2.1 and EF Core 2.1
+
 ## 1.3.1
 - Package: EntityFrameworkCore libraies updated to version 2.0.2, and specific versions defined to match with SqlClient
 - Bug fix: DeleteAllUnitTestDatabases directly referenced LocalDB, which meant it couldn't be used with other databases. This is fixed.
