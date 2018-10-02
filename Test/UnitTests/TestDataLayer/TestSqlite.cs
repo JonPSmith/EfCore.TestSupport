@@ -1,9 +1,7 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
-using System;
 using System.Linq;
-using DataLayer.BookApp;
 using DataLayer.EfCode.BookApp;
 using DataLayer.MyEntityDb;
 using DataLayer.MyEntityDb.EfCompareDbs;
@@ -13,7 +11,7 @@ using TestSupport.EfHelpers;
 using Xunit;
 using Xunit.Extensions.AssertExtensions;
 
-namespace Test.UnitTests.DataLayer
+namespace Test.UnitTests.TestDataLayer
 {
     public class TestSqlite
     {

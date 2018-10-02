@@ -1,18 +1,13 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
-using System.Data.SqlClient;
-using System.Linq;
-using DataLayer.BookApp;
 using DataLayer.EfCode.BookApp;
 using DataLayer.MyEntityDb;
 using Microsoft.EntityFrameworkCore;
-using Test.Helpers;
-using TestSupport.EfHelpers;
 using Xunit;
 using Xunit.Extensions.AssertExtensions;
 
-namespace Test.UnitTests.DataLayer
+namespace Test.UnitTests.TestDataLayer
 {
     public class TestCreateInstance 
     {

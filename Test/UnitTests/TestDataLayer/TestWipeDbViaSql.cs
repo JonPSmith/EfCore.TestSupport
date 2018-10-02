@@ -9,7 +9,7 @@ using TestSupport.EfHelpers;
 using Xunit;
 using Xunit.Extensions.AssertExtensions;
 
-namespace Test.UnitTests.DataLayer
+namespace Test.UnitTests.TestDataLayer
 {
     public class TestWipeDbViaSql
     {

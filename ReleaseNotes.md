@@ -1,5 +1,8 @@
 # Release notes
 
+## 1.5.0
+- New Feature: Added GetConfiguration which takes a relative directory string. This allows you to access configurations in other projects or subdirectories.
+
 ## 1.4.0
 - Package: Updated to .NET Core 2.1 and EF Core 2.1
 

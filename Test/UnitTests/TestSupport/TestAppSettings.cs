@@ -2,6 +2,7 @@
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
 using System.Data.SqlClient;
+using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using TestSupport.Helpers;
 using Xunit;
@@ -24,6 +25,31 @@ namespace Test.UnitTests.TestSupport
                 .ShouldEqual("Server=(localdb)\\mssqllocaldb;Database=EfCore.TestSupport-Test;Trusted_Connection=True;MultipleActiveResultSets=true");
         }
 
+        [Fact]
+        public void GetConfigurationFromDifferentAssemblyOk()
+        {
+            //SETUP
+
+            //ATTEMPT
+            var config = AppSettings.GetConfiguration("..\\DataLayer");
+            var myData = config["MyString"];
+
+            //VERIFY
+            myData.ShouldEqual("This is in the DataLayer");
+        }
+
+        [Fact]
+        public void GetConfigurationFromLowerLevelWithDifferentNameOk()
+        {
+            //SETUP
+
+            //ATTEMPT
+            var config = AppSettings.GetConfiguration("\\TestData", "differentAppSettings.json");
+            var myData = config["MyString"];
+
+            //VERIFY
+            myData.ShouldEqual("This is in the TestData directory in Test");
+        }
         [Fact]
         public void GetTestConnectionStringOk()
         {

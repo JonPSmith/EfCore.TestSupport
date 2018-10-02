@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="System.Data.SqlClient" Version="4.5.0" />
     <PackageReference Include="xunit.assert" Version="2.3.1" />
     <PackageReference Include="xunit.core" Version="2.3.1" />
@@ -23,15 +24,15 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>EfCore.TestSupport</PackageId>
-    <PackageVersion>1.4.0</PackageVersion>
-    <Version>1.4.0</Version>
-    <AssemblyVersion>1.4.0.0</AssemblyVersion>
-    <FileVersion>1.4.0.0</FileVersion>
+    <PackageVersion>1.5.0</PackageVersion>
+    <Version>1.5.0</Version>
+    <AssemblyVersion>1.5.0.0</AssemblyVersion>
+    <FileVersion>1.5.0.0</FileVersion>
     <Authors>Jon P Smith</Authors>
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-      - Package: Updated to .NET Core 2.1 and EF Core 2.1
+      - New Feature: Added GetConfiguration which takes a relative directory string. This allows you to access configurations in other projects or subdirectories
     </PackageReleaseNotes>
     <Copyright>Copyright (c) 2017 Jon P Smith. Licenced under MIT licence</Copyright>
     <PackageTags>Entity Framework Core, xUnit</PackageTags>

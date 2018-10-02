@@ -3,7 +3,6 @@
 
 using System;
 using System.Linq;
-using DataLayer.BookApp;
 using DataLayer.EfCode.BookApp;
 using DataLayer.MyEntityDb;
 using DataLayer.MyEntityDb.EfCompareDbs;
@@ -12,7 +11,7 @@ using TestSupport.EfHelpers;
 using Xunit;
 using Xunit.Extensions.AssertExtensions;
 
-namespace Test.UnitTests.DataLayer
+namespace Test.UnitTests.TestDataLayer
 {
     public class TestInMemory
     {

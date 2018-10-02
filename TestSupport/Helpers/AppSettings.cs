@@ -3,6 +3,7 @@
 
 using System;
 using System.Data.SqlClient;
+using System.IO;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
 
@@ -47,6 +48,24 @@ namespace TestSupport.Helpers
         #C I then use ASP.NET Core's ConfigurationBuilder to read that appsettings.json file. It is optional, so no error is thrown if the configuration file doesn’t exist
         #D Finally I call the Build() method, which returns the IConfigurationRoot type
          * ***************************************************************/
+
+        /// <summary>
+        /// This will look for a appsettings.json file in the directory relative to the calling assembly
+        /// </summary>
+        /// <param name="relativeToCallingAssembly">A relative path relative to the top level directory of the assembly you are calling from
+        /// e.g. "..\MyAspNetApp" would get the appsettings.json from a project directory "MyAspNetApp" at the same level as your test assembly</param>
+        /// <param name="settingsFilename">This allows you to open a json configuration file of this given name</param>
+        /// <returns></returns>
+        public static IConfigurationRoot GetConfiguration(string relativeToCallingAssembly, string settingsFilename = AppSettingFilename) //#A
+        {
+            var callingProjectPath = TestData.GetCallingAssemblyTopLevelDir(Assembly.GetCallingAssembly());
+            var pathToLookIn = Path.GetFullPath(callingProjectPath +"\\" + relativeToCallingAssembly);
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(pathToLookIn)    
+                .AddJsonFile(settingsFilename, optional: true);
+            return builder.Build();
+        }
+
 
         /// <summary>
         /// This creates a unique database name based on the test class name, and an optional extra name
