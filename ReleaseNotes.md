@@ -1,5 +1,8 @@
 # Release notes
 
+## 1.5.1
+- Bug fix: Fixed bug in CompareEfSql where two tables have the same name, but different schemas, caused an exception
+
 ## 1.5.0
 - New Feature: Added GetConfiguration which takes a relative directory string. This allows you to access configurations in other projects or subdirectories.
 

@@ -41,16 +41,16 @@ namespace TestSupport.EfSchemeCompare.Internal
             dbLogger.MarkAsOk(_dbContextName);
             CheckDatabaseOk(_logs.Last(), _model.Relational(), databaseModel);
 
-            var tableDict = databaseModel.Tables.ToDictionary(x => x.Name);
+            var tableDict = databaseModel.Tables.ToDictionary(x => x.FormSchemaTable(databaseModel.DefaultSchema));
             foreach (var entityType in _model.GetEntityTypes())
             {
                 var eRel = entityType.Relational();
                 var logger = new CompareLogger(CompareType.Entity, entityType.ClrType.Name, _logs.Last().SubLogs, _ignoreList, () => _hasErrors = true);
-                if (tableDict.ContainsKey(eRel.TableName))
+                if (tableDict.ContainsKey(eRel.FormSchemaTable()))
                 {
-                    var databaseTable = tableDict[eRel.TableName];
+                    var databaseTable = tableDict[eRel.FormSchemaTable()];
                     //Checks for table matching
-                    var log = logger.MarkAsOk(eRel.TableName);
+                    var log = logger.MarkAsOk(eRel.FormSchemaTable());
                     logger.CheckDifferent(entityType.FindPrimaryKey().Relational().Name, databaseTable.PrimaryKey.Name,
                         CompareAttributes.ConstraintName);
                     CompareColumns(log, entityType, databaseTable);

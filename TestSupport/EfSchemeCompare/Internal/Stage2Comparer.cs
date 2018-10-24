@@ -38,7 +38,7 @@ namespace TestSupport.EfSchemeCompare.Internal
         private void LookForUnusedTables(IReadOnlyList<CompareLog> firstStageLogs, CompareLog log)
         {
             var logger = new CompareLogger(CompareType.Table, null, log.SubLogs, _ignoreList, () => _hasErrors = true);
-            var databaseTableNames = _databaseModel.Tables.Select(x => x.Name);
+            var databaseTableNames = _databaseModel.Tables.Select(x => x.FormSchemaTable(_databaseModel.DefaultSchema));
             var allEntityTableNames = firstStageLogs.SelectMany(p => p.SubLogs)
                 .Where(x => x.State == CompareState.Ok && x.Type == CompareType.Entity)
                 .Select(p => p.Expected).OrderBy(p => p).Distinct().ToList();
@@ -53,7 +53,7 @@ namespace TestSupport.EfSchemeCompare.Internal
         private void LookForUnusedColumns(IReadOnlyList<CompareLog> firstStageLogs, CompareLog log)
         {
             var logger = new CompareLogger(CompareType.Column, null, log.SubLogs, _ignoreList, () => _hasErrors = true);
-            var tableDict = _databaseModel.Tables.ToDictionary(x => x.Name);
+            var tableDict = _databaseModel.Tables.ToDictionary(x => x.FormSchemaTable(_databaseModel.DefaultSchema));
             //because of table splitting and TPH we need to groups properties by table name to correctly say what columns are missed
             var entityColsGrouped = firstStageLogs.SelectMany(p => p.SubLogs)
                 .Where(x => x.State == CompareState.Ok && x.Type == CompareType.Entity)
@@ -80,7 +80,7 @@ namespace TestSupport.EfSchemeCompare.Internal
         private void LookForUnusedIndexes(IReadOnlyList<CompareLog> firstStageLogs, CompareLog log)
         {
             var logger = new CompareLogger(CompareType.Index, null, log.SubLogs, _ignoreList, () => _hasErrors = true);
-            var tableDict = _databaseModel.Tables.ToDictionary(x => x.Name);
+            var tableDict = _databaseModel.Tables.ToDictionary(x => x.FormSchemaTable(_databaseModel.DefaultSchema));
             foreach (var entityLog in firstStageLogs.SelectMany(p => p.SubLogs)
                 .Where(x => x.State == CompareState.Ok && x.Type == CompareType.Entity))
             {
