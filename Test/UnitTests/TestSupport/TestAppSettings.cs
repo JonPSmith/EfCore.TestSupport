@@ -26,6 +26,19 @@ namespace Test.UnitTests.TestSupport
         }
 
         [Fact]
+        public void GetConfigurationDefiningTheJsonFileNameOk()
+        {
+            //SETUP
+
+            //ATTEMPT
+            var config = AppSettings.GetConfiguration(settingsFilename: "appsettings.json");
+
+            //VERIFY
+            config.GetConnectionString(AppSettings.UnitTestConnectionStringName)
+                .ShouldEqual("Server=(localdb)\\mssqllocaldb;Database=EfCore.TestSupport-Test;Trusted_Connection=True;MultipleActiveResultSets=true");
+        }
+
+        [Fact]
         public void GetConfigurationFromDifferentAssemblyOk()
         {
             //SETUP
