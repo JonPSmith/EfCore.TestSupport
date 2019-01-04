@@ -42,7 +42,10 @@ namespace TestSupport.EfSchemeCompare.Internal
             CheckDatabaseOk(_logs.Last(), _model.Relational(), databaseModel);
 
             var tableDict = databaseModel.Tables.ToDictionary(x => x.FormSchemaTable(databaseModel.DefaultSchema));
-            foreach (var entityType in _model.GetEntityTypes())
+            var dbQueries = _model.GetEntityTypes().Where(x => x.IsQueryType).ToList();
+            if (dbQueries.Any())
+                dbLogger.Warning("EfSchemaCompare does not check DbQuery types", null, string.Join(", ", dbQueries.Select(x => x.ClrType.Name)));
+            foreach (var entityType in _model.GetEntityTypes().Where(x => !x.IsQueryType))
             {
                 var eRel = entityType.Relational();
                 var logger = new CompareLogger(CompareType.Entity, entityType.ClrType.Name, _logs.Last().SubLogs, _ignoreList, () => _hasErrors = true);

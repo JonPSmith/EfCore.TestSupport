@@ -1,6 +1,10 @@
 # Release notes
 
 ## 1.5.1
+- Bug fix: CompareEfSql no longer fails when there there isn't a primary key in a DbQuery - issue #8
+- Feature: CompareEfSql outputs a single warning if any DbQuery types are found, as it cannot check DbQuery types - issue #11
+
+## 1.5.1
 - Bug fix: Fixed bug in CompareEfSql where two tables have the same name, but different schemas, caused an exception
 
 ## 1.5.0

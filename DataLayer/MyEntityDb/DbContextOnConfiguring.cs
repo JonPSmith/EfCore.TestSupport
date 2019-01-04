@@ -30,9 +30,4 @@ namespace DataLayer.MyEntityDb
 
         public DbSet<MyEntity> MyEntities { get; set; }
     }
-    /***********************************************************************
-    #A I change the OnConfigured method to only run its normal setup code if the options aren't already configured
-    #B I then add the same constructor-based options settings that the ASP.NET Core version has, which allows me to set any options I want
-    #C I need to add a public, parameterless constructor so that this DbContext will work normally with the application
-     * ********************************************************************/
 }

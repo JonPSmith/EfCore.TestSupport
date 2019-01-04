@@ -26,7 +26,7 @@ namespace TestSupport.EfSchemeCompare
     /// <summary>
     /// This defines the result of a comparision
     /// </summary>
-    public enum CompareState { Debug, Ok, Different, NotInDatabase, ExtraInDatabase }
+    public enum CompareState { Debug, Ok, Warning, Different, NotInDatabase, ExtraInDatabase }
     /// <summary>
     /// This contains extra information on what exactly was compared
     /// </summary>
