@@ -57,17 +57,6 @@ namespace TestSupport.EfSchemeCompare.Internal
             AddToLogsIfNotIgnored(new CompareLog(_type, CompareState.ExtraInDatabase, name ?? _defaultName, attribute, null, found));
         }
 
-        /// <summary>
-        /// This is for adding a warning.
-        /// </summary>
-        /// <param name="errorMessage">This should be the warning message</param>
-        /// <param name="expected">add this if something was missing</param>
-        /// <param name="found">add this if something extra was found</param>
-        public void Warning(string errorMessage, string expected = null, string found = null)
-        {
-            AddToLogsIfNotIgnored(new CompareLog(CompareType.Database, CompareState.Warning, errorMessage, CompareAttributes.NotSet, expected, found));
-        }
-
         //------------------------------------------------------
         //private methods
 
