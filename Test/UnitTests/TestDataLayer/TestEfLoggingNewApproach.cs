@@ -204,7 +204,7 @@ namespace Test.UnitTests.TestDataLayer
         {
             //SETUP
             var logs = new List<LogOutput>();
-            var options = SqliteInMemory.CreateOptionsWithLogging<BookContext>(log => logs.Add(log), false);
+            var options = SqliteInMemory.CreateOptionsWithLogging<BookContext>(log => logs.Add(log), LogLevel.Warning, false);
             using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();
@@ -219,6 +219,7 @@ namespace Test.UnitTests.TestDataLayer
 
                 //VERIFY
                 logs.ToList().Any(x => x.EventId.Name == RelationalEventId.QueryClientEvaluationWarning.Name).ShouldBeTrue();
+                logs.All(x => x.LogLevel >= LogLevel.Warning ).ShouldBeTrue();
             }
         }
 

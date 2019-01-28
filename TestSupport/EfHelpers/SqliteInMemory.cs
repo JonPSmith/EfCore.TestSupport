@@ -31,13 +31,14 @@ namespace TestSupport.EfHelpers
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="efLog">This is a method that receives a LogOutput whenever EF Core logs something</param>
+        /// <param name="logLevel">Optional: Sets the logLevel you want to capture. Defaults to Information</param>
         /// <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
         /// <returns></returns>
-        public static DbContextOptions<T> CreateOptionsWithLogging<T>(Action<LogOutput> efLog, bool throwOnClientServerWarning = true)
+        public static DbContextOptions<T> CreateOptionsWithLogging<T>(Action<LogOutput> efLog, LogLevel logLevel = LogLevel.Information, bool throwOnClientServerWarning = true)
             where T : DbContext
         {
             return SetupConnectionAndBuilderOptions<T>(throwOnClientServerWarning)
-                .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(efLog)}))
+                .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(efLog, logLevel)}))
                 .Options;
         }
 

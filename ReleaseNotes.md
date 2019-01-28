@@ -1,7 +1,10 @@
 # Release notes
 
+## 1.6.1 
+- Bug fix: Added LogLevel to ...WithLogging versions of Sqlite/SQL server option builders.
+
 ## 1.6.0
-- Feature. Added new way to capture EF Core looging output, which is superior to the existing SetupLogging method. See EfCore.TestSupport Wiki page "Capture EF Core logging".
+- Feature. Added new way to capture EF Core logging output, which is superior to the existing SetupLogging method. See EfCore.TestSupport Wiki page "Capture EF Core logging".
 - Bug fix: SetupLogging is now marked as obsolete, but not removed so that existing unit tests don't break. 
 
 ## 1.5.2

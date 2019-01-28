@@ -38,13 +38,14 @@ namespace TestSupport.EfHelpers
         /// <typeparam name="T"></typeparam>
         /// <param name="callingClass">this should be this, i.e. the class you are in</param>
         /// <param name="efLog">This is a method that receives a LogOutput whenever EF Core logs something</param>
+        /// <param name="logLevel">Optional: Sets the logLevel you want to capture. Defaults to Information</param>
         /// <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
         /// <returns></returns>
-        public static DbContextOptions<T> CreateUniqueClassOptionsWithLogging<T>(this object callingClass, Action<LogOutput> efLog, bool throwOnClientServerWarning = true) 
+        public static DbContextOptions<T> CreateUniqueClassOptionsWithLogging<T>(this object callingClass, Action<LogOutput> efLog, LogLevel logLevel = LogLevel.Information, bool throwOnClientServerWarning = true) 
             where T : DbContext
         {
             return CreateOptionWithDatabaseName<T>(callingClass, throwOnClientServerWarning)
-                .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(efLog) }))
+                .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(efLog, logLevel) }))
                 .Options;
         }
 
@@ -72,13 +73,17 @@ namespace TestSupport.EfHelpers
         /// <typeparam name="T"></typeparam>
         /// <param name="callingClass">this should be this, i.e. the class you are in</param>
         /// <param name="efLog">This is a method that receives a LogOutput whenever EF Core logs something</param>
+        /// <param name="logLevel">Optional: Sets the logLevel you want to capture. Defaults to Information</param>
         /// <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
         /// <param name="callingMember">Do not use: this is filled in by compiler</param>
         /// <returns></returns>
-        public static DbContextOptions<T> CreateUniqueMethodOptionsWithLogging<T>(this object callingClass, Action<LogOutput> efLog, bool throwOnClientServerWarning = true,
+        public static DbContextOptions<T> CreateUniqueMethodOptionsWithLogging<T>(this object callingClass, Action<LogOutput> efLog, 
+            LogLevel logLevel = LogLevel.Information, bool throwOnClientServerWarning = true,
             [CallerMemberName] string callingMember = "") where T : DbContext
         {
-            return CreateOptionWithDatabaseName<T>(callingClass, throwOnClientServerWarning, callingMember).Options;
+            return CreateOptionWithDatabaseName<T>(callingClass, throwOnClientServerWarning, callingMember)
+                .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(efLog, logLevel) }))
+                .Options;
         }
 
         /// <summary>
