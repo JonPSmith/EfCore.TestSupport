@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\..\..\1 Business\1 TSF stuff\1 Standard Stationary\images\EfCoreTestSupportNuGetIcon128.png = ..\..\..\1 Business\1 TSF stuff\1 Standard Stationary\images\EfCoreTestSupportNuGetIcon128.png
 		..\..\..\1 Business\1 TSF stuff\2 Web Sites\2 The reformed programmer\images - EF Core in Action\EfSchemaCompare.png = ..\..\..\1 Business\1 TSF stuff\2 Web Sites\2 The reformed programmer\images - EF Core in Action\EfSchemaCompare.png
 		..\..\..\1 Business\4 Clients\Manning Publishing\Chapter 15 - Unit Testing\Example-of-various-test-features.png = ..\..\..\1 Business\4 Clients\Manning Publishing\Chapter 15 - Unit Testing\Example-of-various-test-features.png
+		ExampleOfTestSupport.png = ExampleOfTestSupport.png
 		LICENSE = LICENSE
 		README.md = README.md
 		ReleaseNotes.md = ReleaseNotes.md

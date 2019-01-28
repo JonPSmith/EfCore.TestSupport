@@ -18,7 +18,7 @@ The NuGet package [EfCore.TestSupport](https://www.nuget.org/packages/EfCore.Tes
 
 Here is an image covering just a few of the methods, in **bold** available in this library.  
  
-![Examples of libray methods in use](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/Example-of-various-test-features.png)
+![Examples of libray methods in use](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/ExampleOfTestSupport.png)
 
 The various groups of tools are:
 
