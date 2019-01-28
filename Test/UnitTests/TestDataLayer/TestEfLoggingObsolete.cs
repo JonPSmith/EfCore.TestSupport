@@ -15,11 +15,11 @@ using Xunit.Extensions.AssertExtensions;
 
 namespace Test.UnitTests.TestDataLayer
 {
-    public class TestEfLogging
+    public class TestEfLoggingObsolete
     {
         private readonly ITestOutputHelper _output; //#A
 
-        public TestEfLogging(ITestOutputHelper output) //#B
+        public TestEfLoggingObsolete(ITestOutputHelper output) //#B
         {
             _output = output;
         }

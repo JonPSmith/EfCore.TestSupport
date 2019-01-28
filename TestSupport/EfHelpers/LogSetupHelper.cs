@@ -11,14 +11,19 @@ using Microsoft.Extensions.Logging;
 
 namespace TestSupport.EfHelpers
 {
+    /// <summary>
+    /// Now obsolete logging approach - kept to not break old code.
+    /// </summary>
     public static class LogSetupHelper
     {
         /// <summary>
         /// This extension method will start logging the output of EF Core
+        /// NOTE: This has problems with "bleed" of logs between DbContexts. Replaced by the Sqlite/SqlServer methods that create options which end with ...WithLogging
         /// </summary>
         /// <param name="context"></param>
         /// <param name="logLevel"></param>
         /// <returns>It passes back a reference to a list of Logs that EF Core will add to as the unit test progresses</returns>
+        [Obsolete("You should use the Sqlite/SqlServer methods that create options which end with ...WithLogging")]
         public static List<LogOutput> SetupLogging( //#A
             this DbContext context, //#B
             LogLevel logLevel = LogLevel.Information) //#C
@@ -39,7 +44,12 @@ namespace TestSupport.EfHelpers
         #D
          * *******************************************************************/
 
-        public static IEnumerable<string> DecodedLogs(List<LogOutput> logs)
+        /// <summary>
+        /// Unfinished log decoder
+        /// </summary>
+        /// <param name="logs"></param>
+        /// <returns></returns>
+        private static IEnumerable<string> DecodedLogs(List<LogOutput> logs)
         {
             var indexOfSenStart = logs.IndexOf(logs.FirstOrDefault(x =>
                 x?.EventId.Name == CoreEventId.SensitiveDataLoggingEnabledWarning.Name));
@@ -58,7 +68,7 @@ namespace TestSupport.EfHelpers
 
         private static string InternalDecodeLog(LogOutput log)
         {
-            string pattern = @"(@.*?)='";
+            //string pattern = @"(@.*?)='";
             //see https://msdn.microsoft.com/en-us/library/system.text.regularexpressions.capture(v=vs.110)
             //Abandoned as have to finish the chapter
             throw new NotImplementedException();
