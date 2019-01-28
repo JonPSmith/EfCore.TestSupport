@@ -108,6 +108,26 @@ namespace Test.UnitTests.TestDataLayer
         }
 
         [Fact]
+        public void TestEfCoreLoggingCheckSqlOutput()
+        {
+            //SETUP
+            var logs = new List<LogOutput>();
+            var options = SqliteInMemory.CreateOptionsWithLogging<BookContext>(log => logs.Add(log));
+            using (var context = new BookContext(options))
+            {
+                context.Database.EnsureCreated();
+
+                //ATTEMPT 
+                logs.Clear();
+                context.Books.Count();
+
+                //VERIFY
+                logs.Single().Message.ShouldEndWith("SELECT COUNT(*)\r\nFROM \"Books\" AS \"p\"\r\nWHERE \"p\".\"SoftDeleted\" = 0");
+            }
+        }
+
+
+        [Fact]
         public void TestEfCoreLoggingStringWithBadValues()
         {
             //SETUP
@@ -206,7 +226,7 @@ namespace Test.UnitTests.TestDataLayer
         public void CaptureSqlEfCoreCreatesDatabaseToConsole()
         {
             //SETUP
-            var options = this.CreateUniqueClassOptionsWithLogging<BookContext>(log => _output.WriteLine(log.ToString()));
+            var options = this.CreateUniqueClassOptionsWithLogging<BookContext>(log => _output.WriteLine(log.Message));
             using (var context = new BookContext(options))
             {
 
