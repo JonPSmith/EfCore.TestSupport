@@ -4,14 +4,11 @@
 
 # EfCore.TestSupport
 
-This git repo contains the source of the [EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/), and various tests to check the EfCore.TestSupport 
-[NuGet package](https://www.nuget.org/packages/EfCore.TestSupport/).
+This git repo contains the source of the [EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/), and various tests to check the EfCore.TestSupport [NuGet package](https://www.nuget.org/packages/EfCore.TestSupport/). See [Release Notes](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/ReleaseNotes.md) for information on changes.
 
 This project is open-source (MIT licence).
 
-See [Release Notes](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/ReleaseNotes.md) for information on changes.
-
-# Documentation
+## Documentation
 
 The NuGet package [EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/) is a netstandard2.0 library containing methods to help you unit test applications that use
 [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/index) for database access. This readme defines the various groups, with links to the documentation in the 
