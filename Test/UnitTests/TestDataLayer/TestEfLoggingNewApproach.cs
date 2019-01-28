@@ -202,26 +202,20 @@ namespace Test.UnitTests.TestDataLayer
             }
         }
 
-        //[RunnableInDebugOnly] 
-        //public void CaptureSqlEfCoreCreatesDatabase()
-        //{
-        //    //SETUP
-        //    var options = this.
-        //        CreateUniqueClassOptions<BookContext>();
-        //    using (var context = new BookContext(options))
-        //    {
-                 
+        [RunnableInDebugOnly]
+        public void CaptureSqlEfCoreCreatesDatabaseToConsole()
+        {
+            //SETUP
+            var options = this.CreateUniqueClassOptionsWithLogging<BookContext>(log => _output.WriteLine(log.ToString()));
+            using (var context = new BookContext(options))
+            {
 
-        //        //ATTEMPT
-        //        context.Database.EnsureDeleted(); 
-        //        context.Database.EnsureCreated(); 
+                //ATTEMPT
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
 
-        //        //VERIFY
-        //        foreach (var log in logs)
-        //        {                                     
-        //            _output.WriteLine(log.Message);   
-        //        }                                     
-        //    }
-        //}
+                //VERIFY
+            }
+        }
     }
 }
