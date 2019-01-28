@@ -1,6 +1,10 @@
 # Release notes
 
-## 1.5.1
+## 1.6.0
+- Feature. Added new way to capture EF Core looging output, which is superior to the existing SetupLogging method. See EfCore.TestSupport Wiki page "Capture EF Core logging".
+- Bug fix: SetupLogging is now marked as obsolete, but not removed so that existing unit tests don't break. 
+
+## 1.5.2
 - Bug fix: CompareEfSql no longer fails when there there isn't a primary key in a DbQuery - issue #8
 - Feature: CompareEfSql outputs a single warning if any DbQuery types are found, as it cannot check DbQuery types - issue #11
 

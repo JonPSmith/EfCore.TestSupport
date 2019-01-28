@@ -24,16 +24,16 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>EfCore.TestSupport</PackageId>
-    <PackageVersion>1.5.2</PackageVersion>
-    <Version>1.5.2</Version>
-    <AssemblyVersion>1.5.2.0</AssemblyVersion>
-    <FileVersion>1.5.2.0</FileVersion>
+    <PackageVersion>1.6.0</PackageVersion>
+    <Version>1.6.0</Version>
+    <AssemblyVersion>1.6.0.0</AssemblyVersion>
+    <FileVersion>1.6.0.0</FileVersion>
     <Authors>Jon P Smith</Authors>
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-      - Bug fix: CompareEfSql no longer fails when there are no primary key in a DbQuery - issue #8
-      - Feature: CompareEfSql outputs a single warning if any DbQuery types are found, as it cannot check DbQuery types - issue #11
+      - Feature. Added new way to capture EF Core looging output, which is superior to the existing SetupLogging method. See EfCore.TestSupport Wiki page "Capture EF Core logging".
+      - Bug fix: SetupLogging is now marked as obsolete, but not removed so that existing unit tests don't break.
     </PackageReleaseNotes>
     <Copyright>Copyright (c) 2017 Jon P Smith. Licenced under MIT licence</Copyright>
     <PackageTags>Entity Framework Core, xUnit</PackageTags>
