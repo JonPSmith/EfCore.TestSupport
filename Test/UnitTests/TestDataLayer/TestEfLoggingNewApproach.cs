@@ -118,11 +118,10 @@ namespace Test.UnitTests.TestDataLayer
                 context.Database.EnsureCreated();
 
                 //ATTEMPT 
-                logs.Clear();
                 context.Books.Count();
 
                 //VERIFY
-                logs.Single().Message.ShouldEndWith("SELECT COUNT(*)\r\nFROM \"Books\" AS \"p\"\r\nWHERE \"p\".\"SoftDeleted\" = 0");
+                logs.Last().Message.ShouldEndWith("SELECT COUNT(*)\r\nFROM \"Books\" AS \"p\"\r\nWHERE \"p\".\"SoftDeleted\" = 0");
             }
         }
 

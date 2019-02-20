@@ -1,5 +1,8 @@
 # Release notes
 
+## TODO
+- Minor format error in ToString of LogOutput - adds an unwanted comma after log type.
+
 ## 1.6.1 
 - Bug fix: Added LogLevel to ...WithLogging versions of Sqlite/SQL server option builders.
 
