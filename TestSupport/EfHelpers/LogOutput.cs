@@ -51,8 +51,8 @@ namespace TestSupport.EfHelpers
         /// <returns></returns>
         public override string ToString()
         {
-            return
-                $"{LogLevel},{EfEventIdLastName}: {Message}";
+            var logType = EfEventIdLastName == null ? "" : "," + EfEventIdLastName;        
+            return $"{LogLevel}{logType}: {Message}";
         }
 
         /// <summary>

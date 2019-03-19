@@ -1,14 +1,16 @@
 # Release notes
 
+
 ## TODO
 - Feature: Add version of `SqliteInMemory.CreateOptions` etc. that returns `DbContextOptionsBuilder<T>`
-- Feature: Decode log output with sensative data to SQL
-- Bug fix: Get `GetCallingAssemblyTopLevelDir` to work with  NET Framework
-- Bug fix: Minor format error in ToString of LogOutput - adds an unwanted comma after log type.
+
+## 1.7.0
+- Feature: Added DecodeMessage feature to LogOutput. Tries to recreate the actual SQL to allow cut/paste 
+- Bug fix: Minor format error in ToString of LogOutput - adds an unwanted comma after log type if used for non-EF Core logs.
 
 ## 1.6.1 
 - Bug fix: Added LogLevel to ...WithLogging versions of Sqlite/SQL server option builders.
-
+- 
 ## 1.6.0
 - Feature. Added new way to capture EF Core logging output, which is superior to the existing SetupLogging method. See EfCore.TestSupport Wiki page "Capture EF Core logging".
 - Bug fix: SetupLogging is now marked as obsolete, but not removed so that existing unit tests don't break. 
