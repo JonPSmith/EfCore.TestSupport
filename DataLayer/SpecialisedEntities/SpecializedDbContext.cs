@@ -11,6 +11,7 @@ namespace DataLayer.SpecialisedEntities
         public DbSet<BookSummary> BookSummaries { get; set; }
         public DbSet<OrderInfo> Orders { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<AllTypesEntity> AllTypesEntities { get; set; }
 
         public SpecializedDbContext(DbContextOptions<SpecializedDbContext> options)      
             : base(options) {}

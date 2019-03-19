@@ -33,9 +33,10 @@ namespace Test.UnitTests.TestDataLayer
             //SETUP
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
+            var logs = new List<LogOutput>();
 
             var options = new DbContextOptionsBuilder<BookContext>()
-                .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(l => _output.WriteLine(l.ToString())) }))
+                .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(log => logs.Add(log)) }))
                 .UseSqlite(connection)
                 .Options;
             using (var context = new BookContext(options))
@@ -44,9 +45,12 @@ namespace Test.UnitTests.TestDataLayer
                 context.SeedDatabaseFourBooks();
 
                 //ATTEMPT
+                logs.Clear();
                 var books = context.Books.ToList();
 
                 //VERIFY
+                logs.Single().ToString().ShouldStartWith("Information,CommandExecuted: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']");
+                logs.Single().Message.ShouldStartWith("Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']");
             }
         }
 

@@ -1,7 +1,10 @@
 # Release notes
 
 ## TODO
-- Minor format error in ToString of LogOutput - adds an unwanted comma after log type.
+- Feature: Add version of `SqliteInMemory.CreateOptions` etc. that returns `DbContextOptionsBuilder<T>`
+- Feature: Decode log output with sensative data to SQL
+- Bug fix: Get `GetCallingAssemblyTopLevelDir` to work with  NET Framework
+- Bug fix: Minor format error in ToString of LogOutput - adds an unwanted comma after log type.
 
 ## 1.6.1 
 - Bug fix: Added LogLevel to ...WithLogging versions of Sqlite/SQL server option builders.

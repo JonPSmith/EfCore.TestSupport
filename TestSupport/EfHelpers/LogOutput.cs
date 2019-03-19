@@ -2,53 +2,77 @@
 // // Licensed under MIT licence. See License.txt in the project root for license information.
 
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
+using TestSupport.EfHelpers.Internal;
 
 namespace TestSupport.EfHelpers
 {
-    public class LogOutput //#A
+    public class LogOutput 
     {
-        private const string EfCoreEventIdStartWith //#B
-            = "Microsoft.EntityFrameworkCore";      //#B
+        private const string EfCoreEventIdStartWith = "Microsoft.EntityFrameworkCore";
 
-        public LogLevel LogLevel { get; } //#C
-        public EventId EventId { get; }  //#D
-        public string Message { get; }  //#E
+        /// <summary>
+        /// The logLevel of this log
+        /// </summary>
+        public LogLevel LogLevel { get; } 
+
+        /// <summary>
+        /// The logging EventId - should be string for EF Core logs
+        /// </summary>
+        public EventId EventId { get; }  
+
+        /// <summary>
+        /// The message in the log
+        /// </summary>
+        public string Message { get; }  
 
         /// <summary>
         /// This returns the last part of an EF Core EventId name, or null if the eventId is not an EF Core one
         /// </summary>
-        public string EfEventIdLastName => //#F
-            EventId.Name?.StartsWith(                //#G
-                     EfCoreEventIdStartWith) == true //#G
-                ? EventId.Name.Split('.').Last()     //#G
-                : null;                              //#G
+        private string EfEventIdLastName => 
+            EventId.Name?.StartsWith(                
+                     EfCoreEventIdStartWith) == true 
+                ? EventId.Name.Split('.').Last()     
+                : null;                              
 
-        internal LogOutput(LogLevel logLevel,//#H 
-            EventId eventId, string message) //#H
-        {                                    //#H
-            LogLevel = logLevel;             //#H
-            EventId = eventId;               //#H
-            Message = message;               //#H
-        }                                    //#H
+        internal LogOutput(LogLevel logLevel, 
+            EventId eventId, string message) 
+        {                                    
+            LogLevel = logLevel;             
+            EventId = eventId;               
+            Message = message;               
+        }                                    
 
-        public override string ToString() //#G
+        /// <summary>
+        /// Summary of the log
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
         {
-            return 
-                $"{LogLevel},{EfEventIdLastName}: " +
-                Message;
+            return
+                $"{LogLevel},{EfEventIdLastName}: {Message}";
         }
+
+        /// <summary>
+        /// This tries to build valid SQL commands on CommandExecuted logs, i.e. logs containing the SQL output
+        /// by taking the values available from EnableSensitiveDataLogging and inserting them in place of the parameter.
+        /// This makes it easier to copy the SQL produced by EF Core and run in SSMS etc.
+        /// LIMITATIONS are:
+        /// - It can't distinguish the different between an empty string and a null string - it default to null
+        /// - It can't work out if its a byte[] or not, so byte[] is treated as a SQL string, WHICH WILL fail
+        /// - Numbers are presented as SQL strings, e.g. 123 becomes '123'. SQL Server can handle that
+        /// </summary>
+        /// <param name="sensitiveLoggingEnabled"></param>
+        /// <returns></returns>
+        public string DecodeMessage(bool sensitiveLoggingEnabled = true)
+        {
+            if (!sensitiveLoggingEnabled)
+                return Message;
+
+            return EfCoreLogDecoder.DecodeMessage(this);
+        }
+
     }
-    /***************************************************************
-    #A This class holds each log captured from EF Core
-    #B I use this string to identify logs that were produced by EF Core
-    #C This holds what LogLevel the log was reported at, for istance, Information, Warning, Error
-    #D This holds the EventId - useful because EF Core 2.0.0 has named events
-    #E This is the logged message
-    #F This property returns the last part of the name, but only if its an EF Core log. Useful, as it is a quick way to identify specific events
-    #G This gets either the last part of the EF Core eventid name, or null if not EF Core
-    #H The constructor for the class
-    #I Typically you will show the logs as text, so the ToString method returns a useful string
-     * **************************************************************/
 }
