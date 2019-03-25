@@ -41,6 +41,7 @@ namespace Test.UnitTests.TestDataLayer
             var options = new DbContextOptionsBuilder<BookContext>()
                 .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(l => logs.Add(l))}))
                 .UseSqlite(connection)
+                //.EnableSensitiveDataLogging()
                 .Options;
             using (var context = new BookContext(options))
             {

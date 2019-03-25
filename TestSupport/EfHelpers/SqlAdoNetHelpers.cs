@@ -1,17 +1,22 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using TestSupport.Helpers;
 
 namespace TestSupport.EfHelpers
 {
+    /// <summary>
+    /// Contains extension methods to help with base SQL commands 
+    /// </summary>
     public static class SqlAdoNetHelpers
     {
-
+        /// <summary>
+        /// Execute a count of the rows in a table, with optional where clause, using ADO.NET
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="tableName"></param>
+        /// <param name="whereClause"></param>
+        /// <returns></returns>
         public static int ExecuteRowCount(this string connectionString, string tableName, string whereClause = "")
         {
             using (var myConn = new SqlConnection(connectionString))
@@ -22,10 +27,16 @@ namespace TestSupport.EfHelpers
                 return (int) myCommand.ExecuteScalar();
             }
         }
-
-        public static int ExecuteNonQuery(this string connection, string command, int commandTimeout = 10)
+        /// <summary>
+        /// Execute a non-query SQL using ADO.NET
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="command"></param>
+        /// <param name="commandTimeout"></param>
+        /// <returns></returns>
+        public static int ExecuteNonQuery(this string connectionString, string command, int commandTimeout = 10)
         {
-            using (var myConn = new SqlConnection(connection))
+            using (var myConn = new SqlConnection(connectionString))
             {
                 var myCommand = new SqlCommand(command, myConn) {CommandTimeout = commandTimeout};
                 myConn.Open();

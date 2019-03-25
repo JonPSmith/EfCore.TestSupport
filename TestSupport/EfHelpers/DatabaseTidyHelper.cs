@@ -36,18 +36,19 @@ namespace TestSupport.EfHelpers
         }
 
         /// <summary>
-        /// This returns all the matching databases that start with the startsWith parameter 
+        /// This returns all the matching databases that start with the orgDbStartsWith parameter 
         /// </summary>
-        /// <param name="builder"></param>
+        /// <param name="orgDbStartsWith">Start of database name</param>
+        /// <param name="connectionString"></param>
         /// <returns></returns>
-        private static List<string> GetAllMatchingDatabases(string orgDbName, string connectionString)
+        private static List<string> GetAllMatchingDatabases(string orgDbStartsWith, string connectionString)
         {
             var result = new List<string>();
 
 
             using (var myConn = new SqlConnection(connectionString))
             {
-                var command = $"SELECT name FROM master.dbo.sysdatabases WHERE name LIKE '{orgDbName}%'";
+                var command = $"SELECT name FROM master.dbo.sysdatabases WHERE name LIKE '{orgDbStartsWith}%'";
                 var myCommand = new SqlCommand(command, myConn);
                 myConn.Open();
                 using (var reader = myCommand.ExecuteReader())
@@ -59,6 +60,26 @@ namespace TestSupport.EfHelpers
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Wipes out the existing database and creates a new, empty one
+        /// </summary>
+        /// <param name="databaseConnectionString">a actual connection string</param>
+        /// <param name="timeout">Defines a timeout for connection and the SQL DELETE/CREATE database commands</param>
+        public static void WipeCreateDatabase(this string databaseConnectionString, int timeout = 30)
+        {
+            var builder = new SqlConnectionStringBuilder(databaseConnectionString);
+            var databaseName = builder.InitialCatalog;
+            builder.InitialCatalog = "";          //remove database, as create database won't work with it
+            builder.ConnectTimeout = timeout;
+
+            var nonDbConnectionString = builder.ToString();
+            if (nonDbConnectionString.ExecuteRowCount("sys.databases", String.Format("WHERE [Name] = '{0}'", databaseName)) == 1)
+            {
+                databaseName.DeleteDatabase(nonDbConnectionString);
+            }
+            nonDbConnectionString.ExecuteNonQuery("CREATE DATABASE [" + databaseName + "]", timeout);
         }
 
         private static void DeleteDatabase(this string databaseName, string connectionString)

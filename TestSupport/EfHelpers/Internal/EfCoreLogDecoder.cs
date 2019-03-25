@@ -9,8 +9,8 @@ namespace TestSupport.EfHelpers.Internal
     internal class EfCoreLogDecoder
     {
         private const string EfCoreCommandExecutedEventId = "Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted";
-        private static readonly Regex ParamRegex = new Regex(@"(@p\d+|@__\w*?_\d+)='(.*?)'(\s\(\w*?\s=\s\w*\))*(?:,\s|\]).*?", RegexOptions.None);
-        private const string parameterStart = "[Parameters=[";
+        private static readonly Regex ParamRegex = new Regex(@"(@p\d+|@__\w*?_\d+)='(.*?)'(\s\(\w*?\s=\s\w*\))*(?:,\s|\]).*?");
+        private const string ParameterStart = "[Parameters=[";
 
         private readonly string _paramName;
         private readonly string _paramValue;
@@ -59,11 +59,11 @@ namespace TestSupport.EfHelpers.Internal
                 return log.Message;
 
             var messageLines = log.Message.Split('\n').Select(x => x.Trim()).ToArray();
-            var parametersIndex = messageLines[0].IndexOf(parameterStart);
+            var parametersIndex = messageLines[0].IndexOf(ParameterStart);
             if (parametersIndex <= 0)
                 return log.Message;
 
-            var decodedMatches = ParamRegex.Matches(messageLines[0].Substring(parametersIndex + parameterStart.Length))
+            var decodedMatches = ParamRegex.Matches(messageLines[0].Substring(parametersIndex + ParameterStart.Length))
                 .Cast<Match>().Select(x => new EfCoreLogDecoder(x)).ToList();
             //is sensitive logging isn't enabled then all the param values will '?', so we just return the message
             if (decodedMatches.All(x => x._paramValue == "?"))

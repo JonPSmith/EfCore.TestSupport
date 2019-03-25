@@ -1,8 +1,15 @@
 # Release notes
 
 
+
+
 ## TODO
 - Feature: Add version of `SqliteInMemory.CreateOptions` etc. that returns `DbContextOptionsBuilder<T>`
+
+## 1.8.0
+- Improvement: CompareEfSql now recoginises unique indexes provided by constraints (rather than via the normal SQL Index statement)
+- Improvement: CompareEfSqlConfig.TablesToIgnoreCommaDelimited should trim tables names are ignore null entries
+- Feature: Added WipeCreateDatabase extension method - useful for creating empty database prior to using SQL to add tables etc.
 
 ## 1.7.0
 - Feature: Added DecodeMessage feature to LogOutput. Tries to recreate the actual SQL to allow cut/paste 

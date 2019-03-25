@@ -159,7 +159,8 @@ namespace TestSupport.EfSchemeCompare
             if (_config.TablesToIgnoreCommaDelimited != null)
             {
                 var tablesToRemove = new List<DatabaseTable>();
-                foreach (var tableToIgnore in _config.TablesToIgnoreCommaDelimited.Split(',').Select(x => x.Trim()))
+                foreach (var tableToIgnore in _config.TablesToIgnoreCommaDelimited.Split(',')
+                    .Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)))
                 {
                     var split = tableToIgnore.Split('.').Select(x => x.Trim()).ToArray();
                     var schema = split.Length == 1 ? databaseModel.DefaultSchema : split[0];

@@ -187,6 +187,33 @@ namespace Test.UnitTests.EfSchemaCompare
                     "EXTRA IN DATABASE: MyEntity->PrimaryKey 'PK_MyEntites', column name. Found = MyEntityId");
             }
         }
+
+        [Fact]
+        public void CompareDiffIndexes()
+        {
+            //SETUP
+            var optionsBuilder = new DbContextOptionsBuilder<MyEntityIndexesDbContext>();
+            optionsBuilder.UseSqlServer(_connectionString);
+            using (var context = new MyEntityIndexesDbContext(optionsBuilder.Options))
+            {
+                var handler = new Stage1Comparer(context.Model, context.GetType().Name);
+
+                //ATTEMPT
+                var hasErrors = handler.CompareModelToDatabase(_databaseModel);
+
+                //VERIFY
+                hasErrors.ShouldBeTrue();
+                var errors = CompareLog.ListAllErrors(handler.Logs).ToList();
+                errors.Count.ShouldEqual(3);
+                errors[0].ShouldEqual(
+                    "DIFFERENT: MyEntity->Property 'MyString', column type. Expected = nvarchar(450), found = nvarchar(max)");
+                errors[1].ShouldEqual(
+                    "NOT IN DATABASE: MyEntity->Index 'MyInt', constraint name. Expected = MySpecialName");
+                errors[2].ShouldEqual(
+                    "NOT IN DATABASE: MyEntity->Index 'MyString', constraint name. Expected = IX_MyEntites_MyString");
+            }
+        }
+
         [Fact]
         public void ComparePropertyComputedColName()
         {

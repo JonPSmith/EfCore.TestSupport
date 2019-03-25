@@ -133,7 +133,7 @@ namespace TestSupport.EfSchemeCompare.Internal
 
         private void CompareIndexes(CompareLog log, IEntityType entityType, DatabaseTable table)
         {
-            var indexDict = table.Indexes.ToDictionary(x => x.Name);
+            var indexDict = DatabaseIndexData.GetIndexesAndUniqueConstraints(table). ToDictionary(x => x.Name);
             foreach (var entityIdx in entityType.GetIndexes())
             {
                 var entityIdxprops = entityIdx.Properties;
