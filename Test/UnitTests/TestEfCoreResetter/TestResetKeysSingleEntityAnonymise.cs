@@ -101,5 +101,53 @@ namespace Test.UnitTests.TestEfCoreResetter
             }
         }
 
+        [Fact]
+        public void TestResetKeysSingleEntityAnonymiseNameMinLength()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
+            {
+                var entity = new Author { Name = "Test" };
+
+                //ATTEMPT
+                var config = new DataResetterConfig();
+                config.AddToAnonymiseList<Author>(x => x.Name, "Name:Min=100");
+                var resetter = new DataResetter(context, config);
+                resetter.ResetKeysSingleEntity(entity);
+
+                //VERIFY 
+                entity.Name.Length.ShouldBeInRange(100, 140);
+            }
+        }
+
+        [Fact]
+        public void TestResetKeysSingleEntityAnonymiseOwnAnonymiser()
+        {
+            //SETUP
+            string MyAnonymiser(AnonymiserData data, object objectInstance)
+            {
+                return "My Replacement text";
+            }
+
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
+            {
+                var entity = new Author { Name = "Test" };
+
+                //ATTEMPT
+                var config = new DataResetterConfig
+                {
+                    AnonymiserFunc = MyAnonymiser
+                };
+                config.AddToAnonymiseList<Author>(x => x.Name, "Name");
+                var resetter = new DataResetter(context, config);
+                resetter.ResetKeysSingleEntity(entity);
+
+                //VERIFY 
+                entity.Name.ShouldEqual("My Replacement text");
+            }
+        }
+
     }
 }

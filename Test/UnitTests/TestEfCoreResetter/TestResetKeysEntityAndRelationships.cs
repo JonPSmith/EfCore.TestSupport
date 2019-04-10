@@ -2,6 +2,7 @@
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
 using System.Linq;
+using DataLayer.BookApp;
 using DataLayer.EfCode.BookApp;
 using Microsoft.EntityFrameworkCore;
 using Test.Helpers;
@@ -70,6 +71,38 @@ namespace Test.UnitTests.TestEfCoreResetter
                 entity.AuthorsLink.All(x => x.AuthorId == 0).ShouldBeTrue();
                 entity.AuthorsLink.All(x => x.BookId == 0).ShouldBeTrue();
                 entity.AuthorsLink.Select(x => x.Author).All(x => x.AuthorId == 0).ShouldBeTrue();
+            }
+        }
+
+        [Fact]
+        public void TestResetKeysSingleEntityWithRelationshipsCheckStateIsAdded()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            Book entity;
+            using (var context = new BookContext(options))
+            {
+                context.Database.EnsureCreated();
+                context.SeedDatabaseFourBooks();
+                entity = context.Books
+                    .Include(x => x.Reviews)
+                    .Include(x => x.Promotion)
+                    .Include(x => x.AuthorsLink)
+                    .ThenInclude(x => x.Author)
+                    .First(x => x.Reviews.Any());
+
+                var resetter = new DataResetter(context);
+                resetter.ResetKeysEntityAndRelationships(entity);
+            }
+            using (var context = new BookContext(options))
+            {
+                //ATTEMPT
+                context.Add(entity);
+                var states = context.ChangeTracker.Entries().Select(x => x.State).ToList();
+
+                //VERIFY 
+                states.Count.ShouldEqual(1 + 2 + 1 + 1 + 1); // Book + 2 reviews + promotion + BookAuthor + author
+                states.All(x => x == EntityState.Added).ShouldBeTrue();
             }
         }
 

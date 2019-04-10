@@ -25,7 +25,7 @@ namespace TestSupport.EfHelpers.Internal
 
         public void AnonymiseMember(object entityToUpdate, DataResetterConfig config)
         {
-            PropertyToAnonymise.SetValue(entityToUpdate, config.AnonymiserFunc(AnonymiserData));
+            PropertyToAnonymise.SetValue(entityToUpdate, config.AnonymiserFunc(AnonymiserData, entityToUpdate));
         }
 
         //thanks to https://www.codeproject.com/Tips/301274/How-to-get-property-name-using-Expression-2
