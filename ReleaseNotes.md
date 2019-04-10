@@ -8,8 +8,8 @@
 
 ## 1.9.0
 
-- Feature: Add EfCoreResetter to reset the Primary and Foreign keys for save/restore of data in a database.
-- Feature: Add EfCoreResetter to anonymise names, addesses etc.
+- Feature: Add DataResetter to reset the Primary and Foreign keys for save/restore of data in a database.
+- Feature: Add anonymiser to DataResetter to anonymise names, addesses etc.
 - Bug fix: fix issue #15, EfSchemaCompare: Error with default values on string properties.
 
 ## 1.8.0

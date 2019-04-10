@@ -32,8 +32,9 @@ namespace TestSupport.EfHelpers
         /// <typeparam name="TEntity">The class the field or property is in</typeparam>
         /// <param name="expression">An expression such as "p => p.PropertyInYourClass"</param>
         /// <param name="replaceRequest">Provide usage and config of the replacement string, e.g. "Email" or "FirstName:Max=10:Min=5"
-        /// - First part is the name says what you want, e.g. FirstName, Email etc.
-        /// - You can then add properties 
+        /// - First part is the name says what you want, e.g. FirstName, Email, Address1, Country, etc. 
+        /// - You can then add properties like :Max=10,:Min=2
+        /// NOTE: The default anonymiser uses guids for everything, but add @ana.com if "Email". It also applies the Max=nn if guid is longer
         /// </param>
         public void AddToAnonymiseList<TEntity>(Expression<Func<TEntity, string>> expression, string replaceRequest)
         {
@@ -42,7 +43,9 @@ namespace TestSupport.EfHelpers
         }
 
         /// <summary>
-        /// This is a simple Anonymiser using guids 
+        /// This is a simple Anonymiser using guids
+        /// It adds "@ana.com" to end of guid if "Email"
+        /// It applies the "Max=nn" only if the returned string is longer than that
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
