@@ -1,0 +1,105 @@
+﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Licensed under MIT licence. See License.txt in the project root for license information.
+
+using DataLayer.BookApp;
+using DataLayer.EfCode.BookApp;
+using TestSupport.EfHelpers;
+using Xunit;
+using Xunit.Abstractions;
+using Xunit.Extensions.AssertExtensions;
+
+namespace Test.UnitTests.TestEfCoreResetter
+{
+    public class TestResetKeysSingleEntityAnonymise
+    {
+        private readonly ITestOutputHelper _output;
+
+        public TestResetKeysSingleEntityAnonymise(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
+        [Fact]
+        public void TestResetKeysSingleEntityAnonymiseName()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
+            {
+                var entity = new Author {Name = "Test"};
+
+                //ATTEMPT
+                var config = new DataResetterConfig();
+                config.AddToAnonymiseList<Author>(x => x.Name, "Name");
+                var resetter = new DataResetter(context, config);
+                resetter.ResetKeysSingleEntity(entity);
+
+                //VERIFY 
+                entity.Name.ShouldNotEqual("Test");
+            }
+        }
+
+        [Fact]
+        public void TestResetKeysSingleEntityAnonymiseNameAsEmail()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
+            {
+                var entity = new Author { Name = "Test" };
+
+                //ATTEMPT
+                var config = new DataResetterConfig();
+                config.AddToAnonymiseList<Author>(x => x.Name, "Email");
+                var resetter = new DataResetter(context, config);
+                resetter.ResetKeysSingleEntity(entity);
+
+                //VERIFY 
+                entity.Name.ShouldEndWith("@ano.com");
+            }
+        }
+
+        [Fact]
+        public void TestResetKeysSingleEntityAnonymiseNameMaxLength()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
+            {
+                var entity = new Author { Name = "Test" };
+
+                //ATTEMPT
+                var config = new DataResetterConfig();
+                config.AddToAnonymiseList<Author>(x => x.Name, "Name:Max=5");
+                var resetter = new DataResetter(context, config);
+                resetter.ResetKeysSingleEntity(entity);
+
+                //VERIFY 
+                entity.Name.ShouldNotEqual("Test");
+                entity.Name.Length.ShouldEqual(5);
+            }
+        }
+
+        [Fact]
+        public void TestResetKeysSingleEntityAnonymiseNameAsEmailMaxLength()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
+            {
+                var entity = new Author { Name = "Test" };
+
+                //ATTEMPT
+                var config = new DataResetterConfig();
+                config.AddToAnonymiseList<Author>(x => x.Name, "Email:Max=10");
+                var resetter = new DataResetter(context, config);
+                resetter.ResetKeysSingleEntity(entity);
+
+                //VERIFY 
+                entity.Name.ShouldEndWith("@ano.com");
+                entity.Name.Length.ShouldEqual(10);
+            }
+        }
+
+    }
+}

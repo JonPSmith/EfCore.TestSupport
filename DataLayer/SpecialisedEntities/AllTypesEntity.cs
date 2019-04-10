@@ -33,5 +33,9 @@ namespace DataLayer.SpecialisedEntities
         public DateTimeOffset MyDateTimeOffset { get;  set; }
         public byte[] MyByteArray { get;  set; }
 
+        public void SetId(int id)
+        {
+            Id = id;
+        }
     }
 }
