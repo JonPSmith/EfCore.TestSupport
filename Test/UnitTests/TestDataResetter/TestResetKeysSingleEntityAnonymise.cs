@@ -1,8 +1,11 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
+using System;
+using System.Linq;
 using DataLayer.BookApp;
 using DataLayer.EfCode.BookApp;
+using RandomNameGeneratorLibrary;
 using TestSupport.EfHelpers;
 using Xunit;
 using Xunit.Abstractions;
@@ -146,6 +149,41 @@ namespace Test.UnitTests.TestDataResetter
 
                 //VERIFY 
                 entity.Name.ShouldEqual("My Replacement text");
+            }
+        }
+
+        [Fact]
+        public void TestResetKeysSingleEntityAnonymiseLinkToLibrary()
+        {
+            //SETUP
+            var pGenerator = new PersonNameGenerator();
+            string MyAnonymiser(AnonymiserData data, object objectInstance)
+            {
+                switch (data.ReplacementType.ToLower())
+                {
+                    case "fullname": return pGenerator.GenerateRandomFirstAndLastName();
+                    case "firstname": return pGenerator.GenerateRandomFirstName();
+                    case "lastname": return pGenerator.GenerateRandomLastName();
+                    default: return pGenerator.GenerateRandomFirstAndLastName();
+                }
+            }
+
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            using (var context = new BookContext(options))
+            {
+                var entity = new Author { Name = "Test" };
+
+                //ATTEMPT
+                var config = new DataResetterConfig
+                {
+                    AnonymiserFunc = MyAnonymiser
+                };
+                config.AddToAnonymiseList<Author>(x => x.Name, "LastName");
+                var resetter = new DataResetter(context, config);
+                resetter.ResetKeysSingleEntity(entity);
+
+                //VERIFY 
+                entity.Name.ShouldNotEqual("Test");
             }
         }
 
