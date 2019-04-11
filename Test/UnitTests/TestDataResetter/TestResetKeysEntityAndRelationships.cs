@@ -11,7 +11,7 @@ using Xunit;
 using Xunit.Abstractions;
 using Xunit.Extensions.AssertExtensions;
 
-namespace Test.UnitTests.TestEfCoreResetter
+namespace Test.UnitTests.TestDataResetter
 {
     public class TestResetKeysEntityAndRelationships 
     {
