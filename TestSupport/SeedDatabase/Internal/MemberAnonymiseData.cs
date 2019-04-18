@@ -13,13 +13,11 @@ namespace TestSupport.SeedDatabase.Internal
         {
             ClassType = classType;
             PropertyToAnonymise = propertyToAnonymise;
-            ReplaceRequest = replaceRequest;
-            AnonymiserData = new AnonymiserData(ReplaceRequest);
+            AnonymiserData = new AnonymiserData(replaceRequest);
         }
 
         public Type ClassType { get; private set; }
         public PropertyInfo PropertyToAnonymise { get; private set; }
-        public string ReplaceRequest { get; private set; }
 
         public AnonymiserData AnonymiserData { get; private set; }
 
