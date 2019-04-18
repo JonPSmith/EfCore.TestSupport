@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DataLayer.BookApp;
@@ -62,7 +63,13 @@ namespace Test.UnitTests.TestDataResetter
         /// </summary>
         public class MyAnonymiser
         {
-            readonly PersonNameGenerator _pGenerator = new PersonNameGenerator();
+            readonly PersonNameGenerator _pGenerator;
+
+            public MyAnonymiser(int seed = 42)
+            {
+                var random = new Random(seed);
+                _pGenerator = new PersonNameGenerator(random);
+            }
 
             public string AnonymiseThis(AnonymiserData data, object objectInstance)
             {
@@ -109,7 +116,7 @@ namespace Test.UnitTests.TestDataResetter
                 //1b-ii. Add all class/properties that you want to anonymise
                 config.AddToAnonymiseList<Author>(x => x.Name, "FullName");
                 config.AddToAnonymiseList<Review>(x => x.VoterName, "FirstName");
-                //1b. Reset primary and foreign keys and anonymise author's name (using NuGet package DotNetRandomNameGenerator)
+                //1b. Reset primary and foreign keys and anonymise author's name and Review's VoterName
                 var resetter = new DataResetter(context, config);
                 resetter.ResetKeysEntityAndRelationships(entities);
 
@@ -161,9 +168,9 @@ namespace Test.UnitTests.TestDataResetter
             {
                 //2a. make sure you have an empty database
                 context.Database.EnsureCreated();
-                //2b. read the entities back from the SJON file
+                //2b. read the entities back from the JSON file
                 var entities = "ExampleDatabase".ReadSeedDataFromJsonFile<List<Book>>();
-                //2c. Optionally “tweak” any specific data in the classes that your unit test need
+                //2c. Optionally “tweak” any specific data in the classes that your unit test needs
                 entities.First().Title = "new title";
                 //2d. Add the data to the database and save
                 context.AddRange(entities);

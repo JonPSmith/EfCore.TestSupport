@@ -23,7 +23,7 @@
         "Author": {
           "$id": "3",
           "AuthorId": 0,
-          "Name": "Cecelia Mullally",
+          "Name": "Alisa Streets",
           "BooksLink": [
             {
               "$ref": "2"
@@ -87,7 +87,7 @@
         "Author": {
           "$id": "8",
           "AuthorId": 0,
-          "Name": "Kathlyn Matrejek",
+          "Name": "Rhoda Verhey",
           "BooksLink": [
             {
               "$ref": "7"
@@ -118,7 +118,7 @@
       {
         "$id": "11",
         "ReviewId": 0,
-        "VoterName": "Darrick",
+        "VoterName": "Jade",
         "NumStars": 5,
         "Comment": "I look forward to reading this book, if I am still alive!",
         "BookId": 0
@@ -126,7 +126,7 @@
       {
         "$id": "12",
         "ReviewId": 0,
-        "VoterName": "Maximo",
+        "VoterName": "Bryon",
         "NumStars": 5,
         "Comment": "I write this book if I was still alive!",
         "BookId": 0
@@ -144,7 +144,7 @@
         "Author": {
           "$id": "14",
           "AuthorId": 0,
-          "Name": "Brent Lesieur",
+          "Name": "Patience Marbury",
           "BooksLink": [
             {
               "$ref": "13"
