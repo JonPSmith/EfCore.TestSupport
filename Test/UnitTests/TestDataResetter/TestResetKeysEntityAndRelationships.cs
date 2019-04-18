@@ -7,6 +7,7 @@ using DataLayer.EfCode.BookApp;
 using Microsoft.EntityFrameworkCore;
 using Test.Helpers;
 using TestSupport.EfHelpers;
+using TestSupport.SeedDatabase;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Extensions.AssertExtensions;

@@ -8,9 +8,9 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using TestSupport.EfHelpers.Internal;
+using TestSupport.SeedDatabase.Internal;
 
-namespace TestSupport.EfHelpers
+namespace TestSupport.SeedDatabase
 {
     /// <summary>
     /// This class contains methods to help you save database data for later loading into a database for unit testing.

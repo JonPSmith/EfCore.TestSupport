@@ -5,7 +5,7 @@ using System;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace TestSupport.EfHelpers.Internal
+namespace TestSupport.SeedDatabase.Internal
 {
     internal class MemberAnonymiseData
     {

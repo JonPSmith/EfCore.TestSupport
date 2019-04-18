@@ -4,15 +4,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using TestSupport.EfHelpers.Internal;
+using TestSupport.SeedDatabase.Internal;
 
-namespace TestSupport.EfHelpers
+namespace TestSupport.SeedDatabase
 {
     /// <summary>
     /// This provides configuration information for the DataResetter
     /// </summary>
     public class DataResetterConfig
     {
+        internal const string EmailSuffix = "@gmail.com";
+
         internal List<MemberAnonymiseData> AnonymiseRequests { get; private set; } = new List<MemberAnonymiseData>();
 
         /// <summary>
@@ -55,7 +57,7 @@ namespace TestSupport.EfHelpers
             while (data.MinLength > 0 && anoString.Length < data.MinLength)
                 anoString += anoString;
             if(data.ReplacementType.Equals("Email", StringComparison.InvariantCultureIgnoreCase))
-                anoString += "@ano.com";
+                anoString += EmailSuffix;
             if (data.MaxLength > 0 && data.MaxLength < anoString.Length)
                 //we trim from the end so that an email will still end in @ano.com
                 return anoString.Substring(anoString.Length - data.MaxLength);

@@ -7,6 +7,7 @@ using DataLayer.BookApp;
 using DataLayer.EfCode.BookApp;
 using RandomNameGeneratorLibrary;
 using TestSupport.EfHelpers;
+using TestSupport.SeedDatabase;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Extensions.AssertExtensions;
@@ -58,7 +59,7 @@ namespace Test.UnitTests.TestDataResetter
                 resetter.ResetKeysSingleEntity(entity);
 
                 //VERIFY 
-                entity.Name.ShouldEndWith("@ano.com");
+                entity.Name.ShouldEndWith(DataResetterConfig.EmailSuffix);
             }
         }
 
@@ -99,7 +100,7 @@ namespace Test.UnitTests.TestDataResetter
                 resetter.ResetKeysSingleEntity(entity);
 
                 //VERIFY 
-                entity.Name.ShouldEndWith("@ano.com");
+                entity.Name.ShouldEndWith(DataResetterConfig.EmailSuffix);
                 entity.Name.Length.ShouldEqual(10);
             }
         }
@@ -152,40 +153,7 @@ namespace Test.UnitTests.TestDataResetter
             }
         }
 
-        [Fact]
-        public void TestResetKeysSingleEntityAnonymiseLinkToLibrary()
-        {
-            //SETUP
-            var pGenerator = new PersonNameGenerator();
-            string MyAnonymiser(AnonymiserData data, object objectInstance)
-            {
-                switch (data.ReplacementType.ToLower())
-                {
-                    case "fullname": return pGenerator.GenerateRandomFirstAndLastName();
-                    case "firstname": return pGenerator.GenerateRandomFirstName();
-                    case "lastname": return pGenerator.GenerateRandomLastName();
-                    default: return pGenerator.GenerateRandomFirstAndLastName();
-                }
-            }
 
-            var options = SqliteInMemory.CreateOptions<BookContext>();
-            using (var context = new BookContext(options))
-            {
-                var entity = new Author { Name = "Test" };
-
-                //ATTEMPT
-                var config = new DataResetterConfig
-                {
-                    AnonymiserFunc = MyAnonymiser
-                };
-                config.AddToAnonymiseList<Author>(x => x.Name, "LastName");
-                var resetter = new DataResetter(context, config);
-                resetter.ResetKeysSingleEntity(entity);
-
-                //VERIFY 
-                entity.Name.ShouldNotEqual("Test");
-            }
-        }
 
     }
 }

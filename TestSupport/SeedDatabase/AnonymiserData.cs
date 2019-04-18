@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace TestSupport.EfHelpers
+namespace TestSupport.SeedDatabase
 {
     /// <summary>
     /// This is used to provide the AnonymiserFunc with extra information on how to create the anonymised string
