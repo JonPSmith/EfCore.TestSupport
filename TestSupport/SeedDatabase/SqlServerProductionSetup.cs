@@ -13,7 +13,7 @@ namespace TestSupport.SeedDatabase
     /// This provides a way to set up the options for opening a SQL production database
     /// </summary>
     /// <typeparam name="YourDbContext"></typeparam>
-    public class SqlProductionSetup<YourDbContext> where YourDbContext : DbContext
+    public class SqlServerProductionSetup<YourDbContext> where YourDbContext : DbContext
     {
         /// <summary>
         /// This provides the options 
@@ -29,7 +29,7 @@ namespace TestSupport.SeedDatabase
         /// This sets up the Options and DatabaseName properties ready for you to open the SQL database
         /// </summary>
         /// <param name="connectionNameOrConnectionString">This is either the name of a connection in the appsetting.json file or the actual connection string </param>
-        public SqlProductionSetup(string connectionNameOrConnectionString)
+        public SqlServerProductionSetup(string connectionNameOrConnectionString)
         {
             var connection = GetConfigurationOrActualString(connectionNameOrConnectionString, Assembly.GetCallingAssembly());
             var builder = new SqlConnectionStringBuilder(connection);
