@@ -2,7 +2,9 @@
 // Licensed under MIT license. See License.txt in the project root for license information.
 
 using System.IO;
+using System.Reflection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using TestSupport.Helpers;
 
 namespace TestSupport.SeedDatabase
@@ -25,6 +27,7 @@ namespace TestSupport.SeedDatabase
             return JsonConvert.SerializeObject(data, new JsonSerializerSettings()
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 Formatting = Formatting.Indented
             });
         }
@@ -39,7 +42,11 @@ namespace TestSupport.SeedDatabase
         {
             var filePath = FormJsonFilePath(fileSuffix);
             var json = File.ReadAllText(filePath);
-            return JsonConvert.DeserializeObject<T>(json);
+            var settings = new JsonSerializerSettings()
+            {
+                ContractResolver = new ResolvePrivateSetters()
+            };
+            return JsonConvert.DeserializeObject<T>(json, settings);
         }
 
         /// <summary>
@@ -63,6 +70,32 @@ namespace TestSupport.SeedDatabase
         public static string FormJsonFilePath(string fileSuffix)
         {
             return Path.Combine(TestData.GetTestDataDir(), $"SeedData-{fileSuffix}.json");
+        }
+
+        //-----------------------------------------------------------------
+        //private
+
+        //Thanks to https://bartwullems.blogspot.com/2018/02/jsonnetresolve-private-setters.html
+        private class ResolvePrivateSetters : DefaultContractResolver
+        {
+            protected override JsonProperty CreateProperty(
+                MemberInfo member,
+                MemberSerialization memberSerialization)
+            {
+                var prop = base.CreateProperty(member, memberSerialization);
+
+                if (!prop.Writable)
+                {
+                    var property = member as PropertyInfo;
+                    if (property != null)
+                    {
+                        var hasPrivateSetter = property.GetSetMethod(true) != null;
+                        prop.Writable = hasPrivateSetter;
+                    }
+                }
+
+                return prop;
+            }
         }
 
     }
