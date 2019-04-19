@@ -65,20 +65,25 @@ namespace Test.UnitTests.TestDataResetter
         {
             readonly PersonNameGenerator _pGenerator;
 
-            public MyAnonymiser(int seed = 42)
+            /// <summary>
+            /// Creates the Anonymiser
+            /// </summary>
+            /// <param name="seed">If not given then random sequence,
+            /// or if number given then same sequence every time</param>
+            public MyAnonymiser(int? seed = null)
             {
-                var random = new Random(seed);
+                var random = seed == null ? new Random() : new Random((int)seed);
                 _pGenerator = new PersonNameGenerator(random);
             }
 
             public string AnonymiseThis(AnonymiserData data, object objectInstance)
             {
-                switch (data.ReplacementType.ToLower())
+                switch (data.ReplacementType)
                 {
-                    case "fullname": return _pGenerator.GenerateRandomFirstAndLastName();
-                    case "firstname": return _pGenerator.GenerateRandomFirstName();
-                    case "lastname": return _pGenerator.GenerateRandomLastName();
-                    case "email":
+                    case "FullName": return _pGenerator.GenerateRandomFirstAndLastName();
+                    case "FirstName": return _pGenerator.GenerateRandomFirstName();
+                    case "LastName": return _pGenerator.GenerateRandomLastName();
+                    case "Email":
                         return
                             $"{_pGenerator.GenerateRandomFirstName()}.{_pGenerator.GenerateRandomLastName()}@gmail.com";
                     default: return _pGenerator.GenerateRandomFirstAndLastName();
@@ -108,7 +113,7 @@ namespace Test.UnitTests.TestDataResetter
                     .ToList();
 
                 //1b-ii. Set up resetter config to use own method
-                var myAnonymiser = new MyAnonymiser();
+                var myAnonymiser = new MyAnonymiser(42);
                 var config = new DataResetterConfig
                 {
                     AnonymiserFunc = myAnonymiser.AnonymiseThis
