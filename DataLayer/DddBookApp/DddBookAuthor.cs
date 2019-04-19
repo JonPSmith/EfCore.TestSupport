@@ -5,14 +5,14 @@ using Newtonsoft.Json;
 
 namespace DataLayer.DddBookApp
 {
-    public class BookAuthor
+    public class DddBookAuthor
     {
-        private BookAuthor() { }
+        private DddBookAuthor() { }
 
-        internal BookAuthor(Book book, Author author, byte order)
+        internal DddBookAuthor(DddBook dddBook, DddAuthor dddAuthor, byte order)
         {
-            Book = book;
-            Author = author;
+            DddBook = dddBook;
+            DddAuthor = dddAuthor;
             Order = order;
         }
 
@@ -23,7 +23,7 @@ namespace DataLayer.DddBookApp
         //-----------------------------
         //Relationships
 
-        public Book Book { get; private set; }
-        public Author Author { get; private set; }
+        public DddBook DddBook { get; private set; }
+        public DddAuthor DddAuthor { get; private set; }
     }
 }

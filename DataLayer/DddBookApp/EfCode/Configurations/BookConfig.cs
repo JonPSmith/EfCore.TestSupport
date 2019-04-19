@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DataLayer.DddBookApp.EfCode.Configurations
 {
-    public class BookConfig : IEntityTypeConfiguration<Book>
+    public class BookConfig : IEntityTypeConfiguration<DddBook>
     {
         public void Configure
-            (EntityTypeBuilder<Book> entity)
+            (EntityTypeBuilder<DddBook> entity)
         {
             entity.Property(p => p.PublishedOn).HasColumnType("date");        
 
@@ -30,11 +30,11 @@ namespace DataLayer.DddBookApp.EfCode.Configurations
                 .HasForeignKey(p => p.BookId);
 
             entity.Metadata
-                .FindNavigation(nameof(Book.Reviews))
+                .FindNavigation(nameof(DddBook.Reviews))
                 .SetPropertyAccessMode(PropertyAccessMode.Field);
 
             entity.Metadata
-                .FindNavigation(nameof(Book.AuthorsLink))
+                .FindNavigation(nameof(DddBook.AuthorsLink))
                 .SetPropertyAccessMode(PropertyAccessMode.Field);
         }
     }

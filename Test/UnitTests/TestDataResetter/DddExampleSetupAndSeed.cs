@@ -39,10 +39,10 @@ namespace Test.UnitTests.TestDataResetter
                 context.SeedDatabaseFourBooks();
 
                 //1a. Read in the data to want to seed the database with
-                var entities = context.Books
+                var entities = context.DddBooks
                     .Include(x => x.Reviews)
                     .Include(x => x.AuthorsLink)
-                        .ThenInclude(x => x.Author)
+                        .ThenInclude(x => x.DddAuthor)
                     .ToList();
 
                 //1b. Reset primary and foreign keys (see next version for anonymise)
@@ -104,10 +104,10 @@ namespace Test.UnitTests.TestDataResetter
                 context.SeedDatabaseFourBooks();
 
                 //1a. Read in the data to want to seed the database with
-                var entities = context.Books
+                var entities = context.DddBooks
                     .Include(x => x.Reviews)
                     .Include(x => x.AuthorsLink)
-                        .ThenInclude(x => x.Author)
+                        .ThenInclude(x => x.DddAuthor)
                     .ToList();
 
                 //1b-ii. Set up resetter config to use own method
@@ -117,14 +117,14 @@ namespace Test.UnitTests.TestDataResetter
                     AnonymiserFunc = myAnonymiser.AnonymiseThis
                 };
                 //1b-ii. Add all class/properties that you want to anonymise
-                config.AddToAnonymiseList<Author>(x => x.Name, "FullName");
-                config.AddToAnonymiseList<Review>(x => x.VoterName, "FirstName");
+                config.AddToAnonymiseList<DddAuthor>(x => x.Name, "FullName");
+                config.AddToAnonymiseList<DddReview>(x => x.VoterName, "FirstName");
                 //1b. Reset primary and foreign keys and anonymise author's name and Review's VoterName
                 var resetter = new DataResetter(context, config);
                 resetter.ResetKeysEntityAndRelationships(entities);
 
                 //Show author's myAnonymiser
-                foreach (var author in entities.SelectMany(x => x.AuthorsLink.Select(y => y.Author)).Distinct())
+                foreach (var author in entities.SelectMany(x => x.AuthorsLink.Select(y => y.DddAuthor)).Distinct())
                 {
                     _output.WriteLine($"Author name = {author.Name}");
                 }
@@ -141,14 +141,14 @@ namespace Test.UnitTests.TestDataResetter
         {
             //SETUP
             var options = SqliteInMemory.CreateOptions<DddBookContext>();
-            Book entity;
+            DddBook entity;
             using (var context = new DddBookContext(options))
             {
                 context.Database.EnsureCreated();
                 context.SeedDatabaseFourBooks();
-                entity = context.Books
+                entity = context.DddBooks
                     .Include(x => x.AuthorsLink)
-                    .ThenInclude(x => x.Author)
+                    .ThenInclude(x => x.DddAuthor)
                     .First();
             }
             using (var context = new DddBookContext(options))
@@ -172,7 +172,7 @@ namespace Test.UnitTests.TestDataResetter
                 //2a. make sure you have an empty database
                 context.Database.EnsureCreated();
                 //2b. read the entities back from the JSON file
-                var entities = "DddExampleDatabase".ReadSeedDataFromJsonFile<List<Book>>();
+                var entities = "DddExampleDatabase".ReadSeedDataFromJsonFile<List<DddBook>>();
                 //2c. Optionally “tweak” any specific data in the classes that your unit test needs
                 entities.First().AddPromotion(1, "Only 1$ today!");
                 //2d. Add the data to the database and save
@@ -183,9 +183,9 @@ namespace Test.UnitTests.TestDataResetter
                 //... run your tests here
 
                 //VERIFY 
-                context.Books.First().ActualPrice.ShouldEqual(1);
-                context.Books.Count().ShouldEqual(4);
-                context.Authors.Count().ShouldEqual(3);
+                context.DddBooks.First().ActualPrice.ShouldEqual(1);
+                context.DddBooks.Count().ShouldEqual(4);
+                context.DddAuthors.Count().ShouldEqual(3);
             }
         }
 

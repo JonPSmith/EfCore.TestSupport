@@ -1,162 +1,204 @@
-[
-  {
-    "$id": "1",
-    "BookId": 0,
-    "Title": "Refactoring",
-    "Description": "Improving the design of existing code",
-    "PublishedOn": "1999-07-08T00:00:00",
-    "Publisher": null,
-    "OrgPrice": 40.0,
-    "ActualPrice": 40.0,
-    "PromotionalText": null,
-    "ImageUrl": null,
-    "Reviews": [],
-    "AuthorsLink": [
-      {
-        "$id": "2",
-        "BookId": 0,
-        "AuthorId": 0,
-        "Order": 0,
-        "Book": {
-          "$ref": "1"
-        },
-        "Author": {
-          "AuthorId": 0,
-          "Name": "Martin Fowler",
-          "Email": null,
-          "BooksLink": [
-            {
+{
+  "$id": "1",
+  "$values": [
+    {
+      "$id": "2",
+      "BookId": 0,
+      "Title": "Refactoring",
+      "Description": "Improving the design of existing code",
+      "PublishedOn": "1999-07-08T00:00:00",
+      "Publisher": null,
+      "OrgPrice": 40.0,
+      "ActualPrice": 40.0,
+      "PromotionalText": null,
+      "ImageUrl": null,
+      "Reviews": {
+        "$id": "3",
+        "$values": []
+      },
+      "AuthorsLink": {
+        "$id": "4",
+        "$values": [
+          {
+            "$id": "5",
+            "BookId": 0,
+            "AuthorId": 0,
+            "Order": 0,
+            "DddBook": {
               "$ref": "2"
             },
-            {
-              "$id": "3",
-              "BookId": 0,
+            "DddAuthor": {
               "AuthorId": 0,
-              "Order": 0,
-              "Book": {
-                "BookId": 0,
-                "Title": "Patterns of Enterprise Application Architecture",
-                "Description": "Written in direct response to the stiff challenges",
-                "PublishedOn": "2002-11-15T00:00:00",
-                "Publisher": null,
-                "OrgPrice": 53.0,
-                "ActualPrice": 53.0,
-                "PromotionalText": null,
-                "ImageUrl": null,
-                "Reviews": [],
-                "AuthorsLink": [
+              "Name": "Martin Fowler",
+              "Email": null,
+              "BooksLink": {
+                "$id": "6",
+                "$values": [
                   {
-                    "$ref": "3"
+                    "$ref": "5"
+                  },
+                  {
+                    "$id": "7",
+                    "BookId": 0,
+                    "AuthorId": 0,
+                    "Order": 0,
+                    "DddBook": {
+                      "BookId": 0,
+                      "Title": "Patterns of Enterprise Application Architecture",
+                      "Description": "Written in direct response to the stiff challenges",
+                      "PublishedOn": "2002-11-15T00:00:00",
+                      "Publisher": null,
+                      "OrgPrice": 53.0,
+                      "ActualPrice": 53.0,
+                      "PromotionalText": null,
+                      "ImageUrl": null,
+                      "Reviews": {
+                        "$id": "8",
+                        "$values": []
+                      },
+                      "AuthorsLink": {
+                        "$id": "9",
+                        "$values": [
+                          {
+                            "$ref": "7"
+                          }
+                        ]
+                      }
+                    }
                   }
                 ]
               }
             }
-          ]
-        }
+          }
+        ]
       }
-    ]
-  },
-  {
-    "$id": "4",
-    "BookId": 0,
-    "Title": "Patterns of Enterprise Application Architecture",
-    "Description": "Written in direct response to the stiff challenges",
-    "PublishedOn": "2002-11-15T00:00:00",
-    "Publisher": null,
-    "OrgPrice": 53.0,
-    "ActualPrice": 53.0,
-    "PromotionalText": null,
-    "ImageUrl": null,
-    "Reviews": [],
-    "AuthorsLink": [
-      {
-        "$ref": "3"
-      }
-    ]
-  },
-  {
-    "$id": "5",
-    "BookId": 0,
-    "Title": "Domain-Driven Design",
-    "Description": "Linking business needs to software design",
-    "PublishedOn": "2003-08-30T00:00:00",
-    "Publisher": null,
-    "OrgPrice": 56.0,
-    "ActualPrice": 56.0,
-    "PromotionalText": null,
-    "ImageUrl": null,
-    "Reviews": [],
-    "AuthorsLink": [
-      {
-        "$id": "6",
-        "BookId": 0,
-        "AuthorId": 0,
-        "Order": 0,
-        "Book": {
-          "$ref": "5"
-        },
-        "Author": {
-          "AuthorId": 0,
-          "Name": "Eric Evans",
-          "Email": null,
-          "BooksLink": [
-            {
-              "$ref": "6"
-            }
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "$id": "7",
-    "BookId": 0,
-    "Title": "Quantum Networking",
-    "Description": "Entangled quantum networking provides faster-than-light data communications",
-    "PublishedOn": "2057-01-01T00:00:00",
-    "Publisher": "Future Published",
-    "OrgPrice": 220.0,
-    "ActualPrice": 219.0,
-    "PromotionalText": "Save 1$ by buying 40 years ahead",
-    "ImageUrl": null,
-    "Reviews": [
-      {
-        "$id": "8",
-        "ReviewId": 0,
-        "VoterName": "Jon P Smith",
-        "NumStars": 5,
-        "Comment": "I look forward to reading this book, if I am still alive!",
-        "BookId": 0
+    },
+    {
+      "$id": "10",
+      "BookId": 0,
+      "Title": "Patterns of Enterprise Application Architecture",
+      "Description": "Written in direct response to the stiff challenges",
+      "PublishedOn": "2002-11-15T00:00:00",
+      "Publisher": null,
+      "OrgPrice": 53.0,
+      "ActualPrice": 53.0,
+      "PromotionalText": null,
+      "ImageUrl": null,
+      "Reviews": {
+        "$id": "11",
+        "$values": []
       },
-      {
-        "$id": "9",
-        "ReviewId": 0,
-        "VoterName": "Albert Einstein",
-        "NumStars": 5,
-        "Comment": "I write this book if I was still alive!",
-        "BookId": 0
+      "AuthorsLink": {
+        "$id": "12",
+        "$values": [
+          {
+            "$ref": "7"
+          }
+        ]
       }
-    ],
-    "AuthorsLink": [
-      {
-        "$id": "10",
-        "BookId": 0,
-        "AuthorId": 0,
-        "Order": 0,
-        "Book": {
-          "$ref": "7"
-        },
-        "Author": {
-          "AuthorId": 0,
-          "Name": "Future Person",
-          "Email": null,
-          "BooksLink": [
-            {
-              "$ref": "10"
+    },
+    {
+      "$id": "13",
+      "BookId": 0,
+      "Title": "Domain-Driven Design",
+      "Description": "Linking business needs to software design",
+      "PublishedOn": "2003-08-30T00:00:00",
+      "Publisher": null,
+      "OrgPrice": 56.0,
+      "ActualPrice": 56.0,
+      "PromotionalText": null,
+      "ImageUrl": null,
+      "Reviews": {
+        "$id": "14",
+        "$values": []
+      },
+      "AuthorsLink": {
+        "$id": "15",
+        "$values": [
+          {
+            "$id": "16",
+            "BookId": 0,
+            "AuthorId": 0,
+            "Order": 0,
+            "DddBook": {
+              "$ref": "13"
+            },
+            "DddAuthor": {
+              "AuthorId": 0,
+              "Name": "Eric Evans",
+              "Email": null,
+              "BooksLink": {
+                "$id": "17",
+                "$values": [
+                  {
+                    "$ref": "16"
+                  }
+                ]
+              }
             }
-          ]
-        }
+          }
+        ]
       }
-    ]
-  }
-]
+    },
+    {
+      "$id": "18",
+      "BookId": 0,
+      "Title": "Quantum Networking",
+      "Description": "Entangled quantum networking provides faster-than-light data communications",
+      "PublishedOn": "2057-01-01T00:00:00",
+      "Publisher": "Future Published",
+      "OrgPrice": 220.0,
+      "ActualPrice": 219.0,
+      "PromotionalText": "Save 1$ by buying 40 years ahead",
+      "ImageUrl": null,
+      "Reviews": {
+        "$id": "19",
+        "$values": [
+          {
+            "$id": "20",
+            "ReviewId": 0,
+            "VoterName": "Jon P Smith",
+            "NumStars": 5,
+            "Comment": "I look forward to reading this book, if I am still alive!",
+            "BookId": 0
+          },
+          {
+            "$id": "21",
+            "ReviewId": 0,
+            "VoterName": "Albert Einstein",
+            "NumStars": 5,
+            "Comment": "I write this book if I was still alive!",
+            "BookId": 0
+          }
+        ]
+      },
+      "AuthorsLink": {
+        "$id": "22",
+        "$values": [
+          {
+            "$id": "23",
+            "BookId": 0,
+            "AuthorId": 0,
+            "Order": 0,
+            "DddBook": {
+              "$ref": "18"
+            },
+            "DddAuthor": {
+              "AuthorId": 0,
+              "Name": "Future Person",
+              "Email": null,
+              "BooksLink": {
+                "$id": "24",
+                "$values": [
+                  {
+                    "$ref": "23"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

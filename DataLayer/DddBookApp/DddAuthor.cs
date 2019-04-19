@@ -9,13 +9,14 @@ namespace DataLayer.DddBookApp
     //I have styled the Author entity class as a standard-styled entity, 
     //i.e. it can be created/updated via its property setters. 
     //Technically it has to have a public, parameterless constructor and all properties should  have public setters
-    public class Author
+    public class DddAuthor
     {
         public const int NameLength = 100;
         public const int EmailLength = 100;
 
-        public Author() { }
+        public DddAuthor() { }
 
+        [Key]
         public int AuthorId { get;  set; }
 
         [Required(AllowEmptyStrings = false)]
@@ -28,7 +29,7 @@ namespace DataLayer.DddBookApp
         //------------------------------
         //Relationships
 
-        public ICollection<BookAuthor> BooksLink { get; set; }
+        public ICollection<DddBookAuthor> BooksLink { get; set; }
     }
 
 }

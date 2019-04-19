@@ -15,14 +15,14 @@ namespace Tests.Helpers
 
         public static void SeedDatabaseDummyBooks(this DddBookContext context, int numBooks = 10)
         {
-            context.Books.AddRange(CreateDummyBooks(numBooks));
+            context.DddBooks.AddRange(CreateDummyBooks(numBooks));
             context.SaveChanges();
         }
 
-        public static Book CreateDummyBookOneAuthor()
+        public static DddBook CreateDummyBookOneAuthor()
         {
 
-            var book = new Book
+            var book = DddBook.CreateBook
             (
                 "Book Title",
                 "Book Description",
@@ -30,19 +30,19 @@ namespace Tests.Helpers
                 "Book Publisher",
                 123,
                 null,
-                new[] { new Author { Name = "Test Author"} }
-            );
+                new[] { new DddAuthor { Name = "Test Author"} }
+            ).Result;
 
             return book;
         }
 
-        public static List<Book> CreateDummyBooks(int numBooks = 10, bool stepByYears = false)
+        public static List<DddBook> CreateDummyBooks(int numBooks = 10, bool stepByYears = false)
         {
-            var result = new List<Book>();
-            var commonAuthor = new Author { Name = "CommonAuthor"};
+            var result = new List<DddBook>();
+            var commonAuthor = new DddAuthor { Name = "CommonAuthor"};
             for (int i = 0; i < numBooks; i++)
             {
-                var book = new Book
+                var book = DddBook.CreateBook
                 (
                     $"Book{i:D4} Title",
                     $"Book{i:D4} Description",
@@ -50,8 +50,8 @@ namespace Tests.Helpers
                     "Publisher",
                     (short)(i + 1),
                     $"Image{i:D4}",
-                    new[] { new Author { Name = $"Author{i:D4}"}, commonAuthor}
-                );
+                    new[] { new DddAuthor { Name = $"Author{i:D4}"}, commonAuthor}
+                ).Result;
                 for (int j = 0; j < i; j++)
                 {
                     book.AddReview((j % 5) + 1, null, j.ToString());
@@ -65,17 +65,17 @@ namespace Tests.Helpers
 
         public static void SeedDatabaseFourBooks(this DddBookContext context)
         {
-            context.Books.AddRange(CreateFourBooks());
+            context.DddBooks.AddRange(CreateFourBooks());
             context.SaveChanges();
         }
 
-        public static List<Book> CreateFourBooks()
+        public static List<DddBook> CreateFourBooks()
         {
-            var martinFowler = new Author { Name = "Martin Fowler"};
+            var martinFowler = new DddAuthor { Name = "Martin Fowler"};
 
-            var books = new List<Book>();
+            var books = new List<DddBook>();
 
-            var book1 = new Book
+            var book1 = DddBook.CreateBook
             (
                 "Refactoring",
                 "Improving the design of existing code",
@@ -84,10 +84,10 @@ namespace Tests.Helpers
                 40,
                 null,
                 new[] { martinFowler }
-            );
+            ).Result;
             books.Add(book1);
 
-            var book2 = new Book
+            var book2 = DddBook.CreateBook
             (
                 "Patterns of Enterprise Application Architecture",
                 "Written in direct response to the stiff challenges",
@@ -96,10 +96,10 @@ namespace Tests.Helpers
                 53,
                 null,
                 new []{martinFowler}
-            );
+            ).Result;
             books.Add(book2);
 
-            var book3 = new Book
+            var book3 = DddBook.CreateBook
             (
                 "Domain-Driven Design",
                  "Linking business needs to software design",
@@ -107,11 +107,11 @@ namespace Tests.Helpers
                  null,
                 56,
                 null,
-                new[] { new Author { Name = "Eric Evans"}}
-            );
+                new[] { new DddAuthor { Name = "Eric Evans"}}
+            ).Result;
             books.Add(book3);
 
-            var book4 = new Book
+            var book4 = DddBook.CreateBook
             (
                 "Quantum Networking",
                 "Entangled quantum networking provides faster-than-light data communications",
@@ -119,8 +119,8 @@ namespace Tests.Helpers
                 "Future Published",
                 220,
                 null,
-                new[] { new Author { Name = "Future Person"} }
-            );
+                new[] { new DddAuthor { Name = "Future Person"} }
+            ).Result;
             book4.AddReview(5,
                 "I look forward to reading this book, if I am still alive!", "Jon P Smith");
             book4.AddReview(5,

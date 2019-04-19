@@ -19,8 +19,7 @@ namespace TestSupport.SeedDatabase
     {
         /// <summary>
         /// This serialises the data you provide into a JSON string.
-        /// It uses PreserveReferencesHandling = PreserveReferencesHandling.Objects to keep the object links and
-        /// Formatting = Formatting.Indented to make the JSON easier to read (but it does make a bigger file)
+        /// You may want to build your own if you have specific requirements
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="data"></param>
@@ -37,6 +36,7 @@ namespace TestSupport.SeedDatabase
 
         /// <summary>
         /// This will read the data from the JSON file using the fileSuffix as a discriminator
+        /// You may want to build your own if you have specific requirements
         /// </summary>
         /// <typeparam name="T">This is the type of the data you expect to get back, e.g. <code>List{Book}</code></typeparam>
         /// <param name="fileSuffix">This is the name of the seed data, typically the name of the database that the JSON came from</param>

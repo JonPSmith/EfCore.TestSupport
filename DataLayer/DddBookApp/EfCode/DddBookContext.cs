@@ -12,8 +12,8 @@ namespace DataLayer.DddBookApp.EfCode
             DbContextOptions<DddBookContext> options)      
             : base(options) {}
 
-        public DbSet<Book> Books { get; set; }
-        public DbSet<Author> Authors { get; set; }
+        public DbSet<DddBook> DddBooks { get; set; }
+        public DbSet<DddAuthor> DddAuthors { get; set; }
 
         protected override void
             OnModelCreating(ModelBuilder modelBuilder)

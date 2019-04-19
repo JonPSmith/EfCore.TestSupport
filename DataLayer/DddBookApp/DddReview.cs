@@ -5,13 +5,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DataLayer.DddBookApp
 {
-    public class Review
+    public class DddReview
     {
         public const int NameLength = 100;
 
-        private Review() { }
+        private DddReview() { }
 
-        internal Review(int numStars, string comment, string voterName, int bookId = 0)
+        internal DddReview(int numStars, string comment, string voterName, int bookId = 0)
         {
             NumStars = numStars;
             Comment = comment;
@@ -19,6 +19,7 @@ namespace DataLayer.DddBookApp
             BookId = bookId;
         }
 
+        [Key]
         public int ReviewId { get; private set; }
 
         [MaxLength(NameLength)]

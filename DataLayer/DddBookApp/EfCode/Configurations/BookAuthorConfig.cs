@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DataLayer.DddBookApp.EfCode.Configurations
 {
-    public class BookAuthorConfig : IEntityTypeConfiguration<BookAuthor>
+    public class BookAuthorConfig : IEntityTypeConfiguration<DddBookAuthor>
     {
         public void Configure
-            (EntityTypeBuilder<BookAuthor> entity)
+            (EntityTypeBuilder<DddBookAuthor> entity)
         {
             entity.HasKey(p => 
                 new { p.BookId, p.AuthorId }); //#A
@@ -17,11 +17,11 @@ namespace DataLayer.DddBookApp.EfCode.Configurations
             //-----------------------------
             //Relationships
 
-            entity.HasOne(pt => pt.Book)        //#C
+            entity.HasOne(pt => pt.DddBook)        //#C
                 .WithMany(p => p.AuthorsLink)   //#C
                 .HasForeignKey(pt => pt.BookId);//#C
 
-            entity.HasOne(pt => pt.Author)        //#C
+            entity.HasOne(pt => pt.DddAuthor)        //#C
                 .WithMany(t => t.BooksLink)       //#C
                 .HasForeignKey(pt => pt.AuthorId);//#C
         }
