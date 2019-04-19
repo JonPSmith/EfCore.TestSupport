@@ -50,7 +50,7 @@ namespace DataLayer.DddBookApp
 
         [JsonConstructor]
         private Book(string title, string description, DateTime publishedOn, string publisher, decimal orgPrice, 
-            decimal actualPrice, string promotionalText, string imageUrl, IEnumerable<BookAuthor> authorsLink, IEnumerable<Review> reviews)
+            decimal actualPrice, string promotionalText, string imageUrl, List<BookAuthor> authorsLink, List<Review> reviews)
         {
             if (string.IsNullOrWhiteSpace(title))
                 throw new ArgumentNullException(nameof(title));
