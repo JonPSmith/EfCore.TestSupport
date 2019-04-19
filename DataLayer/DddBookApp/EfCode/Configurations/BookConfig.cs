@@ -29,13 +29,13 @@ namespace DataLayer.DddBookApp.EfCode.Configurations
                 .WithOne()                     
                 .HasForeignKey(p => p.BookId);
 
-            entity.Metadata
-                .FindNavigation(nameof(DddBook.Reviews))
-                .SetPropertyAccessMode(PropertyAccessMode.Field);
+            //entity.Metadata
+            //    .FindNavigation(nameof(DddBook.Reviews))
+            //    .SetPropertyAccessMode(PropertyAccessMode.Field);
 
-            entity.Metadata
-                .FindNavigation(nameof(DddBook.AuthorsLink))
-                .SetPropertyAccessMode(PropertyAccessMode.Field);
+            //entity.Metadata
+            //    .FindNavigation(nameof(DddBook.AuthorsLink))
+            //    .SetPropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

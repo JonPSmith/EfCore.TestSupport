@@ -27,6 +27,91 @@ namespace Test.UnitTests.TestDataResetter
             _output = output;
         }
 
+        [Fact]
+        public void TestSerializeFourBooks()
+        {
+            //SETUP
+            var books = DddEfTestData.CreateFourBooks();
+
+            //ATTEMPT
+            var jsonString = books.DefaultSerializeToJson();
+
+            //VERIFY
+        }
+
+        [Fact]
+        public void TestResetAndSerializeFourBooks()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<DddBookContext>();
+            using (var context = new DddBookContext(options))
+            {
+                var books = DddEfTestData.CreateFourBooks();
+                var resetter = new DataResetter(context);
+                resetter.ResetKeysEntityAndRelationships(books);
+
+                //ATTEMPT
+                var jsonString = books.DefaultSerializeToJson();
+
+                //VERIFY
+            }
+        }
+
+        [Fact]
+        public void TestDddSeedDatabaseFourBooksDataResetterAndSerialize()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<DddBookContext>();
+            using (var context = new DddBookContext(options))
+            {
+                context.Database.EnsureCreated();
+                context.SeedDatabaseFourBooks();
+
+                var entities = context.DddBooks
+                    .Include(x => x.Reviews)
+                    .Include(x => x.AuthorsLink)
+                        .ThenInclude(x => x.DddAuthor)
+                    .ToList();
+
+                //ATTEMPT
+               // entities[0].AuthorsLink.First().DddAuthor.BooksLink.Last().DddBook.ShouldEqual(entities[1]);
+               // entities[1].AuthorsLink.First().DddAuthor.BooksLink.First().DddBook.ShouldEqual(entities[0]);
+
+                var jsonString = entities.DefaultSerializeToJson();
+
+                //VERIFY
+            }
+        }
+
+        [Fact]
+        public void TestDddSeedDatabaseFourBooksDataResetter()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<DddBookContext>();
+            using (var context = new DddBookContext(options))
+            {
+                context.Database.EnsureCreated();
+                context.SeedDatabaseFourBooks();
+
+                var entities = context.DddBooks.AsNoTracking()
+                    .Include(x => x.Reviews)
+                    .Include(x => x.AuthorsLink)
+                        .ThenInclude(x => x.DddAuthor)
+                    .ToList();
+
+                //ATTEMPT
+                var resetter = new DataResetter(context);
+                resetter.ResetKeysEntityAndRelationships(entities);
+                context.AddRange(entities);
+                context.SaveChanges();
+
+                //VERIFY
+                context.DddBooks.Count().ShouldEqual(8);
+                context.DddAuthors.Count().ShouldEqual(6);
+                context.Set<DddReview>().Count().ShouldEqual(4);
+            }
+        }
+
         [RunnableInDebugOnly(DisplayName = "Needs database XYZ")]
         public void ExampleSetup()
         {
@@ -158,7 +243,7 @@ namespace Test.UnitTests.TestDataResetter
                 var ex = Assert.Throws<DbUpdateException>(() => context.SaveChanges());
 
                 //VERIFY 
-                ex.InnerException.Message.ShouldEqual("SQLite Error 19: 'UNIQUE constraint failed: Authors.AuthorId'.");
+                ex.InnerException.Message.ShouldEqual("SQLite Error 19: 'UNIQUE constraint failed: DddAuthors.AuthorId'.");
             }
         }
 

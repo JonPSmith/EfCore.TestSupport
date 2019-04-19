@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using GenericServices;
 using Microsoft.EntityFrameworkCore;
@@ -11,15 +12,18 @@ using Newtonsoft.Json;
 
 namespace DataLayer.DddBookApp
 {
+    [DebuggerDisplay("Title = {Title}")]
     public class DddBook
     {
         public const int PromotionalTextLength = 200;
+        [JsonProperty]
         private HashSet<DddBookAuthor> _authorsLink;
 
         //-----------------------------------------------
         //relationships
 
         //Use uninitialised backing fields - this means we can detect if the collection was loaded
+        [JsonProperty]
         private HashSet<DddReview> _reviews;
 
         //-----------------------------------------------
@@ -28,7 +32,7 @@ namespace DataLayer.DddBookApp
         private DddBook() { }
 
         [JsonConstructor]
-        private DddBook(string title, string description, DateTime publishedOn, string publisher, decimal orgPrice, 
+        private DddBook(string title, string description, DateTime publishedOn, string publisher, decimal orgPrice,
             decimal actualPrice, string promotionalText, string imageUrl, IEnumerable<DddBookAuthor> authorsLink, IEnumerable<DddReview> reviews)
         {
             if (string.IsNullOrWhiteSpace(title))
@@ -44,7 +48,7 @@ namespace DataLayer.DddBookApp
             ImageUrl = imageUrl;
 
             _authorsLink = new HashSet<DddBookAuthor>(authorsLink);
-            _reviews = reviews == null ? null : new HashSet<DddReview>();
+            _reviews = reviews == null ? null : new HashSet<DddReview>(reviews);
         }
 
         public static IStatusGeneric<DddBook> CreateBook(string title, string description, DateTime publishedOn,
@@ -91,7 +95,9 @@ namespace DataLayer.DddBookApp
 
         public string ImageUrl { get; private set; }
 
+        [JsonIgnore]
         public IEnumerable<DddReview> Reviews => _reviews?.ToList();
+        [JsonIgnore]
         public IEnumerable<DddBookAuthor> AuthorsLink => _authorsLink?.ToList();
 
         public void UpdatePublishedOn(DateTime publishedOn)

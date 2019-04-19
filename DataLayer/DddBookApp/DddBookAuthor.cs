@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 
 namespace DataLayer.DddBookApp
 {
+    [JsonObject(IsReference = true)]
     public class DddBookAuthor
     {
         private DddBookAuthor() { }
