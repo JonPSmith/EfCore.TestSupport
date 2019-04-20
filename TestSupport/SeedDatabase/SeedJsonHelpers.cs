@@ -1,16 +1,10 @@
 ﻿// Copyright (c) 2019 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT license. See License.txt in the project root for license information.
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Utilities;
 using Newtonsoft.Json.Serialization;
-using Remotion.Linq.Clauses;
 using TestSupport.Helpers;
 
 namespace TestSupport.SeedDatabase
@@ -29,14 +23,11 @@ namespace TestSupport.SeedDatabase
         /// <returns></returns>
         public static string DefaultSerializeToJson<T>(this T data)
         {
-
             return JsonConvert.SerializeObject(data, new JsonSerializerSettings()
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-
-                //ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                Formatting = Formatting.Indented,
-                ReferenceResolverProvider = () => new EntityReferenceResolver()
+                //ReferenceLoopHandling = ReferenceLoopHandling.Ignore, //NOTE: turning this on can cause the serialization to duplicate objects.
+                Formatting = Formatting.Indented
             });
         }
 
@@ -83,36 +74,6 @@ namespace TestSupport.SeedDatabase
 
         //-----------------------------------------------------------------
         //private
-
-        private class EntityReferenceResolver : IReferenceResolver
-        {
-            private readonly IDictionary<object, int> _entities = new Dictionary<object, int>();
-            private int _referenceNum = 1;
-
-            public object ResolveReference(object context, string reference)
-            {
-                throw new NotImplementedException();
-            }
-
-            public string GetReference(object context, object value)
-            {
-                if (_entities.TryGetValue(value, out int id))
-                    return id.ToString();
-                _entities[value] = _referenceNum++;
-
-                return (_referenceNum - 1).ToString();
-            }
-
-            public bool IsReferenced(object context, object value)
-            {
-                return _entities.ContainsKey(value);
-            }
-
-            public void AddReference(object context, string reference, object value)
-            {
-                throw new NotImplementedException();
-            }
-        }
 
         //Thanks to https://bartwullems.blogspot.com/2018/02/jsonnetresolve-private-setters.html
         private class ResolvePrivateSetters : DefaultContractResolver

@@ -4,7 +4,9 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using TestSupport.EfHelpers;
 using TestSupport.SeedDatabase;
 using Xunit;
 using Xunit.Abstractions;
@@ -21,21 +23,10 @@ namespace Test.UnitTests.TestDataResetter
         }
 
         [Fact]
-        public void TestJsonSerialize()
+        public void TestJsonSerializeNotInDatabase()
         {
             //SETUP
-            var many1 = new ManyToMany {ManyId = 1};
-            var many2 = new ManyToMany {ManyId = 2};
-            var l1a = new Level1(many1, 1);
-            var l1b = new Level1(many2, 2);
-            var l2 = new Level2 {L2Int = 3};
-            many1.L1 = l1a;
-            many1.L2 = l2;
-            many2.L1 = l1b;
-            many2.L2 = l2;
-            l2.Many = new List<ManyToMany> { many1, many2 };
-
-            var entities = new List<Level1> {l1a, l1b};
+            var entities = GetLinkEntities();
 
             //ATTEMPT
             var json = entities.DefaultSerializeToJson();
@@ -44,32 +35,98 @@ namespace Test.UnitTests.TestDataResetter
             _output.WriteLine(json);
         }
 
-        private class Level1
+        [Fact]
+        public void TestJsonSerializeFromDatabase()
         {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<TestDbContext>();
+            using (var context = new TestDbContext(options))
+            {
+                context.Database.EnsureCreated();
+
+                var seed = GetLinkEntities();
+                context.AddRange(seed);
+                context.SaveChanges();
+
+                var entities = context.Books
+                    .Include(x => x.Many).ThenInclude(x => x.AuthorLink);
+
+                //ATTEMPT
+                var json = entities.DefaultSerializeToJson();
+
+                //VERIFY
+                _output.WriteLine(json);
+            }
+        }
+
+        public List<TestBook> GetLinkEntities()
+        {
+            var many1 = new ManyToMany();
+            var many2 = new ManyToMany();
+            var book1 = new TestBook(many1);
+            var book2 = new TestBook(many2);
+            var author = new TestAuthor { TestAuthorId = 3 };
+            many1.SetBookAuthor(book1, author);
+            many2.SetBookAuthor(book2, author);
+            author.Many = new List<ManyToMany> { many1, many2 };
+
+            return new List<TestBook> { book1, book2 };
+        }
+
+        //--------------------------------------------------------------
+        //EF Core stuff
+
+        public class TestDbContext : DbContext
+        {
+            public TestDbContext(
+                DbContextOptions<TestDbContext> options)
+                : base(options) { }
+
+            public DbSet<TestBook> Books { get; set; }
+            public DbSet<TestAuthor> Authors { get; set; }
+
+            protected override void
+                OnModelCreating(ModelBuilder modelBuilder)
+            {
+                modelBuilder.Entity<ManyToMany>().HasKey(x => new {x.TestBookId, x.TestAuthorId});
+            }
+        }
+
+        public class TestBook
+        {
+            private TestBook() {}
+
             //[JsonProperty]
             private readonly HashSet<ManyToMany> _many;
 
-            public Level1(ManyToMany many, int l1Int)
+            public TestBook(ManyToMany many)
             {
                 _many = new HashSet<ManyToMany>{many};
-                L1Int = l1Int;
             }
 
-            public int L1Int { get; set; }
+
+            public int TestBookId { get; set; }
             public IEnumerable<ManyToMany> Many => _many.ToList();
         }
 
-        private class Level2
+        public class TestAuthor
         {
-            public int L2Int { get; set; }
+            public int TestAuthorId { get; set; }
             public ICollection<ManyToMany> Many { get; set; }
         }
 
-        private class ManyToMany
+        public class ManyToMany
         {
-            public int ManyId { get; set; }
-            public Level1 L1 { get; set; }
-            public Level2 L2 { get; set; }
+            public int TestBookId { get; private set; }
+            public int TestAuthorId { get; private set; }
+            public TestBook BookLink { get; private set; }
+            public TestAuthor AuthorLink { get; private set; }
+
+            public void SetBookAuthor(TestBook book, TestAuthor author)
+            {
+                BookLink = book;
+                AuthorLink = author;
+            }
         }
 
 
