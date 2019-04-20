@@ -16,14 +16,14 @@ namespace DataLayer.DddBookApp
     public class DddBook
     {
         public const int PromotionalTextLength = 200;
-        [JsonProperty]
+        //[JsonProperty]
         private HashSet<DddBookAuthor> _authorsLink;
 
         //-----------------------------------------------
         //relationships
 
         //Use uninitialised backing fields - this means we can detect if the collection was loaded
-        [JsonProperty]
+        //[JsonProperty]
         private HashSet<DddReview> _reviews;
 
         //-----------------------------------------------
@@ -95,9 +95,9 @@ namespace DataLayer.DddBookApp
 
         public string ImageUrl { get; private set; }
 
-        [JsonIgnore]
+        //[JsonIgnore]
         public IEnumerable<DddReview> Reviews => _reviews?.ToList();
-        [JsonIgnore]
+        //[JsonIgnore]
         public IEnumerable<DddBookAuthor> AuthorsLink => _authorsLink?.ToList();
 
         public void UpdatePublishedOn(DateTime publishedOn)

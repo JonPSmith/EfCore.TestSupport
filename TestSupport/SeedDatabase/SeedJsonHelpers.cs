@@ -26,7 +26,7 @@ namespace TestSupport.SeedDatabase
             return JsonConvert.SerializeObject(data, new JsonSerializerSettings()
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                //ReferenceLoopHandling = ReferenceLoopHandling.Ignore, //NOTE: turning this on can cause the serialization to duplicate objects.
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore, //NOTE: turning this on can cause the serialization to duplicate objects.
                 Formatting = Formatting.Indented
             });
         }
