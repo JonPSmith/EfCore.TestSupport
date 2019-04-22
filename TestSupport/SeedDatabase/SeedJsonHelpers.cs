@@ -19,16 +19,18 @@ namespace TestSupport.SeedDatabase
         /// You may want to build your own if you have specific requirements
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="data"></param>
+        /// <param name="data">The class or collection you want to save</param>
+        /// <param name="moreReadableJsonFile">Defaults to true - make bigger, but more readable JSON files.</param>
         /// <returns></returns>
-        public static string DefaultSerializeToJson<T>(this T data)
+        public static string DefaultSerializeToJson<T>(this T data, bool moreReadableJsonFile = true)
         {
-            return JsonConvert.SerializeObject(data, new JsonSerializerSettings()
+            var setting = new JsonSerializerSettings()
             {
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore, //NOTE: turning this on can cause the serialization to duplicate objects.
-                Formatting = Formatting.Indented
-            });
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects
+            };
+            if (moreReadableJsonFile)
+                setting.Formatting = Formatting.Indented;
+            return JsonConvert.SerializeObject(data, setting);
         }
 
         /// <summary>
@@ -44,6 +46,7 @@ namespace TestSupport.SeedDatabase
             var json = File.ReadAllText(filePath);
             var settings = new JsonSerializerSettings()
             {
+                ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
                 ContractResolver = new ResolvePrivateSetters()
             };
             return JsonConvert.DeserializeObject<T>(json, settings);

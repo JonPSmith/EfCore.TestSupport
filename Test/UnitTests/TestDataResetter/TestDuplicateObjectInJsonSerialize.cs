@@ -87,25 +87,15 @@ namespace Test.UnitTests.TestDataResetter
         {
             var many1 = new ManyToMany();
             var many2 = new ManyToMany();
-            var many3 = new ManyToMany();
-            var many4 = new ManyToMany();
             var book1 = new TestBook(many1);
             var book2 = new TestBook(many2);
-            var book3 = new TestBook(many3);
-            var book4 = new TestBook(many4);
             var author1 = new TestAuthor { TestAuthorId = 1 };
-            var author2 = new TestAuthor { TestAuthorId = 2 };
-            var author3 = new TestAuthor { TestAuthorId = 3 };
             many1.SetBookAuthor(book1, author1);
             many2.SetBookAuthor(book2, author1);
-            many3.SetBookAuthor(book3, author2);
-            many4.SetBookAuthor(book4, author3);
 
             author1.Many = new List<ManyToMany> { many1, many2 };
-            author2.Many = new List<ManyToMany> { many3 };
-            author3.Many = new List<ManyToMany> { many4 };
 
-            return new List<TestBook> { book1, book2, book3, book4 };
+            return new List<TestBook> { book1, book2};
         }
 
         //--------------------------------------------------------------
