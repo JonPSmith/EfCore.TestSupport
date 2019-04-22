@@ -5,12 +5,12 @@
 
 ## TODO
 
+- Fix issus #15.
+
 
 ## 1.9.0
 
-- Feature: Add DataResetter to reset the Primary and Foreign keys for save/restore of data in a database.
-- Feature: Add anonymiser to DataResetter to anonymise names, addesses etc.
-- Bug fix: fix issue #15, EfSchemaCompare: Error with default values on string properties.
+- Added seed test data from production database - see [Seed from Production feature](https://github.com/JonPSmith/EfCore.TestSupport/wiki/Seed-from-Production-feature) in Wiki docs.
 
 ## 1.8.0
 - Improvement: CompareEfSql now recoginises unique indexes provided by constraints (rather than via the normal SQL Index statement)

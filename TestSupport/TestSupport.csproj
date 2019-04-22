@@ -24,7 +24,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>EfCore.TestSupport</PackageId>
-    <PackageVersion>1.9.0-preview001</PackageVersion>
+    <PackageVersion>1.9.0</PackageVersion>
     <Version>1.9.0</Version>
     <AssemblyVersion>1.9.0.0</AssemblyVersion>
     <FileVersion>1.9.0.0</FileVersion>
@@ -32,8 +32,7 @@
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-      - Feature: Add DataResetter to reset the Primary and Foreign keys for save/restore of data in a database.
-      - Feature: Add anonymiser to DataResetter to anonymise names, addesses etc.
+      - Feature: Added seed test data from production database - see "Seed from Production feature" in Wiki docs.
     </PackageReleaseNotes>
     <Copyright>Copyright (c) 2017 Jon P Smith. Licenced under MIT licence</Copyright>
     <PackageTags>Entity Framework Core, xUnit</PackageTags>
