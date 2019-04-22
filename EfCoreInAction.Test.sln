@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 		README.md = README.md
 		ReleaseNotes.md = ReleaseNotes.md
+		..\..\..\OneDrive - Selective Analytics Ltd\1 Business\1 TSF stuff\2 Web Sites\2 The reformed programmer\images - 2019 Q1 to Q2\SeedFromProductionOverview.png = ..\..\..\OneDrive - Selective Analytics Ltd\1 Business\1 TSF stuff\2 Web Sites\2 The reformed programmer\images - 2019 Q1 to Q2\SeedFromProductionOverview.png
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestSupport", "TestSupport\TestSupport.csproj", "{0CB1A11C-6144-414D-81A9-F880DEB2C71A}"
