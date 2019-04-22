@@ -40,7 +40,7 @@ See [Run SQL Script](https://github.com/JonPSmith/EfCore.TestSupport/wiki/7.-Run
 See [Capture EF Core logging](https://github.com/JonPSmith/EfCore.TestSupport/wiki/8.-Capture-EF-Core-logging).
 9. Tool to compare EF Core's view of the database with an actual database.  
 See [EfSchemaCompare](https://github.com/JonPSmith/EfCore.TestSupport/wiki/9.-EfSchemaCompare).  
-10. Store cleaned production data to supply better data for unit tests.  
+10. Capture cleaned production data to supply better data for unit tests.  
 See [Seed from Production feature](https://github.com/JonPSmith/EfCore.TestSupport/wiki/Seed-from-Production-feature).
 
 
