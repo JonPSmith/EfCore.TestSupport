@@ -5,7 +5,8 @@
 
 ## TODO
 
-- Fix issus #15.
+- Bug fix: Fix issus #15.
+- Improvement: Add a feature to EfSchemaCompare to only scan the tables that the entity classes map to.
 
 
 ## 1.9.0
