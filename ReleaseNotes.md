@@ -5,9 +5,9 @@
 
 ## TODO
 
-- Bug fix: Fix issus #15.
-- Improvement: Add a feature to EfSchemaCompare to only scan the tables that the entity classes map to.
-
+- Bug fix: Fix issus #15 - default SQL value not checked properly.
+- Improvement: Add a feature to EfSchemaCompare to only scan the tables that the entity classes map to. Issue #18.
+- Improvement: Add case insensitive table+schema feature to EfSchemaCompare. Issues #9 and #19.
 
 ## 1.9.0
 
