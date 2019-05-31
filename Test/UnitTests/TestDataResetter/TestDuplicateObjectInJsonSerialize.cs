@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using TestSupport.EfHelpers;
 using Xunit;
 using Xunit.Abstractions;
+using Xunit.Extensions.AssertExtensions;
 
 namespace Test.UnitTests.TestDataResetter
 {
@@ -18,6 +19,28 @@ namespace Test.UnitTests.TestDataResetter
         public TestDuplicateObjectInJsonSerialize(ITestOutputHelper output)
         {
             _output = output;
+        }
+
+        //see https://github.com/JamesNK/Newtonsoft.Json/issues/2066 for discussion on how Json.Net compares 
+        [Fact]
+        public void TestEqualsDatabase()
+        {
+            //SETUP
+            var entities = GetLinkEntities();
+
+            //ATTEMPT
+            var firstBookAuthor = entities.First().Many.First().AuthorLink;
+            var reverseAuthorLink = entities.First().Many.First().AuthorLink.Many;
+            var secondBookAuthor = entities.Last().Many.First().AuthorLink;
+
+            //VERIFY
+            entities.First().Many.Count().ShouldEqual(1);
+            reverseAuthorLink.Count().ShouldEqual(2);
+            entities.Last().Many.Count().ShouldEqual(1);
+            firstBookAuthor.Equals(secondBookAuthor).ShouldBeTrue();
+            reverseAuthorLink.First().BookLink.Equals(entities.First()).ShouldBeTrue();
+            ReferenceEquals(firstBookAuthor, secondBookAuthor).ShouldBeTrue();
+            reverseAuthorLink.Last().BookLink.Equals(entities.Last()).ShouldBeTrue();
         }
 
         [Fact]
@@ -87,9 +110,9 @@ namespace Test.UnitTests.TestDataResetter
         {
             var many1 = new ManyToMany();
             var many2 = new ManyToMany();
-            var book1 = new TestBook(many1);
-            var book2 = new TestBook(many2);
-            var author1 = new TestAuthor { TestAuthorId = 1 };
+            var book1 = new TestBook("Book1", many1);
+            var book2 = new TestBook("Book2", many2);
+            var author1 = new TestAuthor("Author");
             many1.SetBookAuthor(book1, author1);
             many2.SetBookAuthor(book2, author1);
 
@@ -123,19 +146,29 @@ namespace Test.UnitTests.TestDataResetter
 
             private readonly HashSet<ManyToMany> _many;
 
-            public TestBook(ManyToMany many)
+            public TestBook(string title, ManyToMany many)
             {
                 _many = new HashSet<ManyToMany>{many};
             }
 
             public int TestBookId { get; set; }
+            public string Title { get; set; }
             public IEnumerable<ManyToMany> Many => _many.ToList();
         }
 
         public class TestAuthor
         {
+            public TestAuthor(string name)
+            {
+                Name = name;
+            }
+
             public int TestAuthorId { get; set; }
+
+            public string Name { get; set; }
             public ICollection<ManyToMany> Many { get; set; }
+
+
         }
 
         public class ManyToMany
