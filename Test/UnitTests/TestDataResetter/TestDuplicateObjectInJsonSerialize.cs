@@ -148,6 +148,7 @@ namespace Test.UnitTests.TestDataResetter
 
             public TestBook(string title, ManyToMany many)
             {
+                Title = title;
                 _many = new HashSet<ManyToMany>{many};
             }
 
@@ -167,8 +168,6 @@ namespace Test.UnitTests.TestDataResetter
 
             public string Name { get; set; }
             public ICollection<ManyToMany> Many { get; set; }
-
-
         }
 
         public class ManyToMany
@@ -183,9 +182,6 @@ namespace Test.UnitTests.TestDataResetter
                 BookLink = book;
                 AuthorLink = author;
             }
-        }
-
-
-    
+        } 
     }
 }
