@@ -3,9 +3,13 @@
 ## TODO
 
 - Bug fix: Fix issus #15 - default SQL value not checked properly.
-- Improvement: Add a feature to EfSchemaCompare to only scan the tables that the entity classes map to. Issue #18.
 - Improvement: Add case insensitive table, schema, columns, etc. matching feature to EfSchemaCompare. Issues #9 and #19.
 - Think about better IgnoreErrors...
+
+## 2.0.0
+
+- Improvement (BREAKING CHANGE): By default EfSchemaCompare to only scan the tables that the entity classes map to - see issue #18.
+- Bug fix: Fixed problem with serializing/deserializing DDD-styled entity classes.
 
 ## 1.9.0
 
