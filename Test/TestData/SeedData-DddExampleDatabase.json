@@ -21,6 +21,7 @@
           "$ref": "1"
         },
         "DddAuthor": {
+          "$id": "3",
           "AuthorId": 0,
           "Name": "Martin Fowler",
           "Email": null,
@@ -29,11 +30,12 @@
               "$ref": "2"
             },
             {
-              "$id": "3",
+              "$id": "4",
               "BookId": 0,
               "AuthorId": 0,
               "Order": 0,
               "DddBook": {
+                "$id": "5",
                 "BookId": 0,
                 "Title": "Patterns of Enterprise Application Architecture",
                 "Description": "Written in direct response to the stiff challenges",
@@ -46,9 +48,12 @@
                 "Reviews": [],
                 "AuthorsLink": [
                   {
-                    "$ref": "3"
+                    "$ref": "4"
                   }
                 ]
+              },
+              "DddAuthor": {
+                "$ref": "3"
               }
             }
           ]
@@ -57,25 +62,10 @@
     ]
   },
   {
-    "$id": "4",
-    "BookId": 0,
-    "Title": "Patterns of Enterprise Application Architecture",
-    "Description": "Written in direct response to the stiff challenges",
-    "PublishedOn": "2002-11-15T00:00:00",
-    "Publisher": null,
-    "OrgPrice": 53.0,
-    "ActualPrice": 53.0,
-    "PromotionalText": null,
-    "ImageUrl": null,
-    "Reviews": [],
-    "AuthorsLink": [
-      {
-        "$ref": "3"
-      }
-    ]
+    "$ref": "5"
   },
   {
-    "$id": "5",
+    "$id": "6",
     "BookId": 0,
     "Title": "Domain-Driven Design",
     "Description": "Linking business needs to software design",
@@ -88,20 +78,21 @@
     "Reviews": [],
     "AuthorsLink": [
       {
-        "$id": "6",
+        "$id": "7",
         "BookId": 0,
         "AuthorId": 0,
         "Order": 0,
         "DddBook": {
-          "$ref": "5"
+          "$ref": "6"
         },
         "DddAuthor": {
+          "$id": "8",
           "AuthorId": 0,
           "Name": "Eric Evans",
           "Email": null,
           "BooksLink": [
             {
-              "$ref": "6"
+              "$ref": "7"
             }
           ]
         }
@@ -109,7 +100,7 @@
     ]
   },
   {
-    "$id": "7",
+    "$id": "9",
     "BookId": 0,
     "Title": "Quantum Networking",
     "Description": "Entangled quantum networking provides faster-than-light data communications",
@@ -121,7 +112,7 @@
     "ImageUrl": null,
     "Reviews": [
       {
-        "$id": "8",
+        "$id": "10",
         "ReviewId": 0,
         "VoterName": "Jon P Smith",
         "NumStars": 5,
@@ -129,7 +120,7 @@
         "BookId": 0
       },
       {
-        "$id": "9",
+        "$id": "11",
         "ReviewId": 0,
         "VoterName": "Albert Einstein",
         "NumStars": 5,
@@ -139,20 +130,21 @@
     ],
     "AuthorsLink": [
       {
-        "$id": "10",
+        "$id": "12",
         "BookId": 0,
         "AuthorId": 0,
         "Order": 0,
         "DddBook": {
-          "$ref": "7"
+          "$ref": "9"
         },
         "DddAuthor": {
+          "$id": "13",
           "AuthorId": 0,
           "Name": "Future Person",
           "Email": null,
           "BooksLink": [
             {
-              "$ref": "10"
+              "$ref": "12"
             }
           ]
         }
