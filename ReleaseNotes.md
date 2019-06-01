@@ -5,6 +5,8 @@
 - Bug fix: Fix issus #15 - default SQL value not checked properly.
 - Improvement: Add case insensitive table, schema, columns, etc. matching feature to EfSchemaCompare. Issues #9 and #19.
 - Think about better IgnoreErrors...
+- Update EfSchemaCompare docs about TablesToIgnoreCommaDelimited
+- Double-check the default deserialise settings in Seed to Production
 
 ## 2.0.0
 
