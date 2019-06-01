@@ -99,12 +99,29 @@ namespace Test.UnitTests.EfSchemaCompare
         }
 
         [Fact]
-        public void CompareBookAgainstBookOrderDatabaseHasErrors()
+        public void CompareBookAgainstBookOrderDatabaseExtraTablesIgnored()
         {
             //SETUP
             using (var context = new BookContext(GetBookContextOptions()))
             {
                 var comparer = new CompareEfSql();
+
+                //ATTEMPT
+                var hasErrors = comparer.CompareEfWithDb(_connectionString, context);
+
+                //VERIFY
+                hasErrors.ShouldBeFalse();
+            }
+        }
+
+        [Fact]
+        public void CompareBookAgainstBookOrderDatabaseHasErrors()
+        {
+            //SETUP
+            using (var context = new BookContext(GetBookContextOptions()))
+            {
+                var config = new CompareEfSqlConfig {TablesToIgnoreCommaDelimited = ""};
+                var comparer = new CompareEfSql(config);
 
                 //ATTEMPT
                 var hasErrors = comparer.CompareEfWithDb(_connectionString, context);

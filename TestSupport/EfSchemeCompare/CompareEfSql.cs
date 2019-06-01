@@ -7,7 +7,9 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using Microsoft.Extensions.Configuration;
@@ -124,7 +126,7 @@ namespace TestSupport.EfSchemeCompare
 
         private bool FinishRestOfCompare(string configOrConnectionString, DbContext[] dbContexts, IDesignTimeServices designTimeService)
         {
-            var databaseModel = GetDatabaseModelViaScaffolder(dbContexts[0], configOrConnectionString, designTimeService);
+            var databaseModel = GetDatabaseModelViaScaffolder(dbContexts, configOrConnectionString, designTimeService);
             bool hasErrors = false;
             foreach (var context in dbContexts)
             {
@@ -141,24 +143,35 @@ namespace TestSupport.EfSchemeCompare
             return hasErrors;
         }
 
-        private  DatabaseModel GetDatabaseModelViaScaffolder(DbContext context, string configOrConnectionString, IDesignTimeServices designTimeService)
+        private  DatabaseModel GetDatabaseModelViaScaffolder(DbContext[] contexts, string configOrConnectionString, IDesignTimeServices designTimeService)
         {
             var serviceProvider = designTimeService.GetDesignTimeProvider();
             var factory = serviceProvider.GetService<IDatabaseModelFactory>();
             var connectionString = configOrConnectionString == null
-                ? context.Database.GetDbConnection().ConnectionString
+                ? contexts[0].Database.GetDbConnection().ConnectionString
                 : GetConfigurationOrActualString(configOrConnectionString);
 
             var databaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
-            RemoveAnyTabletoIgnore(databaseModel);
+            RemoveAnyTableToIgnore(databaseModel, contexts);
             return databaseModel;
         }
 
-        private void RemoveAnyTabletoIgnore(DatabaseModel databaseModel)
+        private void RemoveAnyTableToIgnore(DatabaseModel databaseModel, DbContext[] contexts)
         {
-            if (_config.TablesToIgnoreCommaDelimited != null)
+
+            var tablesToRemove = new List<DatabaseTable>();
+            if (_config.TablesToIgnoreCommaDelimited == null)
             {
-                var tablesToRemove = new List<DatabaseTable>();
+                //We remove all tables not mapped by the contexts
+
+                var tablesInContext = contexts.SelectMany(x => x.Model.GetEntityTypes()).Where(x => !x.IsQueryType)
+                    .Select(x => x.Relational().FormSchemaTable()).ToList();
+                tablesToRemove = databaseModel.Tables
+                    .Where(x => !tablesInContext.Contains(x.FormSchemaTable(databaseModel.DefaultSchema), StringComparer.InvariantCultureIgnoreCase)).ToList();
+            }
+            else
+            {
+                
                 foreach (var tableToIgnore in _config.TablesToIgnoreCommaDelimited.Split(',')
                     .Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)))
                 {
@@ -173,10 +186,10 @@ namespace TestSupport.EfSchemeCompare
                             $"The TablesToIgnoreCommaDelimited config property contains a table name of '{tableToIgnore}', which was not found in the database");
                     tablesToRemove.Add(tableToRemove);
                 }
-                foreach (var tableToRemove in tablesToRemove)
-                {
-                    databaseModel.Tables.Remove(tableToRemove);
-                }
+            }
+            foreach (var tableToRemove in tablesToRemove)
+            {
+                databaseModel.Tables.Remove(tableToRemove);
             }
         }
 
