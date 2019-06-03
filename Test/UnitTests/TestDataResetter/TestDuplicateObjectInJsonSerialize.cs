@@ -6,6 +6,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using TestSupport.EfHelpers;
+using TestSupport.SeedDatabase;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Extensions.AssertExtensions;
@@ -31,7 +32,8 @@ namespace Test.UnitTests.TestDataResetter
             var json = JsonConvert.SerializeObject(entities, new JsonSerializerSettings()
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                Formatting = Formatting.Indented
+                ContractResolver = new SeedJsonHelpers.ResolvePrivateSetters(), //Needed for DDD-styled classes (JSON.NET needs to know it can set the value which serializing)
+                Formatting = Formatting.Indented,
             });
 
             //VERIFY
@@ -49,6 +51,7 @@ namespace Test.UnitTests.TestDataResetter
             var json = JsonConvert.SerializeObject(entities, new JsonSerializerSettings()
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                ContractResolver = new SeedJsonHelpers.ResolvePrivateSetters(), //Needed for DDD-styled classes, otherwise has problem
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 Formatting = Formatting.Indented
             });
@@ -155,9 +158,7 @@ namespace Test.UnitTests.TestDataResetter
 
             public int TestBookId { get; private set; }
             public int TestAuthorId { get; private set; }
-            [JsonProperty]
             public TestBook BookLink { get; private set; }
-            [JsonProperty]
             public TestAuthor AuthorLink { get; private set; }
 
             public void SetBookAuthor(TestBook book, TestAuthor author)

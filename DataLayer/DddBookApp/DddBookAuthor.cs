@@ -23,9 +23,7 @@ namespace DataLayer.DddBookApp
         //-----------------------------
         //Relationships
 
-        [JsonProperty]
         public DddBook DddBook { get; private set; }
-        [JsonProperty]
         public DddAuthor DddAuthor { get; private set; }
     }
 }

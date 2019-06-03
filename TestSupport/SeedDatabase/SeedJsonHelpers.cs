@@ -26,6 +26,7 @@ namespace TestSupport.SeedDatabase
         {
             var setting = new JsonSerializerSettings()
             {
+                ContractResolver = new ResolvePrivateSetters(), //Needed for DDD-styled classes (JSON.NET needs to know it can set the value which serializing)
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects
             };
             if (moreReadableJsonFile)
@@ -46,7 +47,6 @@ namespace TestSupport.SeedDatabase
             var json = File.ReadAllText(filePath);
             var settings = new JsonSerializerSettings()
             {
-                ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
                 ContractResolver = new ResolvePrivateSetters()
             };
             return JsonConvert.DeserializeObject<T>(json, settings);
@@ -79,7 +79,7 @@ namespace TestSupport.SeedDatabase
         //private
 
         //Thanks to https://bartwullems.blogspot.com/2018/02/jsonnetresolve-private-setters.html
-        private class ResolvePrivateSetters : DefaultContractResolver
+        public class ResolvePrivateSetters : DefaultContractResolver
         {
             protected override JsonProperty CreateProperty(
                 MemberInfo member,
