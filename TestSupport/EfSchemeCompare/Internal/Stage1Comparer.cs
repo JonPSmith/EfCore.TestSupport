@@ -238,15 +238,25 @@ namespace TestSupport.EfSchemeCompare.Internal
 
         private bool ComparePropertyToColumn(CompareLogger logger, IProperty property, DatabaseColumn column)
         {
-            var pRel = property.Relational();
+            var pRel = property.Relational();;
             var error = logger.CheckDifferent(pRel.ColumnType, column.StoreType, CompareAttributes.ColumnType);
             error |= logger.CheckDifferent(property.IsNullable.NullableAsString(), column.IsNullable.NullableAsString(), CompareAttributes.Nullability);
-            error |= logger.CheckDifferent((pRel.DefaultValueSql ?? pRel.DefaultValue?.ToString()).RemoveUnnecessaryBrackets(), 
-                column.DefaultValueSql.RemoveUnnecessaryBrackets(), CompareAttributes.DefaultValueSql);
             error |= logger.CheckDifferent(pRel.ComputedColumnSql.RemoveUnnecessaryBrackets(), 
                 column.ComputedColumnSql.RemoveUnnecessaryBrackets(), CompareAttributes.ComputedColumnSql);
-            error |= CheckValueGenerated(logger, property, column);
+            error |= CheckDefaultValue(logger, pRel.DefaultValue, property, column);
+            error |= CheckValueGenerated(logger, pRel.ComputedColumnSql, pRel.DefaultValue, property, column);
             return error;
+        }
+
+        private bool CheckDefaultValue(CompareLogger logger, object defaultValue, IProperty property, DatabaseColumn column)
+        {
+            if (defaultValue == null && column.DefaultValueSql == null)
+                // nothing set on either side
+                return false;
+
+            return logger.CheckDifferent(defaultValue?.ToString().RemoveUnnecessaryBrackets(),
+                (column.DefaultValueSql ?? GetDefaultValueAsString(property.ClrType)).RemoveUnnecessaryBrackets(),
+                CompareAttributes.DefaultValueSql);
         }
 
         //thanks to https://stackoverflow.com/questions/1749966/c-sharp-how-to-determine-whether-a-type-is-a-number
@@ -255,9 +265,9 @@ namespace TestSupport.EfSchemeCompare.Internal
             typeof(byte), typeof(sbyte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong)
         };
 
-        private bool CheckValueGenerated(CompareLogger logger, IProperty property, DatabaseColumn column)
+        private bool CheckValueGenerated(CompareLogger logger, string computedColumnSql, object defaultValue, IProperty property, DatabaseColumn column)
         {
-            var colValGen = column.ValueGenerated.ConvertNullableValueGenerated(column.DefaultValueSql);
+            var colValGen = column.ValueGenerated.ConvertNullableValueGenerated(computedColumnSql, defaultValue);
             if (colValGen == ValueGenerated.Never.ToString()
                 //There is a case where the property is part of the primary key and the key is not set in the database
                 && property.ValueGenerated == ValueGenerated.OnAdd
@@ -267,6 +277,15 @@ namespace TestSupport.EfSchemeCompare.Internal
                 return false;
             return logger.CheckDifferent(property.ValueGenerated.ToString(),
                 colValGen, CompareAttributes.ValueGenerated);
+        }
+
+        // Thanks to StackOverflow https://stackoverflow.com/a/2490274/1434764
+        private static string GetDefaultValueAsString(Type t)
+        {
+            if (t.IsValueType)
+                return Activator.CreateInstance(t).ToString();
+
+            return "null";
         }
 
     }
