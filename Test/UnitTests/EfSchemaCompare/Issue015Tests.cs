@@ -46,7 +46,13 @@ namespace Test.UnitTests.EfSchemaCompare
                 var hasErrors = comparer.CompareEfWithDb(context);
 
                 //VERIFY
-                hasErrors.ShouldBeFalse(comparer.GetAllErrors);
+                hasErrors.ShouldBeTrue();
+                comparer.GetAllErrors.ShouldEqual(@"DIFFERENT: Message->Property 'BoolRequiredDefaultTrue', default value sql. Expected = True, found = 1
+DIFFERENT: Message->Property 'EnumRequiredDefaultOne', default value sql. Expected = One, found = 1
+DIFFERENT: Message->Property 'StringRequiredDefaultEmpty', default value sql. Expected = , found = N''
+DIFFERENT: Message->Property 'StringRequiredDefaultSomething', default value sql. Expected = something, found = N'something'
+DIFFERENT: Message->Property 'XmlRequiredDefaultEmpty', default value sql. Expected = , found = N''
+DIFFERENT: Message->Property 'XmlRequiredDefaultSomething', default value sql. Expected = <something />, found = N'<something />'");
             }
         }
 
