@@ -2,13 +2,12 @@
 
 ## TODO
 
-- Improvement: Add case insensitive table, schema, columns, etc. matching feature to EfSchemaCompare. Issues #9 and #19.
-- Update EfSchemaCompare docs about TablesToIgnoreCommaDelimited
 
 ## 2.0.0
 
 - BREAKING CHANGE: By default EfSchemaCompare to only scan the tables that the entity classes map to - see issue #18.
 - BREAKING CHANGE: In EfSchemaCompare missing indexes are now referred to by "index constraint name" instead of "constraint name" - this was done as part of case insensitivity 
+- Improvement: EfSchemaCompare now has case insensitive table, schema, columns, etc. matching feature - see issues #9 and #19.
 - Bug fix: Fixed problem with serializing/deserializing DDD-styled entity classes.
 - Bug fix: Default SQL value handled improved, plus now sets the correct ValueGenerated - see issue #15
 

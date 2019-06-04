@@ -196,6 +196,27 @@ namespace Test.UnitTests.EfSchemaCompare
         }
 
         [Fact]
+        public void CompareBookThenOrderAgainstBookOnlyDatabase()
+        {
+            //SETUP
+            var options1 = GetBookContextOptions();
+            var options2 = this.CreateUniqueMethodOptions<OrderContext>();
+            using (var context1 = new BookContext(options1))
+            using (var context2 = new OrderContext(options2))
+            {
+                var comparer = new CompareEfSql();
+
+                //ATTEMPT
+                var hasErrors = comparer.CompareEfWithDb( context1, context2);
+
+                //VERIFY
+                hasErrors.ShouldBeTrue(comparer.GetAllErrors);
+                comparer.GetAllErrors.ShouldEqual(@"NOT IN DATABASE: Entity 'LineItem', table name. Expected = LineItem
+NOT IN DATABASE: Entity 'Order', table name. Expected = Orders");
+            }
+        }
+
+        [Fact]
         public void CompareBookThenOrderAgainstBookOrderDatabase()
         {
             //SETUP

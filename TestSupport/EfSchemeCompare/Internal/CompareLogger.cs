@@ -32,9 +32,11 @@ namespace TestSupport.EfSchemeCompare.Internal
             return log;
         }
 
-        public bool CheckDifferent(string expected, string found, CompareAttributes attribute, string name = null)
+        public bool CheckDifferent(string expected, string found, CompareAttributes attribute,
+            StringComparison caseComparison, string name = null)
         {
-            if (expected != found && expected?.Replace(" ", "") != found?.Replace(" ", ""))
+            if (!string.Equals(expected, found, caseComparison) && 
+                !string.Equals( expected?.Replace(" ", ""), found?.Replace(" ", ""), caseComparison))
             {
                 return AddToLogsIfNotIgnored(new CompareLog(_type, CompareState.Different, name ?? _defaultName, attribute, expected, found));
             }

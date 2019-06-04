@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,22 @@ namespace TestSupport.EfSchemeCompare.Internal
         {
             return isNullable ? "NULL" : "NOT NULL";
         }
+
+        public static StringComparison GetStringComparison(this StringComparer caseComparer)
+        {
+            return ComparerToComparison[caseComparer];
+        }
+
+        private static readonly Dictionary<StringComparer, StringComparison> ComparerToComparison =
+            new Dictionary<StringComparer, StringComparison>
+            {
+                {StringComparer.CurrentCulture, StringComparison.CurrentCulture},
+                {StringComparer.CurrentCultureIgnoreCase, StringComparison.CurrentCultureIgnoreCase},
+                {StringComparer.InvariantCulture, StringComparison.InvariantCulture},
+                {StringComparer.InvariantCultureIgnoreCase, StringComparison.InvariantCultureIgnoreCase},
+                {StringComparer.Ordinal, StringComparison.Ordinal},
+                {StringComparer.OrdinalIgnoreCase, StringComparison.OrdinalIgnoreCase}
+            };
 
         public static string CombinedColNames(this IEnumerable<IProperty> properties)
         {
