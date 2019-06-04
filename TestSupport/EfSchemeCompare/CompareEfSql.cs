@@ -7,9 +7,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using Microsoft.Extensions.Configuration;
@@ -21,7 +19,7 @@ using TestSupport.Helpers;
 namespace TestSupport.EfSchemeCompare
 {
     /// <summary>
-    /// This is the main class for Comparing EF Core DbContexts againsts a database to see if they differ
+    /// This is the main class for Comparing EF Core DbContexts against a database to see if they differ
     /// </summary>
     public class CompareEfSql
     {
@@ -130,14 +128,14 @@ namespace TestSupport.EfSchemeCompare
             bool hasErrors = false;
             foreach (var context in dbContexts)
             {
-                var stage1Comparer = new Stage1Comparer(context.Model, context.GetType().Name, _logs, _config.LogsToIgnore);
+                var stage1Comparer = new Stage1Comparer(context.Model, context.GetType().Name, _config, _logs);
                 hasErrors |= stage1Comparer.CompareModelToDatabase(databaseModel);
             }
 
             if (hasErrors) return true;
 
             //No errors, so its worth running the second phase
-            var stage2Comparer = new Stage2Comparer(databaseModel, _config.LogsToIgnore);
+            var stage2Comparer = new Stage2Comparer(databaseModel, _config);
             hasErrors = stage2Comparer.CompareLogsToDatabase(_logs);
             _logs.AddRange(stage2Comparer.Logs);
             return hasErrors;

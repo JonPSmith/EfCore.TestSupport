@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace TestSupport.EfSchemeCompare.Internal
     internal class Stage2Comparer
     {
         private readonly DatabaseModel _databaseModel;
+        private readonly StringComparer _stringComparer;
 
         private bool _hasErrors;
 
@@ -18,10 +20,11 @@ namespace TestSupport.EfSchemeCompare.Internal
         private readonly IReadOnlyList<CompareLog> _ignoreList;
         public IReadOnlyList<CompareLog> Logs => _logs.ToImmutableList();
 
-        public Stage2Comparer(DatabaseModel databaseModel, IReadOnlyList<CompareLog> ignoreList = null)
+        public Stage2Comparer(DatabaseModel databaseModel, CompareEfSqlConfig config = null)
         {
             _databaseModel = databaseModel;
-            _ignoreList = ignoreList ?? new List<CompareLog>();
+            _ignoreList = config?.LogsToIgnore ?? new List<CompareLog>();
+            _stringComparer = config?.CaseComparer ?? StringComparer.CurrentCulture;
         }
 
         public bool CompareLogsToDatabase(IReadOnlyList<CompareLog> firstStageLogs)
@@ -37,7 +40,7 @@ namespace TestSupport.EfSchemeCompare.Internal
 
         private void LookForUnusedTables(IReadOnlyList<CompareLog> firstStageLogs, CompareLog log)
         {
-            var logger = new CompareLogger(CompareType.Table, null, log.SubLogs, _ignoreList, () => _hasErrors = true);
+            var logger = new CompareLogger(CompareType.Table, null, _logs, _ignoreList, () => _hasErrors = true);
             var databaseTableNames = _databaseModel.Tables.Select(x => x.FormSchemaTable(_databaseModel.DefaultSchema));
             var allEntityTableNames = firstStageLogs.SelectMany(p => p.SubLogs)
                 .Where(x => x.State == CompareState.Ok && x.Type == CompareType.Entity)
@@ -52,7 +55,7 @@ namespace TestSupport.EfSchemeCompare.Internal
 
         private void LookForUnusedColumns(IReadOnlyList<CompareLog> firstStageLogs, CompareLog log)
         {
-            var logger = new CompareLogger(CompareType.Column, null, log.SubLogs, _ignoreList, () => _hasErrors = true);
+            var logger = new CompareLogger(CompareType.Column, null, _logs, _ignoreList, () => _hasErrors = true);
             var tableDict = _databaseModel.Tables.ToDictionary(x => x.FormSchemaTable(_databaseModel.DefaultSchema));
             //because of table splitting and TPH we need to groups properties by table name to correctly say what columns are missed
             var entityColsGrouped = firstStageLogs.SelectMany(p => p.SubLogs)
@@ -79,7 +82,7 @@ namespace TestSupport.EfSchemeCompare.Internal
 
         private void LookForUnusedIndexes(IReadOnlyList<CompareLog> firstStageLogs, CompareLog log)
         {
-            var logger = new CompareLogger(CompareType.Index, null, log.SubLogs, _ignoreList, () => _hasErrors = true);
+            var logger = new CompareLogger(CompareType.Index, null, _logs, _ignoreList, () => _hasErrors = true);
             var tableDict = _databaseModel.Tables.ToDictionary(x => x.FormSchemaTable(_databaseModel.DefaultSchema));
             foreach (var entityLog in firstStageLogs.SelectMany(p => p.SubLogs)
                 .Where(x => x.State == CompareState.Ok && x.Type == CompareType.Entity))

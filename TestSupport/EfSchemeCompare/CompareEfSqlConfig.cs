@@ -15,11 +15,18 @@ namespace TestSupport.EfSchemeCompare
         private readonly List<CompareLog> _logsToIgnore = new List<CompareLog>();
 
         /// <summary>
+        /// Set this to StringComparer.CurrentCultureIgnoreCase to change the 
+        /// This effects the table, schema, column, primary/index/foreignKey constraint names
+        /// </summary>
+        public StringComparer CaseComparer { get; set; } = StringComparer.CurrentCulture;
+
+        /// <summary>
         /// This allows you to ignore tables that your EF Core context doesn't use. There are three settings
         /// 1. null - this will only check the tables that the DbContexts are mapped to.
         /// 2. "" - This will check all tables in the database against the entity classes in the DbContexts.
         /// 3. A comma delimited list of tables, with optional schema, to ignore. 
-        ///    Typical format: "MyTable,MyOtherTable,MySchema.MyTableWithSchema" (note: the schema/table match is case insensitive)
+        ///    Typical format: "MyTable,MyOtherTable,MySchema.MyTableWithSchema"
+        ///    (note: the schema/table match is case insensitive)
         /// </summary>
         public string TablesToIgnoreCommaDelimited { get; set; }
 

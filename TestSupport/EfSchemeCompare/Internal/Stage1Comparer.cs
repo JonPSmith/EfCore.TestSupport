@@ -8,7 +8,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 
 [assembly: InternalsVisibleTo("Test")]
@@ -20,17 +19,20 @@ namespace TestSupport.EfSchemeCompare.Internal
         private readonly IModel _model;
         private readonly string _dbContextName;
         private readonly IReadOnlyList<CompareLog> _ignoreList;
+        private readonly StringComparer _stringComparer;
         private bool _hasErrors;
 
         private readonly List<CompareLog> _logs;
         public IReadOnlyList<CompareLog> Logs => _logs.ToImmutableList();
 
-        public Stage1Comparer(IModel model, string dbContextName, List<CompareLog> logs = null, IReadOnlyList<CompareLog> ignoreList = null)
+        public Stage1Comparer(IModel model, string dbContextName, CompareEfSqlConfig config = null,
+            List<CompareLog> logs = null)
         {
             _model = model;
             _dbContextName = dbContextName;
             _logs = logs ?? new List<CompareLog>();
-            _ignoreList = ignoreList ?? new List<CompareLog>();
+            _ignoreList = config?.LogsToIgnore ?? new List<CompareLog>();
+            _stringComparer = config?.CaseComparer ?? StringComparer.CurrentCulture;
         }
 
         public bool CompareModelToDatabase(DatabaseModel databaseModel)
@@ -41,14 +43,14 @@ namespace TestSupport.EfSchemeCompare.Internal
             dbLogger.MarkAsOk(_dbContextName);
             CheckDatabaseOk(_logs.Last(), _model.Relational(), databaseModel);
 
-            var tableDict = databaseModel.Tables.ToDictionary(x => x.FormSchemaTable(databaseModel.DefaultSchema));
+            var tableDict = databaseModel.Tables.ToDictionary(x => x.FormSchemaTable(databaseModel.DefaultSchema), _stringComparer);
             var dbQueries = _model.GetEntityTypes().Where(x => x.IsQueryType).ToList();
             if (dbQueries.Any())
                 dbLogger.Warning("EfSchemaCompare does not check DbQuery types", null, string.Join(", ", dbQueries.Select(x => x.ClrType.Name)));
             foreach (var entityType in _model.GetEntityTypes().Where(x => !x.IsQueryType))
             {
                 var eRel = entityType.Relational();
-                var logger = new CompareLogger(CompareType.Entity, entityType.ClrType.Name, _logs.Last().SubLogs, _ignoreList, () => _hasErrors = true);
+                var logger = new CompareLogger(CompareType.Entity, entityType.ClrType.Name, _logs, _ignoreList, () => _hasErrors = true);
                 if (tableDict.ContainsKey(eRel.FormSchemaTable()))
                 {
                     var databaseTable = tableDict[eRel.FormSchemaTable()];
@@ -83,7 +85,7 @@ namespace TestSupport.EfSchemeCompare.Internal
             {
                 var entityFKeyprops = entityFKey.Properties;
                 var constraintName = entityFKey.Relational().Name;
-                var logger = new CompareLogger(CompareType.ForeignKey, constraintName, log.SubLogs, _ignoreList, () => _hasErrors = true);
+                var logger = new CompareLogger(CompareType.ForeignKey, constraintName, _logs, _ignoreList, () => _hasErrors = true);
                 if (IgnoreForeignKeyIfInSameTable(entityType, entityFKey, table))
                     continue;
                 if (fKeyDict.ContainsKey(constraintName))
@@ -137,7 +139,7 @@ namespace TestSupport.EfSchemeCompare.Internal
             foreach (var entityIdx in entityType.GetIndexes())
             {
                 var entityIdxprops = entityIdx.Properties;
-                var logger = new CompareLogger(CompareType.Index, entityIdxprops.CombinedColNames(), log.SubLogs, _ignoreList, () => _hasErrors = true);
+                var logger = new CompareLogger(CompareType.Index, entityIdxprops.CombinedColNames(), _logs, _ignoreList, () => _hasErrors = true);
                 var constraintName = entityIdx.Relational().Name;
                 if (indexDict.ContainsKey(constraintName))
                 {
@@ -172,7 +174,7 @@ namespace TestSupport.EfSchemeCompare.Internal
 
             var efPKeyConstraintName = entityType.FindPrimaryKey().Relational().Name;
             bool pKeyError = false;
-            var pKeyLogger = new CompareLogger(CompareType.PrimaryKey, efPKeyConstraintName, log.SubLogs, _ignoreList,
+            var pKeyLogger = new CompareLogger(CompareType.PrimaryKey, efPKeyConstraintName, _logs, _ignoreList,
                 () =>
                 {
                     pKeyError = true;  //extra set of pKeyError
@@ -182,7 +184,7 @@ namespace TestSupport.EfSchemeCompare.Internal
             foreach (var property in entityType.GetProperties())
             {
                 var pRel = property.Relational();
-                var colLogger = new CompareLogger(CompareType.Property, property.Name, log.SubLogs, _ignoreList, () => _hasErrors = true);
+                var colLogger = new CompareLogger(CompareType.Property, property.Name, _logs, _ignoreList, () => _hasErrors = true);
 
                 if (columnDict.ContainsKey(pRel.ColumnName))
                 {

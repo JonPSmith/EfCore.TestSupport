@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
+using System;
 using DataLayer.Issue19;
 using Microsoft.EntityFrameworkCore;
 using TestSupport.EfSchemeCompare;
@@ -77,7 +78,8 @@ namespace Test.UnitTests.EfSchemaCompare
             //SETUP
             using (var context = new Issue19LowerCaseDbContext(_lowerCaseOptions))
             {
-                var comparer = new CompareEfSql();
+                var config = new CompareEfSqlConfig {CaseComparer = StringComparer.CurrentCultureIgnoreCase};
+                var comparer = new CompareEfSql(config);
 
                 //ATTEMPT
                 var hasErrors = comparer.CompareEfWithDb(_fullCaseConnectionString, context);
