@@ -160,7 +160,7 @@ namespace TestSupport.EfSchemeCompare.Internal
                 }
                 else
                 {
-                    logger.NotInDatabase(constraintName, CompareAttributes.ConstraintName);
+                    logger.NotInDatabase(constraintName, CompareAttributes.IndexConstraintName);
                 }
             }
         }

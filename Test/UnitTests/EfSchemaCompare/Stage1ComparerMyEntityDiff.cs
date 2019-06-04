@@ -208,9 +208,9 @@ namespace Test.UnitTests.EfSchemaCompare
                 errors[0].ShouldEqual(
                     "DIFFERENT: MyEntity->Property 'MyString', column type. Expected = nvarchar(450), found = nvarchar(max)");
                 errors[1].ShouldEqual(
-                    "NOT IN DATABASE: MyEntity->Index 'MyInt', constraint name. Expected = MySpecialName");
+                    "NOT IN DATABASE: MyEntity->Index 'MyInt', index constraint name. Expected = MySpecialName");
                 errors[2].ShouldEqual(
-                    "NOT IN DATABASE: MyEntity->Index 'MyString', constraint name. Expected = IX_MyEntites_MyString");
+                    "NOT IN DATABASE: MyEntity->Index 'MyString', index constraint name. Expected = IX_MyEntites_MyString");
             }
         }
 
