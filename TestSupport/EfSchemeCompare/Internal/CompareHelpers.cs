@@ -35,7 +35,8 @@ namespace TestSupport.EfSchemeCompare.Internal
             return string.Join(",", properties.Select(x => x.Relational().ColumnName));
         }
 
-        //The scaffold does not set the correct ValueGenerated for a column that has a sql default value
+        //The scaffold does not set the correct ValueGenerated for a column that has a sql default value of a computed column
+        //see https://github.com/aspnet/EntityFrameworkCore/issues/9323
         public static string ConvertNullableValueGenerated(this ValueGenerated? valGen, string computedColumnSql, string defaultValueSql)
         {
             if (valGen == null && defaultValueSql != null)
