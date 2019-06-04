@@ -16,7 +16,8 @@ namespace TestSupport.EfSchemeCompare.Internal
         private readonly IReadOnlyList<CompareLog> _ignoreList;
         private readonly Action _setErrorHasHappened;
 
-        public CompareLogger(CompareType type, string defaultName, IList<CompareLog> compareLogs, IReadOnlyList<CompareLog> ignoreList, Action setErrorHasHappened)
+        public CompareLogger(CompareType type, string defaultName, IList<CompareLog> compareLogs,
+            IReadOnlyList<CompareLog> ignoreList, Action setErrorHasHappened)
         {
             _type = type;
             _defaultName = defaultName;
@@ -27,7 +28,8 @@ namespace TestSupport.EfSchemeCompare.Internal
 
         public CompareLog MarkAsOk(string expected, string name = null)
         {
-            var log = new CompareLog(_type, CompareState.Ok, name ?? _defaultName, CompareAttributes.NotSet, expected, null);
+            var log = new CompareLog(_type, CompareState.Ok, name ?? _defaultName, CompareAttributes.NotSet, expected,
+                null);
             _compareLogs.Add(log);
             return log;
         }
@@ -36,24 +38,30 @@ namespace TestSupport.EfSchemeCompare.Internal
         {
             if (expected != found && expected?.Replace(" ", "") != found?.Replace(" ", ""))
             {
-                return AddToLogsIfNotIgnored(new CompareLog(_type, CompareState.Different, name ?? _defaultName, attribute, expected, found));
+                return AddToLogsIfNotIgnored(new CompareLog(_type, CompareState.Different, name ?? _defaultName,
+                    attribute, expected, found));
             }
+
             return false;
         }
 
         public void Different(string expected, string found, CompareAttributes attribute, string name = null)
         {
-            AddToLogsIfNotIgnored(new CompareLog(_type, CompareState.Different, name ?? _defaultName, attribute, expected, found));
+            AddToLogsIfNotIgnored(new CompareLog(_type, CompareState.Different, name ?? _defaultName, attribute,
+                expected, found));
         }
 
-        public void NotInDatabase(string expected, CompareAttributes attribute = CompareAttributes.NotSet, string name = null)
+        public void NotInDatabase(string expected, CompareAttributes attribute = CompareAttributes.NotSet,
+            string name = null)
         {
-            AddToLogsIfNotIgnored(new CompareLog(_type, CompareState.NotInDatabase, name ?? _defaultName, attribute, expected, null));
+            AddToLogsIfNotIgnored(new CompareLog(_type, CompareState.NotInDatabase, name ?? _defaultName, attribute,
+                expected, null));
         }
 
         public void ExtraInDatabase(string found, CompareAttributes attribute, string name = null)
         {
-            AddToLogsIfNotIgnored(new CompareLog(_type, CompareState.ExtraInDatabase, name ?? _defaultName, attribute, null, found));
+            AddToLogsIfNotIgnored(new CompareLog(_type, CompareState.ExtraInDatabase, name ?? _defaultName, attribute,
+                null, found));
         }
 
         /// <summary>
@@ -64,7 +72,8 @@ namespace TestSupport.EfSchemeCompare.Internal
         /// <param name="found">add this if something extra was found</param>
         public void Warning(string errorMessage, string expected = null, string found = null)
         {
-            AddToLogsIfNotIgnored(new CompareLog(CompareType.Database, CompareState.Warning, errorMessage, CompareAttributes.NotSet, expected, found));
+            AddToLogsIfNotIgnored(new CompareLog(CompareType.Database, CompareState.Warning, errorMessage,
+                CompareAttributes.NotSet, expected, found));
         }
 
         //------------------------------------------------------
