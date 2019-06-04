@@ -3,7 +3,6 @@
 ## TODO
 
 - Improvement: Add case insensitive table, schema, columns, etc. matching feature to EfSchemaCompare. Issues #9 and #19.
-- Think about better IgnoreErrors...
 - Update EfSchemaCompare docs about TablesToIgnoreCommaDelimited
 
 ## 2.0.0

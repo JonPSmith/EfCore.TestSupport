@@ -36,8 +36,7 @@ namespace TestSupport.EfSchemeCompare.Internal
         {
             if (expected != found && expected?.Replace(" ", "") != found?.Replace(" ", ""))
             {
-                AddToLogsIfNotIgnored(new CompareLog(_type, CompareState.Different, name ?? _defaultName, attribute, expected, found));
-                return true;
+                return AddToLogsIfNotIgnored(new CompareLog(_type, CompareState.Different, name ?? _defaultName, attribute, expected, found));
             }
             return false;
         }
@@ -71,13 +70,21 @@ namespace TestSupport.EfSchemeCompare.Internal
         //------------------------------------------------------
         //private methods
 
-        private void AddToLogsIfNotIgnored(CompareLog log)
+        /// <summary>
+        /// Only adds the 
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        private bool AddToLogsIfNotIgnored(CompareLog log)
         {
             if (!log.ShouldIIgnoreThisLog(_ignoreList))
             {
                 _compareLogs.Add(log);
                 _setErrorHasHappened();
+                return true;
             }
+
+            return false;
         }
     }
 }

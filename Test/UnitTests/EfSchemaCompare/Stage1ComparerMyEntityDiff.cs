@@ -267,11 +267,9 @@ namespace Test.UnitTests.EfSchemaCompare
                 hasErrors.ShouldBeTrue();
                 //The setting of a computed col changed the column type
                 var errors = CompareLog.ListAllErrors(handler.Logs).ToList();
-                errors.Count.ShouldEqual(2);
+                errors.Count.ShouldEqual(1);
                 errors[0].ShouldEqual(
                     "DIFFERENT: MyEntity->Property 'MyDateTime', column type. Expected = datetime2, found = datetime");
-                errors[1].ShouldEqual(
-                    "DIFFERENT: MyEntity->Property 'MyDateTime', value generated. Expected = OnAddOrUpdate, found = Never");
             }
         }
 
@@ -301,11 +299,13 @@ namespace Test.UnitTests.EfSchemaCompare
                 //VERIFY
                 hasErrors.ShouldBeTrue();
                 var errors = CompareLog.ListAllErrors(handler.Logs).ToList();
-                errors.Count.ShouldEqual(2);
+                errors.Count.ShouldEqual(3);
                 errors[0].ShouldEqual(
                     "DIFFERENT: MyEntity->Property 'MyDateTime', column type. Expected = datetime2, found = datetime");
                 errors[1].ShouldEqual(
                     "DIFFERENT: MyEntity->Property 'MyDateTime', computed column sql. Expected = <null>, found = getutcdate()");
+                errors[2].ShouldEqual(
+                    "DIFFERENT: MyEntity->Property 'MyDateTime', value generated. Expected = Never, found = OnAddOrUpdate");
             }
         }
 
@@ -361,8 +361,6 @@ namespace Test.UnitTests.EfSchemaCompare
 
                 //VERIFY
                 hasErrors.ShouldBeFalse();
-                //CompareLog.ListAllErrors(handler.Logs).Single().ShouldEqual(
-                //    "DIFFERENT: Property 'MyInt', value generated. Expected = OnAdd, found = Never");
             }
         }
 

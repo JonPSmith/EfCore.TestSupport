@@ -20,7 +20,7 @@ namespace DataLayer.Issue15
 
             b.Property(p => p.StringRequiredDefaultEmpty).IsRequired().HasDefaultValue("");
             b.Property(p => p.StringRequiredDefaultSomething).IsRequired().HasDefaultValue("something");
-            b.Property(p => p.StringRequiredComputedColumnSql).HasMaxLength(4).IsUnicode(false).HasComputedColumnSql("left('hello',(4))");
+            b.Property(p => p.StringRequiredComputedColumnSql).HasComputedColumnSql("left([StringRequiredDefaultSomething],(4))");
             b.Property(p => p.StringRequiredNoDefault).IsRequired();
 
             b.Property(p => p.IntRequiredDefault0).IsRequired().HasDefaultValue(0);
