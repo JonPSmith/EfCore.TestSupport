@@ -40,10 +40,11 @@ namespace TestSupport.SeedDatabase
         /// </summary>
         /// <typeparam name="T">This is the type of the data you expect to get back, e.g. <code>List{Book}</code></typeparam>
         /// <param name="fileSuffix">This is the name of the seed data, typically the name of the database that the JSON came from</param>
+        /// <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
         /// <returns></returns>
-        public static T ReadSeedDataFromJsonFile<T>(this string fileSuffix)
+        public static T ReadSeedDataFromJsonFile<T>(this string fileSuffix, Assembly callingAssembly = null)
         {
-            var filePath = FormJsonFilePath(fileSuffix);
+            var filePath = FormJsonFilePath(fileSuffix, callingAssembly);
             var json = File.ReadAllText(filePath);
             var settings = new JsonSerializerSettings()
             {
@@ -58,9 +59,10 @@ namespace TestSupport.SeedDatabase
         /// <typeparam name="T"></typeparam>
         /// <param name="fileSuffix">This should be different for each seed data. Suggest using the name of the database that produced it.</param>
         /// <param name="json">The json string to save</param>
-        public static void WriteJsonToJsonFile(this string fileSuffix, string json)
+        /// <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
+        public static void WriteJsonToJsonFile(this string fileSuffix, string json, Assembly callingAssembly = null)
         {
-            var filePath = FormJsonFilePath(fileSuffix);
+            var filePath = FormJsonFilePath(fileSuffix, callingAssembly);
             File.WriteAllText(filePath, json);
         }
 
@@ -69,10 +71,11 @@ namespace TestSupport.SeedDatabase
         /// This is of the form $"SeedData-{fileSuffix}.json"
         /// </summary>
         /// <param name="fileSuffix">This is the name of the seed data, typically the name of the database that the JSON came from</param>
+        /// <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
         /// <returns></returns>
-        public static string FormJsonFilePath(string fileSuffix)
+        public static string FormJsonFilePath(string fileSuffix, Assembly callingAssembly = null)
         {
-            return Path.Combine(TestData.GetTestDataDir(), $"SeedData-{fileSuffix}.json");
+            return Path.Combine(TestData.GetTestDataDir(callingAssembly: callingAssembly), $"SeedData-{fileSuffix}.json");
         }
 
         //-----------------------------------------------------------------
