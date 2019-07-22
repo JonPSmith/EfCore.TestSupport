@@ -55,7 +55,6 @@ namespace TestSupport.SeedDatabase
         /// <summary>
         /// This writes the JSON string to a JSON file using the fileSuffix as part of the file name
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="fileSuffix">This should be different for each seed data. Suggest using the name of the database that produced it.</param>
         /// <param name="json">The json string to save</param>
         public static void WriteJsonToJsonFile(this string fileSuffix, string json)
@@ -79,7 +78,7 @@ namespace TestSupport.SeedDatabase
         //private
 
         //Thanks to https://bartwullems.blogspot.com/2018/02/jsonnetresolve-private-setters.html
-        public class ResolvePrivateSetters : DefaultContractResolver
+        internal class ResolvePrivateSetters : DefaultContractResolver
         {
             protected override JsonProperty CreateProperty(
                 MemberInfo member,

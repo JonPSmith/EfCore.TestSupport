@@ -12,6 +12,7 @@ using TestSupport.EfSchemeCompare.Internal;
 
 namespace TestSupport.EfSchemeCompare
 {
+#pragma warning disable 1591
     /// <summary>
     /// This is used to define what is being compared
     /// </summary>
@@ -41,6 +42,7 @@ namespace TestSupport.EfSchemeCompare
         PrimaryKey, ConstraintName, IndexConstraintName, Unique, DeleteBehaviour,
         //Others
     }
+#pragma warning restore 1591
 
     /// <summary>
     /// This holds the log of each compare done
