@@ -44,7 +44,7 @@ namespace TestSupport.SeedDatabase
         /// <returns></returns>
         public static T ReadSeedDataFromJsonFile<T>(this string fileSuffix, Assembly callingAssembly = null)
         {
-            var filePath = FormJsonFilePath(fileSuffix, callingAssembly);
+            var filePath = FormJsonFilePath(fileSuffix, callingAssembly ?? Assembly.GetCallingAssembly());
             var json = File.ReadAllText(filePath);
             var settings = new JsonSerializerSettings()
             {
@@ -61,7 +61,7 @@ namespace TestSupport.SeedDatabase
         /// <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
         public static void WriteJsonToJsonFile(this string fileSuffix, string json, Assembly callingAssembly = null)
         {
-            var filePath = FormJsonFilePath(fileSuffix, callingAssembly);
+            var filePath = FormJsonFilePath(fileSuffix, callingAssembly ?? Assembly.GetCallingAssembly());
             File.WriteAllText(filePath, json);
         }
 
@@ -72,7 +72,7 @@ namespace TestSupport.SeedDatabase
         /// <param name="fileSuffix">This is the name of the seed data, typically the name of the database that the JSON came from</param>
         /// <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
         /// <returns></returns>
-        public static string FormJsonFilePath(string fileSuffix, Assembly callingAssembly = null)
+        private static string FormJsonFilePath(string fileSuffix, Assembly callingAssembly)
         {
             return Path.Combine(TestData.GetTestDataDir(callingAssembly: callingAssembly), $"SeedData-{fileSuffix}.json");
         }

@@ -200,6 +200,10 @@ namespace Test.UnitTests.EfSchemaCompare
         {
             //SETUP
             var options1 = GetBookContextOptions();
+            using (var context = new BookContext(options1))
+            {
+                context.Database.EnsureCreated();
+            }
             var options2 = this.CreateUniqueMethodOptions<OrderContext>();
             using (var context1 = new BookContext(options1))
             using (var context2 = new OrderContext(options2))

@@ -2,6 +2,10 @@
 
 ## TODO
 
+## 2.0.1
+
+- Bug fix: Seed from Production's WriteJsonToJsonFile and ReadSeedDataFromJsonFile didn't get the calling assembly - see issue #21 (thanks to @Selmirrrrr for spotting this)
+
 
 ## 2.0.0
 

@@ -24,7 +24,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>EfCore.TestSupport</PackageId>
-    <PackageVersion>2.0.0</PackageVersion>
+    <PackageVersion>2.0.1</PackageVersion>
     <Version>2.0.0</Version>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <FileVersion>2.0.0.0</FileVersion>
@@ -32,11 +32,7 @@
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-      - BREAKING CHANGE: By default EfSchemaCompare to only scan the tables that the entity classes map to - see issue #18.
-      - Improvement: EfSchemaCompare now has case insensitive table, schema, columns, etc. matching feature - see issues #9 and #19.
-      - BREAKING CHANGE: In EfSchemaCompare missing indexes are now referred to by "index constraint name" instead of "constraint name" - this was done as part of case insensitivity
-      - Bug fix: EfSchemaCompare default SQL value handled improved, plus now sets the correct ValueGenerated - see issue #15
-      - Bug fix: Fixed problem with serializing/deserializing DDD-styled entity classes.
+      - Bug fix: Seed from Production's WriteJsonToJsonFile and ReadSeedDataFromJsonFile didn't get the calling assembly - see issue #21
     </PackageReleaseNotes>
     <Copyright>Copyright (c) 2017 Jon P Smith. Licenced under MIT licence</Copyright>
     <PackageTags>Entity Framework Core, xUnit</PackageTags>

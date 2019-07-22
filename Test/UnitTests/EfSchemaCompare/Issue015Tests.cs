@@ -55,6 +55,8 @@ DIFFERENT: Message->Property 'StringRequiredDefaultEmpty', default value sql. Ex
 DIFFERENT: Message->Property 'StringRequiredDefaultSomething', default value sql. Expected = something, found = N'something'
 DIFFERENT: Message->Property 'XmlRequiredDefaultEmpty', default value sql. Expected = , found = N''
 DIFFERENT: Message->Property 'XmlRequiredDefaultSomething', default value sql. Expected = <something />, found = N'<something />'");
+
+
             }
         }
 
