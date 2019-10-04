@@ -1,6 +1,20 @@
 # Release notes
 
+
+## Possible new features
+
+- Make EfSchemaCompare handle Views as well.
+
 ## TODO
+
+- Apply to NetStandard2.0 and NetStandard2.1
+   - Bug fix: GetAllErrors() in CompareEfSql should use Environment.NewLine. See issue #20.
+   - Obsolete: Remove LogSetupHelper as obsolete, use `CreateOptionsWithLogging` for Sqlite and SQL Server. 
+- Make it a dual NetStandard2.0/NetStandard2.1 NET package:
+   - Select new NuGet packages (note: change to Microsoft.Data.SqlClient).
+   - EfSchemaCompare: reverse engineering contains views as well as tables. At this time ignore views.
+   - EfSchemaCompare: CompareEfSql & Stage1Compare, stop using IsQueryType and detect via FindPrimaryKey() returning null.
+   - DataLayer: Remove use of DbQuery in DbQueryDbContext, use `ModelBuilder.Entity<T>().HasNoKey()` 
 
 ## 2.0.1
 
