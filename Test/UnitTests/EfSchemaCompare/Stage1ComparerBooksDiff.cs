@@ -1,7 +1,6 @@
-using DataLayer.BookApp;
+
 using DataLayer.EfCode.BookApp;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.Extensions.DependencyInjection;
 using TestSupport.DesignTimeServices;
@@ -41,7 +40,8 @@ namespace Test.UnitTests.EfSchemaCompare
                 var dtService = context.GetDesignTimeService();
                 var serviceProvider = dtService.GetDesignTimeProvider();
                 var factory = serviceProvider.GetService<IDatabaseModelFactory>();
-                var database = factory.Create(_connectionString, new string[] { }, new string[] { });
+                var database = factory.Create(_connectionString,
+                    new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
                 var handler = new Stage1Comparer(context.Model, nameof(BookContext));
 
                 //ATTEMPT

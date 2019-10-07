@@ -149,7 +149,8 @@ namespace TestSupport.EfSchemeCompare
                 ? contexts[0].Database.GetDbConnection().ConnectionString
                 : GetConfigurationOrActualString(configOrConnectionString);
 
-            var databaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+            var databaseModel = factory.Create(connectionString,
+                new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
             RemoveAnyTableToIgnore(databaseModel, contexts);
             return databaseModel;
         }

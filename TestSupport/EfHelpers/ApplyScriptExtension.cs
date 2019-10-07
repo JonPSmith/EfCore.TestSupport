@@ -2,10 +2,10 @@
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
 using System.Data;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace TestSupport.EfHelpers

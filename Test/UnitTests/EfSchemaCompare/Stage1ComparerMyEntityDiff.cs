@@ -1,7 +1,6 @@
 using System.Linq;
 using DataLayer.MyEntityDb.EfCompareDbs;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using Microsoft.EntityFrameworkCore.SqlServer.Design.Internal;
@@ -35,8 +34,9 @@ namespace Test.UnitTests.EfSchemaCompare
             using (var context = new MyEntityDbContext(_options))
             {
                 _connectionString = context.Database.GetDbConnection().ConnectionString;
-                context.Database.EnsureCreated();
-                _databaseModel = factory.Create(_connectionString, new string[] { }, new string[] { });
+                context.Database.EnsureCreated(); 
+                _databaseModel = factory.Create(_connectionString,
+                    new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
             }
         }
 
@@ -256,7 +256,8 @@ namespace Test.UnitTests.EfSchemaCompare
                 var factory = serviceProvider.GetService<IDatabaseModelFactory>();
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
-                var localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+                var localDatabaseModel = factory.Create(_connectionString,
+                    new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
 
                 var handler = new Stage1Comparer(context.Model, context.GetType().Name);
 
@@ -286,7 +287,8 @@ namespace Test.UnitTests.EfSchemaCompare
                 var factory = serviceProvider.GetService<IDatabaseModelFactory>();
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
-                localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+                localDatabaseModel = factory.Create(_connectionString,
+                    new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
             }
 
             using (var context = new MyEntityDbContext(_options))
@@ -352,7 +354,8 @@ namespace Test.UnitTests.EfSchemaCompare
                 var factory = serviceProvider.GetService<IDatabaseModelFactory>();
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
-                var localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+                var localDatabaseModel = factory.Create(_connectionString,
+                    new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
 
                 var handler = new Stage1Comparer(context.Model, context.GetType().Name);
 
@@ -377,7 +380,8 @@ namespace Test.UnitTests.EfSchemaCompare
                 var factory = serviceProvider.GetService<IDatabaseModelFactory>();
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
-                localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+                localDatabaseModel = factory.Create(_connectionString,
+                    new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
             }
 
             using (var context = new MyEntityDbContext(_options))

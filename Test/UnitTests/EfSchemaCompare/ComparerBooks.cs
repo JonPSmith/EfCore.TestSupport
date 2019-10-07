@@ -130,7 +130,7 @@ namespace Test.UnitTests.EfSchemaCompare
                 var comparer = new CompareEfSql();
 
                 //ATTEMPT
-                var ex = Assert.Throws<System.Data.SqlClient.SqlException>(() =>
+                var ex = Assert.Throws<Microsoft.Data.SqlClient.SqlException>(() =>
                     comparer.CompareEfWithDb(badDatabaseConnection, context));
 
                 //VERIFY

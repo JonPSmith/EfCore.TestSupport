@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DataLayer.MyEntityDb.EfCompareDbs;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using Microsoft.EntityFrameworkCore.SqlServer.Design.Internal;
@@ -36,7 +35,8 @@ namespace Test.UnitTests.EfSchemaCompare
             {
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
-                _databaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+                _databaseModel = factory.Create(connectionString,
+                    new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
             }
         }
 
@@ -109,7 +109,8 @@ namespace Test.UnitTests.EfSchemaCompare
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
 
                 context.Database.EnsureCreated();
-                var databaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+                var databaseModel = factory.Create(connectionString,
+                    new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
                 var handler = new Stage2Comparer(databaseModel);
 
                 //ATTEMPT

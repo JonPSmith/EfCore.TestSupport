@@ -15,10 +15,6 @@ namespace DataLayer.SpecialisedEntities.Configurations
             entity.HasDiscriminator(b => b.PType) //#A
                 .HasValue<PaymentCash>(PTypes.Cash) //#B
                 .HasValue<PaymentCard>(PTypes.Card); //#C
-
-            //This is needed for TestChangePaymentTypeOk to work - see EF Core issue #7510
-            entity.Property(p => p.PType)
-                .Metadata.AfterSaveBehavior = PropertySaveBehavior.Save;
         }
     }
 }

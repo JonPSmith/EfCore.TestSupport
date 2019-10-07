@@ -2,9 +2,10 @@
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using DataLayer.EfCode.BookApp;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Test.Helpers;
 using TestSupport.Attributes;

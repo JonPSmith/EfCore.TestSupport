@@ -40,7 +40,8 @@ namespace Test.UnitTests.EfSchemaCompare
             var factory = serviceProvider.GetService<IDatabaseModelFactory>();
 
             //ATTEMPT 
-            var model = factory.Create(_connectionString, new string[] { }, new string[] { });
+            var model = factory.Create(_connectionString,
+                new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
 
             //VERIFY
             model.ShouldNotBeNull();
