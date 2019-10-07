@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
 using System.Linq;
 using DataLayer.BookApp;
 using DataLayer.EfCode.BookApp;
@@ -24,12 +25,11 @@ namespace Test.UnitTests.TestDataLayer
         public void TestExample()
         {
             //SETUP
-            var options = this
-                .CreateUniqueClassOptions<BookContext>();
+            var logs = new List<LogOutput>();
+            var options = this.CreateUniqueClassOptionsWithLogging<BookContext>(log => logs.Add(log));
             using (var context = new BookContext(options))
             {
                 context.CreateEmptyViaWipe();
-                var logs = context.SetupLogging();
 
                 //ATTEMPT
                 context.Add(new Book {Title = "New Book"});
@@ -37,7 +37,7 @@ namespace Test.UnitTests.TestDataLayer
 
                 //VERIFY
                 context.Books.Count().ShouldEqual(1);
-                foreach (var log in logs.ToList())
+                foreach (var log in logs)
                 {                                    
                     _output.WriteLine(log.ToString());
                 }                                     

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using DataLayer.EfCode.BookApp;
@@ -98,16 +99,16 @@ namespace Test.UnitTests.TestDataLayer
         public void TestCreateDbToGetLogsOk()
         {
             //SETUP
-            var options = this.CreateUniqueMethodOptions<BookContext>();
+            var logs = new List<LogOutput>();
+            var options = this.CreateUniqueClassOptionsWithLogging<BookContext>(log => logs.Add(log));
             using (var context = new BookContext(options))
             {
                 //ATTEMPT
-                var logs = context.SetupLogging();
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
 
                 //VERIFY
-                foreach (var log in logs.ToList())
+                foreach (var log in logs)
                 {
                     _output.WriteLine(log.ToString());
                 }

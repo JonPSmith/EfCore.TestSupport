@@ -221,7 +221,7 @@ namespace Test.UnitTests.TestDataLayer
                 .ToList();
 
                 //VERIFY
-                logs.ToList().Any(x => x.EventId.Name == RelationalEventId.QueryClientEvaluationWarning.Name).ShouldBeTrue();
+                logs.Any(x => x.EventId.Name == RelationalEventId.QueryClientEvaluationWarning.Name).ShouldBeTrue();
                 logs.All(x => x.LogLevel >= LogLevel.Warning ).ShouldBeTrue();
             }
         }
