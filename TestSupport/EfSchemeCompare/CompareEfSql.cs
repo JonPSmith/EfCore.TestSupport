@@ -163,8 +163,8 @@ namespace TestSupport.EfSchemeCompare
             {
                 //We remove all tables not mapped by the contexts
 
-                var tablesInContext = contexts.SelectMany(x => x.Model.GetEntityTypes()).Where(x => !x.IsQueryType)
-                    .Select(x => x.Relational().FormSchemaTable()).ToList();
+                var tablesInContext = contexts.SelectMany(x => x.Model.GetEntityTypes()).Where(x => x.FindPrimaryKey() != null)
+                    .Select(x => x.FormSchemaTable()).ToList();
                 tablesToRemove = databaseModel.Tables
                     .Where(x => !tablesInContext.Contains(x.FormSchemaTable(databaseModel.DefaultSchema), StringComparer.InvariantCultureIgnoreCase)).ToList();
             }

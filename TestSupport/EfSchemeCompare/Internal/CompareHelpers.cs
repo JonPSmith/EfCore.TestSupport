@@ -13,9 +13,9 @@ namespace TestSupport.EfSchemeCompare.Internal
 {
     internal static class CompareHelpers
     {
-        public static string FormSchemaTable(this IRelationalEntityTypeAnnotations eRel)
+        public static string FormSchemaTable(this IEntityType entityType)
         {
-            return FormSchemaTable(eRel.Schema, eRel.TableName);
+            return FormSchemaTable(entityType.GetSchema(), entityType.GetTableName());
         }
 
         public static string FormSchemaTable(this DatabaseTable table, string defaultSchema)
@@ -49,7 +49,7 @@ namespace TestSupport.EfSchemeCompare.Internal
 
         public static string CombinedColNames(this IEnumerable<IProperty> properties)
         {
-            return string.Join(",", properties.Select(x => x.Relational().ColumnName));
+            return string.Join(",", properties.Select(x => x.GetColumnName()));
         }
 
         //The scaffold does not set the correct ValueGenerated for a column that has a sql default value of a computed column

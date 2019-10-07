@@ -126,13 +126,12 @@ namespace TestSupport.EfHelpers
 
         private static string FormTableNameWithSchema(IEntityType entityType, bool addBracketsAndSchema)
         {
-            var relational = entityType.Relational();
             return addBracketsAndSchema 
-                ? "[" + (relational.Schema == null
+                ? "[" + (entityType.GetSchema() == null
                        ? ""
-                       : relational.Schema + "].[")
-                   + relational.TableName + "]"
-                : relational.TableName;
+                       : entityType.GetSchema() + "].[")
+                   + entityType.GetTableName() + "]"
+                : entityType.GetTableName();
         }
 
         private static void ThrowExceptionIfCannotWipeSelfRef(List<IEntityType> allEntities)
