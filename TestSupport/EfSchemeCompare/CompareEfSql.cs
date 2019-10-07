@@ -42,7 +42,7 @@ namespace TestSupport.EfSchemeCompare
         /// This returns a single string containing all the errors found
         /// Each error is on a separate line
         /// </summary>
-        public string GetAllErrors => string.Join("\n", CompareLog.ListAllErrors(Logs));
+        public string GetAllErrors => string.Join(Environment.NewLine, CompareLog.ListAllErrors(Logs));
 
         /// <summary>
         /// This gives you access to the full log. but its not an easy thing to parse
