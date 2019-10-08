@@ -28,7 +28,7 @@ namespace Test.UnitTests.EfSchemaCompare
         {
             _output = output;
             _options = this
-                .CreateUniqueClassOptionsWithLogging<DbQueryDbContext>(log => _output.WriteLine(log.ToString()));
+                .CreateUniqueClassOptions<DbQueryDbContext>();
 
             using (var context = new DbQueryDbContext(_options))
             {
