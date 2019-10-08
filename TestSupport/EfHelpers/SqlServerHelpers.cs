@@ -22,12 +22,11 @@ namespace TestSupport.EfHelpers
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="callingClass">this should be this, i.e. the class you are in</param>
-        /// <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
         /// <returns></returns>
-        public static DbContextOptions<T> CreateUniqueClassOptions<T>(this object callingClass, bool throwOnClientServerWarning = true) 
+        public static DbContextOptions<T> CreateUniqueClassOptions<T>(this object callingClass) 
             where T : DbContext
         {
-            return CreateOptionWithDatabaseName<T>(callingClass, throwOnClientServerWarning).Options;
+            return CreateOptionWithDatabaseName<T>(callingClass).Options;
         }
 
         /// <summary>
@@ -39,12 +38,12 @@ namespace TestSupport.EfHelpers
         /// <param name="callingClass">this should be this, i.e. the class you are in</param>
         /// <param name="efLog">This is a method that receives a LogOutput whenever EF Core logs something</param>
         /// <param name="logLevel">Optional: Sets the logLevel you want to capture. Defaults to Information</param>
-        /// <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
         /// <returns></returns>
-        public static DbContextOptions<T> CreateUniqueClassOptionsWithLogging<T>(this object callingClass, Action<LogOutput> efLog, LogLevel logLevel = LogLevel.Information, bool throwOnClientServerWarning = true) 
+        public static DbContextOptions<T> CreateUniqueClassOptionsWithLogging<T>(this object callingClass,
+            Action<LogOutput> efLog, LogLevel logLevel = LogLevel.Information) 
             where T : DbContext
         {
-            return CreateOptionWithDatabaseName<T>(callingClass, throwOnClientServerWarning)
+            return CreateOptionWithDatabaseName<T>(callingClass)
                 .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(efLog, logLevel) }))
                 .Options;
         }
@@ -56,13 +55,12 @@ namespace TestSupport.EfHelpers
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="callingClass">this should be this, i.e. the class you are in</param>
-        /// <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
         /// <param name="callingMember">Do not use: this is filled in by compiler</param>
         /// <returns></returns>
-        public static DbContextOptions<T> CreateUniqueMethodOptions<T>(this object callingClass, bool throwOnClientServerWarning = true,
+        public static DbContextOptions<T> CreateUniqueMethodOptions<T>(this object callingClass,
             [CallerMemberName] string callingMember = "") where T : DbContext
         {
-            return CreateOptionWithDatabaseName<T>(callingClass, throwOnClientServerWarning, callingMember).Options;
+            return CreateOptionWithDatabaseName<T>(callingClass, callingMember).Options;
         }
 
         /// <summary>
@@ -74,14 +72,14 @@ namespace TestSupport.EfHelpers
         /// <param name="callingClass">this should be this, i.e. the class you are in</param>
         /// <param name="efLog">This is a method that receives a LogOutput whenever EF Core logs something</param>
         /// <param name="logLevel">Optional: Sets the logLevel you want to capture. Defaults to Information</param>
-        /// <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
         /// <param name="callingMember">Do not use: this is filled in by compiler</param>
         /// <returns></returns>
-        public static DbContextOptions<T> CreateUniqueMethodOptionsWithLogging<T>(this object callingClass, Action<LogOutput> efLog, 
-            LogLevel logLevel = LogLevel.Information, bool throwOnClientServerWarning = true,
+        public static DbContextOptions<T> CreateUniqueMethodOptionsWithLogging<T>(this object callingClass,
+            Action<LogOutput> efLog,
+            LogLevel logLevel = LogLevel.Information,
             [CallerMemberName] string callingMember = "") where T : DbContext
         {
-            return CreateOptionWithDatabaseName<T>(callingClass, throwOnClientServerWarning, callingMember)
+            return CreateOptionWithDatabaseName<T>(callingClass, callingMember)
                 .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(efLog, logLevel) }))
                 .Options;
         }
@@ -119,26 +117,22 @@ namespace TestSupport.EfHelpers
         //------------------------------------
         //private methods
 
-        private static DbContextOptionsBuilder<T> CreateOptionWithDatabaseName<T>(object callingClass, bool throwOnClientServerWarning, 
-                string callingMember = null)    
+        private static DbContextOptionsBuilder<T> CreateOptionWithDatabaseName<T>(object callingClass,
+            string callingMember = null)    
             where T : DbContext
         {
             var connectionString = callingClass.GetUniqueDatabaseConnectionString( callingMember);                 
             var builder = new DbContextOptionsBuilder<T>();  
             builder.UseSqlServer(connectionString);
-            builder.ApplyOtherOptionSettings(throwOnClientServerWarning);       
+            builder.ApplyOtherOptionSettings();       
 
             return builder; 
         }
 
-        internal static void ApplyOtherOptionSettings<T>(this DbContextOptionsBuilder<T> builder, bool throwOnClientServerWarning) 
+        internal static void ApplyOtherOptionSettings<T>(this DbContextOptionsBuilder<T> builder) 
             where T : DbContext
         {
             builder.EnableSensitiveDataLogging();
-            if (throwOnClientServerWarning)
-            {
-                builder.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
-            }
         }
 
     }

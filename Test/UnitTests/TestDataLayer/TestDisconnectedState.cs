@@ -19,7 +19,7 @@ namespace Test.UnitTests.TestDataLayer
         {
             //SETUP
             var options = SqliteInMemory
-                .CreateOptions<BookContext>(false);
+                .CreateOptions<BookContext>();
             using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();  //#A
@@ -48,7 +48,7 @@ namespace Test.UnitTests.TestDataLayer
         {
             //SETUP
             var options = SqliteInMemory         //#A
-                .CreateOptions<BookContext>(false); //#A
+                .CreateOptions<BookContext>(); //#A
             using (var context = new BookContext(options))//#B
             {
                 context.Database.EnsureCreated();

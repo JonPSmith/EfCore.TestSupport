@@ -46,7 +46,7 @@ namespace TestSupport.EfHelpers
             var builder = new DbContextOptionsBuilder<TContext>();
             builder.UseInMemoryDatabase(dbName)
                 .UseInternalServiceProvider(serviceProvider);
-            builder.ApplyOtherOptionSettings(throwOnClientServerWarning);
+            builder.ApplyOtherOptionSettings();
 
             return builder.Options;
         }
