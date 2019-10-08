@@ -36,7 +36,7 @@ namespace TestSupport.EfHelpers
                     {
                         try
                         {
-                            context.Database.ExecuteSqlCommand(command);
+                            context.Database.ExecuteSqlRaw(command);
                         }
                         catch (SqlException)
                         {

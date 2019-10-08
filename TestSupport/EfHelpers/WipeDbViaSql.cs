@@ -35,7 +35,7 @@ namespace TestSupport.EfHelpers
                 context.GetTableNamesInOrderForWipe(addBracketsAndSchema, maxDepth, excludeTypes))
             {
                 context.Database
-                    .ExecuteSqlCommand(
+                    .ExecuteSqlRaw(
                         "DELETE FROM " + tableName);
             }
         }

@@ -256,7 +256,7 @@ namespace Test.UnitTests.EfSchemaCompare
                 var factory = serviceProvider.GetService<IDatabaseModelFactory>();
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
-                var localDatabaseModel = factory.Create(_connectionString,
+                var localDatabaseModel = factory.Create(connectionString,
                     new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
 
                 var handler = new Stage1Comparer(context.Model, context.GetType().Name);
@@ -287,7 +287,7 @@ namespace Test.UnitTests.EfSchemaCompare
                 var factory = serviceProvider.GetService<IDatabaseModelFactory>();
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
-                localDatabaseModel = factory.Create(_connectionString,
+                localDatabaseModel = factory.Create(connectionString,
                     new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
             }
 
@@ -354,7 +354,7 @@ namespace Test.UnitTests.EfSchemaCompare
                 var factory = serviceProvider.GetService<IDatabaseModelFactory>();
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
-                var localDatabaseModel = factory.Create(_connectionString,
+                var localDatabaseModel = factory.Create(connectionString,
                     new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
 
                 var handler = new Stage1Comparer(context.Model, context.GetType().Name);
@@ -380,7 +380,7 @@ namespace Test.UnitTests.EfSchemaCompare
                 var factory = serviceProvider.GetService<IDatabaseModelFactory>();
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
-                localDatabaseModel = factory.Create(_connectionString,
+                localDatabaseModel = factory.Create(connectionString,
                     new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
             }
 

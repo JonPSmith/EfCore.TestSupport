@@ -47,8 +47,8 @@ namespace TestSupport.EfSchemeCompare.Internal
             var tableDict = databaseModel.Tables.ToDictionary(x => x.FormSchemaTable(databaseModel.DefaultSchema), _caseComparer);
             var dbQueries = _model.GetEntityTypes().Where(x => x.FindPrimaryKey() == null).ToList();
             if (dbQueries.Any())
-                dbLogger.Warning("EfSchemaCompare does not check DbQuery types", null, string.Join(", ", dbQueries.Select(x => x.ClrType.Name)));
-            foreach (var entityType in _model.GetEntityTypes().Where(x => x.FindPrimaryKey() == null))
+                dbLogger.Warning("EfSchemaCompare does not check read-only types", null, string.Join(", ", dbQueries.Select(x => x.ClrType.Name)));
+            foreach (var entityType in _model.GetEntityTypes().Where(x => x.FindPrimaryKey() != null))
             {
                 var logger = new CompareLogger(CompareType.Entity, entityType.ClrType.Name, _logs.Last().SubLogs, _ignoreList, () => _hasErrors = true);
                 if (tableDict.ContainsKey(entityType.FormSchemaTable()))

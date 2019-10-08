@@ -9,7 +9,7 @@ namespace DataLayer.MyEntityDb.EfCompareDbs
     public class DbQueryDbContext : DbContext
     {
         public DbSet<MyEntity> MyEntities { get; set; }
-        public DbQuery<MyEntityReadOnly> MyReadOnlyEntities { get; set; }
+        public DbSet<MyEntityReadOnly> MyReadOnlyEntities { get; set; }
 
         public DbQueryDbContext(
             DbContextOptions<DbQueryDbContext> options)
@@ -17,7 +17,7 @@ namespace DataLayer.MyEntityDb.EfCompareDbs
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MyEntity>().ToTable(nameof(MyReadOnlyEntities));
+            modelBuilder.Entity<MyEntityReadOnly>().HasNoKey();
         }
     }
 }

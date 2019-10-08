@@ -28,7 +28,7 @@ namespace Test.UnitTests.EfSchemaCompare
         {
             _output = output;
             _options = this
-                .CreateUniqueClassOptions<DbQueryDbContext>();
+                .CreateUniqueClassOptionsWithLogging<DbQueryDbContext>(log => _output.WriteLine(log.ToString()));
 
             using (var context = new DbQueryDbContext(_options))
             {
@@ -50,7 +50,7 @@ namespace Test.UnitTests.EfSchemaCompare
 
                 //VERIFY
                 hasErrors.ShouldBeTrue();
-                comparer.GetAllErrors.ShouldEqual("WARNING: Database 'EfSchemaCompare does not check DbQuery types'. Expected = <null>, found = MyEntityReadOnly");
+                comparer.GetAllErrors.ShouldEqual("WARNING: Database 'EfSchemaCompare does not check read-only types'. Expected = <null>, found = MyEntityReadOnly");
             }
         }
 

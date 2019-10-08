@@ -11,11 +11,11 @@ namespace DataLayer.SpecialisedEntities.Configurations
         public void Configure
             (EntityTypeBuilder<User> entity)
         {
+            entity.HasKey(p => p.UserId);
             entity.HasAlternateKey(p => p.Email);
 
             entity
-                .OwnsOne(e => e.HomeAddress)
-                .ToTable("Addresses");
+                .OwnsOne(e => e.HomeAddress);
         }
     }
 }
