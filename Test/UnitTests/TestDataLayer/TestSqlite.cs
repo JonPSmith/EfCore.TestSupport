@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
+using System;
 using System.Linq;
 using DataLayer.EfCode.BookApp;
 using DataLayer.MyEntityDb;
@@ -90,16 +91,17 @@ namespace Test.UnitTests.TestDataLayer
         }
 
         [Fact]
-        public void TestSqlLiteAcceptsComputedCol()
+        public void TestSqlLiteDoesNotSupportComputedCol()
         {
             //SETUP
             var options = SqliteInMemory.CreateOptions<MyEntityComputedColDbContext>();
             using (var context = new MyEntityComputedColDbContext(options))
             {
                 //ATTEMPT
-                context.Database.EnsureCreated();
+                var ex = Assert.Throws<NotSupportedException>(() => context.Database.EnsureCreated());
 
                 //VERIFY
+                ex.Message.ShouldStartWith("SQLite doesn't support computed columns.");
             }
         }
 
@@ -114,24 +116,6 @@ namespace Test.UnitTests.TestDataLayer
                 context.Database.EnsureCreated();
 
                 //VERIFY
-            }
-        }
-
-        [Fact]
-        public void TestSqlLiteAcceptsComputedColButDoesntWork()
-        {
-            //SETUP
-            var options = SqliteInMemory.CreateOptions<MyEntityComputedColDbContext>();
-            using (var context = new MyEntityComputedColDbContext(options))
-            {
-                context.Database.EnsureCreated();
-
-                //ATTEMPT
-                context.Add(new MyEntity());
-                var ex = Assert.Throws<DbUpdateException>(() => context.SaveChanges());
-
-                //VERIFY
-                Assert.StartsWith("SQLite Error 19: 'NOT NULL constraint failed:", ex.InnerException.Message);
             }
         }
 

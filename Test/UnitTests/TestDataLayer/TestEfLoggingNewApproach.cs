@@ -49,8 +49,8 @@ namespace Test.UnitTests.TestDataLayer
                 var books = context.Books.ToList();
 
                 //VERIFY
-                logs.Single().ToString().ShouldStartWith("Information,CommandExecuted: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']");
-                logs.Single().Message.ShouldStartWith("Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']");
+                logs.Single().ToString().ShouldStartWith("Information,CommandExecuting: Executing DbCommand [Parameters=[], CommandType='Text', CommandTimeout='30']");
+                logs.Single().Message.ShouldStartWith("Executing DbCommand [Parameters=[], CommandType='Text', CommandTimeout='30']");
             }
         }
 
@@ -125,7 +125,7 @@ namespace Test.UnitTests.TestDataLayer
                 context.Books.Count();
 
                 //VERIFY
-                logs.Last().Message.ShouldEndWith("SELECT COUNT(*)\r\nFROM \"Books\" AS \"p\"\r\nWHERE \"p\".\"SoftDeleted\" = 0");
+                logs.Last().Message.ShouldEndWith("SELECT COUNT(*)\r\nFROM \"Books\" AS \"b\"\r\nWHERE NOT (\"b\".\"SoftDeleted\")");
             }
         }
 
@@ -193,37 +193,13 @@ namespace Test.UnitTests.TestDataLayer
 
                 //VERIFY
                 logs1.Count.ShouldEqual(logs1Count);
-                logs2.Count.ShouldEqual(logs1Count);
+                logs2.Count.ShouldEqual(logs1Count-1);
             }
         }
 
         private class ClientSeverTestDto
         {
             public string ClientSideProp { get; set; }
-        }
-
-        [Fact]
-        public void TestLogQueryClientEvaluationWarning()
-        {
-            //SETUP
-            var logs = new List<LogOutput>();
-            var options = SqliteInMemory.CreateOptionsWithLogging<BookContext>(log => logs.Add(log), LogLevel.Warning, false);
-            using (var context = new BookContext(options))
-            {
-                context.Database.EnsureCreated();
-                
-
-                //ATTEMPT
-                var books = context.Books.Select(x => new ClientSeverTestDto
-                {
-                    ClientSideProp = x.Price.ToString("C")
-                }).OrderBy(x => x.ClientSideProp)
-                .ToList();
-
-                //VERIFY
-                logs.Any(x => x.EventId.Name == RelationalEventId.QueryClientEvaluationWarning.Name).ShouldBeTrue();
-                logs.All(x => x.LogLevel >= LogLevel.Warning ).ShouldBeTrue();
-            }
         }
 
         [RunnableInDebugOnly]

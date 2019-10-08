@@ -1,4 +1,5 @@
 
+using System;
 using DataLayer.EfCode.BookApp;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -144,11 +145,12 @@ namespace Test.UnitTests.EfSchemaCompare
             var serviceProvider = new SqlServerDesignTimeServices().GetDesignTimeProvider();
 
             //ATTEMPT 
-            var factory = serviceProvider.GetService<IScaffoldingModelFactory>();
+            //var factory = serviceProvider.GetService<IScaffoldingModelFactory>();
+            throw new NotImplementedException();
 
             //VERIFY
-            factory.ShouldNotBeNull();
-            factory.ShouldBeType<RelationalScaffoldingModelFactory>();
+            //factory.ShouldNotBeNull();
+            //factory.ShouldBeType<RelationalScaffoldingModelFactory>();
         }
     }
 }

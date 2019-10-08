@@ -8,7 +8,7 @@ namespace TestSupport.EfHelpers.Internal
 {
     internal class EfCoreLogDecoder
     {
-        private const string EfCoreCommandExecutedEventId = "Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted";
+        private const string EfCoreCommandExecutedEventId = "Microsoft.EntityFrameworkCore.Database.Command.CommandExecuting";
         private static readonly Regex ParamRegex = new Regex(@"(@p\d+|@__\w*?_\d+)='(.*?)'(\s\(\w*?\s=\s\w*\))*(?:,\s|\]).*?");
         private const string ParameterStart = "[Parameters=[";
 
