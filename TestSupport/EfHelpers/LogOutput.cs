@@ -9,6 +9,9 @@ using TestSupport.EfHelpers.Internal;
 
 namespace TestSupport.EfHelpers
 {
+    /// <summary>
+    /// This holds logs produced by the MyLoggerProvider 
+    /// </summary>
     public class LogOutput 
     {
         private const string EfCoreEventIdStartWith = "Microsoft.EntityFrameworkCore";
