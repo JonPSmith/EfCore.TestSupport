@@ -13,10 +13,17 @@ namespace TestSupport.EfSchemeCompare.Internal
 {
     internal static class CompareHelpers
     {
+#if NETSTANDARD2_0
         public static string FormSchemaTable(this IRelationalEntityTypeAnnotations eRel)
         {
             return FormSchemaTable(eRel.Schema, eRel.TableName);
         }
+#elif NETSTANDARD2_1
+        public static string FormSchemaTable(this IEntityType entityType)
+        {
+            return FormSchemaTable(entityType.GetSchema(), entityType.GetTableName());
+        }
+#endif
 
         public static string FormSchemaTable(this DatabaseTable table, string defaultSchema)
         {
@@ -47,10 +54,17 @@ namespace TestSupport.EfSchemeCompare.Internal
                 {StringComparer.OrdinalIgnoreCase, StringComparison.OrdinalIgnoreCase}
             };
 
+#if NETSTANDARD2_0
         public static string CombinedColNames(this IEnumerable<IProperty> properties)
         {
             return string.Join(",", properties.Select(x => x.Relational().ColumnName));
         }
+#elif NETSTANDARD2_1
+        public static string CombinedColNames(this IEnumerable<IProperty> properties)
+        {
+            return string.Join(",", properties.Select(x => x.GetColumnName()));
+        }
+#endif
 
         //The scaffold does not set the correct ValueGenerated for a column that has a sql default value of a computed column
         //see https://github.com/aspnet/EntityFrameworkCore/issues/9323

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
+using System;
 using System.Linq;
 using DataLayer.EfCode.BookApp;
 using DataLayer.MyEntityDb;
@@ -89,6 +90,8 @@ namespace Test.UnitTests.TestDataLayer
             }
         }
 
+
+#if NETCOREAPP2_1
         [Fact]
         public void TestSqlLiteAcceptsComputedCol()
         {
@@ -102,6 +105,22 @@ namespace Test.UnitTests.TestDataLayer
                 //VERIFY
             }
         }
+#elif NETCOREAPP3_0
+        [Fact]
+        public void TestSqlLiteDoesNotSupportComputedCol()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<MyEntityComputedColDbContext>();
+            using (var context = new MyEntityComputedColDbContext(options))
+            {
+                //ATTEMPT
+                var ex = Assert.Throws<NotSupportedException>(() => context.Database.EnsureCreated());
+
+                //VERIFY
+                ex.Message.ShouldStartWith("SQLite doesn't support computed columns.");
+            }
+        }
+#endif
 
         [Fact]
         public void TestSqlLiteDoesAcceptSchema()

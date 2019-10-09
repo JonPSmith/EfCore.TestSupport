@@ -1,7 +1,11 @@
 ﻿// Copyright (c) 2019 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT license. See License.txt in the project root for license information.
 
+#if NETSTANDARD2_0
 using System.Data.SqlClient;
+#elif NETSTANDARD2_1
+using Microsoft.Data.SqlClient;
+#endif
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

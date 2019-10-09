@@ -2,7 +2,11 @@
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
 using System;
+#if NETSTANDARD2_0
 using System.Data.SqlClient;
+#elif NETSTANDARD2_1
+using Microsoft.Data.SqlClient;
+#endif
 using System.IO;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;

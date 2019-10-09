@@ -130,8 +130,14 @@ namespace Test.UnitTests.EfSchemaCompare
                 var comparer = new CompareEfSql();
 
                 //ATTEMPT
+#if NETCOREAPP2_1
                 var ex = Assert.Throws<System.Data.SqlClient.SqlException>(() =>
                     comparer.CompareEfWithDb(badDatabaseConnection, context));
+#elif NETCOREAPP3_0
+                var ex = Assert.Throws<Microsoft.Data.SqlClient.SqlException>(() =>
+                    comparer.CompareEfWithDb(badDatabaseConnection, context));
+#endif
+
 
                 //VERIFY
                 ex.Message.ShouldStartWith("Cannot open database \"BadDatabaseName\" requested by the login. The login failed");

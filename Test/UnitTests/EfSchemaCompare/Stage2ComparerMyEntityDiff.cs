@@ -36,7 +36,12 @@ namespace Test.UnitTests.EfSchemaCompare
             {
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
+#if NETCOREAPP2_1
                 _databaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+#elif NETCOREAPP3_0
+                _databaseModel = factory.Create(connectionString,
+                    new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
+#endif
             }
         }
 
@@ -109,7 +114,12 @@ namespace Test.UnitTests.EfSchemaCompare
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
 
                 context.Database.EnsureCreated();
+#if NETCOREAPP2_1
                 var databaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+#elif NETCOREAPP3_0
+                var databaseModel = factory.Create(connectionString,
+                    new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
+#endif
                 var handler = new Stage2Comparer(databaseModel);
 
                 //ATTEMPT

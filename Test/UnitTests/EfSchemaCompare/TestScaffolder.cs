@@ -40,7 +40,12 @@ namespace Test.UnitTests.EfSchemaCompare
             var factory = serviceProvider.GetService<IDatabaseModelFactory>();
 
             //ATTEMPT 
+#if NETCOREAPP2_1
             var model = factory.Create(_connectionString, new string[] { }, new string[] { });
+#elif NETCOREAPP3_0
+            var model = factory.Create(_connectionString,
+                new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
+#endif
 
             //VERIFY
             model.ShouldNotBeNull();

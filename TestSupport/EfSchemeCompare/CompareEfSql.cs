@@ -149,7 +149,12 @@ namespace TestSupport.EfSchemeCompare
                 ? contexts[0].Database.GetDbConnection().ConnectionString
                 : GetConfigurationOrActualString(configOrConnectionString);
 
+#if NETSTANDARD2_0
             var databaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+#elif NETSTANDARD2_1
+            var databaseModel = factory.Create(connectionString,
+                new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
+#endif
             RemoveAnyTableToIgnore(databaseModel, contexts);
             return databaseModel;
         }
@@ -161,9 +166,13 @@ namespace TestSupport.EfSchemeCompare
             if (_config.TablesToIgnoreCommaDelimited == null)
             {
                 //We remove all tables not mapped by the contexts
-
+#if NETSTANDARD2_0
                 var tablesInContext = contexts.SelectMany(x => x.Model.GetEntityTypes()).Where(x => !x.IsQueryType)
                     .Select(x => x.Relational().FormSchemaTable()).ToList();
+#elif NETSTANDARD2_1
+                var tablesInContext = contexts.SelectMany(x => x.Model.GetEntityTypes()).Where(x => x.FindPrimaryKey() != null)
+                    .Select(x => x.FormSchemaTable()).ToList();
+#endif
                 tablesToRemove = databaseModel.Tables
                     .Where(x => !tablesInContext.Contains(x.FormSchemaTable(databaseModel.DefaultSchema), StringComparer.InvariantCultureIgnoreCase)).ToList();
             }

@@ -1,7 +1,6 @@
 using System.Linq;
 using DataLayer.MyEntityDb.EfCompareDbs;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using Microsoft.EntityFrameworkCore.SqlServer.Design.Internal;
@@ -36,7 +35,12 @@ namespace Test.UnitTests.EfSchemaCompare
             {
                 _connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
+#if NETCOREAPP2_1
                 _databaseModel = factory.Create(_connectionString, new string[] { }, new string[] { });
+#elif NETCOREAPP3_0
+                _databaseModel = factory.Create(_connectionString,
+                    new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
+#endif
             }
         }
 
@@ -256,7 +260,12 @@ namespace Test.UnitTests.EfSchemaCompare
                 var factory = serviceProvider.GetService<IDatabaseModelFactory>();
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
-                var localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+#if NETCOREAPP2_1
+                var localDatabaseModel = factory.Create(_connectionString, new string[] { }, new string[] { });
+#elif NETCOREAPP3_0
+                var localDatabaseModel = factory.Create(_connectionString,
+                    new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
+#endif
 
                 var handler = new Stage1Comparer(context.Model, context.GetType().Name);
 
@@ -286,7 +295,12 @@ namespace Test.UnitTests.EfSchemaCompare
                 var factory = serviceProvider.GetService<IDatabaseModelFactory>();
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
-                localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+#if NETCOREAPP2_1
+                    localDatabaseModel = factory.Create(_connectionString, new string[] { }, new string[] { });
+#elif NETCOREAPP3_0
+                    localDatabaseModel = factory.Create(_connectionString,
+                        new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
+#endif
             }
 
             using (var context = new MyEntityDbContext(_options))
@@ -352,7 +366,12 @@ namespace Test.UnitTests.EfSchemaCompare
                 var factory = serviceProvider.GetService<IDatabaseModelFactory>();
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
-                var localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+#if NETCOREAPP2_1
+                var localDatabaseModel = factory.Create(_connectionString, new string[] { }, new string[] { });
+#elif NETCOREAPP3_0
+                var localDatabaseModel = factory.Create(_connectionString,
+                    new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
+#endif
 
                 var handler = new Stage1Comparer(context.Model, context.GetType().Name);
 
@@ -377,7 +396,12 @@ namespace Test.UnitTests.EfSchemaCompare
                 var factory = serviceProvider.GetService<IDatabaseModelFactory>();
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
-                localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
+#if NETCOREAPP2_1
+                    localDatabaseModel = factory.Create(_connectionString, new string[] { }, new string[] { });
+#elif NETCOREAPP3_0
+                localDatabaseModel = factory.Create(_connectionString,
+                    new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
+#endif
             }
 
             using (var context = new MyEntityDbContext(_options))

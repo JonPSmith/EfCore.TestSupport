@@ -2,7 +2,11 @@
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
 using System.Collections.Generic;
+#if NETCOREAPP2_1
 using System.Data.SqlClient;
+#elif NETCOREAPP3_0
+using Microsoft.Data.SqlClient;
+#endif
 using System.Linq;
 using DataLayer.EfCode.BookApp;
 using Microsoft.EntityFrameworkCore;

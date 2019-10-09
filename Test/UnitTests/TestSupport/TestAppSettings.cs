@@ -1,8 +1,11 @@
 ﻿// Copyright (c) 2016 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
+#if NETCOREAPP2_1
 using System.Data.SqlClient;
-using System.Reflection;
+#elif NETCOREAPP3_0
+using Microsoft.Data.SqlClient;
+#endif
 using Microsoft.Extensions.Configuration;
 using TestSupport.Helpers;
 using Xunit;

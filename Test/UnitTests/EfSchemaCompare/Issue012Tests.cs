@@ -1,10 +1,7 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
-using System.Linq;
 using DataLayer.BookApp.EfCode;
-using DataLayer.EfCode.BookApp;
-using DataLayer.Issue3;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,7 +42,12 @@ namespace Test.UnitTests.EfSchemaCompare
                 var dtService = context.GetDesignTimeService();
                 var serviceProvider = dtService.GetDesignTimeProvider();
                 var factory = serviceProvider.GetService<IDatabaseModelFactory>();
+#if NETCOREAPP2_1
                 var database = factory.Create(_connectionString, new string[] { }, new string[] { });
+#elif NETCOREAPP3_0
+                var database = factory.Create(_connectionString,
+                    new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
+#endif
                 var handler = new Stage1Comparer(context.Model, nameof(BookOrderSchemaContext));
 
                 //ATTEMPT

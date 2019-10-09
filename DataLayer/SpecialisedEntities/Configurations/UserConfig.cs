@@ -16,6 +16,12 @@ namespace DataLayer.SpecialisedEntities.Configurations
             entity
                 .OwnsOne(e => e.HomeAddress)
                 .ToTable("Addresses");
+
+#if NETSTANDARD2_0
+            entity.OwnsOne(e => e.HomeAddress).ToTable("Addresses");
+#elif NETSTANDARD2_1
+            entity.OwnsOne(e => e.HomeAddress); //Cannot map ownedtype to separate table
+#endif
         }
-    }
+}
 }

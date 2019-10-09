@@ -130,10 +130,10 @@ namespace Test.UnitTests.EfSchemaCompare
                 hasErrors.ShouldBeTrue();
                 var errors = CompareLog.ListAllErrors(comparer.Logs).ToList();
                 errors.Count.ShouldEqual(2);
-                errors[0].ShouldEqual(
-                    "EXTRA IN DATABASE: EfCore.TestSupport-Test_ComparerBooksAndOrders->Table 'Orders'");
-                errors[1].ShouldEqual(
-                    "EXTRA IN DATABASE: EfCore.TestSupport-Test_ComparerBooksAndOrders->Table 'LineItem'");
+                errors.Contains(
+                    "EXTRA IN DATABASE: EfCore.TestSupport-Test_ComparerBooksAndOrders->Table 'Orders'").ShouldBeTrue();
+                errors.Contains(
+                    "EXTRA IN DATABASE: EfCore.TestSupport-Test_ComparerBooksAndOrders->Table 'LineItem'").ShouldBeTrue();
             }
         }
 
