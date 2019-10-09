@@ -43,6 +43,7 @@ namespace Test.UnitTests.EfSchemaCompare
                 //VERIFY
                 //hasErrors.ShouldBeFalse(comparer.GetAllErrors);
                 hasErrors.ShouldBeTrue();
+#if NETCOREAPP2_1
                 comparer.GetAllErrors.ShouldEqual(@"DIFFERENT: Message->Property 'BoolRequiredDefaultFalse', default value sql. Expected = False, found = <null>
 DIFFERENT: Message->Property 'BoolRequiredDefaultFalse', value generated. Expected = OnAdd, found = Never
 DIFFERENT: Message->Property 'BoolRequiredDefaultTrue', default value sql. Expected = True, found = 1
@@ -55,7 +56,19 @@ DIFFERENT: Message->Property 'StringRequiredDefaultEmpty', default value sql. Ex
 DIFFERENT: Message->Property 'StringRequiredDefaultSomething', default value sql. Expected = something, found = N'something'
 DIFFERENT: Message->Property 'XmlRequiredDefaultEmpty', default value sql. Expected = , found = N''
 DIFFERENT: Message->Property 'XmlRequiredDefaultSomething', default value sql. Expected = <something />, found = N'<something />'");
-
+#elif NETCOREAPP3_0
+                comparer.GetAllErrors.ShouldEqual(@"DIFFERENT: Message->Property 'BoolRequiredDefaultFalse', default value sql. Expected = False, found = CONVERT([bit],(0))
+DIFFERENT: Message->Property 'BoolRequiredDefaultTrue', default value sql. Expected = True, found = CONVERT([bit],(1))
+DIFFERENT: Message->Property 'EnumRequiredDefaultOne', default value sql. Expected = One, found = 1
+DIFFERENT: Message->Property 'EnumRequiredDefaultZero', default value sql. Expected = Zero, found = <null>
+DIFFERENT: Message->Property 'EnumRequiredDefaultZero', value generated. Expected = OnAdd, found = Never
+DIFFERENT: Message->Property 'IntRequiredDefault0', default value sql. Expected = 0, found = <null>
+DIFFERENT: Message->Property 'IntRequiredDefault0', value generated. Expected = OnAdd, found = Never
+DIFFERENT: Message->Property 'StringRequiredDefaultEmpty', default value sql. Expected = , found = N''
+DIFFERENT: Message->Property 'StringRequiredDefaultSomething', default value sql. Expected = something, found = N'something'
+DIFFERENT: Message->Property 'XmlRequiredDefaultEmpty', default value sql. Expected = , found = N''
+DIFFERENT: Message->Property 'XmlRequiredDefaultSomething', default value sql. Expected = <something />, found = N'<something />'");
+#endif
 
             }
         }

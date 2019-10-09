@@ -39,7 +39,12 @@ namespace Test.UnitTests.EfSchemaCompare
                 var hasErrors = comparer.CompareEfWithDb(context);
 
                 //VERIFY
+#if NETCOREAPP2_1
                 hasErrors.ShouldBeFalse(comparer.GetAllErrors);
+#elif NETCOREAPP3_0
+                hasErrors.ShouldBeTrue(comparer.GetAllErrors);
+                comparer.GetAllErrors.ShouldEqual("DIFFERENT: BookDetail->Property 'Price', nullability. Expected = NOT NULL, found = NULL");
+#endif
             }
         }
 

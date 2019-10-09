@@ -205,7 +205,7 @@ namespace Test.UnitTests.TestDataLayer
 #if NETCOREAPP2_1
                 logs2.Count.ShouldEqual(logs1Count);
 #elif NETCOREAPP3_0
-                logs2.Count.ShouldEqual(logs1Count - 1);
+                logs2.Count.ShouldBeInRange(logs1Count - 1, logs1Count + 1); //It depends which one starts first
 #endif
             }
         }

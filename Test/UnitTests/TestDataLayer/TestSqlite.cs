@@ -105,6 +105,24 @@ namespace Test.UnitTests.TestDataLayer
                 //VERIFY
             }
         }
+
+        [Fact]
+        public void TestSqlLiteAcceptsComputedColButDoesntWork()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<MyEntityComputedColDbContext>();
+            using (var context = new MyEntityComputedColDbContext(options))
+            {
+                context.Database.EnsureCreated();
+
+                //ATTEMPT
+                context.Add(new MyEntity());
+                var ex = Assert.Throws<DbUpdateException>(() => context.SaveChanges());
+
+                //VERIFY
+                Assert.StartsWith("SQLite Error 19: 'NOT NULL constraint failed:", ex.InnerException.Message);
+            }
+        }
 #elif NETCOREAPP3_0
         [Fact]
         public void TestSqlLiteDoesNotSupportComputedCol()
@@ -133,24 +151,6 @@ namespace Test.UnitTests.TestDataLayer
                 context.Database.EnsureCreated();
 
                 //VERIFY
-            }
-        }
-
-        [Fact]
-        public void TestSqlLiteAcceptsComputedColButDoesntWork()
-        {
-            //SETUP
-            var options = SqliteInMemory.CreateOptions<MyEntityComputedColDbContext>();
-            using (var context = new MyEntityComputedColDbContext(options))
-            {
-                context.Database.EnsureCreated();
-
-                //ATTEMPT
-                context.Add(new MyEntity());
-                var ex = Assert.Throws<DbUpdateException>(() => context.SaveChanges());
-
-                //VERIFY
-                Assert.StartsWith("SQLite Error 19: 'NOT NULL constraint failed:", ex.InnerException.Message);
             }
         }
 
