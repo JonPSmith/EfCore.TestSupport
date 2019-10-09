@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using System.Linq;
 using DataLayer.EfCode.BookApp;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Test.Helpers;
 using TestSupport.Attributes;

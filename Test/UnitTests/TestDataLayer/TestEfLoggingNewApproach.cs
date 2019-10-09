@@ -193,7 +193,7 @@ namespace Test.UnitTests.TestDataLayer
 
                 //VERIFY
                 logs1.Count.ShouldEqual(logs1Count);
-                logs2.Count.ShouldEqual(logs1Count-1);
+                logs2.Count.ShouldBeInRange(logs1Count-1, logs1Count+1); //It depends which one starts first
             }
         }
 

@@ -43,9 +43,8 @@ namespace Test.UnitTests.EfSchemaCompare
                 //VERIFY
                 //hasErrors.ShouldBeFalse(comparer.GetAllErrors);
                 hasErrors.ShouldBeTrue();
-                comparer.GetAllErrors.ShouldEqual(@"DIFFERENT: Message->Property 'BoolRequiredDefaultFalse', default value sql. Expected = False, found = <null>
-DIFFERENT: Message->Property 'BoolRequiredDefaultFalse', value generated. Expected = OnAdd, found = Never
-DIFFERENT: Message->Property 'BoolRequiredDefaultTrue', default value sql. Expected = True, found = 1
+                comparer.GetAllErrors.ShouldEqual(@"DIFFERENT: Message->Property 'BoolRequiredDefaultFalse', default value sql. Expected = False, found = CONVERT([bit],(0))
+DIFFERENT: Message->Property 'BoolRequiredDefaultTrue', default value sql. Expected = True, found = CONVERT([bit],(1))
 DIFFERENT: Message->Property 'EnumRequiredDefaultOne', default value sql. Expected = One, found = 1
 DIFFERENT: Message->Property 'EnumRequiredDefaultZero', default value sql. Expected = Zero, found = <null>
 DIFFERENT: Message->Property 'EnumRequiredDefaultZero', value generated. Expected = OnAdd, found = Never

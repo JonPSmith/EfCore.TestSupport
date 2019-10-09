@@ -39,7 +39,8 @@ namespace Test.UnitTests.EfSchemaCompare
                 var hasErrors = comparer.CompareEfWithDb(context);
 
                 //VERIFY
-                hasErrors.ShouldBeFalse(comparer.GetAllErrors);
+                hasErrors.ShouldBeTrue(comparer.GetAllErrors);
+                comparer.GetAllErrors.ShouldEqual("DIFFERENT: BookDetail->Property 'Price', nullability. Expected = NOT NULL, found = NULL");
             }
         }
 
