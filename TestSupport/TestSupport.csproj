@@ -4,14 +4,6 @@
     <TargetFrameworks>netstandard2.1;netstandard2.0</TargetFrameworks>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU' AND '$(TargetFramework)' == 'netstandard2.0'">
-    <DocumentationFile>bin\Debug\netstandard2.0\TestSupport.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU' AND '$(TargetFramework)' == 'netstandard2.1'">
-    <DocumentationFile>bin\Debug\netstandard2.1\TestSupport.xml</DocumentationFile>
-  </PropertyGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.0.0" />
@@ -46,18 +38,29 @@
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
-  
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU' AND '$(TargetFramework)' == 'netstandard2.0'">
+    <DocumentationFile>bin\Debug\netstandard2.0\TestSupport.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU' AND '$(TargetFramework)' == 'netstandard2.1'">
+    <DocumentationFile>bin\Debug\netstandard2.1\TestSupport.xml</DocumentationFile>
+  </PropertyGroup>
+
+
   <PropertyGroup>
     <PackageId>EfCore.TestSupport</PackageId>
-    <PackageVersion>2.0.1</PackageVersion>
-    <Version>2.0.1</Version>
-    <AssemblyVersion>2.0.1.0</AssemblyVersion>
-    <FileVersion>2.0.1.0</FileVersion>
+    <PackageVersion>3.0.0-preview001</PackageVersion>
+    <Version>3.0.0</Version>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <FileVersion>3.0.0.0</FileVersion>
     <Authors>Jon P Smith</Authors>
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-      - Bug fix: Seed from Production's WriteJsonToJsonFile and ReadSeedDataFromJsonFile didn't get the calling assembly - see issue #21
+      - Support both EF Core 2.? and EF Core 3.? by supporting NetStandard2.0 and NetStandard2.1.
+      - Bug fix: GetAllErrors() in CompareEfSql should use Environment.NewLine. See issue #20.
+      - Obsolete: Remove LogSetupHelper as obsolete, use `CreateOptionsWithLogging` for Sqlite and SQL Server.
     </PackageReleaseNotes>
     <Copyright>Copyright (c) 2017 Jon P Smith. Licenced under MIT licence</Copyright>
     <PackageTags>Entity Framework Core, xUnit</PackageTags>
@@ -67,6 +70,11 @@
     <PackageIconUrl>https://raw.githubusercontent.com/JonPSmith/EfCore.TestSupport/master/EfCoreTestSupportNuGetIcon128.png</PackageIconUrl>
     <RepositoryUrl></RepositoryUrl>
     <PackageLicenseUrl>https://github.com/JonPSmith/EfCore.TestSupport/blob/master/LICENSE</PackageLicenseUrl>
+  </PropertyGroup>
+
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
+    <DocumentationFile>C:\Users\jonsm\Source\Repos\EfCore.TestSupport\TestSupport\TestSupport.xml</DocumentationFile>
   </PropertyGroup>
 
 </Project>

@@ -1,0 +1,1150 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TestSupport</name>
+    </assembly>
+    <members>
+        <member name="T:Xunit.Extensions.AssertExtensions.BooleanAssertionExtensions">
+            <summary>
+            Extensions which provide assertions to classes derived from <see cref="T:System.Boolean"/>.
+            </summary>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.BooleanAssertionExtensions.ShouldBeFalse(System.Boolean)">
+            <summary>
+            Verifies that the condition is false.
+            </summary>
+            <param name="condition">The condition to be tested</param>
+            <exception cref="!:FalseException">Thrown if the condition is not false</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.BooleanAssertionExtensions.ShouldBeFalse(System.Boolean,System.String)">
+            <summary>
+            Verifies that the condition is false.
+            </summary>
+            <param name="condition">The condition to be tested</param>
+            <param name="userMessage">The message to show when the condition is not false</param>
+            <exception cref="!:FalseException">Thrown if the condition is not false</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.BooleanAssertionExtensions.ShouldBeTrue(System.Boolean)">
+            <summary>
+            Verifies that an expression is true.
+            </summary>
+            <param name="condition">The condition to be inspected</param>
+            <exception cref="!:TrueException">Thrown when the condition is false</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.BooleanAssertionExtensions.ShouldBeTrue(System.Boolean,System.String)">
+            <summary>
+            Verifies that an expression is true.
+            </summary>
+            <param name="condition">The condition to be inspected</param>
+            <param name="userMessage">The message to be shown when the condition is false</param>
+            <exception cref="!:TrueException">Thrown when the condition is false</exception>
+        </member>
+        <member name="T:Xunit.Extensions.AssertExtensions.CollectionAssertExtensions">
+            <summary>
+            Extensions which provide assertions to classes derived from <see cref="T:System.Collections.IEnumerable"/> and <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </summary>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.CollectionAssertExtensions.ShouldBeEmpty(System.Collections.IEnumerable)">
+            <summary>
+            Verifies that a collection is empty.
+            </summary>
+            <param name="collection">The collection to be inspected</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the collection is null</exception>
+            <exception cref="!:EmptyException">Thrown when the collection is not empty</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.CollectionAssertExtensions.ShouldContain``1(System.Collections.Generic.IEnumerable{``0},``0)">
+            <summary>
+            Verifies that a collection contains a given object.
+            </summary>
+            <typeparam name="T">The type of the object to be verified</typeparam>
+            <param name="collection">The collection to be inspected</param>
+            <param name="expected">The object expected to be in the collection</param>
+            <exception cref="!:ContainsException">Thrown when the object is not present in the collection</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.CollectionAssertExtensions.ShouldContain``1(System.Collections.Generic.IEnumerable{``0},``0,System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+            Verifies that a collection contains a given object, using a comparer.
+            </summary>
+            <typeparam name="T">The type of the object to be verified</typeparam>
+            <param name="collection">The collection to be inspected</param>
+            <param name="expected">The object expected to be in the collection</param>
+            <param name="comparer">The comparer used to equate objects in the collection with the expected object</param>
+            <exception cref="!:ContainsException">Thrown when the object is not present in the collection</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.CollectionAssertExtensions.ShouldNotBeEmpty(System.Collections.IEnumerable)">
+            <summary>
+            Verifies that a collection is not empty.
+            </summary>
+            <param name="collection">The collection to be inspected</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when a null collection is passed</exception>
+            <exception cref="!:NotEmptyException">Thrown when the collection is empty</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.CollectionAssertExtensions.ShouldNotContain``1(System.Collections.Generic.IEnumerable{``0},``0)">
+            <summary>
+            Verifies that a collection does not contain a given object.
+            </summary>
+            <typeparam name="T">The type of the object to be compared</typeparam>
+            <param name="expected">The object that is expected not to be in the collection</param>
+            <param name="collection">The collection to be inspected</param>
+            <exception cref="!:DoesNotContainException">Thrown when the object is present inside the container</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.CollectionAssertExtensions.ShouldNotContain``1(System.Collections.Generic.IEnumerable{``0},``0,System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+            Verifies that a collection does not contain a given object, using a comparer.
+            </summary>
+            <typeparam name="T">The type of the object to be compared</typeparam>
+            <param name="expected">The object that is expected not to be in the collection</param>
+            <param name="collection">The collection to be inspected</param>
+            <param name="comparer">The comparer used to equate objects in the collection with the expected object</param>
+            <exception cref="!:DoesNotContainException">Thrown when the object is present inside the container</exception>
+        </member>
+        <member name="T:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions">
+            <summary>
+            Extensions which provide assertions to classes derived from <see cref="T:System.Object"/>.
+            </summary>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions.ShouldBeInRange``1(``0,``0,``0)">
+            <summary>
+            Verifies that a value is within a given range.
+            </summary>
+            <typeparam name="T">The type of the value to be compared</typeparam>
+            <param name="actual">The actual value to be evaluated</param>
+            <param name="low">The (inclusive) low value of the range</param>
+            <param name="high">The (inclusive) high value of the range</param>
+            <exception cref="!:InRangeException">Thrown when the value is not in the given range</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions.ShouldBeInRange``1(``0,``0,``0,System.Collections.Generic.IComparer{``0})">
+            <summary>
+            Verifies that a value is within a given range, using a comparer.
+            </summary>
+            <typeparam name="T">The type of the value to be compared</typeparam>
+            <param name="actual">The actual value to be evaluated</param>
+            <param name="low">The (inclusive) low value of the range</param>
+            <param name="high">The (inclusive) high value of the range</param>
+            <param name="comparer">The comparer used to evaluate the value's range</param>
+            <exception cref="!:InRangeException">Thrown when the value is not in the given range</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions.ShouldBeNull(System.Object)">
+            <summary>
+            Verifies that an object reference is null.
+            </summary>
+            <param name="object">The object to be inspected</param>
+            <exception cref="!:NullException">Thrown when the object reference is not null</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions.ShouldBeSameAs(System.Object,System.Object)">
+            <summary>
+            Verifies that two objects are the same instance.
+            </summary>
+            <param name="actual">The actual object instance</param>
+            <param name="expected">The expected object instance</param>
+            <exception cref="!:SameException">Thrown when the objects are not the same instance</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions.ShouldBeType``1(System.Object)">
+            <summary>
+            Verifies that an object is exactly the given type (and not a derived type).
+            </summary>
+            <typeparam name="T">The type the object should be</typeparam>
+            <param name="object">The object to be evaluated</param>
+            <returns>The object, casted to type T when successful</returns>
+            <exception cref="!:IsTypeException">Thrown when the object is not the given type</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions.ShouldBeType(System.Object,System.Type)">
+            <summary>
+            Verifies that an object is exactly the given type (and not a derived type).
+            </summary>
+            <param name="object">The object to be evaluated</param>
+            <param name="expectedType">The type the object should be</param>
+            <exception cref="!:IsTypeException">Thrown when the object is not the given type</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions.ShouldEqual``1(``0,``0)">
+            <summary>
+            Verifies that two objects are equal, using a default comparer.
+            </summary>
+            <typeparam name="T">The type of the objects to be compared</typeparam>
+            <param name="actual">The value to be compared against</param>
+            <param name="expected">The expected value</param>
+            <exception cref="!:EqualException">Thrown when the objects are not equal</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions.ShouldEqual``1(``0,``0,System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+            Verifies that two objects are equal, using a custom comparer.
+            </summary>
+            <typeparam name="T">The type of the objects to be compared</typeparam>
+            <param name="actual">The value to be compared against</param>
+            <param name="expected">The expected value</param>
+            <param name="comparer">The comparer used to compare the two objects</param>
+            <exception cref="!:EqualException">Thrown when the objects are not equal</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions.ShouldNotBeInRange``1(``0,``0,``0)">
+            <summary>
+            Verifies that a value is not within a given range, using the default comparer.
+            </summary>
+            <typeparam name="T">The type of the value to be compared</typeparam>
+            <param name="actual">The actual value to be evaluated</param>
+            <param name="low">The (inclusive) low value of the range</param>
+            <param name="high">The (inclusive) high value of the range</param>
+            <exception cref="!:NotInRangeException">Thrown when the value is in the given range</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions.ShouldNotBeInRange``1(``0,``0,``0,System.Collections.Generic.IComparer{``0})">
+            <summary>
+            Verifies that a value is not within a given range, using a comparer.
+            </summary>
+            <typeparam name="T">The type of the value to be compared</typeparam>
+            <param name="actual">The actual value to be evaluated</param>
+            <param name="low">The (inclusive) low value of the range</param>
+            <param name="high">The (inclusive) high value of the range</param>
+            <param name="comparer">The comparer used to evaluate the value's range</param>
+            <exception cref="!:NotInRangeException">Thrown when the value is in the given range</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions.ShouldNotBeNull(System.Object)">
+            <summary>
+            Verifies that an object reference is not null.
+            </summary>
+            <param name="object">The object to be validated</param>
+            <exception cref="!:NotNullException">Thrown when the object is not null</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions.ShouldNotBeSameAs(System.Object,System.Object)">
+            <summary>
+            Verifies that two objects are not the same instance.
+            </summary>
+            <param name="actual">The actual object instance</param>
+            <param name="expected">The expected object instance</param>
+            <exception cref="!:NotSameException">Thrown when the objects are the same instance</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions.ShouldNotBeType``1(System.Object)">
+            <summary>
+            Verifies that an object is not exactly the given type.
+            </summary>
+            <typeparam name="T">The type the object should not be</typeparam>
+            <param name="object">The object to be evaluated</param>
+            <exception cref="!:IsTypeException">Thrown when the object is the given type</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions.ShouldNotBeType(System.Object,System.Type)">
+            <summary>
+            Verifies that an object is not exactly the given type.
+            </summary>
+            <param name="object">The object to be evaluated</param>
+            <param name="expectedType">The type the object should not be</param>
+            <exception cref="!:IsTypeException">Thrown when the object is the given type</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions.ShouldNotEqual``1(``0,``0)">
+            <summary>
+            Verifies that two objects are not equal, using a default comparer.
+            </summary>
+            <typeparam name="T">The type of the objects to be compared</typeparam>
+            <param name="actual">The actual object</param>
+            <param name="expected">The expected object</param>
+            <exception cref="!:NotEqualException">Thrown when the objects are equal</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions.ShouldNotEqual``1(``0,``0,System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+            Verifies that two objects are not equal, using a custom comparer.
+            </summary>
+            <typeparam name="T">The type of the objects to be compared</typeparam>
+            <param name="actual">The actual object</param>
+            <param name="expected">The expected object</param>
+            <param name="comparer">The comparer used to examine the objects</param>
+            <exception cref="!:NotEqualException">Thrown when the objects are equal</exception>
+        </member>
+        <member name="T:Xunit.Extensions.AssertExtensions.StringAssertionExtensions">
+            <summary>
+            Extensions which provide assertions to classes derived from <see cref="T:System.String"/>.
+            </summary>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.StringAssertionExtensions.ShouldContain(System.String,System.String)">
+            <summary>
+            Verifies that a string contains a given sub-string, using the current culture.
+            </summary>
+            <param name="actualString">The string to be inspected</param>
+            <param name="expectedSubString">The sub-string expected to be in the string</param>
+            <exception cref="!:ContainsException">Thrown when the sub-string is not present inside the string</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.StringAssertionExtensions.ShouldContain(System.String,System.String,System.StringComparison)">
+            <summary>
+            Verifies that a string contains a given sub-string, using the given comparison type.
+            </summary>
+            <param name="actualString">The string to be inspected</param>
+            <param name="expectedSubString">The sub-string expected to be in the string</param>
+            <param name="comparisonType">The type of string comparison to perform</param>
+            <exception cref="!:ContainsException">Thrown when the sub-string is not present inside the string</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.StringAssertionExtensions.ShouldNotContain(System.String,System.String)">
+            <summary>
+            Verifies that a string does not contain a given sub-string, using the current culture.
+            </summary>
+            <param name="actualString">The string to be inspected</param>
+            <param name="expectedSubString">The sub-string which is expected not to be in the string</param>
+            <exception cref="!:DoesNotContainException">Thrown when the sub-string is present inside the string</exception>
+        </member>
+        <member name="M:Xunit.Extensions.AssertExtensions.StringAssertionExtensions.ShouldNotContain(System.String,System.String,System.StringComparison)">
+            <summary>
+            Verifies that a string does not contain a given sub-string, using the current culture.
+            </summary>
+            <param name="actualString">The string to be inspected</param>
+            <param name="expectedSubString">The sub-string which is expected not to be in the string</param>
+            <param name="comparisonType">The type of string comparison to perform</param>
+            <exception cref="!:DoesNotContainException">Thrown when the sub-string is present inside the given string</exception>
+        </member>
+        <member name="T:TestSupport.Attributes.RunnableInDebugOnlyAttribute">
+            <summary>
+            Useful attribute for stopping a test from being run
+            see https://lostechies.com/jimmybogard/2013/06/20/run-tests-explicitly-in-xunit-net/ 
+            </summary>
+        </member>
+        <member name="M:TestSupport.Attributes.RunnableInDebugOnlyAttribute.#ctor">
+            <summary>
+            By putting this attribute on a test instead of the normal [Fact] attribute will mean the 
+            test will only run if in debug mode.
+            This is useful for stopping unit tests that should not be run in the normal run of unit tests
+            </summary>
+        </member>
+        <member name="T:TestSupport.DesignTimeServices.DesignProvider">
+            <summary>
+            This static class contains the methods to return a design-time service provider
+            </summary>
+        </member>
+        <member name="M:TestSupport.DesignTimeServices.DesignProvider.GetDesignTimeService(Microsoft.EntityFrameworkCore.DbContext)">
+            <summary>
+            This returns the correct instance of the design time service for the current DbContext
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.DesignTimeServices.DesignProvider.GetDesignTimeProvider(Microsoft.EntityFrameworkCore.Design.IDesignTimeServices)">
+            <summary>
+            This returns a DesignTimeProvider for the design time service instance that you provided
+            </summary>
+            <param name="designTimeService">This should be an instance of rhe design time service for the database provider</param>
+            <returns></returns>
+        </member>
+        <member name="T:TestSupport.EfHelpers.ApplyScriptExtension">
+            <summary>
+            Static class holding extension methods for applying SQL scripts to a database
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.ApplyScriptExtension.ExecuteScriptFileInTransaction(Microsoft.EntityFrameworkCore.DbContext,System.String)">
+            <summary>
+            This reads in a SQL script file and executes each command to the database pointed at by the DbContext
+            Each command should have an GO at the start of the line after the command.
+            </summary>
+            <param name="context"></param>
+            <param name="filePath"></param>
+        </member>
+        <member name="T:TestSupport.EfHelpers.DatabaseTidyHelper">
+            <summary>
+            Extension methods for deleting all the databases used in the unit test
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.DatabaseTidyHelper.DeleteAllUnitTestDatabases">
+            <summary>
+            This will delete all the databases that start with the database name in the default connection string
+            WARNING: This will delete multiple databases - make sure your DefaultConnection database name is unique!!!
+            </summary>
+            <returns>Number of databases deleted</returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.DatabaseTidyHelper.GetAllMatchingDatabases(System.String,System.String)">
+            <summary>
+            This returns all the matching databases that start with the orgDbStartsWith parameter 
+            </summary>
+            <param name="orgDbStartsWith">Start of database name</param>
+            <param name="connectionString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.DatabaseTidyHelper.WipeCreateDatabase(System.String,System.Int32)">
+            <summary>
+            Wipes out the existing database and creates a new, empty one
+            </summary>
+            <param name="databaseConnectionString">a actual connection string</param>
+            <param name="timeout">Defines a timeout for connection and the SQL DELETE/CREATE database commands</param>
+        </member>
+        <member name="T:TestSupport.EfHelpers.EfInMemory">
+            <summary>
+            This static class contains extention methods to use with In-Memory databases
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.EfInMemory.CreateOptions``1(System.Boolean)">
+            <summary>
+            This creates the options for an in-memory database with a unique name
+            </summary>
+            <typeparam name="TContext"></typeparam>
+            <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.EfInMemory.CreateOptions``1(System.String,System.Boolean)">
+            <summary>
+            This creates the options for an in-memory database, with the name given.
+            </summary>
+            <typeparam name="TContext"></typeparam>
+            <param name="dbName">name of in-memory database</param>
+            <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.Internal.EfCoreLogDecoder.DecodeMessage(TestSupport.EfHelpers.LogOutput)">
+            <summary>
+            This will try and decode an EF Core "CommandExecuted" 
+            </summary>
+            <param name="log"></param>
+            <returns></returns>
+        </member>
+        <member name="T:TestSupport.EfHelpers.LogOutput">
+            <summary>
+            This holds logs produced by the MyLoggerProvider 
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfHelpers.LogOutput.LogLevel">
+            <summary>
+            The logLevel of this log
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfHelpers.LogOutput.EventId">
+            <summary>
+            The logging EventId - should be string for EF Core logs
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfHelpers.LogOutput.Message">
+            <summary>
+            The message in the log
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfHelpers.LogOutput.EfEventIdLastName">
+            <summary>
+            This returns the last part of an EF Core EventId name, or null if the eventId is not an EF Core one
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.LogOutput.ToString">
+            <summary>
+            Summary of the log
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.LogOutput.DecodeMessage(System.Boolean)">
+            <summary>
+            This tries to build valid SQL commands on CommandExecuted logs, i.e. logs containing the SQL output
+            by taking the values available from EnableSensitiveDataLogging and inserting them in place of the parameter.
+            This makes it easier to copy the SQL produced by EF Core and run in SSMS etc.
+            LIMITATIONS are:
+            - It can't distinguish the different between an empty string and a null string - it default to null
+            - It can't work out if its a byte[] or not, so byte[] is treated as a SQL string, WHICH WILL fail
+            - Numbers are presented as SQL strings, e.g. 123 becomes '123'. SQL Server can handle that
+            </summary>
+            <param name="sensitiveLoggingEnabled"></param>
+            <returns></returns>
+        </member>
+        <member name="T:TestSupport.EfHelpers.MyLoggerProvider">
+            <summary>
+            Old logging provider, but kept as some unit test code still uses it
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.MyLoggerProvider.#ctor(System.Collections.Generic.List{TestSupport.EfHelpers.LogOutput},Microsoft.Extensions.Logging.LogLevel)">
+            <summary>
+            This is a logger provider that can be linked into a loggerFactory.
+            It will capture the logs and place them as strings into the provided logs parameter
+            </summary>
+            <param name="logs">required: a an initialised List<string> to hold any logs that are created</string></param>
+            <param name="logLevel">optional: the level from with you want to capture logs. Defaults to LogLevel.Information</param>
+        </member>
+        <member name="M:TestSupport.EfHelpers.MyLoggerProvider.CreateLogger(System.String)">
+            <summary>
+            Create a logger
+            </summary>
+            <param name="categoryName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.MyLoggerProvider.Dispose">
+            <summary>
+            Displose - does nothing
+            </summary>
+        </member>
+        <member name="T:TestSupport.EfHelpers.MyLoggerProviderActionOut">
+            <summary>
+            This 
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.MyLoggerProviderActionOut.#ctor(System.Action{TestSupport.EfHelpers.LogOutput},Microsoft.Extensions.Logging.LogLevel)">
+            <summary>
+            This is a logger provider that can be linked into a loggerFactory.
+            It will capture the logs and place them as strings into the provided logs parameter
+            </summary>
+            <param name="efLog">required: a method that will be called when EF Core logs something</param>
+            <param name="logLevel">optional: the level from with you want to capture logs. Defaults to LogLevel.Information</param>
+        </member>
+        <member name="M:TestSupport.EfHelpers.MyLoggerProviderActionOut.CreateLogger(System.String)">
+            <summary>
+            Create a logger that will return a log when it is called.
+            </summary>
+            <param name="categoryName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.MyLoggerProviderActionOut.Dispose">
+            <summary>
+            Dispose - not used
+            </summary>
+        </member>
+        <member name="T:TestSupport.EfHelpers.SqlAdoNetHelpers">
+            <summary>
+            Contains extension methods to help with base SQL commands 
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.SqlAdoNetHelpers.ExecuteRowCount(System.String,System.String,System.String)">
+            <summary>
+            Execute a count of the rows in a table, with optional where clause, using ADO.NET
+            </summary>
+            <param name="connectionString"></param>
+            <param name="tableName"></param>
+            <param name="whereClause"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.SqlAdoNetHelpers.ExecuteNonQuery(System.String,System.String,System.Int32)">
+            <summary>
+            Execute a non-query SQL using ADO.NET
+            </summary>
+            <param name="connectionString"></param>
+            <param name="command"></param>
+            <param name="commandTimeout"></param>
+            <returns></returns>
+        </member>
+        <member name="T:TestSupport.EfHelpers.SqliteInMemory">
+            <summary>
+            This static class contains extention methods to use with in-memory Sqlite databases
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.SqliteInMemory.CreateOptions``1">
+            <summary>
+            Created a Sqlite Options for in-memory database. 
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.SqliteInMemory.CreateOptionsWithLogging``1(System.Action{TestSupport.EfHelpers.LogOutput},Microsoft.Extensions.Logging.LogLevel)">
+            <summary>
+            Created a Sqlite Options for in-memory database while capturing EF Core's logging output. 
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="efLog">This is a method that receives a LogOutput whenever EF Core logs something</param>
+            <param name="logLevel">Optional: Sets the logLevel you want to capture. Defaults to Information</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.SqliteInMemory.SetupConnectionAndBuilderOptions``1">
+            <summary>
+            Created a Sqlite Options for in-memory database. 
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:TestSupport.EfHelpers.SqlServerHelpers">
+            <summary>
+            This static class contains extension methods to use with SQL Server databases
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.SqlServerHelpers.CreateUniqueClassOptions``1(System.Object)">
+            <summary>
+            This creates the DbContextOptions  options for a SQL server database, 
+            where the database name is formed using the appsetting's DefaultConnection with the class name as a prefix.
+            That is, the database is unique to the object provided
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="callingClass">this should be this, i.e. the class you are in</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.SqlServerHelpers.CreateUniqueClassOptionsWithLogging``1(System.Object,System.Action{TestSupport.EfHelpers.LogOutput},Microsoft.Extensions.Logging.LogLevel)">
+            <summary>
+            This creates the DbContextOptions options for a SQL server database while capturing EF Core's logging output. 
+            The database name is formed using the appsetting's DefaultConnection with the class name as a prefix.
+            That is, the database is unique to the object provided
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="callingClass">this should be this, i.e. the class you are in</param>
+            <param name="efLog">This is a method that receives a LogOutput whenever EF Core logs something</param>
+            <param name="logLevel">Optional: Sets the logLevel you want to capture. Defaults to Information</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.SqlServerHelpers.CreateUniqueMethodOptions``1(System.Object,System.String)">
+            <summary>
+            This creates the DbContextOptions options for a SQL server database, 
+            where the database name is formed using the appsetting's DefaultConnection with the class name and the calling method's name as as a prefix.
+            That is, the database is unique to the calling method.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="callingClass">this should be this, i.e. the class you are in</param>
+            <param name="callingMember">Do not use: this is filled in by compiler</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.SqlServerHelpers.CreateUniqueMethodOptionsWithLogging``1(System.Object,System.Action{TestSupport.EfHelpers.LogOutput},Microsoft.Extensions.Logging.LogLevel,System.String)">
+            <summary>
+            This creates the DbContextOptions  options for a SQL server database while capturing EF Core's logging output. 
+            Where the database name is formed using the appsetting's DefaultConnection with the class name and the calling method's name as as a prefix.
+            That is, the database is unique to the calling method.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="callingClass">this should be this, i.e. the class you are in</param>
+            <param name="efLog">This is a method that receives a LogOutput whenever EF Core logs something</param>
+            <param name="logLevel">Optional: Sets the logLevel you want to capture. Defaults to Information</param>
+            <param name="callingMember">Do not use: this is filled in by compiler</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.SqlServerHelpers.CreateEmptyViaDelete(Microsoft.EntityFrameworkCore.DbContext)">
+            <summary>
+            This will ensure an empty database by deleting the current database and recreating it
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:TestSupport.EfHelpers.SqlServerHelpers.CreateEmptyViaWipe(Microsoft.EntityFrameworkCore.DbContext,System.Boolean,System.Int32,System.Type[])">
+            <summary>
+            This will ensure an empty database by using the WipeAllDataFromDatabase method
+            </summary>
+            <param name="context"></param>
+            <param name="addBracketsAndSchema">Optional: normally it only uses the table name, but for cases where you have multiple schemas,
+            or a table name that needs brackets the you can set to to true. Default is false</param>
+            <param name="maxDepth">Valuse to stop the wipe method from getting in a circular reference loop</param>
+            <param name="excludeTypes">This allows you to provide the Types of the table that you don't want wiped. 
+            Useful if you have a circular ref that WipeAllDataFromDatabase cannot handle. You then must wipe that part.</param>
+            <returns>True if the database is created, false if it already existed.</returns>
+        </member>
+        <member name="T:TestSupport.EfHelpers.TimeThings">
+            <summary>
+            Use this in a using statement for timing things - time output to test output when class is disposes
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.TimeThings.#ctor(Xunit.Abstractions.ITestOutputHelper,System.String,System.Int32)">
+            <summary>
+            This will measure the time it took from this class being created to it being disposed
+            </summary>
+            <param name="output"></param>
+            <param name="message"></param>
+            <param name="numRuns">Optional: if the timing covers multiple runs of soemthing, then set numRuns to the number of runs and it will give you the average per run</param>
+        </member>
+        <member name="M:TestSupport.EfHelpers.TimeThings.Dispose">
+            <summary>
+            When disposed it will write to the test output the time it took from creation
+            </summary>
+        </member>
+        <member name="T:TestSupport.EfHelpers.WipeDbViaSql">
+            <summary>
+            This static class contains extention methods for quickly wiping a database using SQL commands
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.WipeDbViaSql.WipeAllDataFromDatabase(Microsoft.EntityFrameworkCore.DbContext,System.Boolean,System.Int32,System.Type[])">
+            <summary>
+            This is a fast way to delete all the rows in all the tables in a database. 
+            Useful for unit testing where you need an empty database.
+            This will work out the right order to delete rows from tables to avoid a delete behavour of Restrict
+            from causing problems. Its not perfect (circular references can cause it problems) but it will throw
+            an exception if it cannot acheive a wipe of the database
+            </summary>
+            <param name="context"></param>
+            <param name="addBracketsAndSchema">Optional: normally it only uses the table name, but for cases where you have multiple schemas,
+            or a table name that needs brackets the you can set to to true. Deafult is false</param>
+            <param name="maxDepth">Value to stop the wipe method from getting in a circular reference loop. Defaults to 10</param>
+            <param name="excludeTypes">This allows you to provide the Types of the table that you don't want wiped. 
+            Useful if you have a circular ref that WipeAllDataFromDatabase cannot handle. You then must wipe that part yourself.</param>
+        </member>
+        <member name="T:TestSupport.EfSchemeCompare.CompareEfSql">
+            <summary>
+            This is the main class for Comparing EF Core DbContexts against a database to see if they differ
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfSchemeCompare.CompareEfSql.#ctor(TestSupport.EfSchemeCompare.CompareEfSqlConfig)">
+            <summary>
+            This creates the comparer class that you use for comparing EF Core DbContexts to a database
+            </summary>
+            <param name="config"></param>
+        </member>
+        <member name="P:TestSupport.EfSchemeCompare.CompareEfSql.GetAllErrors">
+            <summary>
+            This returns a single string containing all the errors found
+            Each error is on a separate line
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfSchemeCompare.CompareEfSql.Logs">
+            <summary>
+            This gives you access to the full log. but its not an easy thing to parse
+            Look at the CompareLog class for various static methods that will output the log in a human-readable format
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfSchemeCompare.CompareEfSql.CompareEfWithDb(Microsoft.EntityFrameworkCore.DbContext[])">
+            <summary>
+            This will compare one or more DbContext against database pointed to the first DbContext.
+            </summary>
+            <param name="dbContexts">One or more dbContext instances to be compared with the database</param>
+            <returns>true if any errors found, otherwise false</returns>
+        </member>
+        <member name="M:TestSupport.EfSchemeCompare.CompareEfSql.CompareEfWithDb``1(Microsoft.EntityFrameworkCore.DbContext[])">
+            <summary>
+            This will compare one or more DbContext against database pointed to the first DbContext
+            using the DesignTimeServices type for T.
+            </summary>
+            <typeparam name="T">Must be the design time provider for the database provider you want to use, e.g. MySqlDesignTimeServices</typeparam>
+            <param name="dbContexts">One or more dbContext instances to be compared with the database</param>
+            <returns>true if any errors found, otherwise false</returns>
+        </member>
+        <member name="M:TestSupport.EfSchemeCompare.CompareEfSql.CompareEfWithDb(System.String,Microsoft.EntityFrameworkCore.DbContext[])">
+            <summary>
+            This will compare one or more DbContext against database pointed to by the configOrConnectionString.
+            </summary>
+            <param name="configOrConnectionString">This should either be a 
+            connection string or the name of a connection string in the appsetting.json file.
+            </param>
+            <param name="dbContexts">One or more dbContext instances to be compared with the database</param>
+            <returns>true if any errors found, otherwise false</returns>
+        </member>
+        <member name="M:TestSupport.EfSchemeCompare.CompareEfSql.CompareEfWithDb``1(System.String,Microsoft.EntityFrameworkCore.DbContext[])">
+            <summary>
+            This will compare one or more DbContext against database pointed to by the configOrConnectionString 
+            using the DesignTimeServices type for T 
+            </summary>
+            <typeparam name="T">Must be the design time provider for the database provider you want to use, e.g. MySqlDesignTimeServices</typeparam>
+            <param name="configOrConnectionString">This should either be a 
+            connection string or the name of a connection string in the appsetting.json file.
+            </param>
+            <param name="dbContexts">One or more dbContext instances to be compared with the database</param>
+            <returns>true if any errors found, otherwise false</returns>
+        </member>
+        <member name="T:TestSupport.EfSchemeCompare.CompareEfSqlConfig">
+            <summary>
+            This class holds the configuration information for the CompareEfSql class
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfSchemeCompare.CompareEfSqlConfig.CaseComparer">
+            <summary>
+            Set this to StringComparer.CurrentCultureIgnoreCase to change the 
+            This effects the table, schema, column, primary/index/foreignKey constraint names
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfSchemeCompare.CompareEfSqlConfig.TablesToIgnoreCommaDelimited">
+            <summary>
+            This allows you to ignore tables that your EF Core context doesn't use. There are three settings
+            1. null - this will only check the tables that the DbContexts are mapped to.
+            2. "" - This will check all tables in the database against the entity classes in the DbContexts.
+            3. A comma delimited list of tables, with optional schema, to ignore. 
+               Typical format: "MyTable,MyOtherTable,MySchema.MyTableWithSchema"
+               (note: the schema/table match is case insensitive)
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfSchemeCompare.CompareEfSqlConfig.LogsToIgnore">
+            <summary>
+            This contains all the log types that should be ignored by the comparer
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfSchemeCompare.CompareEfSqlConfig.IgnoreTheseErrors(System.String)">
+            <summary>
+            This allows you to clip a set of errors strings and add them as ignore items
+            </summary>
+            <param name="textWithNewlineBetweenErrors"></param>
+        </member>
+        <member name="M:TestSupport.EfSchemeCompare.CompareEfSqlConfig.AddIgnoreCompareLog(TestSupport.EfSchemeCompare.CompareLog)">
+            <summary>
+            This allows you to add a log with setting that will be used to decide if a log is ignored
+            The Type and State must be set, but any strings set to null with automatically match anything 
+            and the Attribute has a MatchAnything setting too.
+            </summary>
+            <param name="logTypeToIgnore"></param>
+        </member>
+        <member name="T:TestSupport.EfSchemeCompare.CompareType">
+            <summary>
+            This is used to define what is being compared
+            </summary>
+        </member>
+        <member name="T:TestSupport.EfSchemeCompare.CompareState">
+            <summary>
+            This defines the result of a comparision
+            </summary>
+        </member>
+        <member name="T:TestSupport.EfSchemeCompare.CompareAttributes">
+            <summary>
+            This contains extra information on what exactly was compared
+            </summary>
+        </member>
+        <member name="T:TestSupport.EfSchemeCompare.CompareLog">
+            <summary>
+            This holds the log of each compare done
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfSchemeCompare.CompareLog.SubLogs">
+            <summary>
+            Because an EF Core DbContext has a hierarchy then the logs are also in a hierarchy
+            For EF Core this is DbContext->Entity classes->Properties
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfSchemeCompare.CompareLog.#ctor(TestSupport.EfSchemeCompare.CompareType,TestSupport.EfSchemeCompare.CompareState,System.String,TestSupport.EfSchemeCompare.CompareAttributes,System.String,System.String)">
+            <summary>
+            This constuctor either creates a new log (used internally) or allows the user to create a log for ignore matching
+            </summary>
+            <param name="type"></param>
+            <param name="state"></param>
+            <param name="name"></param>
+            <param name="attribute"></param>
+            <param name="expected"></param>
+            <param name="found"></param>
+        </member>
+        <member name="P:TestSupport.EfSchemeCompare.CompareLog.Type">
+            <summary>
+            This holds what it is comparing
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfSchemeCompare.CompareLog.State">
+            <summary>
+            This holds the result of the comparison
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfSchemeCompare.CompareLog.Name">
+            <summary>
+            This holds the name of the primary thing it is comparing, e.g. MyEntity, MyProperty
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfSchemeCompare.CompareLog.Attribute">
+            <summary>
+            This contains extra information to define exactly what is being compared, for instance the ColumnName that a property is mapped to
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfSchemeCompare.CompareLog.Expected">
+            <summary>
+            This holds what EF Core expects to see
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfSchemeCompare.CompareLog.Found">
+            <summary>
+            This holds what was found in the database
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfSchemeCompare.CompareLog.ToString">
+            <summary>
+            This provides a human-readable version of a CompareLog
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfSchemeCompare.CompareLog.AllResultsIndented(System.Collections.Generic.IReadOnlyList{TestSupport.EfSchemeCompare.CompareLog},System.String)">
+            <summary>
+            This returns all the logs, with an indentation for each level in the hierarchy
+            </summary>
+            <param name="logs"></param>
+            <param name="indent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfSchemeCompare.CompareLog.ListAllErrors(System.Collections.Generic.IReadOnlyList{TestSupport.EfSchemeCompare.CompareLog},System.Collections.Generic.Stack{System.String})">
+            <summary>
+            This returns a string per error, in human-readable form
+            </summary>
+            <param name="logs"></param>
+            <param name="parentNames"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfSchemeCompare.Internal.CompareLogger.Warning(System.String,System.String,System.String)">
+            <summary>
+            This is for adding a warning.
+            </summary>
+            <param name="errorMessage">This should be the warning message</param>
+            <param name="expected">add this if something was missing</param>
+            <param name="found">add this if something extra was found</param>
+        </member>
+        <member name="M:TestSupport.EfSchemeCompare.Internal.CompareLogger.AddToLogsIfNotIgnored(TestSupport.EfSchemeCompare.CompareLog)">
+            <summary>
+            Only adds the 
+            </summary>
+            <param name="log"></param>
+            <returns></returns>
+        </member>
+        <member name="F:TestSupport.EfSchemeCompare.Internal.DatabaseIndexData.Name">
+            <summary>The index name.</summary>
+        </member>
+        <member name="F:TestSupport.EfSchemeCompare.Internal.DatabaseIndexData.Columns">
+            <summary>
+                The ordered list of columns that make up the index.
+            </summary>
+        </member>
+        <member name="F:TestSupport.EfSchemeCompare.Internal.DatabaseIndexData.IsUnique">
+            <summary>
+                Indicates whether or not the index constrains uniqueness.
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfSchemeCompare.Internal.SplitterExtension.SplitCamelCase(System.String)">
+            <summary>
+            This splits up a string based on capital letters
+            e.g. "MyAction" would become "My Action" and "My10Action" would become "My10 Action"
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="T:TestSupport.Helpers.AppSettings">
+            <summary>
+            This is a static method that contains extension methods to get the configuation and form useful connection name strings
+            </summary>
+        </member>
+        <member name="F:TestSupport.Helpers.AppSettings.UnitTestConnectionStringName">
+            <summary>
+            This is the default connection name that the AppSetting class expects
+            </summary>
+        </member>
+        <member name="F:TestSupport.Helpers.AppSettings.RequiredEndingToUnitTestDatabaseName">
+            <summary>
+            Your unit test database name must end with this string.
+            This is a safety measure to stop the DeleteAllUnitTestDatabases from deleting propduction databases
+            </summary>
+        </member>
+        <member name="M:TestSupport.Helpers.AppSettings.GetConfiguration(System.Reflection.Assembly,System.String)">
+            <summary>
+            This will look for a appsettings.json file in the top level of the calling assembly and read content
+            </summary>
+            <param name="callingAssembly">If called by an internal method you must provide the other calling assembly</param>
+            <param name="settingsFilename">This allows you to open a json configuration file of this given name</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.Helpers.AppSettings.GetConfiguration(System.String,System.String)">
+            <summary>
+            This will look for a appsettings.json file in the directory relative to the calling assembly
+            </summary>
+            <param name="relativeToCallingAssembly">A relative path relative to the top level directory of the assembly you are calling from
+            e.g. "..\MyAspNetApp" would get the appsettings.json from a project directory "MyAspNetApp" at the same level as your test assembly</param>
+            <param name="settingsFilename">This allows you to open a json configuration file of this given name</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.Helpers.AppSettings.GetUniqueDatabaseConnectionString(System.Object,System.String,System.Char)">
+            <summary>
+            This creates a unique database name based on the test class name, and an optional extra name
+            </summary>
+            <param name="testClass">This should be 'this' in the test, which means the class name is added to the end of the database name</param>
+            <param name="optionalMethodName">This is an optional string which, if present, is added to the end of the database name</param>
+            <param name="seperator">Optional (defaults to _). This is the character used to separate each part of the formed name</param>
+            <returns></returns>
+        </member>
+        <member name="T:TestSupport.Helpers.TestData">
+            <summary>
+            A static class containing extentions methods for accessing files
+            </summary>
+        </member>
+        <member name="M:TestSupport.Helpers.TestData.GetFilePath(System.String,System.Reflection.Assembly)">
+            <summary>
+            This returns the filepath of the file found by the searchPattern. If more than one file found that throws and exception
+            </summary>
+            <param name="searchPattern">If the search pattern starts with a @"\", then it will look in a subdirectory for the file</param>
+            <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
+            <returns>The absolute filepath to the found file</returns>
+        </member>
+        <member name="M:TestSupport.Helpers.TestData.GetFilePaths(System.String,System.Reflection.Assembly)">
+            <summary>
+            This returns all the filepaths of file that fit the search pattern
+            </summary>
+            <param name="searchPattern">If the search pattern starts with a @"\", then it will look for an alternate testdata directory</param>
+            <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
+            <returns>array of absolute filepaths that match the filepath</returns>
+        </member>
+        <member name="M:TestSupport.Helpers.TestData.GetFileContent(System.String,System.Reflection.Assembly)">
+            <summary>
+            This returns the content of the file found by the searchPattern. If more than one file found that throws and exception
+            </summary>
+            <param name="searchPattern">If the search pattern starts with a @"\", then it will look in a subdirectory for the file</param>
+            <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
+            <returns>The content of the file as text of the found file</returns>
+        </member>
+        <member name="M:TestSupport.Helpers.TestData.EnsureFileDeleted(System.String,System.Reflection.Assembly)">
+            <summary>
+            This will ensure that a file in the TestData directory is deleted
+            </summary>
+            <param name="searchPattern"></param>
+            <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.Helpers.TestData.DeleteDirectoryAndAnyContent(System.String)">
+            <summary>
+            This will delete a directory and any files inside that directory.
+            If no directory exists then it simply returns
+            </summary>
+            <param name="topDirPath"></param>
+        </member>
+        <member name="M:TestSupport.Helpers.TestData.DeleteAllFilesAndSubDirsInDir(System.String)">
+            <summary>
+            This deletes all files and directories (and subdirectories) in the given topDir.
+            It does NOT delete the topDir directory
+            </summary>
+            <param name="topDirPath"></param>
+        </member>
+        <member name="M:TestSupport.Helpers.TestData.GetTestDataDir(System.String,System.Reflection.Assembly)">
+            <summary>
+            This will return the absolute file path to the TestData directory in the calling method's project 
+            </summary>
+            <param name="alternateTestDir">optional. If given then it can be relative or absolute path, which 
+            replaces the default TestData directly</param>
+            <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.Helpers.TestData.GetCallingAssemblyTopLevelDir(System.Reflection.Assembly)">
+            <summary>
+            This will return the absolute file path of the calling assembly, or the assembly provided 
+            </summary>
+            <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
+            <returns></returns>
+        </member>
+        <member name="T:TestSupport.SeedDatabase.AnonymiserData">
+            <summary>
+            This is used to provide the AnonymiserFunc with extra information on how to create the anonymised string
+            </summary>
+        </member>
+        <member name="P:TestSupport.SeedDatabase.AnonymiserData.ReplacementType">
+            <summary>
+            This is the first part of the replacementRequest, e.g. "Name:Max=4" would set this to "Name"
+            </summary>
+        </member>
+        <member name="P:TestSupport.SeedDatabase.AnonymiserData.ReplaceOptions">
+            <summary>
+            This contains all the options provided after the first part, separated by :, e.g "Max=4:Min=100"
+            You can add more commands that are specific to your your own Anonymiser function, e.g. "Case=Pascal"
+            </summary>
+        </member>
+        <member name="P:TestSupport.SeedDatabase.AnonymiserData.MaxLength">
+            <summary>
+            This holds the max length, or -1 if not set
+            </summary>
+        </member>
+        <member name="P:TestSupport.SeedDatabase.AnonymiserData.MinLength">
+            <summary>
+            This holds the min length, or -1 if not set
+            </summary>
+        </member>
+        <member name="M:TestSupport.SeedDatabase.AnonymiserData.#ctor(System.String)">
+            <summary>
+            This decodes the replacement string into it component parts
+            </summary>
+            <param name="replaceRequest"></param>
+        </member>
+        <member name="T:TestSupport.SeedDatabase.DataResetter">
+            <summary>
+            This class contains methods to help you save database data for later loading into a database for unit testing.
+            It can scan a linked set of EF Core database classes and do the following:
+            1. It can reset the primary, alternative and foreign keys to a default state so that the 
+            </summary>
+        </member>
+        <member name="M:TestSupport.SeedDatabase.DataResetter.#ctor(Microsoft.EntityFrameworkCore.DbContext,TestSupport.SeedDatabase.DataResetterConfig)">
+            <summary>
+            This takes in the DbContext of the database you want to save
+            </summary>
+            <param name="context">DbContext of the database you want to save</param>
+            <param name="config">optional configuration data</param>
+        </member>
+        <member name="M:TestSupport.SeedDatabase.DataResetter.ResetKeysSingleEntity(System.Object)">
+            <summary>
+            This resets the primary keys and foreign keys to default value in a single entity.
+            It also will anonymise any properties that you registered with the config
+            </summary>
+            <param name="entityToReset">The entity class to reset</param>
+        </member>
+        <member name="M:TestSupport.SeedDatabase.DataResetter.ResetKeysEntityAndRelationships(System.Object)">
+            <summary>
+            This will work through an EF Core entity class and its relationships and set
+            all primary keys and foreign keys to default value so that the entities will be
+            added as new entries to the database.
+            It also will anonymise any properties that you registered with the config
+            </summary>
+            <param name="entityToReset">The entity class to reset, or an collection of entity classes to </param>
+        </member>
+        <member name="M:TestSupport.SeedDatabase.DataResetter.ResetPkAndIndexesEntityAndRelationships(System.Object,System.Collections.Generic.HashSet{System.Object},System.Boolean)">
+            <summary>
+            This will work through an EF Core entity class and its relationships and set
+            all primary keys and foreign keys to default value so that the entities will be
+            added as new entries to the database.
+            </summary>
+            <param name="entityToReset"></param>
+            <param name="stopCircularLook"></param>
+            <param name="ignoreNonEntityClasses">if false then throw exception if the class isn't found in entity class</param>
+        </member>
+        <member name="T:TestSupport.SeedDatabase.DataResetterConfig">
+            <summary>
+            This provides configuration information for the DataResetter
+            </summary>
+        </member>
+        <member name="P:TestSupport.SeedDatabase.DataResetterConfig.DoNotResetAlternativeKey">
+            <summary>
+            If true any Alternative keys will not be reset
+            </summary>
+        </member>
+        <member name="P:TestSupport.SeedDatabase.DataResetterConfig.AnonymiserFunc">
+            <summary>
+            This function is called on whenever a property you have added via the AnonymiseThisMember config method
+            </summary>
+        </member>
+        <member name="M:TestSupport.SeedDatabase.DataResetterConfig.AddToAnonymiseList``1(System.Linq.Expressions.Expression{System.Func{``0,System.String}},System.String)">
+            <summary>
+            This allows you to add a property in an class to be registered to be anonymised
+            </summary>
+            <typeparam name="TEntity">The class the field or property is in</typeparam>
+            <param name="expression">An expression such as "p => p.PropertyInYourClass"</param>
+            <param name="replaceRequest">Provide usage and config of the replacement string, e.g. "Email" or "FirstName:Max=10:Min=5"
+            - First part is the name says what you want, e.g. FirstName, Email, Address1, Country, etc. 
+            - You can then add properties like :Max=10,:Min=2
+            NOTE: The default anonymiser uses guids for everything, but add @ana.com if "Email". It also applies the Max=nn if guid is longer
+            </param>
+        </member>
+        <member name="M:TestSupport.SeedDatabase.DataResetterConfig.DefaultAnonymiser(TestSupport.SeedDatabase.AnonymiserData,System.Object)">
+            <summary>
+            This is a simple Anonymiser using guids
+            It adds "@ana.com" to end of guid if "Email"
+            It applies both "Min=nn" and "Max=nn", but max is applied only if the guid string is longer than than the max
+            </summary>
+            <param name="data">This is the AnonymiserData produced by when you called <see cref="M:TestSupport.SeedDatabase.DataResetterConfig.AddToAnonymiseList``1(System.Linq.Expressions.Expression{System.Func{``0,System.String}},System.String)"/> </param>
+            <param name="classInstance">This is the instance of the class it is updating. Useful if you want to use matching data in the same instance.</param>
+            <returns></returns>
+        </member>
+        <member name="T:TestSupport.SeedDatabase.SeedJsonHelpers">
+            <summary>
+            Set of extensions that help with serialize and save data to JSON, and read+deserialise data back from the JSON files
+            </summary>
+        </member>
+        <member name="M:TestSupport.SeedDatabase.SeedJsonHelpers.DefaultSerializeToJson``1(``0,System.Boolean)">
+            <summary>
+            This serialises the data you provide into a JSON string.
+            You may want to build your own if you have specific requirements
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="data">The class or collection you want to save</param>
+            <param name="moreReadableJsonFile">Defaults to true - make bigger, but more readable JSON files.</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.SeedDatabase.SeedJsonHelpers.ReadSeedDataFromJsonFile``1(System.String,System.Reflection.Assembly)">
+            <summary>
+            This will read the data from the JSON file using the fileSuffix as a discriminator
+            You may want to build your own if you have specific requirements
+            </summary>
+            <typeparam name="T">This is the type of the data you expect to get back, e.g. <code>List{Book}</code></typeparam>
+            <param name="fileSuffix">This is the name of the seed data, typically the name of the database that the JSON came from</param>
+            <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.SeedDatabase.SeedJsonHelpers.WriteJsonToJsonFile(System.String,System.String,System.Reflection.Assembly)">
+            <summary>
+            This writes the JSON string to a JSON file using the fileSuffix as part of the file name
+            </summary>
+            <param name="fileSuffix">This should be different for each seed data. Suggest using the name of the database that produced it.</param>
+            <param name="json">The json string to save</param>
+            <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
+        </member>
+        <member name="M:TestSupport.SeedDatabase.SeedJsonHelpers.FormJsonFilePath(System.String,System.Reflection.Assembly)">
+            <summary>
+            This forms the name of the json file using the fileSuffix
+            This is of the form $"SeedData-{fileSuffix}.json"
+            </summary>
+            <param name="fileSuffix">This is the name of the seed data, typically the name of the database that the JSON came from</param>
+            <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
+            <returns></returns>
+        </member>
+        <member name="T:TestSupport.SeedDatabase.SqlServerProductionSetup`1">
+            <summary>
+            This provides a way to set up the options for opening a SQL production database
+            </summary>
+            <typeparam name="YourDbContext"></typeparam>
+        </member>
+        <member name="P:TestSupport.SeedDatabase.SqlServerProductionSetup`1.Options">
+            <summary>
+            This provides the options 
+            </summary>
+        </member>
+        <member name="P:TestSupport.SeedDatabase.SqlServerProductionSetup`1.DatabaseName">
+            <summary>
+            This provides the name of the database that was opened. Useful if you want to save the data using the database name
+            </summary>
+        </member>
+        <member name="M:TestSupport.SeedDatabase.SqlServerProductionSetup`1.#ctor(System.String)">
+            <summary>
+            This sets up the Options and DatabaseName properties ready for you to open the SQL database
+            </summary>
+            <param name="connectionNameOrConnectionString">This is either the name of a connection in the appsetting.json file or the actual connection string </param>
+        </member>
+    </members>
+</doc>
