@@ -39,14 +39,13 @@
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU' AND '$(TargetFramework)' == 'netstandard2.0'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard2.0\TestSupport.xml</DocumentationFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU' AND '$(TargetFramework)' == 'netstandard2.1'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard2.1\TestSupport.xml</DocumentationFile>
   </PropertyGroup>
-
 
   <PropertyGroup>
     <PackageId>EfCore.TestSupport</PackageId>
@@ -70,11 +69,6 @@
     <PackageIconUrl>https://raw.githubusercontent.com/JonPSmith/EfCore.TestSupport/master/EfCoreTestSupportNuGetIcon128.png</PackageIconUrl>
     <RepositoryUrl></RepositoryUrl>
     <PackageLicenseUrl>https://github.com/JonPSmith/EfCore.TestSupport/blob/master/LICENSE</PackageLicenseUrl>
-  </PropertyGroup>
-
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
-    <DocumentationFile>C:\Users\jonsm\Source\Repos\EfCore.TestSupport\TestSupport\TestSupport.xml</DocumentationFile>
   </PropertyGroup>
 
 </Project>
