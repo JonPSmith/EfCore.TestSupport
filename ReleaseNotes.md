@@ -9,7 +9,7 @@
 
 ## 3.0.0
 
-- Support both EF Core 2.? and EF Core 3.? by supporting NetStandard2.0 & NetStandard2.1. 
+- Support both EF Core >=2.1 and EF Core >=3.0 by supporting NetStandard2.0 and NetStandard2.1. 
 - Bug fix: GetAllErrors() in CompareEfSql should use Environment.NewLine. See issue #20.
 - Obsolete: Remove LogSetupHelper as obsolete, use `CreateOptionsWithLogging` for Sqlite and SQL Server. 
 
