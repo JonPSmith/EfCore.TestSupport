@@ -51,7 +51,8 @@ namespace TestSupport.EfHelpers
         {
             var allEntities = context.Model
                 .GetEntityTypes()
-                .Where(x => !excludeTypes.Contains(x.ClrType))
+                .Where(x => !excludeTypes.Contains(x.ClrType) 
+                            && x.FindPrimaryKey() != null) //This excludes red-only entities
                 .ToList(); //#C
 
             ThrowExceptionIfCannotWipeSelfRef(allEntities); //#D
