@@ -16,13 +16,13 @@ namespace DataLayer.DddBookApp.EfCode.Configurations
             //-----------------------------
             //Relationships
 
-            //entity.HasOne(pt => pt.DddBook)  
-            //    .WithMany(p => p.AuthorsLink)
-            //    .HasForeignKey(pt => pt.BookId);
+            entity.HasOne(pt => pt.DddBook)
+                .WithMany(p => p.AuthorsLink)
+                .HasForeignKey(pt => pt.BookId);
 
-            //entity.HasOne(pt => pt.DddAuthor)
-            //    .WithMany(t => t.BooksLink)  
-            //    .HasForeignKey(pt => pt.AuthorId);
+            entity.HasOne(pt => pt.DddAuthor)
+                .WithMany(t => t.BooksLink)
+                .HasForeignKey(pt => pt.AuthorId);
         }
     }
 }

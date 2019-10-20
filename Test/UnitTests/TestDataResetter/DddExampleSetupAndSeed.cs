@@ -86,6 +86,7 @@ namespace Test.UnitTests.TestDataResetter
         [Fact]
         public void TestDddSeedDatabaseFourBooksDataResetter()
         {
+            List<DddBook> entities;
             //SETUP
             var options = SqliteInMemory.CreateOptions<DddBookContext>();
             using (var context = new DddBookContext(options))
@@ -93,12 +94,14 @@ namespace Test.UnitTests.TestDataResetter
                 context.Database.EnsureCreated();
                 context.SeedDatabaseFourBooks();
 
-                var entities = context.DddBooks.AsNoTracking()
+                entities = context.DddBooks
                     .Include(x => x.Reviews)
                     .Include(x => x.AuthorsLink)
-                        .ThenInclude(x => x.DddAuthor)
+                    .ThenInclude(x => x.DddAuthor)
                     .ToList();
-
+            }
+            using (var context = new DddBookContext(options))
+            {
                 //ATTEMPT
                 var resetter = new DataResetter(context);
                 resetter.ResetKeysEntityAndRelationships(entities);
@@ -127,7 +130,7 @@ namespace Test.UnitTests.TestDataResetter
                 var entities = context.DddBooks
                     .Include(x => x.Reviews)
                     .Include(x => x.AuthorsLink)
-                        .ThenInclude(x => x.DddAuthor)
+                        .ThenInclude(x => x.DddAuthor).ThenInclude(x => x.BooksLink)
                     .ToList();
 
                 //1b. Reset primary and foreign keys (see next version for anonymise)
