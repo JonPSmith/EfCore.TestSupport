@@ -36,7 +36,10 @@ namespace Test.UnitTests.TestDataLayer
             var logs = new List<LogOutput>();
 
             var options = new DbContextOptionsBuilder<BookContext>()
-                .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(log => logs.Add(log)) }))
+                .UseLoggerFactory(new LoggerFactory(new[]
+                {
+                    new MyLoggerProviderActionOut(log => logs.Add(log))
+                }))
                 .UseSqlite(connection)
                 .Options;
             using (var context = new BookContext(options))
