@@ -30,13 +30,14 @@ See [EF InMemory test database](https://github.com/JonPSmith/EfCore.TestSupport/
 See [Creating connection strings](https://github.com/JonPSmith/EfCore.TestSupport/wiki/3.-Creating-connection-strings).
 4. Helpers for creating unique SQL Server databases for unit testing.  
 See [Create SQL Server databases](https://github.com/JonPSmith/EfCore.TestSupport/wiki/4.-Create-SQL-Server-databases).
-5. Helpers for creating an empty database, and deleting SQL unit test databases.  
+6. Helpers to create Cosmos DB databases linked to Azure Cosmos DB Emulator. See [Create Cosmos DB options](https://github.com/JonPSmith/EfCore.TestSupport/wiki/Create-Cosmos-DB-options)
+6. Helpers for creating an empty database, and deleting SQL unit test databases.  
 See [Quickly create empty databases](https://github.com/JonPSmith/EfCore.TestSupport/wiki/5.-Quickly-create-empty-database).
-6. Various tools for getting test data, or file paths to test data.   
+7. Various tools for getting test data, or file paths to test data.   
 See [Test Data tools](https://github.com/JonPSmith/EfCore.TestSupport/wiki/6.-Test-Data-tools).
 8. A tool for applying a SQL script file to a EF Core database.  
 See [Run SQL Script](https://github.com/JonPSmith/EfCore.TestSupport/wiki/7.-Run-SQL-Script).
-8. Tools for capturing EF Core logging.  
+9. Tools for capturing EF Core logging.  
 See [Capture EF Core logging](https://github.com/JonPSmith/EfCore.TestSupport/wiki/8.-Capture-EF-Core-logging).
 9. Tool to compare EF Core's view of the database with an actual database.  
 See [EfSchemaCompare](https://github.com/JonPSmith/EfCore.TestSupport/wiki/9.-EfSchemaCompare).  
