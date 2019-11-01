@@ -30,7 +30,8 @@ See [EF InMemory test database](https://github.com/JonPSmith/EfCore.TestSupport/
 See [Creating connection strings](https://github.com/JonPSmith/EfCore.TestSupport/wiki/3.-Creating-connection-strings).
 4. Helpers for creating unique SQL Server databases for unit testing.  
 See [Create SQL Server databases](https://github.com/JonPSmith/EfCore.TestSupport/wiki/4.-Create-SQL-Server-databases).
-6. Helpers to create Cosmos DB databases linked to Azure Cosmos DB Emulator. See [Create Cosmos DB options](https://github.com/JonPSmith/EfCore.TestSupport/wiki/Create-Cosmos-DB-options)
+6. Helpers to create Cosmos DB databases linked to Azure Cosmos DB Emulator.  
+See [Create Cosmos DB options](https://github.com/JonPSmith/EfCore.TestSupport/wiki/Create-Cosmos-DB-options)
 6. Helpers for creating an empty database, and deleting SQL unit test databases.  
 See [Quickly create empty databases](https://github.com/JonPSmith/EfCore.TestSupport/wiki/5.-Quickly-create-empty-database).
 7. Various tools for getting test data, or file paths to test data.   
