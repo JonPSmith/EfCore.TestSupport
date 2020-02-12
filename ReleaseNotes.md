@@ -7,10 +7,11 @@
 
 ## TODO
 
-- Issue 14, part 2. Fix code in EfSchemaCompare that checks a connection string that came from the DbContext in case its a named connection string (which is silly).
+- Issue #14, part 2. Fix code in EfSchemaCompare that checks a connection string that came from the DbContext in case its a named connection string (which is silly).
 - Improve EfSchemaCompare by detecting table sharing and account for nullable properties - see [breaking change](https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-3.0/breaking-changes#dependent-entities-sharing-the-table-with-the-principal-are-now-optional).
 
 ## 3.1.0
+
 - Feature: GetCosmosDbToEmulatorOption sets up Cosmos DB options linked to to the Azure Cosmos DB Emulator.
 
 ## 3.0.0
