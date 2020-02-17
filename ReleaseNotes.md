@@ -9,6 +9,7 @@
 
 - Issue #14, part 2. Fix code in EfSchemaCompare that checks a connection string that came from the DbContext in case its a named connection string (which is silly).
 - Improve EfSchemaCompare by detecting table sharing and account for nullable properties - see [breaking change](https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-3.0/breaking-changes#dependent-entities-sharing-the-table-with-the-principal-are-now-optional).
+- Could improve DataResetter and make it useful for copying too. Note: add handling of fields and shadow properties to DataResetter.ResetPkAndIndexesSingleEntity method.
 
 ## 3.1.0
 
