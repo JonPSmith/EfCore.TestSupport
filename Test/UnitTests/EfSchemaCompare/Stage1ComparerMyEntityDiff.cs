@@ -261,9 +261,9 @@ namespace Test.UnitTests.EfSchemaCompare
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
 #if NETCOREAPP2_1
-                var localDatabaseModel = factory.Create(_connectionString, new string[] { }, new string[] { });
+                var localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
 #elif NETCOREAPP3_0
-                var localDatabaseModel = factory.Create(_connectionString,
+                var localDatabaseModel = factory.Create(connectionString,
                     new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
 #endif
 
@@ -296,9 +296,9 @@ namespace Test.UnitTests.EfSchemaCompare
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
 #if NETCOREAPP2_1
-                    localDatabaseModel = factory.Create(_connectionString, new string[] { }, new string[] { });
+                    localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
 #elif NETCOREAPP3_0
-                    localDatabaseModel = factory.Create(_connectionString,
+                    localDatabaseModel = factory.Create(connectionString,
                         new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
 #endif
             }
@@ -367,9 +367,9 @@ namespace Test.UnitTests.EfSchemaCompare
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
 #if NETCOREAPP2_1
-                var localDatabaseModel = factory.Create(_connectionString, new string[] { }, new string[] { });
+                var localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
 #elif NETCOREAPP3_0
-                var localDatabaseModel = factory.Create(_connectionString,
+                var localDatabaseModel = factory.Create(connectionString,
                     new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
 #endif
 
@@ -397,9 +397,9 @@ namespace Test.UnitTests.EfSchemaCompare
                 var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
 #if NETCOREAPP2_1
-                    localDatabaseModel = factory.Create(_connectionString, new string[] { }, new string[] { });
+                    localDatabaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
 #elif NETCOREAPP3_0
-                localDatabaseModel = factory.Create(_connectionString,
+                localDatabaseModel = factory.Create(connectionString,
                     new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
 #endif
             }
