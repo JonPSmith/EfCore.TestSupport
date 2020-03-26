@@ -50,15 +50,16 @@
 
   <PropertyGroup>
     <PackageId>EfCore.TestSupport</PackageId>
-    <PackageVersion>3.1.0</PackageVersion>
-    <Version>3.1.0</Version>
-    <AssemblyVersion>3.1.0.0</AssemblyVersion>
-    <FileVersion>3.1.0.0</FileVersion>
+    <PackageVersion>3.1.1</PackageVersion>
+    <Version>3.1.1</Version>
+    <AssemblyVersion>3.1.1.0</AssemblyVersion>
+    <FileVersion>3.1.1.0</FileVersion>
     <Authors>Jon P Smith</Authors>
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-      - Feature: GetCosmosDbToEmulatorOption sets up Cosmos DB options linked to to the Azure Cosmos DB Emulator
+      - Issue #14, part 2. Fix code in EfSchemaCompare that checks a connection string that came from the DbContext in case its a named connection string (which is silly).
+      - Issue #30. Fixed CompareEfSql on Linux. Changed `CompareHelpers.ComparerToComparison` Dictionary to if statements.
     </PackageReleaseNotes>
     <Copyright>Copyright (c) 2017 Jon P Smith. Licenced under MIT licence</Copyright>
     <PackageTags>Entity Framework Core, xUnit</PackageTags>

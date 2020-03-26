@@ -40,19 +40,26 @@ namespace TestSupport.EfSchemeCompare.Internal
 
         public static StringComparison GetStringComparison(this StringComparer caseComparer)
         {
-            return ComparerToComparison[caseComparer];
+            return caseComparer.ComparerToComparison();
         }
 
-        private static readonly Dictionary<StringComparer, StringComparison> ComparerToComparison =
-            new Dictionary<StringComparer, StringComparison>
-            {
-                {StringComparer.CurrentCulture, StringComparison.CurrentCulture},
-                {StringComparer.CurrentCultureIgnoreCase, StringComparison.CurrentCultureIgnoreCase},
-                {StringComparer.InvariantCulture, StringComparison.InvariantCulture},
-                {StringComparer.InvariantCultureIgnoreCase, StringComparison.InvariantCultureIgnoreCase},
-                {StringComparer.Ordinal, StringComparison.Ordinal},
-                {StringComparer.OrdinalIgnoreCase, StringComparison.OrdinalIgnoreCase}
-            };
+        private static StringComparison ComparerToComparison(this StringComparer caseComparer)
+        {
+            if (caseComparer.Equals(StringComparer.CurrentCulture))
+                return StringComparison.CurrentCulture;
+            if (caseComparer.Equals(StringComparer.CurrentCultureIgnoreCase))
+                return StringComparison.CurrentCultureIgnoreCase;
+            if (caseComparer.Equals(StringComparer.InvariantCulture))
+                return StringComparison.InvariantCulture;
+            if (caseComparer.Equals(StringComparer.InvariantCultureIgnoreCase))
+                return StringComparison.InvariantCultureIgnoreCase;
+            if (caseComparer.Equals(StringComparer.Ordinal))
+                return StringComparison.Ordinal;
+            if (caseComparer.Equals(StringComparer.OrdinalIgnoreCase))
+                return StringComparison.OrdinalIgnoreCase;
+
+            throw new ArgumentOutOfRangeException(nameof(caseComparer));
+        }
 
 #if NETSTANDARD2_0
         public static string CombinedColNames(this IEnumerable<IProperty> properties)

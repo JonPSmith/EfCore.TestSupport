@@ -80,7 +80,7 @@ namespace TestSupport.EfSchemeCompare
         }
 
         /// <summary>
-        /// This will compare one or more DbContext against database pointed to by the configOrConnectionString.
+        /// This will compare one or more DbContext against database pointed to by the connectionString.
         /// </summary>
         /// <param name="configOrConnectionString">This should either be a 
         /// connection string or the name of a connection string in the appsetting.json file.
@@ -94,12 +94,12 @@ namespace TestSupport.EfSchemeCompare
                 throw new ArgumentException("You must provide at least one DbContext instance.", nameof(dbContexts));
 
             var designTimeService = dbContexts[0].GetDesignTimeService();
-            return FinishRestOfCompare(configOrConnectionString, dbContexts, designTimeService);
+            return FinishRestOfCompare(GetConfigurationOrActualString(configOrConnectionString), dbContexts, designTimeService);
         }
 
 
         /// <summary>
-        /// This will compare one or more DbContext against database pointed to by the configOrConnectionString 
+        /// This will compare one or more DbContext against database pointed to by the connectionString 
         /// using the DesignTimeServices type for T 
         /// </summary>
         /// <typeparam name="T">Must be the design time provider for the database provider you want to use, e.g. MySqlDesignTimeServices</typeparam>
@@ -116,15 +116,15 @@ namespace TestSupport.EfSchemeCompare
                 throw new ArgumentException("You must provide at least one DbContext instance.", nameof(dbContexts));
 
             var designTimeService = new T();
-            return FinishRestOfCompare(configOrConnectionString, dbContexts, designTimeService);
+            return FinishRestOfCompare(GetConfigurationOrActualString(configOrConnectionString), dbContexts, designTimeService);
         }
 
         //------------------------------------------------------
         //private methods
 
-        private bool FinishRestOfCompare(string configOrConnectionString, DbContext[] dbContexts, IDesignTimeServices designTimeService)
+        private bool FinishRestOfCompare(string connectionString, DbContext[] dbContexts, IDesignTimeServices designTimeService)
         {
-            var databaseModel = GetDatabaseModelViaScaffolder(dbContexts, configOrConnectionString, designTimeService);
+            var databaseModel = GetDatabaseModelViaScaffolder(dbContexts, connectionString, designTimeService);
             bool hasErrors = false;
             foreach (var context in dbContexts)
             {
@@ -141,13 +141,10 @@ namespace TestSupport.EfSchemeCompare
             return hasErrors;
         }
 
-        private  DatabaseModel GetDatabaseModelViaScaffolder(DbContext[] contexts, string configOrConnectionString, IDesignTimeServices designTimeService)
+        private  DatabaseModel GetDatabaseModelViaScaffolder(DbContext[] contexts, string connectionString, IDesignTimeServices designTimeService)
         {
             var serviceProvider = designTimeService.GetDesignTimeProvider();
             var factory = serviceProvider.GetService<IDatabaseModelFactory>();
-            var connectionString = configOrConnectionString == null
-                ? contexts[0].Database.GetDbConnection().ConnectionString
-                : GetConfigurationOrActualString(configOrConnectionString);
 
 #if NETSTANDARD2_0
             var databaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
