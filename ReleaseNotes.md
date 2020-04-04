@@ -4,9 +4,12 @@
 ## Possible new features
 
 - Make EfSchemaCompare handle Views as well.
-- - Improve EfSchemaCompare by detecting table sharing and account for nullable properties - see [breaking change](https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-3.0/breaking-changes#dependent-entities-sharing-the-table-with-the-principal-are-now-optional).
+- Improve EfSchemaCompare by detecting table sharing and account for nullable properties - see [breaking change](https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-3.0/breaking-changes#dependent-entities-sharing-the-table-with-the-principal-are-now-optional).
+- EF Core 3 - Owned Type class properties are always nullable.
 
 ## TODO
+
+- Issue 32: Missing primary key in database causes a exception. (see Stage1Comparer line 297)
 
 ## 3.1.1
 
