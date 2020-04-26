@@ -21,10 +21,22 @@ namespace TestSupport.EfHelpers
         /// <typeparam name="T"></typeparam>
         /// <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
         /// <returns></returns>
-        public static DbContextOptions<T> CreateOptions<T> (bool throwOnClientServerWarning = true)
+        public static DbContextOptions<T> CreateOptions<T>(bool throwOnClientServerWarning = true)
             where T : DbContext
         {
-            return SetupConnectionAndBuilderOptions<T>(throwOnClientServerWarning).Options;
+            return CreateOptionsBuilder<T>(throwOnClientServerWarning).Options;
+        }
+
+        /// <summary>
+        /// Created a Sqlite Options Builder for in-memory database. 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
+        /// <returns></returns>
+        public static DbContextOptionsBuilder<T> CreateOptionsBuilder<T>(bool throwOnClientServerWarning = true)
+            where T : DbContext
+        {
+            return SetupConnectionAndBuilderOptions<T>(throwOnClientServerWarning);
         }
 #elif NETSTANDARD2_1
         /// <summary>
@@ -35,7 +47,18 @@ namespace TestSupport.EfHelpers
         public static DbContextOptions<T> CreateOptions<T>()
             where T : DbContext
         {
-            return SetupConnectionAndBuilderOptions<T>().Options;
+            return CreateOptionsBuilder<T>().Options;
+        }
+
+        /// <summary>
+        /// Created a Sqlite Options Builder for in-memory database. 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static DbContextOptionsBuilder<T> CreateOptionsBuilder<T>()
+            where T : DbContext
+        {
+            return SetupConnectionAndBuilderOptions<T>();
         }
 #endif
 
@@ -51,9 +74,22 @@ namespace TestSupport.EfHelpers
         public static DbContextOptions<T> CreateOptionsWithLogging<T>(Action<LogOutput> efLog, LogLevel logLevel = LogLevel.Information, bool throwOnClientServerWarning = true)
             where T : DbContext
         {
+            return CreateOptionsBuilderWithLogging<T>(efLog, logLevel, throwOnClientServerWarning).Options;
+        }
+
+        /// <summary>
+        /// Created a Sqlite Options Builder for in-memory database while capturing EF Core's logging output. 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="efLog">This is a method that receives a LogOutput whenever EF Core logs something</param>
+        /// <param name="logLevel">Optional: Sets the logLevel you want to capture. Defaults to Information</param>
+        /// <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
+        /// <returns></returns>
+        public static DbContextOptionsBuilder<T> CreateOptionsBuilderWithLogging<T>(Action<LogOutput> efLog, LogLevel logLevel = LogLevel.Information, bool throwOnClientServerWarning = true)
+            where T : DbContext
+        {
             return SetupConnectionAndBuilderOptions<T>(throwOnClientServerWarning)
-                .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(efLog, logLevel)}))
-                .Options;
+                .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(efLog, logLevel) }));
         }
 #elif NETSTANDARD2_1
         /// <summary>
@@ -67,9 +103,22 @@ namespace TestSupport.EfHelpers
             LogLevel logLevel = LogLevel.Information)
             where T : DbContext
         {
+            return CreateOptionsBuilderWithLogging<T>(efLog, logLevel).Options;
+        }
+
+        /// <summary>
+        /// Created a Sqlite Options Builder for in-memory database while capturing EF Core's logging output. 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="efLog">This is a method that receives a LogOutput whenever EF Core logs something</param>
+        /// <param name="logLevel">Optional: Sets the logLevel you want to capture. Defaults to Information</param>
+        /// <returns></returns>
+        public static DbContextOptionsBuilder<T> CreateOptionsBuilderWithLogging<T>(Action<LogOutput> efLog,
+            LogLevel logLevel = LogLevel.Information)
+            where T : DbContext
+        {
             return SetupConnectionAndBuilderOptions<T>()
-                .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(efLog, logLevel) }))
-                .Options;
+                .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(efLog, logLevel) }));
         }
 #endif
 
