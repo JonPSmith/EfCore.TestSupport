@@ -64,6 +64,24 @@ namespace TestSupport.EfSchemeCompare
         }
 
         /// <summary>
+        /// This will compare one or more DbContext against database pointed to the first DbContext (with options).
+        /// </summary>
+        /// <param name="dbContexts">One or more dbContext instances to be compared with the database</param>
+        /// <param name="schemas">database schemas to operate on</param>
+        /// <param name="tables">database tables to operate on</param>
+        /// <returns>true if any errors found, otherwise false</returns>
+        public bool CompareEfWithDbWithOptions(DbContext[] dbContexts, IEnumerable<string> schemas, 
+            IEnumerable<string> tables)
+        {
+            if (dbContexts == null) throw new ArgumentNullException(nameof(dbContexts));
+            if (dbContexts.Length == 0)
+                throw new ArgumentException("You must provide at least one DbContext instance.", nameof(dbContexts));
+
+            return CompareEfWithDbWithOptions(dbContexts[0].Database.GetDbConnection().ConnectionString, dbContexts,
+                schemas, tables);
+        }
+
+        /// <summary>
         /// This will compare one or more DbContext against database pointed to the first DbContext
         /// using the DesignTimeServices type for T.
         /// </summary>
@@ -97,6 +115,26 @@ namespace TestSupport.EfSchemeCompare
             return FinishRestOfCompare(GetConfigurationOrActualString(configOrConnectionString), dbContexts, designTimeService);
         }
 
+        /// <summary>
+        /// This will compare one or more DbContext against database pointed to by the connectionString (with options).
+        /// </summary>
+        /// <param name="configOrConnectionString">This should either be a 
+        /// connection string or the name of a connection string in the appsetting.json file.
+        /// </param>
+        /// <param name="dbContexts">One or more dbContext instances to be compared with the database</param>
+        /// <returns>true if any errors found, otherwise false</returns>
+        public bool CompareEfWithDbWithOptions(string configOrConnectionString, DbContext[] dbContexts,
+            IEnumerable<string> schemas, IEnumerable<string> tables)
+        {
+            if (dbContexts == null) throw new ArgumentNullException(nameof(dbContexts));
+            if (dbContexts.Length == 0)
+                throw new ArgumentException("You must provide at least one DbContext instance.", nameof(dbContexts));
+
+            var designTimeService = dbContexts[0].GetDesignTimeService();
+            return FinishRestOfCompare(GetConfigurationOrActualString(configOrConnectionString), dbContexts, designTimeService,
+                tables, schemas);
+        }
+
 
         /// <summary>
         /// This will compare one or more DbContext against database pointed to by the connectionString 
@@ -122,9 +160,10 @@ namespace TestSupport.EfSchemeCompare
         //------------------------------------------------------
         //private methods
 
-        private bool FinishRestOfCompare(string connectionString, DbContext[] dbContexts, IDesignTimeServices designTimeService)
+        private bool FinishRestOfCompare(string connectionString, DbContext[] dbContexts,
+            IDesignTimeServices designTimeService, IEnumerable<string> tables = null, IEnumerable<string> schemas = null)
         {
-            var databaseModel = GetDatabaseModelViaScaffolder(dbContexts, connectionString, designTimeService);
+            var databaseModel = GetDatabaseModelViaScaffolder(dbContexts, connectionString, designTimeService, tables, schemas);
             bool hasErrors = false;
             foreach (var context in dbContexts)
             {
@@ -141,7 +180,8 @@ namespace TestSupport.EfSchemeCompare
             return hasErrors;
         }
 
-        private  DatabaseModel GetDatabaseModelViaScaffolder(DbContext[] contexts, string connectionString, IDesignTimeServices designTimeService)
+        private DatabaseModel GetDatabaseModelViaScaffolder(DbContext[] contexts, string connectionString,
+            IDesignTimeServices designTimeService, IEnumerable<string> tables, IEnumerable<string> schemas)
         {
             var serviceProvider = designTimeService.GetDesignTimeProvider();
             var factory = serviceProvider.GetService<IDatabaseModelFactory>();
@@ -150,7 +190,7 @@ namespace TestSupport.EfSchemeCompare
             var databaseModel = factory.Create(connectionString, new string[] { }, new string[] { });
 #elif NETSTANDARD2_1
             var databaseModel = factory.Create(connectionString,
-                new DatabaseModelFactoryOptions(new string[] { }, new string[] { }));
+                new DatabaseModelFactoryOptions(tables, schemas));
 #endif
             RemoveAnyTableToIgnore(databaseModel, contexts);
             return databaseModel;
