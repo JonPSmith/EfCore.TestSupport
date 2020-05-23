@@ -9,9 +9,12 @@
 
 - Improve EfSchemaCompare by detecting table sharing and account for nullable properties - see [breaking change](https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-3.0/breaking-changes#dependent-entities-sharing-the-table-with-the-principal-are-now-optional).
 - EF Core 3 - Owned Type class properties are always nullable.
-- Issue 32: Missing primary key in database causes a exception. (see Stage1Comparer line 297)
 - Add version of SqliteInMemory and SqlServerHelpers to return DbContextOptionsBuilder<T>
 - Add version of TimeThings that calls an action to obtain the time etc. 
+
+## 3.1.2
+
+- Issue 32: Missing primary key in database causes a exception.
 
 ## 3.1.1
 

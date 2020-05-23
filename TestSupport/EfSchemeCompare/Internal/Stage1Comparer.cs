@@ -16,6 +16,8 @@ namespace TestSupport.EfSchemeCompare.Internal
 {
     internal class Stage1Comparer
     {
+        private const string NoPrimaryKey = "- no primary key -";
+
         private readonly IModel _model;
         private readonly string _dbContextName;
         private readonly IReadOnlyList<CompareLog> _ignoreList;
@@ -58,7 +60,8 @@ namespace TestSupport.EfSchemeCompare.Internal
                     var databaseTable = tableDict[eRel.FormSchemaTable()];
                     //Checks for table matching
                     var log = logger.MarkAsOk(eRel.FormSchemaTable());
-                    logger.CheckDifferent(entityType.FindPrimaryKey().Relational().Name, databaseTable.PrimaryKey.Name,
+                    logger.CheckDifferent(entityType.FindPrimaryKey()?.Relational().Name ?? NoPrimaryKey, 
+                        databaseTable.PrimaryKey?.Name ?? NoPrimaryKey,
                         CompareAttributes.ConstraintName, _caseComparison);
                     CompareColumns(log, entityType, databaseTable);
                     CompareForeignKeys(log, entityType, databaseTable);
@@ -172,7 +175,8 @@ namespace TestSupport.EfSchemeCompare.Internal
         private void CompareColumns(CompareLog log, IEntityType entityType, DatabaseTable table)
         {
             var columnDict = table.Columns.ToDictionary(x => x.Name, _caseComparer);
-            var primaryKeyDict = table.PrimaryKey.Columns.ToDictionary(x => x.Name, _caseComparer);
+            var primaryKeyDict = table.PrimaryKey?.Columns.ToDictionary(x => x.Name, _caseComparer) 
+                ?? new Dictionary<string, DatabaseColumn>();
 
             var efPKeyConstraintName = entityType.FindPrimaryKey().Relational().Name;
             bool pKeyError = false;
@@ -182,7 +186,8 @@ namespace TestSupport.EfSchemeCompare.Internal
                     pKeyError = true;  //extra set of pKeyError
                     _hasErrors = true;
                 });
-            pKeyLogger.CheckDifferent(efPKeyConstraintName, table.PrimaryKey.Name, CompareAttributes.ConstraintName, _caseComparison);
+            pKeyLogger.CheckDifferent(efPKeyConstraintName, table.PrimaryKey?.Name ?? NoPrimaryKey, 
+                CompareAttributes.ConstraintName, _caseComparison);
             foreach (var property in entityType.GetProperties())
             {
                 var pRel = property.Relational();
@@ -294,7 +299,8 @@ namespace TestSupport.EfSchemeCompare.Internal
                     var databaseTable = tableDict[entityType.FormSchemaTable()];
                     //Checks for table matching
                     var log = logger.MarkAsOk(entityType.FormSchemaTable());
-                    logger.CheckDifferent(entityType.FindPrimaryKey()?.GetName(), databaseTable.PrimaryKey.Name,
+                    logger.CheckDifferent(entityType.FindPrimaryKey()?.GetName() ?? NoPrimaryKey,
+                        databaseTable.PrimaryKey?.Name ?? NoPrimaryKey,
                         CompareAttributes.ConstraintName, _caseComparison);
                     CompareColumns(log, entityType, databaseTable);
                     CompareForeignKeys(log, entityType, databaseTable);
@@ -408,7 +414,8 @@ namespace TestSupport.EfSchemeCompare.Internal
         private void CompareColumns(CompareLog log, IEntityType entityType, DatabaseTable table)
         {
             var columnDict = table.Columns.ToDictionary(x => x.Name, _caseComparer);
-            var primaryKeyDict = table.PrimaryKey.Columns.ToDictionary(x => x.Name, _caseComparer);
+            var primaryKeyDict = table.PrimaryKey?.Columns.ToDictionary(x => x.Name, _caseComparer)
+                                 ?? new Dictionary<string, DatabaseColumn>();
 
             var efPKeyConstraintName = entityType.FindPrimaryKey().GetName();
             bool pKeyError = false;
@@ -418,7 +425,8 @@ namespace TestSupport.EfSchemeCompare.Internal
                     pKeyError = true;  //extra set of pKeyError
                     _hasErrors = true;
                 });
-            pKeyLogger.CheckDifferent(efPKeyConstraintName, table.PrimaryKey.Name, CompareAttributes.ConstraintName, _caseComparison);
+            pKeyLogger.CheckDifferent(efPKeyConstraintName, table.PrimaryKey?.Name ?? NoPrimaryKey, 
+                CompareAttributes.ConstraintName, _caseComparison);
             foreach (var property in entityType.GetProperties())
             {
                 var colLogger = new CompareLogger(CompareType.Property, property.Name, log.SubLogs, _ignoreList, () => _hasErrors = true);
