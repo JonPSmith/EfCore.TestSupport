@@ -157,7 +157,8 @@ namespace Test.UnitTests.TestDataLayer
                 context.Entry(book).State.ShouldEqual(EntityState.Unchanged);
             }
             //ATTEMPT
-            var options2 = this.CreateUniqueMethodOptions<BookContext>(builder => builder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+            var options2 = this.CreateUniqueMethodOptions<BookContext>(
+                builder => builder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
             using (var context = new BookContext(options2))
             {
                 //VERIFY

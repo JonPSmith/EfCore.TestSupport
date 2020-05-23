@@ -103,13 +103,21 @@ namespace Test.UnitTests.TestDataLayer
                 context.Database.EnsureCreated();
                 context.SeedDatabaseFourBooks();
                 connection = context.Database.GetDbConnection();
+
+                var book = context.Books.First();
+                context.Entry(book).State.ShouldEqual(EntityState.Unchanged);
             }
             //ATTEMPT
-            var options2 = SqliteInMemory.CreateOptions<BookContext>(builder => builder.UseSqlite(connection));
+            var options2 = SqliteInMemory.CreateOptions<BookContext>(builder =>
+            {
+                builder.UseSqlite(connection);
+                builder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            });
             using (var context = new BookContext(options2))
             {
                 //VERIFY
-                context.Books.Count().ShouldEqual(4);
+                var book = context.Books.First();
+                context.Entry(book).State.ShouldEqual(EntityState.Detached);
             }
         }
 #endif

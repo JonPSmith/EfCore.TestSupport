@@ -50,16 +50,17 @@
 
   <PropertyGroup>
     <PackageId>EfCore.TestSupport</PackageId>
-    <PackageVersion>3.1.1</PackageVersion>
-    <Version>3.1.1</Version>
-    <AssemblyVersion>3.1.1.0</AssemblyVersion>
-    <FileVersion>3.1.1.0</FileVersion>
+    <PackageVersion>3.2.0</PackageVersion>
+    <Version>3.2.0</Version>
+    <AssemblyVersion>3.2.0.0</AssemblyVersion>
+    <FileVersion>3.2.0.0</FileVersion>
     <Authors>Jon P Smith</Authors>
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-      - Issue #14, part 2. Fix code in EfSchemaCompare that checks a connection string that came from the DbContext in case its a named connection string (which is silly).
-      - Issue #30. Fixed CompareEfSql on Linux. Changed `CompareHelpers.ComparerToComparison` Dictionary to if statements.
+      - New Feature: (only EF Core 3): The extension methods that create options for In-memory sqlite options and SQL Server options now have an optional parameter that allows you to add extra options to the DbContextOptionsBuilder
+      - New Feature: TimeThings has version that returns the result of the timing.
+      - Issue 32: Missing primary key in database causes a exception.
     </PackageReleaseNotes>
     <Copyright>Copyright (c) 2017 Jon P Smith. Licenced under MIT licence</Copyright>
     <PackageTags>Entity Framework Core, xUnit</PackageTags>

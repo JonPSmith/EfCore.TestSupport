@@ -4,9 +4,10 @@
 
 # EfCore.TestSupport
 
-This git repo contains the source of the [EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/), and various tests to check the EfCore.TestSupport [NuGet package](https://www.nuget.org/packages/EfCore.TestSupport/). See [Release Notes](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/ReleaseNotes.md) for information on changes.
+This git repo contains the source of the [EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/) library, and various tests to check the EfCore.TestSupport [NuGet package](https://www.nuget.org/packages/EfCore.TestSupport/).  
+See [Release Notes](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/ReleaseNotes.md) for information on changes.
 
-This project is open-source (MIT licence).
+This project is open-source (MIT licence) and works for EF Core 2.1 (netstandard2.0) and EF Core 3 (netstandard2.1).
 
 ## Documentation
 
