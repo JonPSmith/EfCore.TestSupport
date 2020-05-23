@@ -2,6 +2,7 @@
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
 using System;
+using System.Data.Common;
 using System.Linq;
 using DataLayer.EfCode.BookApp;
 using DataLayer.MyEntityDb;
@@ -89,6 +90,29 @@ namespace Test.UnitTests.TestDataLayer
                 books.Last().Reviews.ShouldNotBeNull();
             }
         }
+
+#if NETCOREAPP3_0
+        [Fact]
+        public void TestAddExtraOption()
+        {
+            //SETUP
+            var options1 = SqliteInMemory.CreateOptions<BookContext>();
+            DbConnection connection;
+            using (var context = new BookContext(options1))
+            {
+                context.Database.EnsureCreated();
+                context.SeedDatabaseFourBooks();
+                connection = context.Database.GetDbConnection();
+            }
+            //ATTEMPT
+            var options2 = SqliteInMemory.CreateOptions<BookContext>(builder => builder.UseSqlite(connection));
+            using (var context = new BookContext(options2))
+            {
+                //VERIFY
+                context.Books.Count().ShouldEqual(4);
+            }
+        }
+#endif
 
 
 #if NETCOREAPP2_1

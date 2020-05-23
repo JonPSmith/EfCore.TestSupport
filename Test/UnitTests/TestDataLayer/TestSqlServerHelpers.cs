@@ -142,5 +142,32 @@ namespace Test.UnitTests.TestDataLayer
             }
         }
 
+#if NETCOREAPP3_0
+        [Fact]
+        public void TestAddExtraBuilderOptions()
+        {
+            //SETUP
+            var options1 = this.CreateUniqueMethodOptions<BookContext>();
+            using (var context = new BookContext(options1))
+            {
+                context.Database.EnsureCreated();
+                context.SeedDatabaseDummyBooks(100);
+
+                var book = context.Books.First();
+                context.Entry(book).State.ShouldEqual(EntityState.Unchanged);
+            }
+            //ATTEMPT
+            var options2 = this.CreateUniqueMethodOptions<BookContext>(builder => builder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+            using (var context = new BookContext(options2))
+            {
+                //VERIFY
+                var book = context.Books.First();
+                context.Entry(book).State.ShouldEqual(EntityState.Detached);
+
+            }
+        }
+#endif
+
+
     }
 }

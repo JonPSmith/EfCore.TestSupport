@@ -79,5 +79,23 @@ namespace Test.UnitTests.TestSupport
             mock.LastWriteLine.ShouldContain(", ave. per run = ");
         }
 
+        [Fact]
+        public void TestTimeThingResultReturn()
+        {
+            //SETUP                  
+            TimeThingResult result = null;
+
+            //ATTEMPT
+            using (new TimeThings(x => result = x, "This message", 10))
+            {
+                Thread.Sleep(10);
+            }
+
+            //VERIFY
+            result.Message.ShouldEqual("This message");
+            result.NumRuns.ShouldEqual(10);
+            result.TotalTimeMilliseconds.ShouldBeInRange(10, 20);
+        }
+
     }
 }

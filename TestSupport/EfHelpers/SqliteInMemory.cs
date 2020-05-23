@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace TestSupport.EfHelpers
 {
     /// <summary>
-    /// This static class contains extention methods to use with in-memory Sqlite databases
+    /// This static class contains extension methods to use with in-memory Sqlite databases
     /// </summary>
     public static class SqliteInMemory
     {
@@ -31,11 +31,12 @@ namespace TestSupport.EfHelpers
         /// Created a Sqlite Options for in-memory database. 
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="applyExtraOption">Optional: action that allows you to add extra options to the builder</param>
         /// <returns></returns>
-        public static DbContextOptions<T> CreateOptions<T>()
+        public static DbContextOptions<T> CreateOptions<T>(Action<DbContextOptionsBuilder<T>> applyExtraOption = null)
             where T : DbContext
         {
-            return SetupConnectionAndBuilderOptions<T>().Options;
+            return SetupConnectionAndBuilderOptions<T>(applyExtraOption).Options;
         }
 #endif
 
@@ -62,12 +63,13 @@ namespace TestSupport.EfHelpers
         /// <typeparam name="T"></typeparam>
         /// <param name="efLog">This is a method that receives a LogOutput whenever EF Core logs something</param>
         /// <param name="logLevel">Optional: Sets the logLevel you want to capture. Defaults to Information</param>
+        /// <param name="applyExtraOption">Optional: action that allows you to add extra options to the builder</param>
         /// <returns></returns>
         public static DbContextOptions<T> CreateOptionsWithLogging<T>(Action<LogOutput> efLog,
-            LogLevel logLevel = LogLevel.Information)
+            LogLevel logLevel = LogLevel.Information, Action<DbContextOptionsBuilder<T>> applyExtraOption = null)
             where T : DbContext
         {
-            return SetupConnectionAndBuilderOptions<T>()
+            return SetupConnectionAndBuilderOptions<T>(applyExtraOption)
                 .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(efLog, logLevel) }))
                 .Options;
         }
@@ -106,7 +108,7 @@ namespace TestSupport.EfHelpers
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        private static DbContextOptionsBuilder<T> SetupConnectionAndBuilderOptions<T>() //#A
+        private static DbContextOptionsBuilder<T> SetupConnectionAndBuilderOptions<T>(Action<DbContextOptionsBuilder<T>> applyExtraOption) //#A
             where T : DbContext
         {
             //Thanks to https://www.scottbrady91.com/Entity-Framework/Entity-Framework-Core-In-Memory-Testing
@@ -121,6 +123,7 @@ namespace TestSupport.EfHelpers
             var builder = new DbContextOptionsBuilder<T>();
             builder.UseSqlite(connection); //#F
             builder.ApplyOtherOptionSettings(); //#G
+            applyExtraOption?.Invoke(builder);
 
             return builder; //#H
         }
