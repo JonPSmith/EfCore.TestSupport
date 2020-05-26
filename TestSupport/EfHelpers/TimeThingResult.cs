@@ -3,8 +3,17 @@
 
 namespace TestSupport.EfHelpers
 {
+    /// <summary>
+    /// Result from a TimeThings instance once it is disposed
+    /// </summary>
     public class TimeThingResult
     {
+        /// <summary>
+        /// Creates the TimeThingResult
+        /// </summary>
+        /// <param name="totalTimeMilliseconds"></param>
+        /// <param name="numRuns"></param>
+        /// <param name="message"></param>
         public TimeThingResult(double totalTimeMilliseconds, int numRuns, string message)
         {
             TotalTimeMilliseconds = totalTimeMilliseconds;
@@ -12,10 +21,23 @@ namespace TestSupport.EfHelpers
             Message = message;
         }
 
+        /// <summary>
+        /// Total time in milliseconds, with fractions
+        /// </summary>
         public double TotalTimeMilliseconds { get; private set; }
+        /// <summary>
+        /// Optional number of runs. zero if not set.
+        /// </summary>
         public int NumRuns { get; private set; }
+        /// <summary>
+        /// Optional string to identify this usage of the TimeThings
+        /// </summary>
         public string Message { get; private set; }
 
+        /// <summary>
+        /// Provides a detailed report of the timed event
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             var prefix = NumRuns > 1 ? $"{NumRuns:#,###} x " : "";

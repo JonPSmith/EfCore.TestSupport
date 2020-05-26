@@ -13,7 +13,7 @@ namespace TestSupport.EfHelpers
     public class TimeThings : IDisposable
     {
         private readonly Stopwatch _stopwatch ;
-        private Action<TimeThingResult> _funcToCall;
+        private readonly Action<TimeThingResult> _funcToCall;
         private readonly ITestOutputHelper _output;
         private readonly string _message;
         private readonly int _numRuns;
@@ -21,7 +21,8 @@ namespace TestSupport.EfHelpers
         /// <summary>
         /// This will measure the time it took from this class being created to it being disposed
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="result">This action returns the TimeThingResult on dispose</param>
+        /// <param name="message">Optional: a string to show in the result. Useful if you have multiple timing in a row</param>
         /// <param name="numRuns">Optional: if the timing covers multiple runs of something, then set numRuns to the number of runs and it will give you the average per run</param>
         public TimeThings(Action<TimeThingResult> result, string message = "", int numRuns = 0)
             : this(message, numRuns)
@@ -32,8 +33,8 @@ namespace TestSupport.EfHelpers
         /// <summary>
         /// This will measure the time it took from this class being created to it being disposed and writes out to xUnit ITestOutputHelper
         /// </summary>
-        /// <param name="output"></param>
-        /// <param name="message"></param>
+        /// <param name="output">On dispose it will write the result to the output</param>
+        /// <param name="message">Optional: a string to show in the result. Useful if you have multiple timing in a row</param>
         /// <param name="numRuns">Optional: if the timing covers multiple runs of something, then set numRuns to the number of runs and it will give you the average per run</param>
         public TimeThings(ITestOutputHelper output, string message = "", int numRuns = 0)
             : this(message, numRuns)
