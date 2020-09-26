@@ -40,7 +40,7 @@ namespace NetCore31Test.Fixtures
             DbContext = (T) Activator.CreateInstance(typeof(T), builder.Options);
 
             if (DbContext == null)
-                throw new InvalidOperationException("TODO");
+                throw new NullReferenceException($"{nameof(DbContext)} not initialized successfully, activator failed.");
 
             await DbContext.Database.EnsureDeletedAsync();
 
