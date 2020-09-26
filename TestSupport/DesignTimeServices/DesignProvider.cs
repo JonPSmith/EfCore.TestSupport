@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
 using Microsoft.EntityFrameworkCore.Sqlite.Design.Internal;
 using Microsoft.EntityFrameworkCore.SqlServer.Design.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Design.Internal;
 
 namespace TestSupport.DesignTimeServices
 {
@@ -21,6 +21,7 @@ namespace TestSupport.DesignTimeServices
     {
         private const string SqlServerProviderName = "Microsoft.EntityFrameworkCore.SqlServer";
         private const string SqliteProviderName = "Microsoft.EntityFrameworkCore.Sqlite";
+        private const string NpgsqlProviderName = "Npgsql.EntityFrameworkCore.PostgreSQL";
 
         /// <summary>
         /// This returns the correct instance of the design time service for the current DbContext
@@ -31,7 +32,7 @@ namespace TestSupport.DesignTimeServices
         {
             var dbProvider = context.GetService<IDatabaseProvider>();
             if (dbProvider == null)
-                throw new InvalidOperationException("Cound not find a database provider service.");
+                throw new InvalidOperationException("Could not find a database provider service.");
 
             var providerName = dbProvider.Name;
 
@@ -39,6 +40,8 @@ namespace TestSupport.DesignTimeServices
                 return new SqlServerDesignTimeServices();
             if (providerName == SqliteProviderName)
                 return new SqliteDesignTimeServices();
+            if (providerName == NpgsqlProviderName)
+                return new NpgsqlDesignTimeServices();
 
             throw new InvalidOperationException("This is not a database provider that we currently support.");
         }
@@ -46,7 +49,7 @@ namespace TestSupport.DesignTimeServices
         /// <summary>
         /// This returns a DesignTimeProvider for the design time service instance that you provided
         /// </summary>
-        /// <param name="designTimeService">This should be an instance of rhe design time service for the database provider</param>
+        /// <param name="designTimeService">This should be an instance of the design time service for the database provider</param>
         /// <returns></returns>
         public static ServiceProvider GetDesignTimeProvider(this IDesignTimeServices designTimeService)
         {

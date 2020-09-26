@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestSupport", "TestSupport\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net472Test", "Net472Test\Net472Test.csproj", "{77C5DA91-75DB-48DD-A6C1-3B7483DB2E8B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCore31Test", "NetCore31Test\NetCore31Test.csproj", "{020DAA30-A361-42AB-91AD-766FB39CBDF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,26 @@ Global
 		{77C5DA91-75DB-48DD-A6C1-3B7483DB2E8B}.Release|x64.Build.0 = Release|Any CPU
 		{77C5DA91-75DB-48DD-A6C1-3B7483DB2E8B}.Release|x86.ActiveCfg = Release|Any CPU
 		{77C5DA91-75DB-48DD-A6C1-3B7483DB2E8B}.Release|x86.Build.0 = Release|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Debug|ARM.Build.0 = Debug|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Debug|x64.Build.0 = Debug|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Debug|x86.Build.0 = Debug|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Release|ARM.ActiveCfg = Release|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Release|ARM.Build.0 = Release|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Release|ARM64.Build.0 = Release|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Release|x64.ActiveCfg = Release|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Release|x64.Build.0 = Release|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Release|x86.ActiveCfg = Release|Any CPU
+		{020DAA30-A361-42AB-91AD-766FB39CBDF3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
