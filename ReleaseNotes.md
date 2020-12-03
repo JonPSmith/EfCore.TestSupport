@@ -7,16 +7,22 @@
 - BREAKING CHANGES
    - Removed EfSchemaCompare - now found in another library
    - Removed SeedDatabase - use old 3.2.0 version
+   - Remove InMemory Database helper
 
 ## 5.0.0 TODO
 
 - BREAKING CHANGES
-   - Remove InMemory database helper
    - Alter SqliteInMemory to return a IDisposable options
 - Marked obsolete
-   - WipeDbViaSql 
+   - WipeDbViaSql - recommend respawn 
 - New features
    - Add `EnsureClean` 
+   - New version of getting database options with LogTo
+- Move DesignProvider to internal
+
+---
+
+# Older versions of EfCore.TestSupport
 
 ## Possible new features
 
