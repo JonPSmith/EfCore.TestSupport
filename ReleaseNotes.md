@@ -11,8 +11,10 @@
 ## 5.0.0 TODO
 
 - BREAKING CHANGES
-   - Remove InMemory helper
+   - Remove InMemory database helper
    - Alter SqliteInMemory to return a IDisposable options
+- Marked obsolete
+   - WipeDbViaSql 
 - New features
    - Add `EnsureClean` 
 

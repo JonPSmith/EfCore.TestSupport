@@ -52,8 +52,7 @@ namespace Test.UnitTests.TestDataLayer
                 var books = context.Books.ToList();
 
                 //VERIFY
-                logs.Single().ToString().ShouldStartWith("Information,CommandExecuting: Executing DbCommand [Parameters=[], CommandType='Text', CommandTimeout='30']");
-                logs.Single().Message.ShouldStartWith("Executing DbCommand [Parameters=[], CommandType='Text', CommandTimeout='30']");
+                logs.Single().ToString().ShouldStartWith("Information,CommandExecuted: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']");
             }
         }
 
