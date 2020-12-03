@@ -56,15 +56,9 @@ namespace Test.UnitTests.TestDataLayer
                 //VERIFY
                 var sqlCommand = decoded.Split('\n').Skip(1).Select(x => x.Trim()).ToArray();
                 sqlCommand[0].ShouldEqual(
-#if NETCOREAPP2_1
-                    "SELECT \"p\".\"BookId\", \"p\".\"Description\", \"p\".\"ImageUrl\", \"p\".\"Price\", \"p\".\"PublishedOn\", \"p\".\"Publisher\", \"p\".\"SoftDeleted\", \"p\".\"Title\"");
-                sqlCommand[1].ShouldEqual("FROM \"Books\" AS \"p\"");
-                sqlCommand[2].ShouldEqual("WHERE (\"p\".\"SoftDeleted\" = 0) AND (\"p\".\"BookId\" = @__id_0)");
-#elif NETCOREAPP3_0
                     "SELECT \"b\".\"BookId\", \"b\".\"Description\", \"b\".\"ImageUrl\", \"b\".\"Price\", \"b\".\"PublishedOn\", \"b\".\"Publisher\", \"b\".\"SoftDeleted\", \"b\".\"Title\"");
                 sqlCommand[1].ShouldEqual("FROM \"Books\" AS \"b\"");
                 sqlCommand[2].ShouldEqual("WHERE NOT (\"b\".\"SoftDeleted\") AND ((\"b\".\"BookId\" = @__id_0) AND @__id_0 IS NOT NULL)");
-#endif
             }
         }
 
@@ -87,13 +81,8 @@ namespace Test.UnitTests.TestDataLayer
                 //VERIFY  
                 var sqlCommand = decoded.Split('\n').Skip(1).Select(x => x.Trim()).ToArray();
                 sqlCommand[0].ShouldEqual("SELECT COUNT(*)");
-#if NETCOREAPP2_1
-                sqlCommand[1].ShouldEqual("FROM \"Books\" AS \"p\"");
-                sqlCommand[2].ShouldEqual("WHERE \"p\".\"SoftDeleted\" = 0");
-#elif NETCOREAPP3_0
                 sqlCommand[1].ShouldEqual("FROM \"Books\" AS \"b\"");
                 sqlCommand[2].ShouldEqual("WHERE NOT (\"b\".\"SoftDeleted\")");
-#endif
             }
         }
 
@@ -117,16 +106,9 @@ namespace Test.UnitTests.TestDataLayer
                 //VERIFY  
                 var sqlCommand = decoded.Split('\n').Skip(1).Select(x => x.Trim()).ToArray();
                 sqlCommand[0].ShouldEqual(
-#if NETCOREAPP2_1
-                        "SELECT TOP(2) [p].[BookId], [p].[Description], [p].[ImageUrl], [p].[Price], [p].[PublishedOn], [p].[Publisher], [p].[SoftDeleted], [p].[Title]");
-                sqlCommand[1].ShouldEqual("FROM [Books] AS [p]");
-                sqlCommand[2].ShouldEqual("WHERE ([p].[SoftDeleted] = 0) AND ([p].[BookId] = '1')");
-#elif NETCOREAPP3_0
                     "SELECT TOP(2) [b].[BookId], [b].[Description], [b].[ImageUrl], [b].[Price], [b].[PublishedOn], [b].[Publisher], [b].[SoftDeleted], [b].[Title]");
                 sqlCommand[1].ShouldEqual("FROM [Books] AS [b]");
                 sqlCommand[2].ShouldEqual("WHERE ([b].[SoftDeleted] <> CAST(1 AS bit)) AND (([b].[BookId] = '1') AND '1' IS NOT NULL)");
-
-#endif
             }
         }
 

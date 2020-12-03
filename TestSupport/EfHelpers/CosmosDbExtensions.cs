@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TestSupport.EfHelpers
 {
-#if NETSTANDARD2_1
+
     /// <summary>
     /// Extensions to provide Cosmos DB options where the Database/Container is held in the Azure Cosmos DB Emulator.
     /// </summary>
@@ -48,5 +48,4 @@ namespace TestSupport.EfHelpers
             return builder.Options;
         }
     }
-#endif
 }

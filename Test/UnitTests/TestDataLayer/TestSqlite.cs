@@ -91,7 +91,6 @@ namespace Test.UnitTests.TestDataLayer
             }
         }
 
-#if NETCOREAPP3_0
         [Fact]
         public void TestAddExtraOption()
         {
@@ -120,42 +119,7 @@ namespace Test.UnitTests.TestDataLayer
                 context.Entry(book).State.ShouldEqual(EntityState.Detached);
             }
         }
-#endif
 
-
-#if NETCOREAPP2_1
-        [Fact]
-        public void TestSqlLiteAcceptsComputedCol()
-        {
-            //SETUP
-            var options = SqliteInMemory.CreateOptions<MyEntityComputedColDbContext>();
-            using (var context = new MyEntityComputedColDbContext(options))
-            {
-                //ATTEMPT
-                context.Database.EnsureCreated();
-
-                //VERIFY
-            }
-        }
-
-        [Fact]
-        public void TestSqlLiteAcceptsComputedColButDoesntWork()
-        {
-            //SETUP
-            var options = SqliteInMemory.CreateOptions<MyEntityComputedColDbContext>();
-            using (var context = new MyEntityComputedColDbContext(options))
-            {
-                context.Database.EnsureCreated();
-
-                //ATTEMPT
-                context.Add(new MyEntity());
-                var ex = Assert.Throws<DbUpdateException>(() => context.SaveChanges());
-
-                //VERIFY
-                Assert.StartsWith("SQLite Error 19: 'NOT NULL constraint failed:", ex.InnerException.Message);
-            }
-        }
-#elif NETCOREAPP3_0
         [Fact]
         public void TestSqlLiteDoesNotSupportComputedCol()
         {
@@ -170,7 +134,6 @@ namespace Test.UnitTests.TestDataLayer
                 ex.Message.ShouldStartWith("SQLite doesn't support computed columns.");
             }
         }
-#endif
 
         [Fact]
         public void TestSqlLiteDoesAcceptSchema()

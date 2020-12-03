@@ -34,11 +34,7 @@ namespace TestSupport.EfHelpers
             foreach (var tableName in
                 context.GetTableNamesInOrderForWipe(addBracketsAndSchema, maxDepth, excludeTypes))
             {
-#if NETSTANDARD2_0
-                context.Database.ExecuteSqlCommand("DELETE FROM " + tableName);
-#elif NETSTANDARD2_1
                 context.Database.ExecuteSqlRaw("DELETE FROM " + tableName);
-#endif
             }
         }
 
@@ -129,22 +125,12 @@ namespace TestSupport.EfHelpers
 
         private static string FormTableNameWithSchema(IEntityType entityType, bool addBracketsAndSchema)
         {
-#if NETSTANDARD2_0
-            var relational = entityType.Relational();
             return addBracketsAndSchema 
-                ? "[" + (relational.Schema == null
-                       ? ""
-                       : relational.Schema + "].[")
-                   + relational.TableName + "]"
-                : relational.TableName;
-#elif NETSTANDARD2_1
-                        return addBracketsAndSchema 
                 ? "[" + (entityType.GetSchema() == null
                        ? ""
                        : entityType.GetSchema() + "].[")
                    + entityType.GetTableName() + "]"
                 : entityType.GetTableName();
-#endif
         }
 
         private static void ThrowExceptionIfCannotWipeSelfRef(List<IEntityType> allEntities)

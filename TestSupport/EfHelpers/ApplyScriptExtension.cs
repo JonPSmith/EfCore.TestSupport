@@ -2,11 +2,7 @@
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
 using System.Data;
-#if NETSTANDARD2_0
-using System.Data.SqlClient;
-#elif NETSTANDARD2_1
 using Microsoft.Data.SqlClient;
-#endif
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -40,11 +36,7 @@ namespace TestSupport.EfHelpers
                     {
                         try
                         {
-#if NETSTANDARD2_0
-                            context.Database.ExecuteSqlCommand(command);
-#elif NETSTANDARD2_1
                             context.Database.ExecuteSqlRaw(command);
-#endif
                         }
                         catch (SqlException)
                         {

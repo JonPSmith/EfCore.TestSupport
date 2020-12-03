@@ -1,6 +1,21 @@
 # Release notes
 
 
+## 5.0.0
+
+- Designed to work with EF Core 5 with serious cleanup
+- BREAKING CHANGES
+   - Removed EfSchemaCompare - now found in another library
+   - Removed SeedDatabase - use old 3.2.0 version
+
+## 5.0.0 TODO
+
+- BREAKING CHANGES
+   - Remove InMemory helper
+   - Alter SqliteInMemory to return a IDisposable options
+- New features
+   - Add `EnsureClean` 
+
 ## Possible new features
 
 - Make EfSchemaCompare handle Views as well.

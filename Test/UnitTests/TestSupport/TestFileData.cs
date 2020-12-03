@@ -21,21 +21,7 @@ namespace Test.UnitTests.TestSupport
             //VERIFY
             path.ShouldEndWith(this.GetType().Namespace.Split('.').First());
         }
-
-#if NETCOREAPP2_1
-        [Fact]
-        public void TestGetCallerTopLevelDirectoryNuGetAssembly()
-        {
-            //SETUP
-
-            //ATTEMPT
-            var ex = Assert.Throws<Exception>(() => TestData.GetCallingAssemblyTopLevelDir(Assembly.GetAssembly(typeof(DbContext))));
-
-            //VERIFY
-            ex.Message.ShouldEqual(@"Did not find '\bin\' in the assembly. Do you need to provide the callingAssembly parameter?");
-        }
-#endif
-
+        
 
         [Fact]
         public void TestGetTestDataFileDirectory()

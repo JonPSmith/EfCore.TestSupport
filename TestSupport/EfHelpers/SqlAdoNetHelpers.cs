@@ -1,11 +1,7 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
-#if NETSTANDARD2_0
-using System.Data.SqlClient;
-#elif NETSTANDARD2_1
 using Microsoft.Data.SqlClient;
-#endif
 
 namespace TestSupport.EfHelpers
 {

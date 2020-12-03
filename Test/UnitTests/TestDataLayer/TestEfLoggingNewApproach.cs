@@ -52,13 +52,8 @@ namespace Test.UnitTests.TestDataLayer
                 var books = context.Books.ToList();
 
                 //VERIFY
-#if NETCOREAPP2_1
-                logs.Single().ToString().ShouldStartWith("Information,CommandExecuted: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']");
-                logs.Single().Message.ShouldStartWith("Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']");
-#elif NETCOREAPP3_0
                 logs.Single().ToString().ShouldStartWith("Information,CommandExecuting: Executing DbCommand [Parameters=[], CommandType='Text', CommandTimeout='30']");
                 logs.Single().Message.ShouldStartWith("Executing DbCommand [Parameters=[], CommandType='Text', CommandTimeout='30']");
-#endif
             }
         }
 
@@ -133,11 +128,7 @@ namespace Test.UnitTests.TestDataLayer
                 context.Books.Count();
 
                 //VERIFY
-#if NETCOREAPP2_1
-                logs.Last().Message.ShouldEndWith("SELECT COUNT(*)\r\nFROM \"Books\" AS \"p\"\r\nWHERE \"p\".\"SoftDeleted\" = 0");
-#elif NETCOREAPP3_0
                 logs.Last().Message.ShouldEndWith("SELECT COUNT(*)\r\nFROM \"Books\" AS \"b\"\r\nWHERE NOT (\"b\".\"SoftDeleted\")");
-#endif
             }
         }
 
@@ -205,11 +196,7 @@ namespace Test.UnitTests.TestDataLayer
 
                 //VERIFY
                 logs1.Count.ShouldEqual(logs1Count);
-#if NETCOREAPP2_1
-                logs2.Count.ShouldEqual(logs1Count);
-#elif NETCOREAPP3_0
                 logs2.Count.ShouldBeInRange(logs1Count - 1, logs1Count + 1); //It depends which one starts first
-#endif
             }
         }
 
@@ -217,32 +204,6 @@ namespace Test.UnitTests.TestDataLayer
         {
             public string ClientSideProp { get; set; }
         }
-
-#if NETCOREAPP2_1
-        [Fact]
-        public void TestLogQueryClientEvaluationWarning()
-        {
-            //SETUP
-            var logs = new List<LogOutput>();
-            var options = SqliteInMemory.CreateOptionsWithLogging<BookContext>(log => logs.Add(log), LogLevel.Warning, false);
-            using (var context = new BookContext(options))
-            {
-                context.Database.EnsureCreated();
-                
-
-                //ATTEMPT
-                var books = context.Books.Select(x => new ClientSeverTestDto
-                {
-                    ClientSideProp = x.Price.ToString("C")
-                }).OrderBy(x => x.ClientSideProp)
-                .ToList();
-
-                //VERIFY
-                logs.Any(x => x.EventId.Name == RelationalEventId.QueryClientEvaluationWarning.Name).ShouldBeTrue();
-                logs.All(x => x.LogLevel >= LogLevel.Warning ).ShouldBeTrue();
-            }
-        }
-#endif
 
         [RunnableInDebugOnly]
         public void CaptureSqlEfCoreCreatesDatabaseToConsole()

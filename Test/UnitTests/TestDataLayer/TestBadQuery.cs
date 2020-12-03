@@ -28,11 +28,7 @@ namespace Test.UnitTests.TestDataLayer
                 var ex = Assert.Throws<InvalidOperationException>(() => context.Books.Last());
 
                 //VERIFY
-#if NETCOREAPP2_1
-                ex.Message.ShouldStartWith("Error generated for warning 'Microsoft.EntityFrameworkCore.Query.QueryClientEvaluationWarning:");
-#elif NETCOREAPP3_0
                 ex.Message.ShouldContain("could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to either");
-#endif
             }
         }
     }
