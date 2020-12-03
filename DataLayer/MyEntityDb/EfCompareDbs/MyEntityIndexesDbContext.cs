@@ -15,7 +15,7 @@ namespace DataLayer.MyEntityDb.EfCompareDbs
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             AddMyEntity.Build(modelBuilder);
-            modelBuilder.Entity<MyEntity>().HasIndex(p => p.MyInt).IsUnique().HasName("MySpecialName");
+            modelBuilder.Entity<MyEntity>().HasIndex(p => p.MyInt).IsUnique().HasDatabaseName("MySpecialName");
             modelBuilder.Entity<MyEntity>().HasIndex(p => p.MyString);
         }
     }

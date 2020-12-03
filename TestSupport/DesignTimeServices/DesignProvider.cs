@@ -36,6 +36,7 @@ namespace TestSupport.DesignTimeServices
             var providerName = dbProvider.Name;
 
             if (providerName == SqlServerProviderName)
+#pragma warning disable EF1001 // Internal EF Core API usage.
                 return new SqlServerDesignTimeServices();
             if (providerName == SqliteProviderName)
                 return new SqliteDesignTimeServices();
@@ -55,6 +56,7 @@ namespace TestSupport.DesignTimeServices
                 .AddEntityFrameworkDesignTimeServices()
                 .AddSingleton<IOperationReporter, OperationReporter>()
                 .AddSingleton<IOperationReportHandler, OperationReportHandler>();
+#pragma warning restore EF1001 // Internal EF Core API usage.
 
             designTimeService.ConfigureDesignTimeServices(serviceCollection);
             return serviceCollection.BuildServiceProvider();
