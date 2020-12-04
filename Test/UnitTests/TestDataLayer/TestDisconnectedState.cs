@@ -47,8 +47,8 @@ namespace Test.UnitTests.TestDataLayer
         public void TestSqliteTwoInstancesOk()
         {
             //SETUP
-            var options = SqliteInMemory         //#A
-                .CreateOptions<BookContext>(); //#A
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            options.StopNextDispose(); 
             using (var context = new BookContext(options))//#B
             {
                 context.Database.EnsureCreated();

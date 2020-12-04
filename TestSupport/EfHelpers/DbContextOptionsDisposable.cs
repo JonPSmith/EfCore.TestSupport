@@ -12,15 +12,29 @@ namespace TestSupport.EfHelpers
 {
     public class DbContextOptionsDisposable<T> : DbContextOptions<T>, IDisposable where T : DbContext
     {
-        private readonly DbConnection _connection;
+        private bool _stopNextDispose;
+        public DbConnection Connection { get; private set; }
 
         public DbContextOptionsDisposable(DbContextOptions<T> baseOptions)
              : base(new ReadOnlyDictionary<Type, IDbContextOptionsExtension>(
                  baseOptions.Extensions.ToDictionary(x => x.GetType())))
         {
-            _connection = RelationalOptionsExtension.Extract(baseOptions).Connection;
+            Connection = RelationalOptionsExtension.Extract(baseOptions).Connection;
         }
 
-        public void Dispose() => _connection.Dispose();
+        /// <summary>
+        /// Use this to stop the Dispose if you want to create a second context to the same 
+        /// </summary>
+        public void StopNextDispose()
+        {
+            _stopNextDispose = true;
+        }
+
+        public void Dispose()
+        {
+            if (!_stopNextDispose)
+                Connection.Dispose();
+            _stopNextDispose = false;
+        }
     }
 }
