@@ -67,7 +67,9 @@ namespace Test.UnitTests.TestDataLayer
         {
             //SETUP
             var logs = new List<LogOutput>();
+#pragma warning disable 618
             var options = SqliteInMemory.CreateOptionsWithLogging<BookContext>(log => logs.Add(log));
+#pragma warning restore 618
             //var options = this.CreateUniqueClassOptionsWithLogging<BookContext>(log => logs.Add(log));
             using (var context = new BookContext(options))
             {
@@ -92,7 +94,9 @@ namespace Test.UnitTests.TestDataLayer
             //SETUP
             var logs = new List<LogOutput>();
             //var options = SqliteInMemory.CreateOptionsWithLogging<BookContext>(log => logs.Add(log));
+#pragma warning disable 618
             var options = this.CreateUniqueClassOptionsWithLogging<BookContext>(log => logs.Add(log));
+#pragma warning restore 618
             using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();

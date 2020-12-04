@@ -29,7 +29,9 @@ namespace Test.UnitTests.TestDataLayer
         {
             //SETUP
             var showLog = false;
+#pragma warning disable 618
             var options = this.CreateUniqueClassOptionsWithLogging<DbContext1>(log =>
+#pragma warning restore 618
             {
                 if (showLog)
                     _output.WriteLine(log.Message);
@@ -54,7 +56,9 @@ namespace Test.UnitTests.TestDataLayer
         {
             //SETUP
             var showLog = false;
+#pragma warning disable 618
             var options = this.CreateUniqueClassOptionsWithLogging<DbContext2>(log =>
+#pragma warning restore 618
             {
                 if (showLog)
                     _output.WriteLine(log.Message);

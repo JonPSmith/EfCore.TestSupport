@@ -25,7 +25,9 @@ namespace Test.UnitTests.TestDataLayer
                 context.SeedDatabaseFourBooks();
 
                 //ATTEMPT
+#pragma warning disable 618
                 context.WipeAllDataFromDatabase();
+#pragma warning restore 618
 
                 //VERIFY
                 context.Books.Count().ShouldEqual(0);
@@ -44,7 +46,9 @@ namespace Test.UnitTests.TestDataLayer
                 context.SeedDatabaseFourBooks();
 
                 //ATTEMPT
+#pragma warning disable 618
                 context.WipeAllDataFromDatabase(false, 10, typeof(Author));
+#pragma warning restore 618
 
                 //VERIFY
                 context.Books.Count().ShouldEqual(0);

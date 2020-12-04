@@ -6,6 +6,7 @@ using System.Linq;
 using DataLayer.BookApp;
 using DataLayer.BookApp.EfCode;
 using TestSupport.EfHelpers;
+using TestSupportSchema;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Extensions.AssertExtensions;
@@ -25,11 +26,12 @@ namespace Test.UnitTests.TestDataLayer
         public void TestExample()
         {
             //SETUP
-            var logs = new List<LogOutput>();
-            var options = this.CreateUniqueClassOptionsWithLogging<BookContext>(log => logs.Add(log));
+            var logs = new List<string>();
+            var options = this.CreateUniqueClassOptionsWithLogTo<BookContext>(log => logs.Add(log));
             using (var context = new BookContext(options))
             {
-                context.CreateEmptyViaWipe();
+                context.Database.EnsureClean();
+                logs.Clear();
 
                 //ATTEMPT
                 context.Add(new Book {Title = "New Book"});
@@ -39,7 +41,7 @@ namespace Test.UnitTests.TestDataLayer
                 context.Books.Count().ShouldEqual(1);
                 foreach (var log in logs)
                 {                                    
-                    _output.WriteLine(log.ToString());
+                    _output.WriteLine(log);
                 }                                     
             }
         }

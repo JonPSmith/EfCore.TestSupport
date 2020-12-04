@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Test.Helpers;
 using TestSupport.Attributes;
 using TestSupport.EfHelpers;
+using TestSupportSchema;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Extensions.AssertExtensions;
@@ -28,11 +29,10 @@ namespace Test.UnitTests.TestDataLayer
         public void TestExampleSqlDatabaseOk()
         {
             //SETUP
-            var options = this
-                .CreateUniqueClassOptions<BookContext>();
+            var options = this.CreateUniqueClassOptions<BookContext>();
             using (var context = new BookContext(options))
             {
-                context.CreateEmptyViaWipe();
+                context.Database.EnsureClean();
 
                 //ATTEMPT
                 context.SeedDatabaseFourBooks();
@@ -99,8 +99,8 @@ namespace Test.UnitTests.TestDataLayer
         public void TestCreateDbToGetLogsOk()
         {
             //SETUP
-            var logs = new List<LogOutput>();
-            var options = this.CreateUniqueClassOptionsWithLogging<BookContext>(log => logs.Add(log));
+            var logs = new List<string>();
+            var options = this.CreateUniqueClassOptionsWithLogTo<BookContext>(log => logs.Add(log));
             using (var context = new BookContext(options))
             {
                 //ATTEMPT
@@ -110,7 +110,7 @@ namespace Test.UnitTests.TestDataLayer
                 //VERIFY
                 foreach (var log in logs)
                 {
-                    _output.WriteLine(log.ToString());
+                    _output.WriteLine(log);
                 }
             }
         }
@@ -130,7 +130,9 @@ namespace Test.UnitTests.TestDataLayer
                 //ATTEMPT
                 using(new TimeThings(_output, "Time to wipe the database"))
                 {
+#pragma warning disable 618
                     context.CreateEmptyViaWipe();
+#pragma warning restore 618
                 }
 
                 //VERIFY

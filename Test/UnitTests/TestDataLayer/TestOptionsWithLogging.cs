@@ -28,7 +28,9 @@ namespace Test.UnitTests.TestDataLayer
         public void TestEfCoreLoggingExampleOfOutputToConsole()
         {
             //SETUP
+#pragma warning disable 618
             var options = SqliteInMemory.CreateOptionsWithLogging<BookContext>(l => _output.WriteLine(l.Message));
+#pragma warning restore 618
             using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();
@@ -46,7 +48,9 @@ namespace Test.UnitTests.TestDataLayer
         {
             //SETUP
             var logs = new List<LogOutput>();
+#pragma warning disable 618
             var options = SqliteInMemory.CreateOptionsWithLogging<BookContext>(log => logs.Add(log));
+#pragma warning restore 618
             using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();
@@ -65,7 +69,9 @@ namespace Test.UnitTests.TestDataLayer
         {
             //SETUP
             var logs = new List<LogOutput>();
+#pragma warning disable 618
             var options = SqliteInMemory.CreateOptionsWithLogging<BookContext>(log => logs.Add(log));
+#pragma warning restore 618
             using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();
@@ -88,7 +94,9 @@ namespace Test.UnitTests.TestDataLayer
         {
             //SETUP
             var logs = new List<LogOutput>();
+#pragma warning disable 618
             var options = SqliteInMemory.CreateOptionsWithLogging<BookContext>(log => logs.Add(log));
+#pragma warning restore 618
             using (var context = new BookContext(options))
             {
                 //ATTEMPT
@@ -109,9 +117,11 @@ namespace Test.UnitTests.TestDataLayer
         {
             //SETUP
             var logs1 = new List<LogOutput>();
+#pragma warning disable 618
             var options1 = SqliteInMemory.CreateOptionsWithLogging<BookContext>(log => logs1.Add(log));
             var logs2 = new List<LogOutput>();
             var options2 = SqliteInMemory.CreateOptionsWithLogging<BookContext>(log => logs2.Add(log));
+#pragma warning restore 618
             using (var context1 = new BookContext(options1))
             using (var context2 = new BookContext(options2))
             {
@@ -132,7 +142,9 @@ namespace Test.UnitTests.TestDataLayer
         public void CaptureSqlEfCoreCreatesDatabaseToConsole()
         {
             //SETUP
+#pragma warning disable 618
             var options = this.CreateUniqueClassOptionsWithLogging<BookContext>(log => _output.WriteLine(log.Message));
+#pragma warning restore 618
             using (var context = new BookContext(options))
             {
 
