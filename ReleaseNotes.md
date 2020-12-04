@@ -6,7 +6,7 @@
 - Designed to work with EF Core 5 with serious cleanup
 - BREAKING CHANGES
    - Altered SqliteInMemory to return a IDisposable options (disposes connection at the end of the test). Can effect current code.
-- New features
+- New feature - added LogTo
    - SqliteInMemory now has CreateOptionsWithLogTo
    - SqlServer now has CreateUniqueClassOptionsWithLogTo and CreateUniqueMethodOptionsWithLogTo
 - REMOVED FEATURES

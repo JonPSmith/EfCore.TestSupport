@@ -1,44 +1,35 @@
-﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
-// Licensed under MIT license. See License.txt in the project root for license information.
+﻿// // Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// // Licensed under MIT license. See License.txt in the project root for license information.
 
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Sqlite.Design.Internal;
 using Microsoft.EntityFrameworkCore.SqlServer.Design.Internal;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace TestSupport.DesignTimeServices
+namespace TestSupport.EfHelpers.Internal
 {
     /// <summary>
     /// This static class contains the methods to return a design-time service provider
     /// </summary>
-    public static class DesignProvider
+    internal static class DesignProvider
     {
         private const string SqlServerProviderName = "Microsoft.EntityFrameworkCore.SqlServer";
         private const string SqliteProviderName = "Microsoft.EntityFrameworkCore.Sqlite";
 
         /// <summary>
-        /// This returns the correct instance of the design time service for the current DbContext
+        /// This returns the correct instance of the design time service for the current DbContext's Database property
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="databaseFacade"></param>
         /// <returns></returns>
-        public static IDesignTimeServices GetDesignTimeService(this DbContext context)
+        public static IDesignTimeServices GetDesignTimeService(this DatabaseFacade databaseFacade)
         {
-            var dbProvider = context.GetService<IDatabaseProvider>();
-            if (dbProvider == null)
-                throw new InvalidOperationException("Cound not find a database provider service.");
-
-            var providerName = dbProvider.Name;
-
-            if (providerName == SqlServerProviderName)
+            if (databaseFacade.IsSqlServer())
+                //Only handles SQL Server
 #pragma warning disable EF1001 // Internal EF Core API usage.
                 return new SqlServerDesignTimeServices();
-            if (providerName == SqliteProviderName)
-                return new SqliteDesignTimeServices();
 
             throw new InvalidOperationException("This is not a database provider that we currently support.");
         }
