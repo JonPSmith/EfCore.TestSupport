@@ -1,8 +1,6 @@
 ﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT license. See License.txt in the project root for license information.
 
-using System;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 
@@ -33,20 +31,8 @@ namespace TestSupport.EfHelpers
         /// <summary>
         /// This allows you to set format of the log message, for instance
         /// DefaultWithUtcTime will use a UTC time instead the local time
-        /// Defaults to null, which uses local time
+        /// Defaults to null, which means no extra info is prepended to the message
         /// </summary>
         public DbContextLoggerOptions LoggerOptions { get; set; }
-
-        internal DbContextOptionsBuilder<T> AddLogTo<T>(DbContextOptionsBuilder<T> builder, Action<string> action)
-            where T : DbContext
-        {
-            if (OnlyShowTheseCategories != null)
-                return builder.LogTo(action, OnlyShowTheseCategories, LogLevel, LoggerOptions);
-            if (OnlyShowTheseEvents != null)
-                return builder.LogTo(action, OnlyShowTheseEvents, LogLevel, LoggerOptions);
-
-            return builder.LogTo(action, LogLevel, LoggerOptions);
-        }
-
     }
 }

@@ -1,11 +1,11 @@
-﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
-// Licensed under MIT licence. See License.txt in the project root for license information.
+﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Licensed under MIT license. See License.txt in the project root for license information.
 
 using System.Data;
-using Microsoft.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace TestSupport.EfHelpers
@@ -15,7 +15,6 @@ namespace TestSupport.EfHelpers
     /// </summary>
     public static class ApplyScriptExtension
     {
-
         /// <summary>
         /// This reads in a SQL script file and executes each command to the database pointed at by the DbContext
         /// Each command should have an GO at the start of the line after the command.

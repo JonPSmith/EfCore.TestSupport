@@ -7,14 +7,22 @@
 - BREAKING CHANGES
    - Removed EfSchemaCompare - now found in another library
    - Removed SeedDatabase - use old 3.2.0 version
-   - Remove InMemory Database helper
+   - Remove InMemory Database helper - use EF Core's In Memory database
+- New features
+   - SqliteInMemory now has CreateOptionsWithLogTo
+   - SqlServer now has CreateUniqueClassOptionsWithLogTo and CreateUniqueMethodOptionsWithLogTo
+   - Altered SqliteInMemory to return a IDisposable options (disposes connection)
+- Marked as obsolete
+   - CreateOptionsWithLogging
+   - CreateUniqueClassOptionsWithLogging
+   - CreateUniqueMethodOptionsWithLogging
 
 ## 5.0.0 TODO
 
 - BREAKING CHANGES
-   - Alter SqliteInMemory to return a IDisposable options
+
 - Marked obsolete
-   - WipeDbViaSql - recommend respawn 
+   - WipeDbViaSql - recommend EnsureClean or respawn 
 - New features
    - Add `EnsureClean` 
    - New version of getting database options with LogTo

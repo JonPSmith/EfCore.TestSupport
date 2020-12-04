@@ -1,5 +1,5 @@
-﻿// Copyright (c) 2016 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
-// Licensed under MIT licence. See License.txt in the project root for license information.
+﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Licensed under MIT license. See License.txt in the project root for license information.
 
 using System;
 using System.Collections.Generic;
@@ -12,8 +12,8 @@ namespace TestSupport.EfHelpers
     /// </summary>
     public class MyLoggerProvider : ILoggerProvider
     {
-        private readonly List<LogOutput> _logs;
         private readonly LogLevel _logLevel;
+        private readonly List<LogOutput> _logs;
 
         /// <summary>
         /// This is a logger provider that can be linked into a loggerFactory.
@@ -46,8 +46,8 @@ namespace TestSupport.EfHelpers
 
         private class MyLogger : ILogger
         {
-            private readonly List<LogOutput> _logs;
             private readonly LogLevel _logLevel;
+            private readonly List<LogOutput> _logs;
 
             public MyLogger(List<LogOutput> logs, LogLevel logLevel)
             {

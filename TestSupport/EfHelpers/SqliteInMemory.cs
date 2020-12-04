@@ -1,10 +1,9 @@
-﻿// Copyright (c) 2016 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
-// Licensed under MIT licence. See License.txt in the project root for license information.
+﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Licensed under MIT license. See License.txt in the project root for license information.
 
 using System;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 using TestSupport.EfHelpers.Internal;
 
@@ -15,7 +14,6 @@ namespace TestSupport.EfHelpers
     /// </summary>
     public static class SqliteInMemory
     {
-
         /// <summary>
         /// Created a Sqlite Options for in-memory database. 
         /// </summary>
@@ -26,7 +24,7 @@ namespace TestSupport.EfHelpers
             where T : DbContext
         {
             return new DbContextOptionsDisposable<T>(SetupConnectionAndBuilderOptions<T>(builder)
-                .EnableDetailedErrors().Options);
+                .Options);
         }
 
         /// <summary>
@@ -37,6 +35,7 @@ namespace TestSupport.EfHelpers
         /// <param name="logLevel">Optional: Sets the logLevel you want to capture. Defaults to Information</param>
         /// <param name="builder">Optional: action that allows you to add extra options to the builder</param>
         /// <returns></returns>
+        [Obsolete("Suggest using CreateOptionsWithLogTo<T> which gives more logging options")]
         public static DbContextOptionsDisposable<T> CreateOptionsWithLogging<T>(Action<LogOutput> efLog,
             LogLevel logLevel = LogLevel.Information, Action<DbContextOptionsBuilder<T>> builder = null)
             where T : DbContext
@@ -52,7 +51,7 @@ namespace TestSupport.EfHelpers
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="logAction">This action is called with each log output</param>
-        /// <param name="logToOptions">Optional: This allows you to define what logs you want and what format. Defaults to LogLevel.Infromation</param>
+        /// <param name="logToOptions">Optional: This allows you to define what logs you want and what format. Defaults to LogLevel.Information</param>
         /// <param name="builder">Optional: action that allows you to add extra options to the builder</param>
         /// <returns></returns>
         public static DbContextOptionsDisposable<T> CreateOptionsWithLogTo<T>(Action<string> logAction,
@@ -92,6 +91,7 @@ namespace TestSupport.EfHelpers
 
             return builder; //#H
         }
+
         /****************************************************************
         #A By default it will throw an exception if a QueryClientEvaluationWarning is logged (see section 15.8). You can turn this off by providing a value of false as a parameter
         #B Creates a SQLite connection string with the DataSource set to ":memory:"

@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT license. See License.txt in the project root for license information.
 
 using System.Linq;
@@ -9,13 +9,13 @@ namespace TestSupport.EfHelpers.Internal
     internal class EfCoreLogDecoder
     {
         private const string EfCoreCommandExecutedEventId = "Microsoft.EntityFrameworkCore.Database.Command.CommandExecuting";
-
-        private static readonly Regex ParamRegex = new Regex(@"(@p\d+|@__\w*?_\d+)='(.*?)'(\s\(\w*?\s=\s\w*\))*(?:,\s|\]).*?");
         private const string ParameterStart = "[Parameters=[";
 
+        private static readonly Regex ParamRegex = new Regex(@"(@p\d+|@__\w*?_\d+)='(.*?)'(\s\(\w*?\s=\s\w*\))*(?:,\s|\]).*?");
+
         private readonly string _paramName;
-        private readonly string _paramValue;
         private readonly string[] _paramTypes;
+        private readonly string _paramValue;
 
         private EfCoreLogDecoder(Match matchedParam)
         {
@@ -84,6 +84,5 @@ namespace TestSupport.EfHelpers.Internal
 
             return string.Join("\r\n", messageLines);
         }
-
     }
 }

@@ -25,10 +25,12 @@ namespace TestSupport.EfHelpers
         /// Total time in milliseconds, with fractions
         /// </summary>
         public double TotalTimeMilliseconds { get; private set; }
+
         /// <summary>
         /// Optional number of runs. zero if not set.
         /// </summary>
         public int NumRuns { get; private set; }
+
         /// <summary>
         /// Optional string to identify this usage of the TimeThings
         /// </summary>

@@ -1,5 +1,5 @@
-﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
-// Licensed under MIT licence. See License.txt in the project root for license information.
+﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Licensed under MIT license. See License.txt in the project root for license information.
 
 using System;
 using System.Diagnostics;
@@ -12,11 +12,11 @@ namespace TestSupport.EfHelpers
     /// </summary>
     public class TimeThings : IDisposable
     {
-        private readonly Stopwatch _stopwatch ;
         private readonly Action<TimeThingResult> _funcToCall;
-        private readonly ITestOutputHelper _output;
         private readonly string _message;
         private readonly int _numRuns;
+        private readonly ITestOutputHelper _output;
+        private readonly Stopwatch _stopwatch ;
 
         /// <summary>
         /// This will measure the time it took from this class being created to it being disposed
@@ -61,7 +61,5 @@ namespace TestSupport.EfHelpers
             _funcToCall?.Invoke(result);
             _output?.WriteLine(result.ToString());
         }
-
-
     }
 }

@@ -1,10 +1,10 @@
-﻿// // Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
-// // Licensed under MIT licence. See License.txt in the project root for license information.
+﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Licensed under MIT license. See License.txt in the project root for license information.
 
 using System;
-using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
 using System.Reflection;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using TestSupport.Helpers;
 
@@ -75,7 +75,7 @@ namespace TestSupport.EfHelpers
             builder.ConnectTimeout = timeout;
 
             var nonDbConnectionString = builder.ToString();
-            if (nonDbConnectionString.ExecuteRowCount("sys.databases", String.Format("WHERE [Name] = '{0}'", databaseName)) == 1)
+            if (nonDbConnectionString.ExecuteRowCount("sys.databases", string.Format("WHERE [Name] = '{0}'", databaseName)) == 1)
             {
                 databaseName.DeleteDatabase(nonDbConnectionString);
             }

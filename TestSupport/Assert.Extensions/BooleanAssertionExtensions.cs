@@ -1,4 +1,7 @@
-﻿namespace Xunit.Extensions.AssertExtensions
+﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Licensed under MIT license. See License.txt in the project root for license information.
+
+namespace Xunit.Extensions.AssertExtensions
 {
     /// <summary>
     /// Extensions which provide assertions to classes derived from <see cref="bool"/>.
