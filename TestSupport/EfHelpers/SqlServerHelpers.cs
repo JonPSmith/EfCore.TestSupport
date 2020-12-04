@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
+using TestSupport.EfHelpers.Internal;
 using TestSupport.Helpers;
 
 namespace TestSupport.EfHelpers
@@ -136,12 +137,6 @@ namespace TestSupport.EfHelpers
             applyExtraOption?.Invoke(builder);
 
             return builder;
-        }
-
-        internal static void ApplyOtherOptionSettings<T>(this DbContextOptionsBuilder<T> builder)
-            where T : DbContext
-        {
-            builder.EnableSensitiveDataLogging();
         }
     }
 }

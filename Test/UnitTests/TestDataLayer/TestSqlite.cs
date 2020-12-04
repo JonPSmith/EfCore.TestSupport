@@ -44,6 +44,40 @@ namespace Test.UnitTests.TestDataLayer
          * *********************************************************/
 
         [Fact]
+        public void TestSqliteDisposableOk()
+        {
+            //SETUP
+            using var options = SqliteInMemory.CreateOptions<BookContext>();
+            using var context = new BookContext(options);
+
+            context.Database.EnsureCreated();
+
+            //ATTEMPT
+            context.SeedDatabaseFourBooks(); 
+
+            //VERIFY
+            context.Books.Count().ShouldEqual(4); 
+        }
+
+        [Fact]
+        public void TestSqliteLogToOk()
+        {
+            //SETUP
+            using var options = SqliteInMemory.CreateOptions<BookContext>();
+            using var context = new BookContext(options);
+
+            context.Database.EnsureCreated();
+
+            //ATTEMPT
+            context.SeedDatabaseFourBooks();
+
+            //VERIFY
+            context.Books.Count().ShouldEqual(4);
+        }
+
+
+
+        [Fact]
         public void TestSqliteTwoInstancesOk()
         {
             //SETUP

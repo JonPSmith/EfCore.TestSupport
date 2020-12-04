@@ -5,10 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DataLayer.BookApp;
 using DataLayer.EfCode.BookApp;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Logging;
 using Test.Helpers;
 using TestSupport.Attributes;
 using TestSupport.EfHelpers;
@@ -18,80 +14,13 @@ using Xunit.Extensions.AssertExtensions;
 
 namespace Test.UnitTests.TestDataLayer
 {
-    public class TestEfLoggingNewApproach
+    public class TestOptionsWithLogging
     {
         private readonly ITestOutputHelper _output; 
 
-        public TestEfLoggingNewApproach(ITestOutputHelper output) 
+        public TestOptionsWithLogging(ITestOutputHelper output) 
         {
             _output = output;
-        }
-
-        [Fact]
-        public void TestEfCoreLoggingViaBuilder()
-        {
-            //SETUP
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-            var logs = new List<LogOutput>();
-
-            var options = new DbContextOptionsBuilder<BookContext>()
-                .UseLoggerFactory(new LoggerFactory(new[]
-                {
-                    new MyLoggerProviderActionOut(log => logs.Add(log))
-                }))
-                .UseSqlite(connection)
-                .Options;
-            using (var context = new BookContext(options))
-            {
-                context.Database.EnsureCreated();
-                context.SeedDatabaseFourBooks();
-
-                //ATTEMPT
-                logs.Clear();
-                var books = context.Books.ToList();
-
-                //VERIFY
-                logs.Single().ToString().ShouldStartWith("Information,CommandExecuted: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']");
-            }
-        }
-
-        [Fact]
-        public void TestEfCoreLoggingWithMultipleDbContextsViaBuilder()
-        {
-            //SETUP
-            var logs1 = new List<LogOutput>();
-            var connection1 = new SqliteConnection("DataSource=:memory:");
-            connection1.Open();
-
-            var options1 = new DbContextOptionsBuilder<BookContext>()
-                .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(log => logs1.Add(log)) }))
-                .UseSqlite(connection1)
-                .Options;
-            using (var context = new BookContext(options1))
-            {
-                //ATTEMPT
-                context.Database.EnsureCreated();
-            }
-            var logs1Count = logs1.Count;
-
-            var logs2 = new List<LogOutput>();
-            var connection2 = new SqliteConnection("DataSource=:memory:");
-            connection1.Open();
-
-            var options2 = new DbContextOptionsBuilder<BookContext>()
-                .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(log => logs2.Add(log))}))
-                .UseSqlite(connection2)
-                .Options;
-            using (var context = new BookContext(options2))
-            {
-                //ATTEMPT
-                context.Database.EnsureCreated();
-
-                //VERIFY
-                logs2.Count.ShouldBeInRange(1, 100);
-                logs1.Count.ShouldEqual(logs1Count); 
-            }
         }
 
 
@@ -104,8 +33,7 @@ namespace Test.UnitTests.TestDataLayer
             {
                 context.Database.EnsureCreated();
                 context.SeedDatabaseFourBooks();
-                 
-
+                
                 //ATTEMPT
                 var books = context.Books.ToList(); 
 
@@ -199,10 +127,6 @@ namespace Test.UnitTests.TestDataLayer
             }
         }
 
-        private class ClientSeverTestDto
-        {
-            public string ClientSideProp { get; set; }
-        }
 
         [RunnableInDebugOnly]
         public void CaptureSqlEfCoreCreatesDatabaseToConsole()

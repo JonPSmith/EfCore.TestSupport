@@ -6,6 +6,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
+using TestSupport.EfHelpers.Internal;
 
 namespace TestSupport.EfHelpers
 {
@@ -19,12 +20,13 @@ namespace TestSupport.EfHelpers
         /// Created a Sqlite Options for in-memory database. 
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="applyExtraOption">Optional: action that allows you to add extra options to the builder</param>
+        /// <param name="builder">Optional: action that allows you to add extra options to the builder</param>
         /// <returns></returns>
-        public static DbContextOptions<T> CreateOptions<T>(Action<DbContextOptionsBuilder<T>> applyExtraOption = null)
+        public static DbContextOptionsDisposable<T> CreateOptions<T>(Action<DbContextOptionsBuilder<T>> builder = null)
             where T : DbContext
         {
-            return SetupConnectionAndBuilderOptions<T>(applyExtraOption).Options;
+            return new DbContextOptionsDisposable<T>(SetupConnectionAndBuilderOptions<T>(builder)
+                .EnableDetailedErrors().Options);
         }
 
         /// <summary>
@@ -33,15 +35,36 @@ namespace TestSupport.EfHelpers
         /// <typeparam name="T"></typeparam>
         /// <param name="efLog">This is a method that receives a LogOutput whenever EF Core logs something</param>
         /// <param name="logLevel">Optional: Sets the logLevel you want to capture. Defaults to Information</param>
-        /// <param name="applyExtraOption">Optional: action that allows you to add extra options to the builder</param>
+        /// <param name="builder">Optional: action that allows you to add extra options to the builder</param>
         /// <returns></returns>
-        public static DbContextOptions<T> CreateOptionsWithLogging<T>(Action<LogOutput> efLog,
-            LogLevel logLevel = LogLevel.Information, Action<DbContextOptionsBuilder<T>> applyExtraOption = null)
+        public static DbContextOptionsDisposable<T> CreateOptionsWithLogging<T>(Action<LogOutput> efLog,
+            LogLevel logLevel = LogLevel.Information, Action<DbContextOptionsBuilder<T>> builder = null)
             where T : DbContext
         {
-            return SetupConnectionAndBuilderOptions<T>(applyExtraOption)
-                .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(efLog, logLevel) }))
-                .Options;
+            return new DbContextOptionsDisposable<T>(
+                SetupConnectionAndBuilderOptions<T>(builder)
+                    .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(efLog, logLevel) }))
+                .Options);
+        }
+
+        /// <summary>
+        /// Created a Sqlite Options for in-memory database while using LogTo to get the EF Core logging output. 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="logAction">This action is called with each log output</param>
+        /// <param name="logToOptions">Optional: This allows you to define what logs you want and what format. Defaults to LogLevel.Infromation</param>
+        /// <param name="builder">Optional: action that allows you to add extra options to the builder</param>
+        /// <returns></returns>
+        public static DbContextOptionsDisposable<T> CreateOptionsWithLogTo<T>(Action<string> logAction,
+            LogToOptions logToOptions = null , Action<DbContextOptionsBuilder<T>> builder = null)
+            where T : DbContext
+        {
+            if (logAction == null) throw new ArgumentNullException(nameof(logAction));
+
+            return new DbContextOptionsDisposable<T>(
+                SetupConnectionAndBuilderOptions(builder)
+                    .AddLogTo(logAction, logToOptions)
+                    .Options);
         }
 
 
