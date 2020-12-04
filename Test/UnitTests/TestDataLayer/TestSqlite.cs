@@ -4,7 +4,7 @@
 using System;
 using System.Data.Common;
 using System.Linq;
-using DataLayer.EfCode.BookApp;
+using DataLayer.BookApp.EfCode;
 using DataLayer.MyEntityDb;
 using DataLayer.MyEntityDb.EfCompareDbs;
 using Microsoft.EntityFrameworkCore;

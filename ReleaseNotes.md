@@ -5,26 +5,24 @@
 
 - Designed to work with EF Core 5 with serious cleanup
 - BREAKING CHANGES
-   - Altered SqliteInMemory to return a IDisposable options (disposes connection at the end of the test). Can effect current code.
-- New feature - added LogTo
-   - SqliteInMemory now has CreateOptionsWithLogTo
-   - SqlServer now has CreateUniqueClassOptionsWithLogTo and CreateUniqueMethodOptionsWithLogTo
+   - Altered SqliteInMemory methods to return a IDisposable options (disposes connection at the end of the test). Can effect current code.
+- New features
+   - Add `EnsureClean`. This clears the schema and data and set up new model (only for SQL Server)
+   - SqliteInMemory now has `CreateOptionsWithLogTo<T>` 
+   - SqlServer now has `CreateUniqueClassOptionsWithLogTo<T>` and `CreateUniqueMethodOptionsWithLogTo<T>`
 - REMOVED FEATURES
    - Removed EfSchemaCompare - now found in another library
    - Removed SeedDatabase - use old 3.2.0 version
    - Remove InMemory Database helper - use EF Core's In Memory database
 - Marked as obsolete
-   - CreateOptionsWithLogging
-   - CreateUniqueClassOptionsWithLogging
-   - CreateUniqueMethodOptionsWithLogging
+   - `CreateOptionsWithLogging<T>`
+   - `CreateUniqueClassOptionsWithLogging<T>`
+   - `CreateUniqueMethodOptionsWithLogging<T>`
 
 ## 5.0.0 TODO
 
 - Marked obsolete
    - WipeDbViaSql - recommend EnsureClean or respawn 
-- New features
-   - Add `EnsureClean` 
-       - Move DesignProvider to internal
 
 ---
 

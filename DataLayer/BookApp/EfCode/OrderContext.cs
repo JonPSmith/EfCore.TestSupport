@@ -3,9 +3,8 @@
 
 using DataLayer.BookApp.EfCode.Configurations;
 using Microsoft.EntityFrameworkCore;
-using DataLayer.BookApp;
 
-namespace DataLayer.EfCode.BookApp
+namespace DataLayer.BookApp.EfCode
 {
     public class OrderContext : DbContext
     {

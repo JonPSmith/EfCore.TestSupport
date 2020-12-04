@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DataLayer.BookApp;
-using DataLayer.EfCode.BookApp;
+using DataLayer.BookApp.EfCode;
 using TestSupport.EfHelpers;
 using Xunit;
 using Xunit.Abstractions;

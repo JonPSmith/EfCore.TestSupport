@@ -2,7 +2,6 @@
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
 using DataLayer.BookApp.EfCode.Configurations;
-using DataLayer.EfCode.BookApp;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataLayer.BookApp.EfCode
