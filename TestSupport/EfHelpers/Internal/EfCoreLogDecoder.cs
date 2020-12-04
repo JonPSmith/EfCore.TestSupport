@@ -11,7 +11,7 @@ namespace TestSupport.EfHelpers.Internal
         private const string EfCoreCommandExecutedEventId = "Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted";
         private const string ParameterStart = "[Parameters=[";
 
-        private static readonly Regex ParamRegex = new Regex(@"(@p\d+|@__\w*?_\d+)='(.*?)'(\s\(\w*?\s=\s\w*\))*(?:,\s|\]).*?");
+        private static readonly Regex ParamRegex = new Regex(@"(@p\d+|@__\w*?_\d+)=('(.*?)'|NULL)(\s\(\w*?\s=\s\w*\))*(?:,\s|\]).*?");
 
         private readonly string _paramName;
         private readonly string[] _paramTypes;
@@ -20,8 +20,8 @@ namespace TestSupport.EfHelpers.Internal
         private EfCoreLogDecoder(Match matchedParam)
         {
             _paramName = matchedParam.Groups[1].Value;
-            _paramValue = matchedParam.Groups[2].Value;
-            _paramTypes = matchedParam.Groups[3].Captures.Cast<Capture>().Select(x => x.Value).ToArray();
+            _paramValue = matchedParam.Groups[3].Value;
+            _paramTypes = matchedParam.Groups[4].Captures.Cast<Capture>().Select(x => x.Value).ToArray();
         }
 
         private string ValueToInsert()

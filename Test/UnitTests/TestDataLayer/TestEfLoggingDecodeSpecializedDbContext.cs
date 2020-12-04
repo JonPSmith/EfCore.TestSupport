@@ -53,7 +53,7 @@ namespace Test.UnitTests.TestDataLayer
                 sqlCommand[i++].ShouldEqual("SET NOCOUNT ON;");
                 sqlCommand[i++].ShouldEqual("INSERT INTO [AllTypesEntities] ([MyAnsiNonNullString], [MyBool], [MyBoolNullable], [MyByteArray], [MyDateTime], [MyDateTimeNullable], [MyDateTimeOffset], [MyDecimal], [MyDouble], [MyGuid], [MyGuidNullable], [MyInt], [MyIntNullable], [MyString], [MyStringEmptyString], [MyStringNull], [MyTimeSpan])");
                 //can't test for new Guid so do before and after
-                sqlCommand[i].ShouldStartWith("VALUES ('ascii only', 1, NULL, '0x010203', '2000-01-02T00:00:00', NULL, '2004-05-06T00:00:00.0000000+01:00', '3456.789', '5678.9012', '");
+                sqlCommand[i].ShouldStartWith("VALUES ('ascii only', 1, NULL, '0x010203', '2000-01-02T00:00:00.0000000', NULL, '2004-05-06T00:00:00.0000000+01:00', '3456.789', '5678.9012', '");
                 sqlCommand[i++].ShouldEndWith("', NULL, '1234', NULL, 'string with '' in it', NULL, NULL, '04:05:06');");
                 sqlCommand[i++].ShouldEqual("SELECT [Id]");
                 sqlCommand[i++].ShouldEqual("FROM [AllTypesEntities]");
