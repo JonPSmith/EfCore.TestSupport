@@ -11,20 +11,15 @@
    - SqliteInMemory now has `CreateOptionsWithLogTo<T>` 
    - SqlServer now has `CreateUniqueClassOptionsWithLogTo<T>` and `CreateUniqueMethodOptionsWithLogTo<T>`
 - REMOVED FEATURES
-   - Removed EfSchemaCompare - now found in another library
-   - Removed SeedDatabase - use old 3.2.0 version
+   - Removed EfSchemaCompare - going to its own library
+   - Removed SeedDatabase - use old 3.2.0 EfCore.TestSupport version
    - Remove InMemory Database helper - use EF Core's In Memory database
 - Marked as obsolete
-   - `CreateOptionsWithLogging<T>`
-   - `CreateUniqueClassOptionsWithLogging<T>`
-   - `CreateUniqueMethodOptionsWithLogging<T>`
+   - `CreateOptionsWithLogging<T>` - use ...ToLog version
+   - `CreateUniqueClassOptionsWithLogging<T>` - use ...ToLog version
+   - `CreateUniqueMethodOptionsWithLogging<T>` - use ...ToLog version
+   - `CreateEmptyViaWipe` - recommend `EnsureClean` or respawn
 
-## 5.0.0 TODO
-
-- Marked obsolete
-   - WipeDbViaSql - recommend EnsureClean or respawn 
-
----
 
 # Older versions of EfCore.TestSupport
 

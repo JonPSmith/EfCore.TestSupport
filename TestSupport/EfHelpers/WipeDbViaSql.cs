@@ -10,10 +10,31 @@ using Microsoft.EntityFrameworkCore.Metadata;
 namespace TestSupport.EfHelpers
 {
     /// <summary>
-    /// This static class contains extention methods for quickly wiping a database using SQL commands
+    /// This static class contains extension methods for quickly wiping a database using SQL commands
     /// </summary>
     public static class WipeDbViaSql
     {
+        /// <summary>
+        /// This will ensure an empty database by using the WipeAllDataFromDatabase method
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="addBracketsAndSchema">Optional: normally it only uses the table name, but for cases where you have multiple schemas,
+        /// or a table name that needs brackets the you can set to to true. Default is false</param>
+        /// <param name="maxDepth">Valuse to stop the wipe method from getting in a circular reference loop</param>
+        /// <param name="excludeTypes">This allows you to provide the Types of the table that you don't want wiped. 
+        /// Useful if you have a circular ref that WipeAllDataFromDatabase cannot handle. You then must wipe that part.</param>
+        /// <returns>True if the database is created, false if it already existed.</returns>
+        [Obsolete("Please use EnsureClean from this library for SQL Server and Nuget package Respawn for other database types")]
+        public static bool CreateEmptyViaWipe(this DbContext context,
+            bool addBracketsAndSchema = false,
+            int maxDepth = 10, params Type[] excludeTypes)
+        {
+            var databaseWasCreated = context.Database.EnsureCreated();
+            if (!databaseWasCreated)
+                context.WipeAllDataFromDatabase(addBracketsAndSchema, maxDepth, excludeTypes);
+            return databaseWasCreated;
+        }
+
         /// <summary>
         /// This is a fast way to delete all the rows in all the tables in a database. 
         /// Useful for unit testing where you need an empty database.
@@ -27,6 +48,7 @@ namespace TestSupport.EfHelpers
         /// <param name="maxDepth">Value to stop the wipe method from getting in a circular reference loop. Defaults to 10</param>
         /// <param name="excludeTypes">This allows you to provide the Types of the table that you don't want wiped. 
         /// Useful if you have a circular ref that WipeAllDataFromDatabase cannot handle. You then must wipe that part yourself.</param>
+        [Obsolete("Please use EnsureClean from this library for SQL Server and Nuget package Respawn for other database types")]
         public static void WipeAllDataFromDatabase(this DbContext context,
             bool addBracketsAndSchema = false,
             int maxDepth = 10, params Type[] excludeTypes)
@@ -39,8 +61,7 @@ namespace TestSupport.EfHelpers
         }
 
         //NOTE: This will not handle a circular relationship: e.g. EntityA->EntityB->EntityA
-        private static IEnumerable<string>
-            GetTableNamesInOrderForWipe //#A
+        private static IEnumerable<string> GetTableNamesInOrderForWipe //#A
             (this DbContext context,
                 bool addBracketsAndSchema,
                 int maxDepth = 10, params Type[] excludeTypes) //#B
