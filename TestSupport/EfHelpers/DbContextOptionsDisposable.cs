@@ -17,6 +17,7 @@ namespace TestSupport.EfHelpers
     public class DbContextOptionsDisposable<T> : DbContextOptions<T>, IDisposable where T : DbContext
     {
         private bool _stopNextDispose;
+        private bool _turnOffDispose;
         private readonly DbConnection _connection;
 
         /// <summary>
@@ -31,7 +32,8 @@ namespace TestSupport.EfHelpers
         }
 
         /// <summary>
-        /// Use this to stop the Dispose if you want to create a second context to the same 
+        /// Use this to stop the Dispose if you want to create a second context to the same connection.
+        /// You should call this BEFORE you create the DbContext
         /// </summary>
         public void StopNextDispose()
         {
@@ -39,11 +41,31 @@ namespace TestSupport.EfHelpers
         }
 
         /// <summary>
+        /// If you have lots of separate application DbContext's then use this to stop the connection from being removed.
+        /// But remember to call <see cref="ManualDispose"/> at the end of your unit test
+        /// </summary>
+        public void TurnOffDispose()
+        {
+            _turnOffDispose = true;
+        }
+
+        /// <summary>
+        /// If you used <see cref="TurnOffDispose"/>, then you should call this at the end of your unit test
+        /// That will dispose the connection.
+        /// </summary>
+        public void ManualDispose()
+        {
+            _turnOffDispose = false;
+            _stopNextDispose = false;
+            Dispose();
+        }
+
+        /// <summary>
         /// This disposes the Sqlite connection with holds the in-memory data 
         /// </summary>
         public void Dispose()
         {
-            if (!_stopNextDispose)
+            if (!_stopNextDispose && !_turnOffDispose)
                 _connection.Dispose();
             _stopNextDispose = false;
         }

@@ -397,7 +397,20 @@
         </member>
         <member name="M:TestSupport.EfHelpers.DbContextOptionsDisposable`1.StopNextDispose">
             <summary>
-            Use this to stop the Dispose if you want to create a second context to the same 
+            Use this to stop the Dispose if you want to create a second context to the same connection.
+            You should call this BEFORE you create the DbContext
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.DbContextOptionsDisposable`1.TurnOffDispose">
+            <summary>
+            If you have lots of separate application DbContext's then use this to stop the connection from being removed.
+            But remember to call <see cref="M:TestSupport.EfHelpers.DbContextOptionsDisposable`1.ManualDispose"/> at the end of your unit test
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.DbContextOptionsDisposable`1.ManualDispose">
+            <summary>
+            If you used <see cref="M:TestSupport.EfHelpers.DbContextOptionsDisposable`1.TurnOffDispose"/>, then you should call this at the end of your unit test
+            That will dispose the connection.
             </summary>
         </member>
         <member name="M:TestSupport.EfHelpers.DbContextOptionsDisposable`1.Dispose">

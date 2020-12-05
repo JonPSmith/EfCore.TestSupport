@@ -1,7 +1,6 @@
 ﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT licence. See License.txt in the project root for license information.
 
-using System;
 using System.Data.Common;
 using System.Linq;
 using DataLayer.BookApp.EfCode;
@@ -77,7 +76,6 @@ namespace Test.UnitTests.TestDataLayer
         }
 
 
-
         [Fact]
         public void TestSqliteTwoInstancesOk()
         {
@@ -106,6 +104,54 @@ namespace Test.UnitTests.TestDataLayer
         #E I read in the books, without any includes
         #F The last book has two reviews, so I check it is null because I didn't have an Include on the query. NOTE this would FAIL if there was one instance
          * ***********************************************************/
+
+        [Fact]
+        public void TestSqliteThreeInstancesOk()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            options.TurnOffDispose();
+            using (var context = new BookContext(options))
+            {
+                context.Database.EnsureCreated();
+                context.SeedDatabaseFourBooks(); 
+            }
+            using (var context = new BookContext(options))
+            {
+                //ATTEMPT
+                var books = context.Books.ToList();
+
+                //VERIFY
+                books.Last().Reviews.ShouldBeNull();
+            }
+            using (var context = new BookContext(options))
+            {
+                //ATTEMPT
+                var books = context.Books.ToList(); 
+
+                //VERIFY
+                books.Last().Reviews.ShouldBeNull();
+            }
+            options.ManualDispose();
+        }
+
+        [Fact]
+        public void TestSqliteOneInstanceWithChangeTrackerClearOk()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            using var context = new BookContext(options);
+            context.Database.EnsureCreated();
+            context.SeedDatabaseFourBooks();
+
+            context.ChangeTracker.Clear();
+
+            //ATTEMPT
+            var books = context.Books.ToList();
+
+            //VERIFY
+            books.Last().Reviews.ShouldBeNull();
+        }
 
         [Fact]
         public void TestSqliteSingleInstanceOk()

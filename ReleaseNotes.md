@@ -3,17 +3,17 @@
 
 ## 5.0.0
 
-- A serious cleanup to the this library
+- A serious cleanup to the this library with BREAKING CHANGES
 - BREAKING CHANGES
    - Altered SqliteInMemory methods to return a IDisposable options (disposes connection at the end of the test). Can effect current code.
+- REMOVED FEATURES
+   - Removed EfSchemaCompare - going to its own library (but not there yet)
+   - Removed SeedDatabase - use old 3.2.0 EfCore.TestSupport version
+   - Remove InMemory Database helper - use EF Core's In Memory database
 - New features
    - Add `EnsureClean`. This clears the schema and data and set up new model (only for SQL Server)
    - SqliteInMemory now has `CreateOptionsWithLogTo<T>` 
    - SqlServer now has `CreateUniqueClassOptionsWithLogTo<T>` and `CreateUniqueMethodOptionsWithLogTo<T>`
-- REMOVED FEATURES
-   - Removed EfSchemaCompare - going to its own library
-   - Removed SeedDatabase - use old 3.2.0 EfCore.TestSupport version
-   - Remove InMemory Database helper - use EF Core's In Memory database
 - Marked as obsolete
    - `CreateOptionsWithLogging<T>` - use ...ToLog version
    - `CreateUniqueClassOptionsWithLogging<T>` - use ...ToLog version

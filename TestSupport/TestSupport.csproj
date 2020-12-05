@@ -6,14 +6,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="2.1.0" />
     <PackageReference Include="xunit.assert" Version="2.4.1" />
     <PackageReference Include="xunit.core" Version="2.4.1" />
@@ -23,13 +21,9 @@
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard2.1\TestSupport.xml</DocumentationFile>
-  </PropertyGroup>
-
   <PropertyGroup>
     <PackageId>EfCore.TestSupport</PackageId>
-    <PackageVersion>5.0.0-preview001</PackageVersion>
+    <PackageVersion>5.0.0-preview003</PackageVersion>
     <Version>5.0.0</Version>
     <AssemblyVersion>5.0.0.0</AssemblyVersion>
     <FileVersion>5.0.0.0</FileVersion>
@@ -37,17 +31,17 @@
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-      - A serious cleanup to the this library
+      A serious cleanup to the this library with BREAKING CHANGES
       BREAKING CHANGES
       - Altered SqliteInMemory methods to return a IDisposable options (disposes connection at the end of the test). Can effect current code.
+      REMOVED FEATURES
+      - Removed EfSchemaCompare - going to its own library (but not there yet)
+      - Removed SeedDatabase - use old 3.2.0 EfCore.TestSupport version
+      - Remove InMemory Database helper - use EF Core's In Memory database
       NEW FEATURES
       - Add `EnsureClean`. This clears the schema and data and set up new model (only for SQL Server)
       - SqliteInMemory now has CreateOptionsWithLogTo
       - SqlServer now has CreateUniqueClassOptionsWithLogTo and CreateUniqueMethodOptionsWithLogTo
-      REMOVED FEATURES
-      - Removed EfSchemaCompare - going to its own library
-      - Removed SeedDatabase - use old 3.2.0 EfCore.TestSupport version
-      - Remove InMemory Database helper - use EF Core's In Memory database
       MARKED AS OBSOLETE
       - CreateOptionsWithLogging - use ...ToLog version
       - CreateUniqueClassOptionsWithLogging - use ...ToLog version
@@ -58,19 +52,23 @@
     <PackageTags>Entity Framework Core, xUnit</PackageTags>
     <IsPackable>true</IsPackable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageProjectUrl>https://github.com/JonPSmith/EfCore.TestSupport</PackageProjectUrl>
+    <ProjectUrl>https://github.com/JonPSmith/EfCore.TestSupport</ProjectUrl>
+    <RepositoryUrl>https://github.com/JonPSmith/EfCore.TestSupport</RepositoryUrl>
     <PackageIcon>EfCoreTestSupportNuGetIcon128.png</PackageIcon>
-    <PackageIconUrl>https://raw.githubusercontent.com/JonPSmith/EfCore.TestSupport/master/EfCoreTestSupportNuGetIcon128.png</PackageIconUrl>
-    <RepositoryUrl></RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="EfCoreTestSupportNuGetIcon128.png" Pack="true" PackagePath="\"/>
+    <None Include="EfCoreTestSupportNuGetIcon128.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\TestSupport.xml</DocumentationFile>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
-    <DocumentationFile>C:\Users\JonPSmith\source\repos\EfCore.TestSupport\TestSupport\TestSupport.xml</DocumentationFile>
+    <DocumentationFile>TestSupport.xml</DocumentationFile>
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
 
 </Project>
