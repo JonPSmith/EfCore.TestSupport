@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.SqlServer.Design.Internal;
 using Microsoft.Extensions.DependencyInjection;
 
+#pragma warning disable EF1001 // Internal EF Core API usage.
 namespace TestSupport.EfHelpers.Internal
 {
     /// <summary>
@@ -19,6 +20,7 @@ namespace TestSupport.EfHelpers.Internal
         private const string SqlServerProviderName = "Microsoft.EntityFrameworkCore.SqlServer";
         private const string SqliteProviderName = "Microsoft.EntityFrameworkCore.Sqlite";
 
+
         /// <summary>
         /// This returns the correct instance of the design time service for the current DbContext's Database property
         /// </summary>
@@ -28,7 +30,6 @@ namespace TestSupport.EfHelpers.Internal
         {
             if (databaseFacade.IsSqlServer())
                 //Only handles SQL Server
-#pragma warning disable EF1001 // Internal EF Core API usage.
                 return new SqlServerDesignTimeServices();
 
             throw new InvalidOperationException("This is not a database provider that we currently support.");
@@ -46,7 +47,6 @@ namespace TestSupport.EfHelpers.Internal
                 .AddEntityFrameworkDesignTimeServices()
                 .AddSingleton<IOperationReporter, OperationReporter>()
                 .AddSingleton<IOperationReportHandler, OperationReportHandler>();
-#pragma warning restore EF1001 // Internal EF Core API usage.
 
             designTimeService.ConfigureDesignTimeServices(serviceCollection);
             return serviceCollection.BuildServiceProvider();

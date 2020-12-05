@@ -6,7 +6,6 @@ using System.Linq;
 using DataLayer.BookApp;
 using DataLayer.BookApp.EfCode;
 using TestSupport.EfHelpers;
-using TestSupportSchema;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Extensions.AssertExtensions;

@@ -2,6 +2,7 @@
 // Licensed under MIT license. See License.txt in the project root for license information.
 
 using System;
+#pragma warning disable 1574,1584,1581,1580
 
 namespace Xunit.Extensions.AssertExtensions
 {

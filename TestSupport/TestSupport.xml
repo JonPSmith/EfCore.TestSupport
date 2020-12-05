@@ -98,6 +98,11 @@
             <param name="comparer">The comparer used to equate objects in the collection with the expected object</param>
             <exception cref="!:DoesNotContainException">Thrown when the object is present inside the container</exception>
         </member>
+        <member name="T:Xunit.Extensions.AssertExtensions.ExtraStringAssertionExtensions">
+            <summary>
+            Extra AssertExtensions that I find useful
+            </summary>
+        </member>
         <member name="T:Xunit.Extensions.AssertExtensions.ObjectAssertExtensions">
             <summary>
             Extensions which provide assertions to classes derived from <see cref="T:System.Object"/>.
@@ -298,25 +303,6 @@
             This is useful for stopping unit tests that should not be run in the normal run of unit tests
             </summary>
         </member>
-        <member name="T:TestSupport.DesignTimeServices.DesignProvider">
-            <summary>
-            This static class contains the methods to return a design-time service provider
-            </summary>
-        </member>
-        <member name="M:TestSupport.DesignTimeServices.DesignProvider.GetDesignTimeService(Microsoft.EntityFrameworkCore.DbContext)">
-            <summary>
-            This returns the correct instance of the design time service for the current DbContext
-            </summary>
-            <param name="context"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TestSupport.DesignTimeServices.DesignProvider.GetDesignTimeProvider(Microsoft.EntityFrameworkCore.Design.IDesignTimeServices)">
-            <summary>
-            This returns a DesignTimeProvider for the design time service instance that you provided
-            </summary>
-            <param name="designTimeService">This should be an instance of rhe design time service for the database provider</param>
-            <returns></returns>
-        </member>
         <member name="T:TestSupport.EfHelpers.ApplyScriptExtension">
             <summary>
             Static class holding extension methods for applying SQL scripts to a database
@@ -329,6 +315,46 @@
             </summary>
             <param name="context"></param>
             <param name="filePath"></param>
+        </member>
+        <member name="T:TestSupport.EfHelpers.CleanDatabaseExtensions">
+            <summary>
+            Static class holding the EnsureClean extension method
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.CleanDatabaseExtensions.EnsureClean(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade,System.Boolean)">
+            <summary>
+            Calling this will wipe the database schema down to nothing in the database and then calls
+            Database.EnsureCreated to create the correct database schema based on your EF Core Context
+            NOTE: This only works for SQL Server
+            </summary>>
+            <param name="databaseFacade">The Database property of the current DbContext that you want to clean</param>
+            <param name="setUpSchema">Optional: by default it will set the schema to match the current DbContext configuration. If false leaves the database empty</param>
+        </member>
+        <member name="T:TestSupport.EfHelpers.CosmosDbExtensions">
+            <summary>
+            Extensions to provide Cosmos DB options where the Database/Container is held in the Azure Cosmos DB Emulator.
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.CosmosDbExtensions.GetCosmosDbToEmulatorOptions``1(System.Object,System.Boolean,System.String)">
+            <summary>
+            This creates Cosmos DB options where the Database/Container is held in the Azure Cosmos DB Emulator.
+            It uses the name of the object as the database name (normally "this", which is your unit test class.
+            For method-level uniqueness set makeMethodUnique to true to add the calling method to end of the database name
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="callingClass">this object is used to get the name of the database</param>
+            <param name="makeMethodUnique">optional: If set then add the calling method's name to the end of the object name.</param>
+            <param name="callingMember"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.CosmosDbExtensions.GetCosmosDbToEmulatorOptions``1(System.String)">
+            <summary>
+            This creates Cosmos DB options where the Database/Container is held in the Azure Cosmos DB Emulator.
+            The given string will be the database name
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="databaseName">name to use for database name.</param>
+            <returns></returns>
         </member>
         <member name="T:TestSupport.EfHelpers.DatabaseTidyHelper">
             <summary>
@@ -357,26 +383,45 @@
             <param name="databaseConnectionString">a actual connection string</param>
             <param name="timeout">Defines a timeout for connection and the SQL DELETE/CREATE database commands</param>
         </member>
-        <member name="T:TestSupport.EfHelpers.EfInMemory">
+        <member name="T:TestSupport.EfHelpers.DbContextOptionsDisposable`1">
             <summary>
-            This static class contains extention methods to use with In-Memory databases
+            This is used to return a class that implements <see cref="T:Microsoft.EntityFrameworkCore.DbContextOptions`1"/>
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:TestSupport.EfHelpers.DbContextOptionsDisposable`1.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{`0})">
+            <summary>
+            This creates the class and sets up the <see cref="T:Microsoft.EntityFrameworkCore.DbContextOptions`1"/> part and getting a reference to the connection
+            </summary>
+            <param name="baseOptions"></param>
+        </member>
+        <member name="M:TestSupport.EfHelpers.DbContextOptionsDisposable`1.StopNextDispose">
+            <summary>
+            Use this to stop the Dispose if you want to create a second context to the same 
             </summary>
         </member>
-        <member name="M:TestSupport.EfHelpers.EfInMemory.CreateOptions``1(System.Boolean)">
+        <member name="M:TestSupport.EfHelpers.DbContextOptionsDisposable`1.Dispose">
             <summary>
-            This creates the options for an in-memory database with a unique name
+            This disposes the Sqlite connection with holds the in-memory data 
             </summary>
-            <typeparam name="TContext"></typeparam>
-            <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
+        </member>
+        <member name="T:TestSupport.EfHelpers.Internal.DesignProvider">
+            <summary>
+            This static class contains the methods to return a design-time service provider
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.Internal.DesignProvider.GetDesignTimeService(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade)">
+            <summary>
+            This returns the correct instance of the design time service for the current DbContext's Database property
+            </summary>
+            <param name="databaseFacade"></param>
             <returns></returns>
         </member>
-        <member name="M:TestSupport.EfHelpers.EfInMemory.CreateOptions``1(System.String,System.Boolean)">
+        <member name="M:TestSupport.EfHelpers.Internal.DesignProvider.GetDesignTimeProvider(Microsoft.EntityFrameworkCore.Design.IDesignTimeServices)">
             <summary>
-            This creates the options for an in-memory database, with the name given.
+            This returns a DesignTimeProvider for the design time service instance that you provided
             </summary>
-            <typeparam name="TContext"></typeparam>
-            <param name="dbName">name of in-memory database</param>
-            <param name="throwOnClientServerWarning">Optional: default will throw exception if QueryClientEvaluationWarning is logged. Set to false if not needed</param>
+            <param name="designTimeService">This should be an instance of rhe design time service for the database provider</param>
             <returns></returns>
         </member>
         <member name="M:TestSupport.EfHelpers.Internal.EfCoreLogDecoder.DecodeMessage(TestSupport.EfHelpers.LogOutput)">
@@ -429,6 +474,38 @@
             </summary>
             <param name="sensitiveLoggingEnabled"></param>
             <returns></returns>
+        </member>
+        <member name="T:TestSupport.EfHelpers.LogToOptions">
+            <summary>
+            This class allows you to define the various LogTo options
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfHelpers.LogToOptions.LogLevel">
+            <summary>
+            This sets the lowest LogLevel that will be returned
+            Defaults to LogLevel.Information
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfHelpers.LogToOptions.OnlyShowTheseCategories">
+            <summary>
+            This allows you to only show certain DbLoggerCategory, for instance
+            new[] { DbLoggerCategory.Database.Command.Name }) would only show the Database.Command logs
+            Defaults to null, i.e. not used 
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfHelpers.LogToOptions.OnlyShowTheseEvents">
+            <summary>
+            This allows you to only show certain events, for instance
+            new[] { CoreEventId.ContextInitialized }
+            Defaults to null, i.e. not used 
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfHelpers.LogToOptions.LoggerOptions">
+            <summary>
+            This allows you to set format of the log message, for instance
+            DefaultWithUtcTime will use a UTC time instead the local time
+            Defaults to null, which means no extra info is prepended to the message
+            </summary>
         </member>
         <member name="T:TestSupport.EfHelpers.MyLoggerProvider">
             <summary>
@@ -505,26 +582,38 @@
         </member>
         <member name="T:TestSupport.EfHelpers.SqliteInMemory">
             <summary>
-            This static class contains extention methods to use with in-memory Sqlite databases
+            This static class contains extension methods to use with in-memory Sqlite databases
             </summary>
         </member>
-        <member name="M:TestSupport.EfHelpers.SqliteInMemory.CreateOptions``1">
+        <member name="M:TestSupport.EfHelpers.SqliteInMemory.CreateOptions``1(System.Action{Microsoft.EntityFrameworkCore.DbContextOptionsBuilder{``0}})">
             <summary>
             Created a Sqlite Options for in-memory database. 
             </summary>
             <typeparam name="T"></typeparam>
+            <param name="builder">Optional: action that allows you to add extra options to the builder</param>
             <returns></returns>
         </member>
-        <member name="M:TestSupport.EfHelpers.SqliteInMemory.CreateOptionsWithLogging``1(System.Action{TestSupport.EfHelpers.LogOutput},Microsoft.Extensions.Logging.LogLevel)">
+        <member name="M:TestSupport.EfHelpers.SqliteInMemory.CreateOptionsWithLogging``1(System.Action{TestSupport.EfHelpers.LogOutput},Microsoft.Extensions.Logging.LogLevel,System.Action{Microsoft.EntityFrameworkCore.DbContextOptionsBuilder{``0}})">
             <summary>
             Created a Sqlite Options for in-memory database while capturing EF Core's logging output. 
             </summary>
             <typeparam name="T"></typeparam>
             <param name="efLog">This is a method that receives a LogOutput whenever EF Core logs something</param>
             <param name="logLevel">Optional: Sets the logLevel you want to capture. Defaults to Information</param>
+            <param name="builder">Optional: action that allows you to add extra options to the builder</param>
             <returns></returns>
         </member>
-        <member name="M:TestSupport.EfHelpers.SqliteInMemory.SetupConnectionAndBuilderOptions``1">
+        <member name="M:TestSupport.EfHelpers.SqliteInMemory.CreateOptionsWithLogTo``1(System.Action{System.String},TestSupport.EfHelpers.LogToOptions,System.Action{Microsoft.EntityFrameworkCore.DbContextOptionsBuilder{``0}})">
+            <summary>
+            Created a Sqlite Options for in-memory database while using LogTo to get the EF Core logging output. 
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="logAction">This action is called with each log output</param>
+            <param name="logToOptions">Optional: This allows you to define what logs you want and what format. Defaults to LogLevel.Information</param>
+            <param name="builder">Optional: action that allows you to add extra options to the builder</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.SqliteInMemory.SetupConnectionAndBuilderOptions``1(System.Action{Microsoft.EntityFrameworkCore.DbContextOptionsBuilder{``0}})">
             <summary>
             Created a Sqlite Options for in-memory database. 
             </summary>
@@ -536,7 +625,7 @@
             This static class contains extension methods to use with SQL Server databases
             </summary>
         </member>
-        <member name="M:TestSupport.EfHelpers.SqlServerHelpers.CreateUniqueClassOptions``1(System.Object)">
+        <member name="M:TestSupport.EfHelpers.SqlServerHelpers.CreateUniqueClassOptions``1(System.Object,System.Action{Microsoft.EntityFrameworkCore.DbContextOptionsBuilder{``0}})">
             <summary>
             This creates the DbContextOptions  options for a SQL server database, 
             where the database name is formed using the appsetting's DefaultConnection with the class name as a prefix.
@@ -544,9 +633,10 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="callingClass">this should be this, i.e. the class you are in</param>
+            <param name="builder">Optional: action that allows you to add extra options to the builder</param>
             <returns></returns>
         </member>
-        <member name="M:TestSupport.EfHelpers.SqlServerHelpers.CreateUniqueClassOptionsWithLogging``1(System.Object,System.Action{TestSupport.EfHelpers.LogOutput},Microsoft.Extensions.Logging.LogLevel)">
+        <member name="M:TestSupport.EfHelpers.SqlServerHelpers.CreateUniqueClassOptionsWithLogging``1(System.Object,System.Action{TestSupport.EfHelpers.LogOutput},Microsoft.Extensions.Logging.LogLevel,System.Action{Microsoft.EntityFrameworkCore.DbContextOptionsBuilder{``0}})">
             <summary>
             This creates the DbContextOptions options for a SQL server database while capturing EF Core's logging output. 
             The database name is formed using the appsetting's DefaultConnection with the class name as a prefix.
@@ -556,9 +646,23 @@
             <param name="callingClass">this should be this, i.e. the class you are in</param>
             <param name="efLog">This is a method that receives a LogOutput whenever EF Core logs something</param>
             <param name="logLevel">Optional: Sets the logLevel you want to capture. Defaults to Information</param>
+            <param name="builder">Optional: action that allows you to add extra options to the builder</param>
             <returns></returns>
         </member>
-        <member name="M:TestSupport.EfHelpers.SqlServerHelpers.CreateUniqueMethodOptions``1(System.Object,System.String)">
+        <member name="M:TestSupport.EfHelpers.SqlServerHelpers.CreateUniqueClassOptionsWithLogTo``1(System.Object,System.Action{System.String},TestSupport.EfHelpers.LogToOptions,System.Action{Microsoft.EntityFrameworkCore.DbContextOptionsBuilder{``0}})">
+            <summary>
+            This creates the DbContextOptions options for a SQL server database while capturing EF Core's logging output. 
+            The database name is formed using the appsetting's DefaultConnection with the class name as a prefix.
+            That is, the database is unique to the object provided
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="callingClass">this should be this, i.e. the class you are in</param>
+            <param name="logAction">This action is called with each log output</param>
+            <param name="logToOptions">Optional: This allows you to define what logs you want and what format. Defaults to LogLevel.Information</param>
+            <param name="builder">Optional: action that allows you to add extra options to the builder</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.SqlServerHelpers.CreateUniqueMethodOptions``1(System.Object,System.Action{Microsoft.EntityFrameworkCore.DbContextOptionsBuilder{``0}},System.String)">
             <summary>
             This creates the DbContextOptions options for a SQL server database, 
             where the database name is formed using the appsetting's DefaultConnection with the class name and the calling method's name as as a prefix.
@@ -566,10 +670,11 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="callingClass">this should be this, i.e. the class you are in</param>
+            <param name="builder">Optional: action that allows you to add extra options to the builder</param>
             <param name="callingMember">Do not use: this is filled in by compiler</param>
             <returns></returns>
         </member>
-        <member name="M:TestSupport.EfHelpers.SqlServerHelpers.CreateUniqueMethodOptionsWithLogging``1(System.Object,System.Action{TestSupport.EfHelpers.LogOutput},Microsoft.Extensions.Logging.LogLevel,System.String)">
+        <member name="M:TestSupport.EfHelpers.SqlServerHelpers.CreateUniqueMethodOptionsWithLogging``1(System.Object,System.Action{TestSupport.EfHelpers.LogOutput},Microsoft.Extensions.Logging.LogLevel,System.Action{Microsoft.EntityFrameworkCore.DbContextOptionsBuilder{``0}},System.String)">
             <summary>
             This creates the DbContextOptions  options for a SQL server database while capturing EF Core's logging output. 
             Where the database name is formed using the appsetting's DefaultConnection with the class name and the calling method's name as as a prefix.
@@ -579,6 +684,21 @@
             <param name="callingClass">this should be this, i.e. the class you are in</param>
             <param name="efLog">This is a method that receives a LogOutput whenever EF Core logs something</param>
             <param name="logLevel">Optional: Sets the logLevel you want to capture. Defaults to Information</param>
+            <param name="builder">Optional: action that allows you to add extra options to the builder</param>
+            <param name="callingMember">Do not use: this is filled in by compiler</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.SqlServerHelpers.CreateUniqueMethodOptionsWithLogTo``1(System.Object,System.Action{System.String},TestSupport.EfHelpers.LogToOptions,System.Action{Microsoft.EntityFrameworkCore.DbContextOptionsBuilder{``0}},System.String)">
+            <summary>
+            This creates the DbContextOptions  options for a SQL server database while capturing EF Core's logging output. 
+            Where the database name is formed using the appsetting's DefaultConnection with the class name and the calling method's name as as a prefix.
+            That is, the database is unique to the calling method.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="callingClass">this should be this, i.e. the class you are in</param>
+            <param name="logAction">This action is called with each log output</param>
+            <param name="logToOptions">Optional: This allows you to define what logs you want and what format. Defaults to LogLevel.Information</param>
+            <param name="builder">Optional: action that allows you to add extra options to the builder</param>
             <param name="callingMember">Do not use: this is filled in by compiler</param>
             <returns></returns>
         </member>
@@ -588,7 +708,72 @@
             </summary>
             <param name="context"></param>
         </member>
-        <member name="M:TestSupport.EfHelpers.SqlServerHelpers.CreateEmptyViaWipe(Microsoft.EntityFrameworkCore.DbContext,System.Boolean,System.Int32,System.Type[])">
+        <member name="T:TestSupport.EfHelpers.TimeThingResult">
+            <summary>
+            Result from a TimeThings instance once it is disposed
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.TimeThingResult.#ctor(System.Double,System.Int32,System.String)">
+            <summary>
+            Creates the TimeThingResult
+            </summary>
+            <param name="totalTimeMilliseconds"></param>
+            <param name="numRuns"></param>
+            <param name="message"></param>
+        </member>
+        <member name="P:TestSupport.EfHelpers.TimeThingResult.TotalTimeMilliseconds">
+            <summary>
+            Total time in milliseconds, with fractions
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfHelpers.TimeThingResult.NumRuns">
+            <summary>
+            Optional number of runs. zero if not set.
+            </summary>
+        </member>
+        <member name="P:TestSupport.EfHelpers.TimeThingResult.Message">
+            <summary>
+            Optional string to identify this usage of the TimeThings
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.TimeThingResult.ToString">
+            <summary>
+            Provides a detailed report of the timed event
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:TestSupport.EfHelpers.TimeThings">
+            <summary>
+            Use this in a using statement for timing things - time output to test output when class is disposes
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.TimeThings.#ctor(System.Action{TestSupport.EfHelpers.TimeThingResult},System.String,System.Int32)">
+            <summary>
+            This will measure the time it took from this class being created to it being disposed
+            </summary>
+            <param name="result">This action returns the TimeThingResult on dispose</param>
+            <param name="message">Optional: a string to show in the result. Useful if you have multiple timing in a row</param>
+            <param name="numRuns">Optional: if the timing covers multiple runs of something, then set numRuns to the number of runs and it will give you the average per run</param>
+        </member>
+        <member name="M:TestSupport.EfHelpers.TimeThings.#ctor(Xunit.Abstractions.ITestOutputHelper,System.String,System.Int32)">
+            <summary>
+            This will measure the time it took from this class being created to it being disposed and writes out to xUnit ITestOutputHelper
+            </summary>
+            <param name="output">On dispose it will write the result to the output</param>
+            <param name="message">Optional: a string to show in the result. Useful if you have multiple timing in a row</param>
+            <param name="numRuns">Optional: if the timing covers multiple runs of something, then set numRuns to the number of runs and it will give you the average per run</param>
+        </member>
+        <member name="M:TestSupport.EfHelpers.TimeThings.Dispose">
+            <summary>
+            When disposed it will return the result, either via a action or by an output
+            </summary>
+        </member>
+        <member name="T:TestSupport.EfHelpers.WipeDbViaSql">
+            <summary>
+            This static class contains extension methods for quickly wiping a database using SQL commands
+            </summary>
+        </member>
+        <member name="M:TestSupport.EfHelpers.WipeDbViaSql.CreateEmptyViaWipe(Microsoft.EntityFrameworkCore.DbContext,System.Boolean,System.Int32,System.Type[])">
             <summary>
             This will ensure an empty database by using the WipeAllDataFromDatabase method
             </summary>
@@ -599,29 +784,6 @@
             <param name="excludeTypes">This allows you to provide the Types of the table that you don't want wiped. 
             Useful if you have a circular ref that WipeAllDataFromDatabase cannot handle. You then must wipe that part.</param>
             <returns>True if the database is created, false if it already existed.</returns>
-        </member>
-        <member name="T:TestSupport.EfHelpers.TimeThings">
-            <summary>
-            Use this in a using statement for timing things - time output to test output when class is disposes
-            </summary>
-        </member>
-        <member name="M:TestSupport.EfHelpers.TimeThings.#ctor(Xunit.Abstractions.ITestOutputHelper,System.String,System.Int32)">
-            <summary>
-            This will measure the time it took from this class being created to it being disposed
-            </summary>
-            <param name="output"></param>
-            <param name="message"></param>
-            <param name="numRuns">Optional: if the timing covers multiple runs of soemthing, then set numRuns to the number of runs and it will give you the average per run</param>
-        </member>
-        <member name="M:TestSupport.EfHelpers.TimeThings.Dispose">
-            <summary>
-            When disposed it will write to the test output the time it took from creation
-            </summary>
-        </member>
-        <member name="T:TestSupport.EfHelpers.WipeDbViaSql">
-            <summary>
-            This static class contains extention methods for quickly wiping a database using SQL commands
-            </summary>
         </member>
         <member name="M:TestSupport.EfHelpers.WipeDbViaSql.WipeAllDataFromDatabase(Microsoft.EntityFrameworkCore.DbContext,System.Boolean,System.Int32,System.Type[])">
             <summary>
@@ -637,232 +799,6 @@
             <param name="maxDepth">Value to stop the wipe method from getting in a circular reference loop. Defaults to 10</param>
             <param name="excludeTypes">This allows you to provide the Types of the table that you don't want wiped. 
             Useful if you have a circular ref that WipeAllDataFromDatabase cannot handle. You then must wipe that part yourself.</param>
-        </member>
-        <member name="T:TestSupport.EfSchemeCompare.CompareEfSql">
-            <summary>
-            This is the main class for Comparing EF Core DbContexts against a database to see if they differ
-            </summary>
-        </member>
-        <member name="M:TestSupport.EfSchemeCompare.CompareEfSql.#ctor(TestSupport.EfSchemeCompare.CompareEfSqlConfig)">
-            <summary>
-            This creates the comparer class that you use for comparing EF Core DbContexts to a database
-            </summary>
-            <param name="config"></param>
-        </member>
-        <member name="P:TestSupport.EfSchemeCompare.CompareEfSql.GetAllErrors">
-            <summary>
-            This returns a single string containing all the errors found
-            Each error is on a separate line
-            </summary>
-        </member>
-        <member name="P:TestSupport.EfSchemeCompare.CompareEfSql.Logs">
-            <summary>
-            This gives you access to the full log. but its not an easy thing to parse
-            Look at the CompareLog class for various static methods that will output the log in a human-readable format
-            </summary>
-        </member>
-        <member name="M:TestSupport.EfSchemeCompare.CompareEfSql.CompareEfWithDb(Microsoft.EntityFrameworkCore.DbContext[])">
-            <summary>
-            This will compare one or more DbContext against database pointed to the first DbContext.
-            </summary>
-            <param name="dbContexts">One or more dbContext instances to be compared with the database</param>
-            <returns>true if any errors found, otherwise false</returns>
-        </member>
-        <member name="M:TestSupport.EfSchemeCompare.CompareEfSql.CompareEfWithDb``1(Microsoft.EntityFrameworkCore.DbContext[])">
-            <summary>
-            This will compare one or more DbContext against database pointed to the first DbContext
-            using the DesignTimeServices type for T.
-            </summary>
-            <typeparam name="T">Must be the design time provider for the database provider you want to use, e.g. MySqlDesignTimeServices</typeparam>
-            <param name="dbContexts">One or more dbContext instances to be compared with the database</param>
-            <returns>true if any errors found, otherwise false</returns>
-        </member>
-        <member name="M:TestSupport.EfSchemeCompare.CompareEfSql.CompareEfWithDb(System.String,Microsoft.EntityFrameworkCore.DbContext[])">
-            <summary>
-            This will compare one or more DbContext against database pointed to by the configOrConnectionString.
-            </summary>
-            <param name="configOrConnectionString">This should either be a 
-            connection string or the name of a connection string in the appsetting.json file.
-            </param>
-            <param name="dbContexts">One or more dbContext instances to be compared with the database</param>
-            <returns>true if any errors found, otherwise false</returns>
-        </member>
-        <member name="M:TestSupport.EfSchemeCompare.CompareEfSql.CompareEfWithDb``1(System.String,Microsoft.EntityFrameworkCore.DbContext[])">
-            <summary>
-            This will compare one or more DbContext against database pointed to by the configOrConnectionString 
-            using the DesignTimeServices type for T 
-            </summary>
-            <typeparam name="T">Must be the design time provider for the database provider you want to use, e.g. MySqlDesignTimeServices</typeparam>
-            <param name="configOrConnectionString">This should either be a 
-            connection string or the name of a connection string in the appsetting.json file.
-            </param>
-            <param name="dbContexts">One or more dbContext instances to be compared with the database</param>
-            <returns>true if any errors found, otherwise false</returns>
-        </member>
-        <member name="T:TestSupport.EfSchemeCompare.CompareEfSqlConfig">
-            <summary>
-            This class holds the configuration information for the CompareEfSql class
-            </summary>
-        </member>
-        <member name="P:TestSupport.EfSchemeCompare.CompareEfSqlConfig.CaseComparer">
-            <summary>
-            Set this to StringComparer.CurrentCultureIgnoreCase to change the 
-            This effects the table, schema, column, primary/index/foreignKey constraint names
-            </summary>
-        </member>
-        <member name="P:TestSupport.EfSchemeCompare.CompareEfSqlConfig.TablesToIgnoreCommaDelimited">
-            <summary>
-            This allows you to ignore tables that your EF Core context doesn't use. There are three settings
-            1. null - this will only check the tables that the DbContexts are mapped to.
-            2. "" - This will check all tables in the database against the entity classes in the DbContexts.
-            3. A comma delimited list of tables, with optional schema, to ignore. 
-               Typical format: "MyTable,MyOtherTable,MySchema.MyTableWithSchema"
-               (note: the schema/table match is case insensitive)
-            </summary>
-        </member>
-        <member name="P:TestSupport.EfSchemeCompare.CompareEfSqlConfig.LogsToIgnore">
-            <summary>
-            This contains all the log types that should be ignored by the comparer
-            </summary>
-        </member>
-        <member name="M:TestSupport.EfSchemeCompare.CompareEfSqlConfig.IgnoreTheseErrors(System.String)">
-            <summary>
-            This allows you to clip a set of errors strings and add them as ignore items
-            </summary>
-            <param name="textWithNewlineBetweenErrors"></param>
-        </member>
-        <member name="M:TestSupport.EfSchemeCompare.CompareEfSqlConfig.AddIgnoreCompareLog(TestSupport.EfSchemeCompare.CompareLog)">
-            <summary>
-            This allows you to add a log with setting that will be used to decide if a log is ignored
-            The Type and State must be set, but any strings set to null with automatically match anything 
-            and the Attribute has a MatchAnything setting too.
-            </summary>
-            <param name="logTypeToIgnore"></param>
-        </member>
-        <member name="T:TestSupport.EfSchemeCompare.CompareType">
-            <summary>
-            This is used to define what is being compared
-            </summary>
-        </member>
-        <member name="T:TestSupport.EfSchemeCompare.CompareState">
-            <summary>
-            This defines the result of a comparision
-            </summary>
-        </member>
-        <member name="T:TestSupport.EfSchemeCompare.CompareAttributes">
-            <summary>
-            This contains extra information on what exactly was compared
-            </summary>
-        </member>
-        <member name="T:TestSupport.EfSchemeCompare.CompareLog">
-            <summary>
-            This holds the log of each compare done
-            </summary>
-        </member>
-        <member name="P:TestSupport.EfSchemeCompare.CompareLog.SubLogs">
-            <summary>
-            Because an EF Core DbContext has a hierarchy then the logs are also in a hierarchy
-            For EF Core this is DbContext->Entity classes->Properties
-            </summary>
-        </member>
-        <member name="M:TestSupport.EfSchemeCompare.CompareLog.#ctor(TestSupport.EfSchemeCompare.CompareType,TestSupport.EfSchemeCompare.CompareState,System.String,TestSupport.EfSchemeCompare.CompareAttributes,System.String,System.String)">
-            <summary>
-            This constuctor either creates a new log (used internally) or allows the user to create a log for ignore matching
-            </summary>
-            <param name="type"></param>
-            <param name="state"></param>
-            <param name="name"></param>
-            <param name="attribute"></param>
-            <param name="expected"></param>
-            <param name="found"></param>
-        </member>
-        <member name="P:TestSupport.EfSchemeCompare.CompareLog.Type">
-            <summary>
-            This holds what it is comparing
-            </summary>
-        </member>
-        <member name="P:TestSupport.EfSchemeCompare.CompareLog.State">
-            <summary>
-            This holds the result of the comparison
-            </summary>
-        </member>
-        <member name="P:TestSupport.EfSchemeCompare.CompareLog.Name">
-            <summary>
-            This holds the name of the primary thing it is comparing, e.g. MyEntity, MyProperty
-            </summary>
-        </member>
-        <member name="P:TestSupport.EfSchemeCompare.CompareLog.Attribute">
-            <summary>
-            This contains extra information to define exactly what is being compared, for instance the ColumnName that a property is mapped to
-            </summary>
-        </member>
-        <member name="P:TestSupport.EfSchemeCompare.CompareLog.Expected">
-            <summary>
-            This holds what EF Core expects to see
-            </summary>
-        </member>
-        <member name="P:TestSupport.EfSchemeCompare.CompareLog.Found">
-            <summary>
-            This holds what was found in the database
-            </summary>
-        </member>
-        <member name="M:TestSupport.EfSchemeCompare.CompareLog.ToString">
-            <summary>
-            This provides a human-readable version of a CompareLog
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:TestSupport.EfSchemeCompare.CompareLog.AllResultsIndented(System.Collections.Generic.IReadOnlyList{TestSupport.EfSchemeCompare.CompareLog},System.String)">
-            <summary>
-            This returns all the logs, with an indentation for each level in the hierarchy
-            </summary>
-            <param name="logs"></param>
-            <param name="indent"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TestSupport.EfSchemeCompare.CompareLog.ListAllErrors(System.Collections.Generic.IReadOnlyList{TestSupport.EfSchemeCompare.CompareLog},System.Collections.Generic.Stack{System.String})">
-            <summary>
-            This returns a string per error, in human-readable form
-            </summary>
-            <param name="logs"></param>
-            <param name="parentNames"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TestSupport.EfSchemeCompare.Internal.CompareLogger.Warning(System.String,System.String,System.String)">
-            <summary>
-            This is for adding a warning.
-            </summary>
-            <param name="errorMessage">This should be the warning message</param>
-            <param name="expected">add this if something was missing</param>
-            <param name="found">add this if something extra was found</param>
-        </member>
-        <member name="M:TestSupport.EfSchemeCompare.Internal.CompareLogger.AddToLogsIfNotIgnored(TestSupport.EfSchemeCompare.CompareLog)">
-            <summary>
-            Only adds the 
-            </summary>
-            <param name="log"></param>
-            <returns></returns>
-        </member>
-        <member name="F:TestSupport.EfSchemeCompare.Internal.DatabaseIndexData.Name">
-            <summary>The index name.</summary>
-        </member>
-        <member name="F:TestSupport.EfSchemeCompare.Internal.DatabaseIndexData.Columns">
-            <summary>
-                The ordered list of columns that make up the index.
-            </summary>
-        </member>
-        <member name="F:TestSupport.EfSchemeCompare.Internal.DatabaseIndexData.IsUnique">
-            <summary>
-                Indicates whether or not the index constrains uniqueness.
-            </summary>
-        </member>
-        <member name="M:TestSupport.EfSchemeCompare.Internal.SplitterExtension.SplitCamelCase(System.String)">
-            <summary>
-            This splits up a string based on capital letters
-            e.g. "MyAction" would become "My Action" and "My10Action" would become "My10 Action"
-            </summary>
-            <param name="str"></param>
-            <returns></returns>
         </member>
         <member name="T:TestSupport.Helpers.AppSettings">
             <summary>
@@ -972,179 +908,6 @@
             </summary>
             <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
             <returns></returns>
-        </member>
-        <member name="T:TestSupport.SeedDatabase.AnonymiserData">
-            <summary>
-            This is used to provide the AnonymiserFunc with extra information on how to create the anonymised string
-            </summary>
-        </member>
-        <member name="P:TestSupport.SeedDatabase.AnonymiserData.ReplacementType">
-            <summary>
-            This is the first part of the replacementRequest, e.g. "Name:Max=4" would set this to "Name"
-            </summary>
-        </member>
-        <member name="P:TestSupport.SeedDatabase.AnonymiserData.ReplaceOptions">
-            <summary>
-            This contains all the options provided after the first part, separated by :, e.g "Max=4:Min=100"
-            You can add more commands that are specific to your your own Anonymiser function, e.g. "Case=Pascal"
-            </summary>
-        </member>
-        <member name="P:TestSupport.SeedDatabase.AnonymiserData.MaxLength">
-            <summary>
-            This holds the max length, or -1 if not set
-            </summary>
-        </member>
-        <member name="P:TestSupport.SeedDatabase.AnonymiserData.MinLength">
-            <summary>
-            This holds the min length, or -1 if not set
-            </summary>
-        </member>
-        <member name="M:TestSupport.SeedDatabase.AnonymiserData.#ctor(System.String)">
-            <summary>
-            This decodes the replacement string into it component parts
-            </summary>
-            <param name="replaceRequest"></param>
-        </member>
-        <member name="T:TestSupport.SeedDatabase.DataResetter">
-            <summary>
-            This class contains methods to help you save database data for later loading into a database for unit testing.
-            It can scan a linked set of EF Core database classes and do the following:
-            1. It can reset the primary, alternative and foreign keys to a default state so that the 
-            </summary>
-        </member>
-        <member name="M:TestSupport.SeedDatabase.DataResetter.#ctor(Microsoft.EntityFrameworkCore.DbContext,TestSupport.SeedDatabase.DataResetterConfig)">
-            <summary>
-            This takes in the DbContext of the database you want to save
-            </summary>
-            <param name="context">DbContext of the database you want to save</param>
-            <param name="config">optional configuration data</param>
-        </member>
-        <member name="M:TestSupport.SeedDatabase.DataResetter.ResetKeysSingleEntity(System.Object)">
-            <summary>
-            This resets the primary keys and foreign keys to default value in a single entity.
-            It also will anonymise any properties that you registered with the config
-            </summary>
-            <param name="entityToReset">The entity class to reset</param>
-        </member>
-        <member name="M:TestSupport.SeedDatabase.DataResetter.ResetKeysEntityAndRelationships(System.Object)">
-            <summary>
-            This will work through an EF Core entity class and its relationships and set
-            all primary keys and foreign keys to default value so that the entities will be
-            added as new entries to the database.
-            It also will anonymise any properties that you registered with the config
-            </summary>
-            <param name="entityToReset">The entity class to reset, or an collection of entity classes to </param>
-        </member>
-        <member name="M:TestSupport.SeedDatabase.DataResetter.ResetPkAndIndexesEntityAndRelationships(System.Object,System.Collections.Generic.HashSet{System.Object},System.Boolean)">
-            <summary>
-            This will work through an EF Core entity class and its relationships and set
-            all primary keys and foreign keys to default value so that the entities will be
-            added as new entries to the database.
-            </summary>
-            <param name="entityToReset"></param>
-            <param name="stopCircularLook"></param>
-            <param name="ignoreNonEntityClasses">if false then throw exception if the class isn't found in entity class</param>
-        </member>
-        <member name="T:TestSupport.SeedDatabase.DataResetterConfig">
-            <summary>
-            This provides configuration information for the DataResetter
-            </summary>
-        </member>
-        <member name="P:TestSupport.SeedDatabase.DataResetterConfig.DoNotResetAlternativeKey">
-            <summary>
-            If true any Alternative keys will not be reset
-            </summary>
-        </member>
-        <member name="P:TestSupport.SeedDatabase.DataResetterConfig.AnonymiserFunc">
-            <summary>
-            This function is called on whenever a property you have added via the AnonymiseThisMember config method
-            </summary>
-        </member>
-        <member name="M:TestSupport.SeedDatabase.DataResetterConfig.AddToAnonymiseList``1(System.Linq.Expressions.Expression{System.Func{``0,System.String}},System.String)">
-            <summary>
-            This allows you to add a property in an class to be registered to be anonymised
-            </summary>
-            <typeparam name="TEntity">The class the field or property is in</typeparam>
-            <param name="expression">An expression such as "p => p.PropertyInYourClass"</param>
-            <param name="replaceRequest">Provide usage and config of the replacement string, e.g. "Email" or "FirstName:Max=10:Min=5"
-            - First part is the name says what you want, e.g. FirstName, Email, Address1, Country, etc. 
-            - You can then add properties like :Max=10,:Min=2
-            NOTE: The default anonymiser uses guids for everything, but add @ana.com if "Email". It also applies the Max=nn if guid is longer
-            </param>
-        </member>
-        <member name="M:TestSupport.SeedDatabase.DataResetterConfig.DefaultAnonymiser(TestSupport.SeedDatabase.AnonymiserData,System.Object)">
-            <summary>
-            This is a simple Anonymiser using guids
-            It adds "@ana.com" to end of guid if "Email"
-            It applies both "Min=nn" and "Max=nn", but max is applied only if the guid string is longer than than the max
-            </summary>
-            <param name="data">This is the AnonymiserData produced by when you called <see cref="M:TestSupport.SeedDatabase.DataResetterConfig.AddToAnonymiseList``1(System.Linq.Expressions.Expression{System.Func{``0,System.String}},System.String)"/> </param>
-            <param name="classInstance">This is the instance of the class it is updating. Useful if you want to use matching data in the same instance.</param>
-            <returns></returns>
-        </member>
-        <member name="T:TestSupport.SeedDatabase.SeedJsonHelpers">
-            <summary>
-            Set of extensions that help with serialize and save data to JSON, and read+deserialise data back from the JSON files
-            </summary>
-        </member>
-        <member name="M:TestSupport.SeedDatabase.SeedJsonHelpers.DefaultSerializeToJson``1(``0,System.Boolean)">
-            <summary>
-            This serialises the data you provide into a JSON string.
-            You may want to build your own if you have specific requirements
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="data">The class or collection you want to save</param>
-            <param name="moreReadableJsonFile">Defaults to true - make bigger, but more readable JSON files.</param>
-            <returns></returns>
-        </member>
-        <member name="M:TestSupport.SeedDatabase.SeedJsonHelpers.ReadSeedDataFromJsonFile``1(System.String,System.Reflection.Assembly)">
-            <summary>
-            This will read the data from the JSON file using the fileSuffix as a discriminator
-            You may want to build your own if you have specific requirements
-            </summary>
-            <typeparam name="T">This is the type of the data you expect to get back, e.g. <code>List{Book}</code></typeparam>
-            <param name="fileSuffix">This is the name of the seed data, typically the name of the database that the JSON came from</param>
-            <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
-            <returns></returns>
-        </member>
-        <member name="M:TestSupport.SeedDatabase.SeedJsonHelpers.WriteJsonToJsonFile(System.String,System.String,System.Reflection.Assembly)">
-            <summary>
-            This writes the JSON string to a JSON file using the fileSuffix as part of the file name
-            </summary>
-            <param name="fileSuffix">This should be different for each seed data. Suggest using the name of the database that produced it.</param>
-            <param name="json">The json string to save</param>
-            <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
-        </member>
-        <member name="M:TestSupport.SeedDatabase.SeedJsonHelpers.FormJsonFilePath(System.String,System.Reflection.Assembly)">
-            <summary>
-            This forms the name of the json file using the fileSuffix
-            This is of the form $"SeedData-{fileSuffix}.json"
-            </summary>
-            <param name="fileSuffix">This is the name of the seed data, typically the name of the database that the JSON came from</param>
-            <param name="callingAssembly">optional: provide the calling assembly. default is to use the current calling assembly</param>
-            <returns></returns>
-        </member>
-        <member name="T:TestSupport.SeedDatabase.SqlServerProductionSetup`1">
-            <summary>
-            This provides a way to set up the options for opening a SQL production database
-            </summary>
-            <typeparam name="YourDbContext"></typeparam>
-        </member>
-        <member name="P:TestSupport.SeedDatabase.SqlServerProductionSetup`1.Options">
-            <summary>
-            This provides the options 
-            </summary>
-        </member>
-        <member name="P:TestSupport.SeedDatabase.SqlServerProductionSetup`1.DatabaseName">
-            <summary>
-            This provides the name of the database that was opened. Useful if you want to save the data using the database name
-            </summary>
-        </member>
-        <member name="M:TestSupport.SeedDatabase.SqlServerProductionSetup`1.#ctor(System.String)">
-            <summary>
-            This sets up the Options and DatabaseName properties ready for you to open the SQL database
-            </summary>
-            <param name="connectionNameOrConnectionString">This is either the name of a connection in the appsetting.json file or the actual connection string </param>
         </member>
     </members>
 </doc>

@@ -8,7 +8,6 @@ using DataLayer.Database2;
 using Microsoft.EntityFrameworkCore;
 using TestSupport.EfHelpers;
 using TestSupport.Helpers;
-using TestSupportSchema;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Extensions.AssertExtensions;

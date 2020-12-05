@@ -7,8 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using TestSupport.EfHelpers.Internal;
 
-namespace TestSupportSchema
+namespace TestSupport.EfHelpers
 {
+    /// <summary>
+    /// Static class holding the EnsureClean extension method
+    /// </summary>
     public static class CleanDatabaseExtensions
     {
         /// <summary>

@@ -59,10 +59,15 @@
     <IsPackable>true</IsPackable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/JonPSmith/EfCore.TestSupport</PackageProjectUrl>
+    <PackageIcon>EfCoreTestSupportNuGetIcon128.png</PackageIcon>
     <PackageIconUrl>https://raw.githubusercontent.com/JonPSmith/EfCore.TestSupport/master/EfCoreTestSupportNuGetIcon128.png</PackageIconUrl>
     <RepositoryUrl></RepositoryUrl>
-    <PackageLicenseUrl>https://github.com/JonPSmith/EfCore.TestSupport/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="EfCoreTestSupportNuGetIcon128.png" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
     <DocumentationFile>C:\Users\JonPSmith\source\repos\EfCore.TestSupport\TestSupport\TestSupport.xml</DocumentationFile>
