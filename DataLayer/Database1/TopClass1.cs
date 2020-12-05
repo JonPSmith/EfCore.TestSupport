@@ -13,6 +13,5 @@ namespace DataLayer.Database1
         public Guid MyGuid { get; set; }
 
         public ICollection<Dependent1> Dependents { get; set; }
-
     }
 }

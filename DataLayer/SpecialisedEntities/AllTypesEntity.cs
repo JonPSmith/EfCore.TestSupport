@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT license. See License.txt in the project root for license information.
 
 using System;
@@ -15,7 +15,7 @@ namespace DataLayer.SpecialisedEntities
         public int MyInt { get; private set; } = 1234;
         public int? MyIntNullable { get; private set; } = null;
         public double MyDouble { get; private set; } = 5678.9012;
-        public Decimal MyDecimal { get; private set; } = 3456.789m;
+        public decimal MyDecimal { get; private set; } = 3456.789m;
         public Guid MyGuid { get;  set; }
         public Guid? MyGuidNullable { get; private set; } = null;
 

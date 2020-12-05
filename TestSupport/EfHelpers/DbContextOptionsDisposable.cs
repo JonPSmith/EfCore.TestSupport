@@ -10,16 +10,24 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace TestSupport.EfHelpers
 {
+    /// <summary>
+    /// This is used to return a class that implements <see cref="DbContextOptions{T}"/>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class DbContextOptionsDisposable<T> : DbContextOptions<T>, IDisposable where T : DbContext
     {
         private bool _stopNextDispose;
-        public DbConnection Connection { get; private set; }
+        private readonly DbConnection _connection;
 
+        /// <summary>
+        /// This creates the class and sets up the <see cref="DbContextOptions{T}"/> part and getting a reference to the connection
+        /// </summary>
+        /// <param name="baseOptions"></param>
         public DbContextOptionsDisposable(DbContextOptions<T> baseOptions)
              : base(new ReadOnlyDictionary<Type, IDbContextOptionsExtension>(
                  baseOptions.Extensions.ToDictionary(x => x.GetType())))
         {
-            Connection = RelationalOptionsExtension.Extract(baseOptions).Connection;
+            _connection = RelationalOptionsExtension.Extract(baseOptions).Connection;
         }
 
         /// <summary>
@@ -30,10 +38,13 @@ namespace TestSupport.EfHelpers
             _stopNextDispose = true;
         }
 
+        /// <summary>
+        /// This disposes the Sqlite connection with holds the in-memory data 
+        /// </summary>
         public void Dispose()
         {
             if (!_stopNextDispose)
-                Connection.Dispose();
+                _connection.Dispose();
             _stopNextDispose = false;
         }
     }

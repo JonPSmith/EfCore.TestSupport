@@ -12,6 +12,5 @@ namespace DataLayer.Database1
         public Guid MyGuid { get; set; }
 
         public int TopClass1Id { get; set; }
-
     }
 }

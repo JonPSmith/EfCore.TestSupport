@@ -1,5 +1,5 @@
-﻿// Copyright (c) 2016 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
-// Licensed under MIT licence. See License.txt in the project root for license information.
+﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Licensed under MIT license. See License.txt in the project root for license information.
 
 using DataLayer.BookApp.EfCode.Configurations;
 using Microsoft.EntityFrameworkCore;
@@ -8,14 +8,14 @@ namespace DataLayer.BookApp.EfCode
 {
     public class BookOrderSchemaContext : DbContext
     {
-        public DbSet<Book> Books { get; set; }             
-        public DbSet<Author> Authors { get; set; }         
-        public DbSet<PriceOffer> PriceOffers { get; set; }
-        public DbSet<Order> Orders { get; set; }
-
         public BookOrderSchemaContext(                             
             DbContextOptions<BookOrderSchemaContext> options)      
             : base(options) {}
+
+        public DbSet<Book> Books { get; set; }
+        public DbSet<Author> Authors { get; set; }
+        public DbSet<PriceOffer> PriceOffers { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         protected override void
             OnModelCreating(ModelBuilder modelBuilder)

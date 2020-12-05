@@ -3,7 +3,7 @@
 
 ## 5.0.0
 
-- Designed to work with EF Core 5 with serious cleanup
+- A serious cleanup to the this library
 - BREAKING CHANGES
    - Altered SqliteInMemory methods to return a IDisposable options (disposes connection at the end of the test). Can effect current code.
 - New features

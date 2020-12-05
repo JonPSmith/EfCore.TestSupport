@@ -6,6 +6,9 @@ using Microsoft.Extensions.Logging;
 
 namespace TestSupport.EfHelpers
 {
+    /// <summary>
+    /// This class allows you to define the various LogTo options
+    /// </summary>
     public class LogToOptions
     {
         /// <summary>

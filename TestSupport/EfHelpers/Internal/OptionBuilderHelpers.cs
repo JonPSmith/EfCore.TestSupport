@@ -22,7 +22,10 @@ namespace TestSupport.EfHelpers.Internal
         {
             logToOptions ??= new LogToOptions();
 
-            if (logToOptions.OnlyShowTheseCategories != null)
+            if (logToOptions.OnlyShowTheseCategories != null && logToOptions.OnlyShowTheseEvents != null)
+                throw new NotImplementedException($"You can't define a {nameof(LogToOptions.OnlyShowTheseCategories)} and {nameof(LogToOptions.OnlyShowTheseEvents)} at the same time");
+
+                if (logToOptions.OnlyShowTheseCategories != null)
                 return builder.LogTo(action, logToOptions.OnlyShowTheseCategories, logToOptions.LogLevel, logToOptions.LoggerOptions);
             if (logToOptions.OnlyShowTheseEvents != null)
                 return builder.LogTo(action, logToOptions.OnlyShowTheseEvents, logToOptions.LogLevel, logToOptions.LoggerOptions);

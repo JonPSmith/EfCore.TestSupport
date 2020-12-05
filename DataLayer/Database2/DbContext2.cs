@@ -7,10 +7,10 @@ namespace DataLayer.Database2
 {
     public class DbContext2 : DbContext
     {
-        public DbSet<TopClass2> TopClasses { get; set; }
-        public DbSet<Dependent2> Dependents { get; set; }
-
         public DbContext2(DbContextOptions<DbContext2> options)
             : base(options) { }
+
+        public DbSet<TopClass2> TopClasses { get; set; }
+        public DbSet<Dependent2> Dependents { get; set; }
     }
 }

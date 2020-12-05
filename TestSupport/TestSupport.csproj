@@ -37,7 +37,22 @@
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-      - BREAKING CHANGES
+      - A serious cleanup to the this library
+      BREAKING CHANGES
+      - Altered SqliteInMemory methods to return a IDisposable options (disposes connection at the end of the test). Can effect current code.
+      NEW FEATURES
+      - Add `EnsureClean`. This clears the schema and data and set up new model (only for SQL Server)
+      - SqliteInMemory now has CreateOptionsWithLogTo
+      - SqlServer now has CreateUniqueClassOptionsWithLogTo and CreateUniqueMethodOptionsWithLogTo
+      REMOVED FEATURES
+      - Removed EfSchemaCompare - going to its own library
+      - Removed SeedDatabase - use old 3.2.0 EfCore.TestSupport version
+      - Remove InMemory Database helper - use EF Core's In Memory database
+      MARKED AS OBSOLETE
+      - CreateOptionsWithLogging - use ...ToLog version
+      - CreateUniqueClassOptionsWithLogging - use ...ToLog version
+      - CreateUniqueMethodOptionsWithLogging - use ...ToLog version
+      - CreateEmptyViaWipe - recommend `EnsureClean` or respawn
     </PackageReleaseNotes>
     <Copyright>Copyright (c) 2020 Jon P Smith. Licenced under MIT licence</Copyright>
     <PackageTags>Entity Framework Core, xUnit</PackageTags>
@@ -47,6 +62,10 @@
     <PackageIconUrl>https://raw.githubusercontent.com/JonPSmith/EfCore.TestSupport/master/EfCoreTestSupportNuGetIcon128.png</PackageIconUrl>
     <RepositoryUrl></RepositoryUrl>
     <PackageLicenseUrl>https://github.com/JonPSmith/EfCore.TestSupport/blob/master/LICENSE</PackageLicenseUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
+    <DocumentationFile>C:\Users\JonPSmith\source\repos\EfCore.TestSupport\TestSupport\TestSupport.xml</DocumentationFile>
   </PropertyGroup>
 
 </Project>

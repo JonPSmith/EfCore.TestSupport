@@ -1,5 +1,5 @@
-﻿// Copyright (c) 2016 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
-// Licensed under MIT licence. See License.txt in the project root for license information.
+﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Licensed under MIT license. See License.txt in the project root for license information.
 
 namespace DataLayer.BookApp
 {
@@ -7,13 +7,13 @@ namespace DataLayer.BookApp
     {
         public int BookId { get; set; }  //#A
         public int AuthorId { get; set; }//#A
-        public byte Order { get; set; }   
+        public byte Order { get; set; }
 
         //-----------------------------
         //Relationships
 
-        public Book Book { get; set; }      
-        public Author Author { get; set; }  
+        public Book Book { get; set; }
+        public Author Author { get; set; }
     }
     /************************************************************
     A# The primary key is make up of the two foreign keys
