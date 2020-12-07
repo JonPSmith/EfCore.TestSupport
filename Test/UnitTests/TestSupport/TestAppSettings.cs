@@ -1,6 +1,5 @@
-﻿// Copyright (c) 2016 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
-// Licensed under MIT licence. See License.txt in the project root for license information.
-
+﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Licensed under MIT license. See License.txt in the project root for license information.
 
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -63,6 +62,7 @@ namespace Test.UnitTests.TestSupport
             //VERIFY
             myData.ShouldEqual("This is in the TestData directory in Test");
         }
+
         [Fact]
         public void GetTestConnectionStringOk()
         {
@@ -75,7 +75,7 @@ namespace Test.UnitTests.TestSupport
 
             //VERIFY
             var newDatabaseName = new SqlConnectionStringBuilder(con).InitialCatalog;
-            newDatabaseName.ShouldEqual ($"{orgDbName}_{this.GetType().Name}");
+            newDatabaseName.ShouldEqual ($"{orgDbName}_{GetType().Name}");
         }
 
         [Fact]
@@ -90,7 +90,7 @@ namespace Test.UnitTests.TestSupport
 
             //VERIFY
             var newDatabaseName = new SqlConnectionStringBuilder(con).InitialCatalog;
-            newDatabaseName.ShouldEqual($"{orgDbName}.{this.GetType().Name}");
+            newDatabaseName.ShouldEqual($"{orgDbName}.{GetType().Name}");
         }
 
         [Fact]

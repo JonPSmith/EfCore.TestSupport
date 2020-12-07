@@ -1,5 +1,5 @@
-﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
-// Licensed under MIT licence. See License.txt in the project root for license information.
+﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Licensed under MIT license. See License.txt in the project root for license information.
 
 using System;
 using System.Linq;
@@ -66,6 +66,7 @@ namespace Test.UnitTests.TestDataLayer
                 ex.Message.ShouldStartWith("Object reference not set to an instance of an object.");
             }
         }
+
         /*************************************************************
         #A I create the in-memory sqlite options in the same way as the last example
         #B I create the first instance of the application's DbContext
@@ -74,8 +75,5 @@ namespace Test.UnitTests.TestDataLayer
         #E I read in the last book from my test set, which I know has two reviews
         #F When I try to add the new Review the EF Core will throw a NullReferenceException
          * ***********************************************************/
-
-
-
     }
 }

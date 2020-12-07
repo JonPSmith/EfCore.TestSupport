@@ -1,6 +1,7 @@
-using System.ComponentModel.DataAnnotations;
+// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Licensed under MIT license. See License.txt in the project root for license information.
+
 using System.Threading;
-using System.Threading.Tasks;
 using TestSupport.EfHelpers;
 using Xunit;
 using Xunit.Abstractions;
@@ -10,23 +11,6 @@ namespace Test.UnitTests.TestSupport
 {
     public class TestTimeThings
     {
-
-
-        private class MockOutput : ITestOutputHelper
-        {
-            public string LastWriteLine { get; private set; }
-
-            public void WriteLine(string message)
-            {
-                LastWriteLine = message;
-            }
-
-            public void WriteLine(string format, params object[] args)
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
         [Fact]                  
         public void TestNoSettings() 
         {
@@ -97,5 +81,20 @@ namespace Test.UnitTests.TestSupport
             result.TotalTimeMilliseconds.ShouldBeInRange(10, 20);
         }
 
+
+        private class MockOutput : ITestOutputHelper
+        {
+            public string LastWriteLine { get; private set; }
+
+            public void WriteLine(string message)
+            {
+                LastWriteLine = message;
+            }
+
+            public void WriteLine(string format, params object[] args)
+            {
+                throw new System.NotImplementedException();
+            }
+        }
     }
 }

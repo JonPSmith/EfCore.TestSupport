@@ -1,10 +1,10 @@
-using System;
+// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Licensed under MIT license. See License.txt in the project root for license information.
+
 using System.Linq;
-using System.Reflection;
-using Microsoft.EntityFrameworkCore;
 using TestSupport.Helpers;
-using Xunit.Extensions.AssertExtensions;
 using Xunit;
+using Xunit.Extensions.AssertExtensions;
 
 namespace Test.UnitTests.TestSupport
 {
@@ -19,9 +19,9 @@ namespace Test.UnitTests.TestSupport
             var path = TestData.GetCallingAssemblyTopLevelDir();
 
             //VERIFY
-            path.ShouldEndWith(this.GetType().Namespace.Split('.').First());
+            path.ShouldEndWith(GetType().Namespace.Split('.').First());
         }
-        
+
 
         [Fact]
         public void TestGetTestDataFileDirectory()
@@ -32,7 +32,7 @@ namespace Test.UnitTests.TestSupport
             var path = TestData.GetTestDataDir();
 
             //VERIFY
-            path.ShouldEndWith(this.GetType().Namespace.Split('.').First() + "\\TestData");
+            path.ShouldEndWith(GetType().Namespace.Split('.').First() + "\\TestData");
         }
 
         [Fact]

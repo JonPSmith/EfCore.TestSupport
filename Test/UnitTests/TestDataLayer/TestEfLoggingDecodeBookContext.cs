@@ -1,18 +1,13 @@
-﻿// Copyright (c) 2017 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
-// Licensed under MIT licence. See License.txt in the project root for license information.
+﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Licensed under MIT license. See License.txt in the project root for license information.
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataLayer.BookApp;
 using DataLayer.BookApp.EfCode;
-using DataLayer.SpecialisedEntities;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Test.Helpers;
-using TestSupport.Attributes;
 using TestSupport.EfHelpers;
 using Xunit;
 using Xunit.Abstractions;
@@ -22,7 +17,7 @@ namespace Test.UnitTests.TestDataLayer
 {
     public class TestEfLoggingDecodeBookContext
     {
-        private readonly ITestOutputHelper _output; 
+        private readonly ITestOutputHelper _output;
 
         public TestEfLoggingDecodeBookContext(ITestOutputHelper output) 
         {
@@ -115,8 +110,5 @@ namespace Test.UnitTests.TestDataLayer
                 sqlCommand[2].ShouldEqual("WHERE ([b].[SoftDeleted] <> CAST(1 AS bit)) AND ([b].[BookId] = '1')");
             }
         }
-
-
-
     }
 }

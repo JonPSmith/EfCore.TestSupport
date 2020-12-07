@@ -1,3 +1,6 @@
+// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Licensed under MIT license. See License.txt in the project root for license information.
+
 using Xunit;
 using Xunit.Extensions.AssertExtensions;
 
@@ -17,6 +20,7 @@ namespace Test.UnitTests.TestSupport
             //VERIFY
             result.ShouldEqual(2); //#E
         }
+
         /*****************************************************
         #A The [Fact] attribute tells the unit test runner that this method is an xUnit unit test that should be run
         #B The method must be public. It should return void, or if you are running async methods, then it should return "async Task" 

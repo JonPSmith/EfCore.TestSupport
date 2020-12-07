@@ -1,3 +1,6 @@
+// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
+// Licensed under MIT license. See License.txt in the project root for license information.
+
 using TestSupport.Attributes;
 using TestSupport.EfHelpers;
 using Xunit.Abstractions;
@@ -23,6 +26,7 @@ namespace Test.UnitCommands
             _output.WriteLine(                              //#D
                 "This deleted {0} databases.", numDeleted); //#D
         }
+
         /****************************************************************
         #A The [RunnableInDebugOnly] makes sure the unit command is not run by accident when the main unit tests are run. I must manually run this method in debug mode
         #B This has the format of a unit test, that is a public method which returns void
