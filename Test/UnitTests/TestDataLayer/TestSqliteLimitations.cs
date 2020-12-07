@@ -1,8 +1,7 @@
 ﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT license. See License.txt in the project root for license information.
 
-using DataLayer.MyEntityDb;
-using DataLayer.MyEntityDb.EfCompareDbs;
+using DataLayer.DiffConfig;
 using Microsoft.Data.Sqlite;
 using TestSupport.EfHelpers;
 using Xunit;
@@ -13,11 +12,40 @@ namespace Test.UnitTests.TestDataLayer
     public class TestSqliteLimitations
     {
         [Fact]
+        public void TestSqlLiteDoesAcceptSchema()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<DiffConfigDbContext>();
+            using (var context = new DiffConfigDbContext(options, DiffConfigs.AddSchema))
+            {
+                //ATTEMPT
+                context.Database.EnsureCreated();
+
+                //VERIFY
+            }
+        }
+
+        [Fact]
+        public void TestSqlLiteDoesAcceptAddSequence()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<DiffConfigDbContext>();
+            using (var context = new DiffConfigDbContext(options, DiffConfigs.AddSequence))
+            {
+                //ATTEMPT
+                context.Database.EnsureCreated();
+
+                //VERIFY
+            }
+        }
+
+
+        [Fact]
         public void TestSqlLiteComputedColDifferent()
         {
             //SETUP
-            var options = SqliteInMemory.CreateOptions<MyEntityComputedColDbContext>();
-            using (var context = new MyEntityComputedColDbContext(options))
+            var options = SqliteInMemory.CreateOptions<DiffConfigDbContext>();
+            using (var context = new DiffConfigDbContext(options, DiffConfigs.SetComputedCol))
             {
                 //ATTEMPT
                 var ex = Assert.Throws<SqliteException>(() => context.Database.EnsureCreated());
@@ -27,18 +55,6 @@ namespace Test.UnitTests.TestDataLayer
             }
         }
 
-        [Fact]
-        public void TestSqlLiteDoesAcceptSchema()
-        {
-            //SETUP
-            var options = SqliteInMemory.CreateOptions<DbContextWithSchema>();
-            using (var context = new DbContextWithSchema(options))
-            {
-                //ATTEMPT
-                context.Database.EnsureCreated();
 
-                //VERIFY
-            }
-        }
     }
 }

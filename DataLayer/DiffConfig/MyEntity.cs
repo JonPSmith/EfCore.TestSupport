@@ -3,11 +3,10 @@
 
 using System;
 
-namespace DataLayer.MyEntityDb
+namespace DataLayer.DiffConfig
 {
     public class MyEntity
     {
-        private int _backingField;
 
         public int MyEntityId { get; set; }
 
@@ -16,5 +15,7 @@ namespace DataLayer.MyEntityDb
         public int MyInt { get; set; }
 
         public string MyString { get; set; }
+
+        public decimal MyDecimal { get; set; }
     }
 }
