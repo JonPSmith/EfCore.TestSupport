@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataLayer.SpecialisedEntities;
+using DataLayer.DecodedParts;
 using TestSupport.EfHelpers;
 using Xunit;
 using Xunit.Abstractions;
@@ -26,11 +26,11 @@ namespace Test.UnitTests.TestDataLayer
         {
             //SETUP
             var logs = new List<LogOutput>();
-            //var options = SqliteInMemory.CreateOptionsWithLogging<SpecializedDbContext>(log => logs.Add(log));
+            //var options = SqliteInMemory.CreateOptionsWithLogging<AllTypesDbContext>(log => logs.Add(log));
 #pragma warning disable 618
-            var options = this.CreateUniqueClassOptionsWithLogging<SpecializedDbContext>(log => logs.Add(log));
+            var options = this.CreateUniqueClassOptionsWithLogging<AllTypesDbContext>(log => logs.Add(log));
 #pragma warning restore 618
-            using (var context = new SpecializedDbContext(options))
+            using (var context = new AllTypesDbContext(options))
             {
                 context.Database.EnsureCreated();
                 logs.Clear();
