@@ -9,7 +9,7 @@
 - REMOVED FEATURES
    - Removed EfSchemaCompare - going to its own library (but not there yet)
    - Removed SeedDatabase - use old 3.2.0 EfCore.TestSupport version
-   - Remove InMemory Database helper - use EF Core's In Memory database
+   - Removed InMemory Database helper - use EF Core's In Memory database
 - New features
    - Add `EnsureClean`. This clears the schema and data and set up new model (only for SQL Server)
    - SqliteInMemory now has `CreateOptionsWithLogTo<T>` 

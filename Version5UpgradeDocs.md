@@ -1,6 +1,15 @@
 # Upgrade documentation notes
 
-This document provides information when converting to Version 5 of the EfCore.TestSupport library.
+This document provides information when converting to Version 5 of the `EfCore.TestSupport` library.
+
+## Summary of the changes
+
+1. The `SqliteInMemory.CreateOptions` etc. has changed and some of your unit tests might break. See section below.
+2. The EfSchemaCompare feature has been removed. If you need this then keep using the V3 version of EfCore.TestSupport (I do plan to create a library for EfSchemaCompare, but I haven't done that yet)
+3. Added SQLite/SQL Server options with looging using the new `LogTo` logging output and marked the `...WithLogging` versions as obsolete.
+4. Removed InMemory Database helper as this provider isn't a good way to unit test. If you need it then use EF Core's In Memory database provider.
+5. Removed SeedDatabase - use old 3.2.0 EfCore.TestSupport version (very few people used this)
+6. Nice new `EnsureClean` feature added for SQL Server. See docs for that.
 
 ## Breaking change in SqliteInMemory options
 
@@ -22,7 +31,8 @@ public void TestSqliteTwoInstancesBAD()
     using (var context = new BookContext(options))
     {
         //ATTEMPT
-        var books = context.Books.ToList(); //WILL FAIL!!!!!
+        //THIS WILL FAIL!!!! THIS WILL FAIL!!!! THIS WILL FAIL!!!!
+        var books = context.Books.ToList();
 
         //VERIFY
         books.Last().Reviews.ShouldBeNull();
