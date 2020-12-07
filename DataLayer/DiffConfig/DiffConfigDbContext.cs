@@ -4,27 +4,29 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 
-public enum DiffConfigs {AddSchema, AddSequence, SetDefaultCol, SetComputedCol}
+public enum DiffConfigs {Nothing, AddSchema, AddSequence, SetDefaultCol, SetComputedCol}
 
 namespace DataLayer.DiffConfig
 {
     public class DiffConfigDbContext : DbContext
     {
-        private readonly DiffConfigs _config;
+        public DiffConfigs Config { get; private set; }
 
         public DiffConfigDbContext(
             DbContextOptions<DiffConfigDbContext> options, DiffConfigs config)      
             : base(options)
         {
-            _config = config;
+            Config = config;
         }
 
         public DbSet<MyEntity> MyEntities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            switch (_config)
+            switch (Config)
             {
+                case DiffConfigs.Nothing:
+                    break;
                 case DiffConfigs.AddSchema:
                     modelBuilder.Entity<MyEntity>().ToTable("MyEntities", "MySchema");
                     break;
