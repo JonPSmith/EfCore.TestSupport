@@ -72,9 +72,9 @@ namespace TestSupport.Helpers
         /// </summary>
         /// <param name="testClass">This should be 'this' in the test, which means the class name is added to the end of the database name</param>
         /// <param name="optionalMethodName">This is an optional string which, if present, is added to the end of the database name</param>
-        /// <param name="seperator">Optional (defaults to _). This is the character used to separate each part of the formed name</param>
+        /// <param name="separator">Optional (defaults to _). This is the character used to separate each part of the formed name</param>
         /// <returns></returns>
-        public static string GetUniqueDatabaseConnectionString(this object testClass, string optionalMethodName = null, char seperator = '_')
+        public static string GetUniqueDatabaseConnectionString(this object testClass, string optionalMethodName = null, char separator = '_')
         {
             var config = GetConfiguration(Assembly.GetAssembly(testClass.GetType()));
             var orgConnect = config.GetConnectionString(UnitTestConnectionStringName);
@@ -85,8 +85,8 @@ namespace TestSupport.Helpers
                 throw new InvalidOperationException($"The database name in your connection string must end with '{RequiredEndingToUnitTestDatabaseName}', but is '{builder.InitialCatalog}'."+
                     " This is a safety measure to help stop DeleteAllUnitTestDatabases from deleting production databases.");
 
-            var extraDatabaseName = $"{seperator}{testClass.GetType().Name}";
-            if (!string.IsNullOrEmpty(optionalMethodName)) extraDatabaseName += $"{seperator}{optionalMethodName}";
+            var extraDatabaseName = $"{separator}{testClass.GetType().Name}";
+            if (!string.IsNullOrEmpty(optionalMethodName)) extraDatabaseName += $"{separator}{optionalMethodName}";
 
             builder.InitialCatalog += extraDatabaseName;
 

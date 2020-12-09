@@ -72,35 +72,42 @@ namespace TestSupport.EfHelpers
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        private static DbContextOptionsBuilder<T> SetupConnectionAndBuilderOptions<T>(Action<DbContextOptionsBuilder<T>> applyExtraOption) //#A
+        private static DbContextOptionsBuilder<T> 
+            SetupConnectionAndBuilderOptions<T> //#D
+            (Action<DbContextOptionsBuilder<T>> applyExtraOption) //#E
             where T : DbContext
         {
             //Thanks to https://www.scottbrady91.com/Entity-Framework/Entity-Framework-Core-In-Memory-Testing
-            var connectionStringBuilder =         //#B
-                new SqliteConnectionStringBuilder //#B
-                    { DataSource = ":memory:" };  //#B
-            var connectionString = connectionStringBuilder.ToString(); //#C
-            var connection = new SqliteConnection(connectionString); //#D
-            connection.Open();  //#E             //see https://github.com/aspnet/EntityFramework/issues/6968
+            var connectionStringBuilder =         //#F
+                new SqliteConnectionStringBuilder //#F
+                    { DataSource = ":memory:" };  //#F
+            var connectionString = connectionStringBuilder.ToString(); //#G
+            var connection = new SqliteConnection(connectionString); //#H
+            connection.Open();  //#I             //see https://github.com/aspnet/EntityFramework/issues/6968
 
             // create in-memory context
             var builder = new DbContextOptionsBuilder<T>();
-            builder.UseSqlite(connection); //#F
-            builder.ApplyOtherOptionSettings(); //#G
-            applyExtraOption?.Invoke(builder);
+            builder.UseSqlite(connection); //#J
+            builder.ApplyOtherOptionSettings(); //#K
+            applyExtraOption?.Invoke(builder); //#L
 
-            return builder; //#H
+            return builder; //#M
         }
 
         /****************************************************************
-        #A By default it will throw an exception if a QueryClientEvaluationWarning is logged (see section 15.8). You can turn this off by providing a value of false as a parameter
-        #B Creates a SQLite connection string with the DataSource set to ":memory:"
-        #C Turns the SQLiteConnectionStringBuilder into a string 
-        #D Forms a SQLite connection using the connection string
-        #E You must open the SQLite connection. If you don't, the in-memory database doesn't work.
-        #F Builds a DbContextOptions<T> with the SQLite database provider and the open connection
-        #G Calls a general method used on all your option builders. This enables sensitive logging so you get more information, and if throwOnClientServerWarning is true, it configures the warning to throw on a QueryClientEvaluationWarning being logged
-        #H Returns the DbContextOptions<T> to use in the creation of your application's DbContext
+        #A A class containing the SQLite in-memory options which is also disposable
+        #B This parameter allows you at add more option methods while building of the options
+        #C Gets the DbContextOptions<T> and returns a disposable version
+        #D This method builds the SQLite in-memory options
+        #E This contains any extra option methods the user provided 
+        #F Creates a SQLite connection string with the DataSource set to ":memory:"
+        #G Turns the SQLiteConnectionStringBuilder into a connection string 
+        #H Forms a SQLite connection using the connection string
+        #I You must open the SQLite connection. If you don't, the in-memory database doesn't work.
+        #J Builds a DbContextOptions<T> with the SQLite database provider and the open connection
+        #K Calls a general method used on all your option builders. This enables sensitive logging and better error messages
+        #L Add any extra options the user added
+        #M Returns the DbContextOptions<T> to use in the creation of your application's DbContext
          * **************************************************************/
     }
 }

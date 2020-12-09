@@ -5,7 +5,7 @@
 
 - A serious cleanup to the this library with BREAKING CHANGES
 - BREAKING CHANGES
-   - Altered SqliteInMemory methods to return a IDisposable options (disposes connection at the end of the test). Can effect current code.
+   - Altered SqliteInMemory methods to return a IDisposable options (disposes connection at the end of the test). THIS WILL BREAK YOUR CODE.
 - REMOVED FEATURES
    - Removed EfSchemaCompare - going to its own library (but not there yet)
    - Removed SeedDatabase - use old 3.2.0 EfCore.TestSupport version
@@ -20,6 +20,9 @@
    - `CreateUniqueMethodOptionsWithLogging<T>` - use ...ToLog version
    - `CreateEmptyViaWipe` - recommend `EnsureClean` or respawn
 
+## TODO
+
+- Configuration with secrets
 
 # Older versions of EfCore.TestSupport
 

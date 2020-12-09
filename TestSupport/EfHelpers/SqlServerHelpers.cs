@@ -27,7 +27,7 @@ namespace TestSupport.EfHelpers
         public static DbContextOptions<T> CreateUniqueClassOptions<T>(this object callingClass, Action<DbContextOptionsBuilder<T>> builder = null)
             where T : DbContext
         {
-            return CreateOptionWithDatabaseName<T>(callingClass, null, builder).Options;
+            return CreateOptionWithDatabaseName(callingClass, null, builder).Options;
         }
 
         /// <summary>
