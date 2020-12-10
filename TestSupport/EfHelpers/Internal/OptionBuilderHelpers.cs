@@ -18,10 +18,16 @@ namespace TestSupport.EfHelpers.Internal
                 .EnableSensitiveDataLogging();
         }
 
-        internal static DbContextOptionsBuilder<T> AddLogTo<T>(this DbContextOptionsBuilder<T> builder, Action<string> action, LogToOptions logToOptions)
+        internal static DbContextOptionsBuilder<T> AddLogTo<T>(this DbContextOptionsBuilder<T> builder, Action<string> userAction, LogToOptions logToOptions)
             where T : DbContext
         {
             logToOptions ??= new LogToOptions();
+
+            Action<string> action = log =>
+            {
+                if (logToOptions.ShowLog)
+                    userAction(log);
+            };
 
             var usedNames = new List<string>();
 

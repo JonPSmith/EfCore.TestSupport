@@ -494,6 +494,12 @@
             NOTE: You can only set a value for one of the three filters: OnlyShow... and FilterFunction
             </summary>
         </member>
+        <member name="P:TestSupport.EfHelpers.LogToOptions.ShowLog">
+            <summary>
+            This controls the action being called. If set to false it will not call the action
+            Defaults to true, i.e. returns all logs
+            </summary>
+        </member>
         <member name="P:TestSupport.EfHelpers.LogToOptions.LogLevel">
             <summary>
             This sets the lowest LogLevel that will be returned
@@ -525,7 +531,7 @@
             <summary>
             This allows you to set format of the log message, for instance
             DefaultWithUtcTime will use a UTC time instead the local time
-            Defaults to null, which means no extra info is prepended to the message
+            Defaults to None, which means no extra info is prepended to the message
             </summary>
         </member>
         <member name="T:TestSupport.EfHelpers.MyLoggerProviderActionOut">

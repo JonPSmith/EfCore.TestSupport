@@ -23,7 +23,7 @@
 
   <PropertyGroup>
     <PackageId>EfCore.TestSupport</PackageId>
-    <PackageVersion>5.0.0-preview004</PackageVersion>
+    <PackageVersion>5.0.0-preview005</PackageVersion>
     <Version>5.0.0</Version>
     <AssemblyVersion>5.0.0.0</AssemblyVersion>
     <FileVersion>5.0.0.0</FileVersion>
@@ -40,8 +40,8 @@
       - Remove InMemory Database helper - use EF Core's In Memory database
       NEW FEATURES
       - Add `EnsureClean`. This clears the schema and data and set up new model (only for SQL Server)
-      - SqliteInMemory now has CreateOptionsWithLogTo
-      - SqlServer now has CreateUniqueClassOptionsWithLogTo and CreateUniqueMethodOptionsWithLogTo
+      - SqliteInMemory now has CreateOptionsWithLogTo extension method
+      - SqlServer now has CreateUniqueClassOptionsWithLogTo and CreateUniqueMethodOptionsWithLogTo extension methods
       MARKED AS OBSOLETE
       - CreateOptionsWithLogging - use ...ToLog version
       - CreateUniqueClassOptionsWithLogging - use ...ToLog version

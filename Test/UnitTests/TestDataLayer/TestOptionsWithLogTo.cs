@@ -62,6 +62,33 @@ namespace Test.UnitTests.TestDataLayer
         }
 
         [Fact]
+        public void TestEfCoreLoggingCheckSqlOutputShowLog()
+        {
+            //SETUP
+            var logs = new List<string>();
+            var logToOptions = new LogToOptions
+            {
+                ShowLog = false
+            };
+            var options = SqliteInMemory.CreateOptionsWithLogTo<BookContext>(log => logs.Add(log), logToOptions);
+            using var context = new BookContext(options);
+            context.Database.EnsureCreated();
+            context.SeedDatabaseFourBooks();
+
+            //ATTEMPT 
+            logToOptions.ShowLog = true;
+            var book = context.Books.Single(x => x.Reviews.Count() > 1);
+
+            //VERIFY
+            logs.Count.ShouldEqual(1);
+            logs.Single().ShouldEqual("Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']\r\n" +
+                                    "SELECT \"b\".\"BookId\", \"b\".\"Description\", \"b\".\"ImageUrl\", \"b\".\"Price\"," +
+                                    " \"b\".\"PublishedOn\", \"b\".\"Publisher\", \"b\".\"SoftDeleted\", \"b\".\"Title\"\r\n" +
+                                    "FROM \"Books\" AS \"b\"\r\nWHERE NOT (\"b\".\"SoftDeleted\") AND ((\r\n" +
+                                    "    SELECT COUNT(*)\r\n    FROM \"Review\" AS \"r\"\r\n    WHERE \"b\".\"BookId\" = \"r\".\"BookId\") > 1)\r\nLIMIT 2");
+        }
+
+        [Fact]
         public void TestEfCoreLoggingCheckOnlyShowTheseCategories()
         {
             //SETUP
@@ -150,7 +177,7 @@ namespace Test.UnitTests.TestDataLayer
         }
 
         [Fact]
-        public void TestEfCoreLoggingCheckLoggerOptions()
+        public void TestEfCoreLoggingCheckLoggerOptionsDefaultWithUtcTime()
         {
             //SETUP
             var logs = new List<string>();
@@ -168,6 +195,27 @@ namespace Test.UnitTests.TestDataLayer
 
             //VERIFY
             logs.All(x => x.StartsWith("warn:") || x.StartsWith("info:")).ShouldBeTrue();
+        }
+
+        [Fact]
+        public void TestEfCoreLoggingCheckLoggerOptionsSingleLine()
+        {
+            //SETUP
+            var logs = new List<string>();
+            var logToOptions = new LogToOptions
+            {
+                LoggerOptions = DbContextLoggerOptions.Id
+            };
+            var options = SqliteInMemory.CreateOptionsWithLogTo<BookContext>(log => logs.Add(log), logToOptions);
+            using var context = new BookContext(options);
+            context.Database.EnsureCreated();
+            context.SeedDatabaseFourBooks();
+
+            //ATTEMPT 
+            var books = context.Books.Select(x => x.BookId).ToList();
+
+            //VERIFY
+            logs.All(x => x.StartsWith("RelationalEventId.CommandExecuted") || x.StartsWith("CoreEventId.")).ShouldBeTrue();
         }
 
 

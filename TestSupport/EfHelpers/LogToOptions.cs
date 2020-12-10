@@ -14,6 +14,12 @@ namespace TestSupport.EfHelpers
     public class LogToOptions
     {
         /// <summary>
+        /// This controls the action being called. If set to false it will not call the action
+        /// Defaults to true, i.e. returns all logs
+        /// </summary>
+        public bool ShowLog { get; set; } = true;
+
+        /// <summary>
         /// This sets the lowest LogLevel that will be returned
         /// Defaults to LogLevel.Information
         /// </summary>
@@ -43,8 +49,8 @@ namespace TestSupport.EfHelpers
         /// <summary>
         /// This allows you to set format of the log message, for instance
         /// DefaultWithUtcTime will use a UTC time instead the local time
-        /// Defaults to null, which means no extra info is prepended to the message
+        /// Defaults to None, which means no extra info is prepended to the message
         /// </summary>
-        public DbContextLoggerOptions LoggerOptions { get; set; }
+        public DbContextLoggerOptions LoggerOptions { get; set; } = DbContextLoggerOptions.None;
     }
 }

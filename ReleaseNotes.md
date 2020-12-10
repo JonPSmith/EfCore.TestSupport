@@ -12,8 +12,8 @@
    - Removed InMemory Database helper - use EF Core's In Memory database
 - New features
    - Add `EnsureClean`. This clears the schema and data and set up new model (only for SQL Server)
-   - SqliteInMemory now has `CreateOptionsWithLogTo<T>` 
-   - SqlServer now has `CreateUniqueClassOptionsWithLogTo<T>` and `CreateUniqueMethodOptionsWithLogTo<T>`
+   - SqliteInMemory now has `CreateOptionsWithLogTo` extension method
+   - SqlServer now has `CreateUniqueClassOptionsWithLogTo` and `CreateUniqueMethodOptionsWithLogTo` extension methods
 - Marked as obsolete
    - `CreateOptionsWithLogging<T>` - use ...ToLog version
    - `CreateUniqueClassOptionsWithLogging<T>` - use ...ToLog version
