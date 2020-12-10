@@ -36,7 +36,7 @@ namespace Test.UnitTests.TestDataLayer
             var options = new DbContextOptionsBuilder<BookContext>()
                 .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(l => logs.Add(l))}))
                 .UseSqlite(connection)
-                //.EnableSensitiveDataLogging()
+                .EnableSensitiveDataLogging()
                 .Options;
             using (var context = new BookContext(options))
             {
@@ -53,7 +53,7 @@ namespace Test.UnitTests.TestDataLayer
                 sqlCommand[0].ShouldEqual(
                     "SELECT \"b\".\"BookId\", \"b\".\"Description\", \"b\".\"ImageUrl\", \"b\".\"Price\", \"b\".\"PublishedOn\", \"b\".\"Publisher\", \"b\".\"SoftDeleted\", \"b\".\"Title\"");
                 sqlCommand[1].ShouldEqual("FROM \"Books\" AS \"b\"");
-                sqlCommand[2].ShouldEqual("WHERE NOT (\"b\".\"SoftDeleted\") AND (\"b\".\"BookId\" = @__id_0)");
+                sqlCommand[2].ShouldEqual("WHERE NOT (\"b\".\"SoftDeleted\") AND (\"b\".\"BookId\" = 1");
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT license. See License.txt in the project root for license information.
 
+using System;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 
@@ -8,6 +9,7 @@ namespace TestSupport.EfHelpers
 {
     /// <summary>
     /// This class allows you to define the various LogTo options
+    /// NOTE: You can only set a value for one of the three filters: OnlyShow... and FilterFunction
     /// </summary>
     public class LogToOptions
     {
@@ -30,6 +32,13 @@ namespace TestSupport.EfHelpers
         /// Defaults to null, i.e. not used 
         /// </summary>
         public EventId[] OnlyShowTheseEvents { get; set; }
+
+        /// <summary>
+        /// This allows you to provide a method to filter the logs, for instance
+        /// bool MyFilterFunction(EventId eventId, LogLevel logLevel) {...}
+        /// Defaults to null, i.e. not used
+        /// </summary>
+        public Func<EventId, LogLevel, bool> FilterFunction { get; set; }
 
         /// <summary>
         /// This allows you to set format of the log message, for instance

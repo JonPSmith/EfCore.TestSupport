@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace TestSupport.EfHelpers
 {
     /// <summary>
-    /// This 
+    /// This provides a ILoggerProvider that returns logging output 
     /// </summary>
     public class MyLoggerProviderActionOut : ILoggerProvider
     {

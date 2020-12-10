@@ -1,21 +1,18 @@
-[
-![buymeacoffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)
-](https://www.buymeacoffee.com/l709oYtzp)
-
 # EfCore.TestSupport
 
-This git repo contains the source of the [EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/) library, and various tests to check the EfCore.TestSupport [NuGet package](https://www.nuget.org/packages/EfCore.TestSupport/).  
+This NuGet package containing methods to help you unit test applications that use [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/index) for database access. This readme defines the various groups, with links to the documentation in the [EfCore.TestSupport wiki](https://github.com/JonPSmith/EfCore.TestSupport/wiki).
+
 See [Release Notes](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/ReleaseNotes.md) for information on changes.
 
-This project is open-source (MIT licence) and works for EF Core 2.1 (netstandard2.0) and EF Core 3 (netstandard2.1).
+This project is open-source (MIT licence) and works for EF Core 5
 
 ## Documentation
 
-The NuGet package [EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/) is a netstandard2.0 library containing methods to help you unit test applications that use
+The NuGet package [EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/) containing methods to help you unit test applications that use
 [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/index) for database access. This readme defines the various groups, with links to the documentation in the 
 [EfCore.TestSupport wiki](https://github.com/JonPSmith/EfCore.TestSupport/wiki).
 
-*NOTE: The techniques are explained in much more details in chapter 15 of the book [Entity Framework in Action](http://bit.ly/2m8KRAZ).*
+*NOTE: The techniques are explained in much more details in chapter 17 of the book [Entity Framework in Action, second edition](https://bit.ly/EfCoreBookEd2).*
 
 Here is an image covering just a few of the methods, in **bold** available in this library.  
  

@@ -2,6 +2,7 @@
 // Licensed under MIT license. See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace TestSupport.EfHelpers.Internal
@@ -22,13 +23,24 @@ namespace TestSupport.EfHelpers.Internal
         {
             logToOptions ??= new LogToOptions();
 
-            if (logToOptions.OnlyShowTheseCategories != null && logToOptions.OnlyShowTheseEvents != null)
-                throw new NotImplementedException($"You can't define a {nameof(LogToOptions.OnlyShowTheseCategories)} and {nameof(LogToOptions.OnlyShowTheseEvents)} at the same time");
+            var usedNames = new List<string>();
+
+            if (logToOptions.OnlyShowTheseCategories != null)
+                usedNames.Add(nameof(LogToOptions.OnlyShowTheseCategories));
+            if (logToOptions.OnlyShowTheseEvents != null)
+                usedNames.Add(nameof(LogToOptions.OnlyShowTheseEvents));
+            if (logToOptions.FilterFunction != null)
+                usedNames.Add(nameof(LogToOptions.FilterFunction));
+
+            if (usedNames.Count > 1)
+                throw new NotSupportedException($"You can't define {string.Join(" and ", usedNames)} at the same time.");
 
             if (logToOptions.OnlyShowTheseCategories != null)
                 return builder.LogTo(action, logToOptions.OnlyShowTheseCategories, logToOptions.LogLevel, logToOptions.LoggerOptions);
             if (logToOptions.OnlyShowTheseEvents != null)
                 return builder.LogTo(action, logToOptions.OnlyShowTheseEvents, logToOptions.LogLevel, logToOptions.LoggerOptions);
+            if (logToOptions.FilterFunction != null)
+                return builder.LogTo(action, logToOptions.FilterFunction, logToOptions.LoggerOptions);
 
             return builder.LogTo(action, logToOptions.LogLevel, logToOptions.LoggerOptions);
         }

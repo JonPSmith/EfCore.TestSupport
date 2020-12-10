@@ -1,11 +1,13 @@
 ﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT license. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DataLayer.BookApp.EfCode;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Logging;
 using Test.Helpers;
 using TestSupport.EfHelpers;
 using Xunit;
@@ -100,6 +102,51 @@ namespace Test.UnitTests.TestDataLayer
             //VERIFY
             logs.Count.ShouldEqual(1);
             logs.Single().ShouldStartWith("Entity Framework Core 5.0.0 initialized 'BookContext' using provider 'Microsoft.EntityFrameworkCore.Sqlite' with options: ");
+        }
+
+        [Fact]
+        public void TestEfCoreLoggingCheckFilterFunction()
+        {
+            bool MyFilterFunction(EventId eventId, LogLevel logLevel)
+            {
+                return eventId.Name == RelationalEventId.CommandExecuted.Name && logLevel == LogLevel.Information;
+            }
+
+            //SETUP
+            var logs = new List<string>();
+            var logToOptions = new LogToOptions
+            {
+                FilterFunction = MyFilterFunction
+            };
+            var options = SqliteInMemory.CreateOptionsWithLogTo<BookContext>(log => logs.Add(log), logToOptions);
+            using var context = new BookContext(options);
+            context.Database.EnsureCreated();
+            context.SeedDatabaseFourBooks();
+
+            //ATTEMPT 
+            var books = context.Books.Select(x => x.BookId).ToList();
+
+            //VERIFY
+            logs.All(l => l.StartsWith("Executed DbCommand ")).ShouldBeTrue();
+        }
+
+        [Fact]
+        public void TestEfCoreLoggingLogToOptionBad()
+        {
+            //SETUP
+            var logs = new List<string>();
+            var logToOptions = new LogToOptions
+            {
+                OnlyShowTheseEvents = new[] { CoreEventId.ContextInitialized },
+                OnlyShowTheseCategories = new[] { DbLoggerCategory.Database.Command.Name }
+            };
+
+            //ATTEMPT 
+            var ex = Assert.Throws<NotSupportedException>(() =>
+                SqliteInMemory.CreateOptionsWithLogTo<BookContext>(log => logs.Add(log), logToOptions));
+
+            //VERIFY
+            ex.Message.ShouldEqual("You can't define OnlyShowTheseCategories and OnlyShowTheseEvents at the same time.");
         }
 
         [Fact]

@@ -491,6 +491,7 @@
         <member name="T:TestSupport.EfHelpers.LogToOptions">
             <summary>
             This class allows you to define the various LogTo options
+            NOTE: You can only set a value for one of the three filters: OnlyShow... and FilterFunction
             </summary>
         </member>
         <member name="P:TestSupport.EfHelpers.LogToOptions.LogLevel">
@@ -513,6 +514,13 @@
             Defaults to null, i.e. not used 
             </summary>
         </member>
+        <member name="P:TestSupport.EfHelpers.LogToOptions.FilterFunction">
+            <summary>
+            This allows you to provide a method to filter the logs, for instance
+            bool MyFilterFunction(EventId eventId, LogLevel logLevel) {...}
+            Defaults to null, i.e. not used
+            </summary>
+        </member>
         <member name="P:TestSupport.EfHelpers.LogToOptions.LoggerOptions">
             <summary>
             This allows you to set format of the log message, for instance
@@ -520,34 +528,9 @@
             Defaults to null, which means no extra info is prepended to the message
             </summary>
         </member>
-        <member name="T:TestSupport.EfHelpers.MyLoggerProvider">
-            <summary>
-            Old logging provider, but kept as some unit test code still uses it
-            </summary>
-        </member>
-        <member name="M:TestSupport.EfHelpers.MyLoggerProvider.#ctor(System.Collections.Generic.List{TestSupport.EfHelpers.LogOutput},Microsoft.Extensions.Logging.LogLevel)">
-            <summary>
-            This is a logger provider that can be linked into a loggerFactory.
-            It will capture the logs and place them as strings into the provided logs parameter
-            </summary>
-            <param name="logs">required: a an initialised List<string> to hold any logs that are created</string></param>
-            <param name="logLevel">optional: the level from with you want to capture logs. Defaults to LogLevel.Information</param>
-        </member>
-        <member name="M:TestSupport.EfHelpers.MyLoggerProvider.CreateLogger(System.String)">
-            <summary>
-            Create a logger
-            </summary>
-            <param name="categoryName"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TestSupport.EfHelpers.MyLoggerProvider.Dispose">
-            <summary>
-            Displose - does nothing
-            </summary>
-        </member>
         <member name="T:TestSupport.EfHelpers.MyLoggerProviderActionOut">
             <summary>
-            This 
+            This provides a ILoggerProvider that returns logging output 
             </summary>
         </member>
         <member name="M:TestSupport.EfHelpers.MyLoggerProviderActionOut.#ctor(System.Action{TestSupport.EfHelpers.LogOutput},Microsoft.Extensions.Logging.LogLevel)">
@@ -852,7 +835,7 @@
             </summary>
             <param name="testClass">This should be 'this' in the test, which means the class name is added to the end of the database name</param>
             <param name="optionalMethodName">This is an optional string which, if present, is added to the end of the database name</param>
-            <param name="seperator">Optional (defaults to _). This is the character used to separate each part of the formed name</param>
+            <param name="separator">Optional (defaults to _). This is the character used to separate each part of the formed name</param>
             <returns></returns>
         </member>
         <member name="T:TestSupport.Helpers.TestData">

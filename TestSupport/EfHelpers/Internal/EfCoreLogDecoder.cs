@@ -3,12 +3,12 @@
 
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace TestSupport.EfHelpers.Internal
 {
     internal class EfCoreLogDecoder
     {
-        private const string EfCoreCommandExecutedEventId = "Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted";
         private const string ParameterStart = "[Parameters=[";
 
         private static readonly Regex ParamRegex = new Regex(@"(@p\d+|@__\w*?_\d+)=('(.*?)'|NULL)(\s\(\w*?\s=\s\w*\))*(?:,\s|\]).*?");
@@ -56,7 +56,7 @@ namespace TestSupport.EfHelpers.Internal
         /// <returns></returns>
         public static string DecodeMessage(LogOutput log)
         {
-            if (log.EventId.Name != EfCoreCommandExecutedEventId)
+            if (log.EventId.Name != RelationalEventId.CommandExecuted.Name)
                 return log.Message;
 
             var messageLines = log.Message.Split('\n').Select(x => x.Trim()).ToArray();
