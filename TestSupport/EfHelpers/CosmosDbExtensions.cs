@@ -1,8 +1,10 @@
 ﻿// Copyright (c) 2020 Jon P Smith, GitHub: JonPSmith, web: http://www.thereformedprogrammer.net/
 // Licensed under MIT license. See License.txt in the project root for license information.
 
+using System;
 using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
+using TestSupport.EfHelpers.Internal;
 
 namespace TestSupport.EfHelpers
 {
@@ -14,38 +16,93 @@ namespace TestSupport.EfHelpers
     {
         /// <summary>
         /// This creates Cosmos DB options where the Database/Container is held in the Azure Cosmos DB Emulator.
-        /// It uses the name of the object as the database name (normally "this", which is your unit test class.
-        /// For method-level uniqueness set makeMethodUnique to true to add the calling method to end of the database name
+        /// The name of the database is taken from the callingClass 
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="callingClass">this object is used to get the name of the database</param>
-        /// <param name="makeMethodUnique">optional: If set then add the calling method's name to the end of the object name.</param>
-        /// <param name="callingMember"></param>
+        /// <param name="builder">Optional: action that allows you to add extra options to the builder</param>
         /// <returns></returns>
-        public static DbContextOptions<T> GetCosmosDbToEmulatorOptions<T>(this object callingClass,
-            bool makeMethodUnique = false, [CallerMemberName] string callingMember = "") where T : DbContext
+        public static DbContextOptions<T> CreateUniqueClassCosmosDbEmulator<T>(this object callingClass, Action<DbContextOptionsBuilder<T>> builder = null) where T : DbContext
         {
-            var databaseName = callingClass.GetType().Name;
-            if (makeMethodUnique)
-                databaseName += callingMember;
-            return databaseName.GetCosmosDbToEmulatorOptions<T>();
+            return CreateOptionWithDatabaseName<T>(callingClass.GetType().Name, builder).Options;
+        }
+
+        /// <summary>
+        /// This creates the DbContextOptions options for a Azure Cosmos DB Emulator database while capturing EF Core's logging output. 
+        /// The name of the database is the type name of the callingClass parameter (normally this)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="callingClass">this should be this, i.e. the class you are in</param>
+        /// <param name="logAction">This action is called with each log output</param>
+        /// <param name="logToOptions">Optional: This allows you to define what logs you want and what format. Defaults to LogLevel.Information</param>
+        /// <param name="builder">Optional: action that allows you to add extra options to the builder</param>
+        /// <returns></returns>
+        public static DbContextOptions<T> CreateUniqueClassCosmosDbEmulatorWithLogTo<T>(this object callingClass,
+            Action<string> logAction,
+            LogToOptions logToOptions = null, Action<DbContextOptionsBuilder<T>> builder = null)
+            where T : DbContext
+        {
+            if (logAction == null) throw new ArgumentNullException(nameof(logAction));
+
+            return CreateOptionWithDatabaseName(callingClass.GetType().Name, builder)
+                .AddLogTo(logAction, logToOptions)
+                .Options;
         }
 
         /// <summary>
         /// This creates Cosmos DB options where the Database/Container is held in the Azure Cosmos DB Emulator.
-        /// The given string will be the database name
+        /// The name of the database is the type name of the callingClass parameter (normally this) plus the method name
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="databaseName">name to use for database name.</param>
+        /// <param name="callingClass">this object is used to get the name of the database</param>
+        /// <param name="builder">Optional: action that allows you to add extra options to the builder</param>
+        /// <param name="callingMember">Do not use: this is filled in by compiler</param>
         /// <returns></returns>
-        public static DbContextOptions<T> GetCosmosDbToEmulatorOptions<T>(this string databaseName) where T : DbContext
+        public static DbContextOptions<T> CreateUniqueMethodCosmosDbEmulator<T>(this object callingClass,
+            Action<DbContextOptionsBuilder<T>> builder = null, [CallerMemberName] string callingMember = "") where T : DbContext
         {
-            var builder = new DbContextOptionsBuilder<T>()
+            var databaseName = callingClass.GetType().Name;
+            
+                databaseName += callingMember;
+            return databaseName.CreateOptionWithDatabaseName<T>(builder).Options;
+        }
+
+        /// <summary>
+        /// This creates the DbContextOptions options for a Azure Cosmos DB Emulator database while capturing EF Core's logging output. 
+        /// The name of the database is the type name of the callingClass parameter (normally this) plus the method name
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="callingClass">this object is used to get the name of the database</param>
+        /// <param name="logAction">This action is called with each log output</param>
+        /// <param name="logToOptions">Optional: This allows you to define what logs you want and what format. Defaults to LogLevel.Information</param>
+        /// <param name="builder">Optional: action that allows you to add extra options to the builder</param>
+        /// <param name="callingMember">Do not use: this is filled in by compiler</param>
+        /// <returns></returns>
+        public static DbContextOptions<T> CreateUniqueMethodCosmosDbEmulatorWithLogTo<T>(this object callingClass,
+            Action<string> logAction,
+            LogToOptions logToOptions = null, Action<DbContextOptionsBuilder<T>> builder = null,
+            [CallerMemberName] string callingMember = "") where T : DbContext
+        {
+            var databaseName = callingClass.GetType().Name;
+
+            databaseName += callingMember;
+            return databaseName.CreateOptionWithDatabaseName<T>(builder).Options;
+        }
+
+        //------------------------------------------
+        //private methods
+
+        private static DbContextOptionsBuilder<T> CreateOptionWithDatabaseName<T>(this string databaseName, Action<DbContextOptionsBuilder<T>> builder) 
+            where T : DbContext
+        {
+            var localBuilder = new DbContextOptionsBuilder<T>()
                 .UseCosmos(
                     "https://localhost:8081",
                     "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==",
                     databaseName);
-            return builder.Options;
+            localBuilder.ApplyOtherOptionSettings();
+            builder?.Invoke(localBuilder);
+            return localBuilder;
         }
     }
 }

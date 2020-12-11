@@ -23,7 +23,7 @@
 
   <PropertyGroup>
     <PackageId>EfCore.TestSupport</PackageId>
-    <PackageVersion>5.0.0-preview005</PackageVersion>
+    <PackageVersion>5.0.0-preview006</PackageVersion>
     <Version>5.0.0</Version>
     <AssemblyVersion>5.0.0.0</AssemblyVersion>
     <FileVersion>5.0.0.0</FileVersion>
@@ -34,6 +34,7 @@
       A serious cleanup to the this library with BREAKING CHANGES
       BREAKING CHANGES
       - Altered SqliteInMemory methods to return a IDisposable options (disposes connection at the end of the test). THIS WILL BREAK YOUR CODE.
+      - Cosmos DB methods renames and extended
       REMOVED FEATURES
       - Removed EfSchemaCompare - going to its own library (but not there yet)
       - Removed SeedDatabase - use old 3.2.0 EfCore.TestSupport version

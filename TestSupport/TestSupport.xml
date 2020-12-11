@@ -335,25 +335,50 @@
             Extensions to provide Cosmos DB options where the Database/Container is held in the Azure Cosmos DB Emulator.
             </summary>
         </member>
-        <member name="M:TestSupport.EfHelpers.CosmosDbExtensions.GetCosmosDbToEmulatorOptions``1(System.Object,System.Boolean,System.String)">
+        <member name="M:TestSupport.EfHelpers.CosmosDbExtensions.CreateUniqueClassCosmosDbEmulator``1(System.Object,System.Action{Microsoft.EntityFrameworkCore.DbContextOptionsBuilder{``0}})">
             <summary>
             This creates Cosmos DB options where the Database/Container is held in the Azure Cosmos DB Emulator.
-            It uses the name of the object as the database name (normally "this", which is your unit test class.
-            For method-level uniqueness set makeMethodUnique to true to add the calling method to end of the database name
+            The name of the database is taken from the callingClass 
             </summary>
             <typeparam name="T"></typeparam>
             <param name="callingClass">this object is used to get the name of the database</param>
-            <param name="makeMethodUnique">optional: If set then add the calling method's name to the end of the object name.</param>
-            <param name="callingMember"></param>
+            <param name="builder">Optional: action that allows you to add extra options to the builder</param>
             <returns></returns>
         </member>
-        <member name="M:TestSupport.EfHelpers.CosmosDbExtensions.GetCosmosDbToEmulatorOptions``1(System.String)">
+        <member name="M:TestSupport.EfHelpers.CosmosDbExtensions.CreateUniqueClassCosmosDbEmulatorWithLogTo``1(System.Object,System.Action{System.String},TestSupport.EfHelpers.LogToOptions,System.Action{Microsoft.EntityFrameworkCore.DbContextOptionsBuilder{``0}})">
             <summary>
-            This creates Cosmos DB options where the Database/Container is held in the Azure Cosmos DB Emulator.
-            The given string will be the database name
+            This creates the DbContextOptions options for a Azure Cosmos DB Emulator database while capturing EF Core's logging output. 
+            The name of the database is the type name of the callingClass parameter (normally this)
             </summary>
             <typeparam name="T"></typeparam>
-            <param name="databaseName">name to use for database name.</param>
+            <param name="callingClass">this should be this, i.e. the class you are in</param>
+            <param name="logAction">This action is called with each log output</param>
+            <param name="logToOptions">Optional: This allows you to define what logs you want and what format. Defaults to LogLevel.Information</param>
+            <param name="builder">Optional: action that allows you to add extra options to the builder</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.CosmosDbExtensions.CreateUniqueMethodCosmosDbEmulator``1(System.Object,System.Action{Microsoft.EntityFrameworkCore.DbContextOptionsBuilder{``0}},System.String)">
+            <summary>
+            This creates Cosmos DB options where the Database/Container is held in the Azure Cosmos DB Emulator.
+            The name of the database is the type name of the callingClass parameter (normally this) plus the method name
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="callingClass">this object is used to get the name of the database</param>
+            <param name="builder">Optional: action that allows you to add extra options to the builder</param>
+            <param name="callingMember">Do not use: this is filled in by compiler</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestSupport.EfHelpers.CosmosDbExtensions.CreateUniqueMethodCosmosDbEmulatorWithLogTo``1(System.Object,System.Action{System.String},TestSupport.EfHelpers.LogToOptions,System.Action{Microsoft.EntityFrameworkCore.DbContextOptionsBuilder{``0}},System.String)">
+            <summary>
+            This creates the DbContextOptions options for a Azure Cosmos DB Emulator database while capturing EF Core's logging output. 
+            The name of the database is the type name of the callingClass parameter (normally this) plus the method name
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="callingClass">this object is used to get the name of the database</param>
+            <param name="logAction">This action is called with each log output</param>
+            <param name="logToOptions">Optional: This allows you to define what logs you want and what format. Defaults to LogLevel.Information</param>
+            <param name="builder">Optional: action that allows you to add extra options to the builder</param>
+            <param name="callingMember">Do not use: this is filled in by compiler</param>
             <returns></returns>
         </member>
         <member name="T:TestSupport.EfHelpers.DatabaseTidyHelper">
