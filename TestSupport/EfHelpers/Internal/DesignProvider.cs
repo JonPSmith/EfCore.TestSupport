@@ -43,10 +43,11 @@ namespace TestSupport.EfHelpers.Internal
         public static ServiceProvider GetDesignTimeProvider(this IDesignTimeServices designTimeService)
         {
             // Add base services for scaffolding
-            var serviceCollection = new ServiceCollection()
-                .AddEntityFrameworkDesignTimeServices()
-                .AddSingleton<IOperationReporter, OperationReporter>()
-                .AddSingleton<IOperationReportHandler, OperationReportHandler>();
+            var serviceCollection = new ServiceCollection();
+
+            serviceCollection.AddEntityFrameworkDesignTimeServices();
+            serviceCollection.AddSingleton<IOperationReporter, OperationReporter>();
+            serviceCollection.AddSingleton<IOperationReportHandler, OperationReportHandler>();
 
             designTimeService.ConfigureDesignTimeServices(serviceCollection);
             return serviceCollection.BuildServiceProvider();

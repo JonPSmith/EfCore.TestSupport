@@ -78,7 +78,7 @@ namespace Test.UnitTests.TestSupport
             //VERIFY
             result.Message.ShouldEqual("This message");
             result.NumRuns.ShouldEqual(10);
-            result.TotalTimeMilliseconds.ShouldBeInRange(10, 20);
+            result.TotalTimeMilliseconds.ShouldBeInRange(10, 50);
         }
 
 
@@ -93,7 +93,7 @@ namespace Test.UnitTests.TestSupport
 
             public void WriteLine(string format, params object[] args)
             {
-                throw new System.NotImplementedException();
+                LastWriteLine = string.Format(format, args);
             }
         }
     }
