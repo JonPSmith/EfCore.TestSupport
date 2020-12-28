@@ -1,5 +1,13 @@
 # Release notes
 
+## TODO
+
+- Update to EF Core 5.1
+- Update documentation
+  - Sort out old EfSchemaCompare
+- Merge to master
+- Update link to UnitTestExample image
+
 
 ## 5.0.0
 
@@ -21,16 +29,11 @@
    - `CreateUniqueMethodOptionsWithLogging<T>` - use ...ToLog version
    - `CreateEmptyViaWipe` - recommend `EnsureClean` or respawn
 
+
+---
+
+
 # Older versions of EfCore.TestSupport
-
-## Possible new features
-
-- Make EfSchemaCompare handle Views as well.
-
-## TODO
-
-- Improve EfSchemaCompare by detecting table sharing and account for nullable properties - see [breaking change](https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-3.0/breaking-changes#dependent-entities-sharing-the-table-with-the-principal-are-now-optional).
-- EF Core 3 - Owned Type class properties are always nullable.
 
 ## 3.2.0
 
