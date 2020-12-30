@@ -6,8 +6,10 @@
 - Update documentation
   - Sort out old EfSchemaCompare
 - Merge to master
-- Update link to UnitTestExample image
-
+- Create NuGet package
+- Update links in README
+  - To Version5UpgradeDocs file
+  - to UnitTestExample image
 
 ## 5.0.0
 
@@ -28,7 +30,6 @@
    - `CreateUniqueClassOptionsWithLogging<T>` - use ...ToLog version
    - `CreateUniqueMethodOptionsWithLogging<T>` - use ...ToLog version
    - `CreateEmptyViaWipe` - recommend `EnsureClean` or respawn
-
 
 ---
 

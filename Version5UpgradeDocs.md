@@ -5,11 +5,13 @@ This document provides information when converting to Version 5 of the `EfCore.T
 ## Summary of the changes
 
 1. The `SqliteInMemory.CreateOptions` etc. has changed and some of your unit tests might break. See section below.
+2. Nice new `EnsureClean` feature added for SQL Server. See docs on that.
 2. The EfSchemaCompare feature has been removed. If you need this then keep using the V3 version of EfCore.TestSupport (I do plan to create a library for EfSchemaCompare, but I haven't done that yet)
 3. Added SQLite/SQL Server options with looging using the new `LogTo` logging output and marked the `...WithLogging` versions as obsolete.
+4. Cosmos DB methods renames and extended.
 4. Removed InMemory Database helper as this provider isn't a good way to unit test. If you need it then use EF Core's In Memory database provider.
 5. Removed SeedDatabase - use old 3.2.0 EfCore.TestSupport version (very few people used this)
-6. Nice new `EnsureClean` feature added for SQL Server. See docs for that.
+
 
 ## Breaking change in SqliteInMemory options
 
@@ -133,3 +135,7 @@ public void TestSqliteThreeInstancesOk()
 *NOTE the call to `options.TurnOnDispose();` before the last application DbContext.*
 
 ## Removed features
+
+- You can find the EfSchemaCompare feature in the GitHub repo [EfCore.SchemaCompare](https://github.com/JonPSmith/EfCore.SchemaCompare) and its associated [NuGet package](https://www.nuget.org/packages/EfCore.SchemaCompare/).
+- The InMemory Database provider is not recommended by the EF Core team - see [this link](https://docs.microsoft.com/en-us/ef/core/testing/#approach-3-the-ef-core-in-memory-database) .
+5. Removed SeedDatabase - very few people used this, but you can get the code in the [Version3-2-0](https://github.com/JonPSmith/EfCore.TestSupport/tree/Version3-2-0) branch.
