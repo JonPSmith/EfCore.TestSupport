@@ -161,4 +161,4 @@ public void TestSqliteThreeInstancesOk()
 
 - You can find the EfSchemaCompare feature in the GitHub repo [EfCore.SchemaCompare](https://github.com/JonPSmith/EfCore.SchemaCompare) and its associated [NuGet package](https://www.nuget.org/packages/EfCore.SchemaCompare/).
 - The InMemory Database provider is not recommended by the EF Core team - see [this link](https://docs.microsoft.com/en-us/ef/core/testing/#approach-3-the-ef-core-in-memory-database) .
-5. Removed SeedDatabase - very few people used this, but you can get the code in the [Version3-2-0](https://github.com/JonPSmith/EfCore.TestSupport/tree/Version3-2-0) branch.
+- Removed SeedDatabase - very few people used this, but you can get the code in the [Version3-2-0](https://github.com/JonPSmith/EfCore.TestSupport/tree/Version3-2-0) branch.
