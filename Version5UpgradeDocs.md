@@ -101,7 +101,7 @@ public void TestSqliteTwoInstancesGood()
 {
     //SETUP
     var options = SqliteInMemory.CreateOptions<BookContext>();
-    options.TurnOffDispose();
+    options.StopNextDispose();
     using (var context = new BookContext(options))
     {
         context.Database.EnsureCreated();
