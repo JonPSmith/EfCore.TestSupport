@@ -2,14 +2,13 @@
 
 ## TODO
 
-- Update to EF Core 5.1
-- Update documentation
-  - Sort out old EfSchemaCompare
 - Merge to master
 - Create NuGet package
 - Update links in README
   - To Version5UpgradeDocs file
   - to UnitTestExample image
+- Update documentation
+  - Sort out old EfSchemaCompare
 
 ## 5.0.0
 
