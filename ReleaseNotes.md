@@ -2,7 +2,6 @@
 
 ## TODO
 
-- Create NuGet package
 - Update links in README
   - To Version5UpgradeDocs file
   - to UnitTestExample image
