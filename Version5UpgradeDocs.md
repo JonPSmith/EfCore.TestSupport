@@ -4,7 +4,7 @@ This document provides information when converting to Version 5 of the `EfCore.T
 
 ## Summary of the changes
 
-1. The `SqliteInMemory.CreateOptions` etc. has changed and some of your unit tests might break. See section below.
+1. BREAKING CHANGE: The `SqliteInMemory.CreateOptions` etc. has changed and some of your unit tests might break. See section below.
 2. Nice new `EnsureClean` feature added for SQL Server. See docs on that.
 2. The EfSchemaCompare feature has been removed. If you need this then keep using the V3 version of EfCore.TestSupport (I do plan to create a library for EfSchemaCompare, but I haven't done that yet)
 3. Added SQLite/SQL Server options with logging using the new `LogTo` logging output and marked the `...WithLogging` versions as obsolete.
