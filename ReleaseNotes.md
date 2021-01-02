@@ -2,9 +2,6 @@
 
 ## TODO
 
-- Update links in README
-  - To Version5UpgradeDocs file
-  - to UnitTestExample image
 - Update documentation
   - Sort out old EfSchemaCompare
 
