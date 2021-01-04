@@ -47,7 +47,7 @@ public void TestSqliteTwoInstancesBAD()
 }
 ```
 
-You have three options (best first):
+You have four options:
 
 1. **Quick and Easy**: Turn off Dispose using `options.TurnOffDispose()`
 2. **Best approach**: Have one instance of the application DbContext and use `ChangeTracker.Clear()`.
