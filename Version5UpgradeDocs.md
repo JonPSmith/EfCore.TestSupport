@@ -1,6 +1,8 @@
 # Upgrade documentation notes
 
-This document provides information when converting to Version 5 of the `EfCore.TestSupport` library.
+This document provides information when converting from EfCore.TestSupport version 3.2.0 to EfCore.TestSupport version 5 or higher.
+
+*NOTE: EfCore.TestSupport version 5 doesn't work with any EF Core version below 5.1.**
 
 ## Summary of the changes
 
@@ -17,7 +19,7 @@ This document provides information when converting to Version 5 of the `EfCore.T
 
 **If you use any of the `SqliteInMemory.CreateOptions...` from previous versions of EfCore.TestSupport, then its VERY LIKELY THAT IT WILL BREAK YOUR UNIT TESTS!!**
 
-The new `SqliteInMemory.CreateOptions<MyDbContext>()` method now returns a class that implements `DbContextOptions<MyDbContext>` needed by the database, but now also implements `IDisposable`. This is done to dispose Sqlite's connection (which contains the in-memory data) when the context is disposed. (I didn't do that in the the previous versions, and I should have.)
+The new `SqliteInMemory.CreateOptions<MyDbContext>()` method now returns a class that implements `DbContextOptions<MyDbContext>` needed by the database, but now also implements `IDisposable`. This is done to dispose Sqlite's connection (which contains the in-memory data) when the context is disposed. (I didn't do that in the previous versions, and I should have.)
 
 This means when the application DbContext using that option is disposed the `Dispose` method in the options class is also called and the connection is disposed.
 
