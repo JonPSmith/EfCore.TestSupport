@@ -2,9 +2,6 @@
 
 ## TODO
 
-- Update documentation
-  - Sort out old EfSchemaCompare
-
 ## 5.0.0
 
 - A serious cleanup to the this library with BREAKING CHANGES
@@ -25,10 +22,14 @@
    - `CreateUniqueMethodOptionsWithLogging<T>` - use ...ToLog version
    - `CreateEmptyViaWipe` - recommend `EnsureClean` or respawn
 
+*NOTE:It is no longer possible to detect the EF Core version via the netstandard so now it is done via the first number in the library's version. For instance EfCore.TestSupport, version 5.?.? works with EF Core 5.?.?.*
+
 ---
 
 
 # Older versions of EfCore.TestSupport
+
+These support EF Core 2.1, 3.0, and 3.1.
 
 ## 3.2.0
 
