@@ -2,7 +2,13 @@
 
 This document provides information when converting from EfCore.TestSupport version 3.2.0 to EfCore.TestSupport version 5 or higher.
 
-*NOTE: EfCore.TestSupport version 5 doesn't work with any EF Core version below 5.1.**
+*NOTE: EfCore.TestSupport version 5 doesn't work with any EF Core version below 5.0.1.**
+
+## You don't have to upgrade is you don't want to
+
+The first thing to say is you don't need to upgrade to EfCore.TestSupport version 5. [EfCore.TestSupport, version 3.2.0](https://www.nuget.org/packages/EfCore.TestSupport/3.2.0) will work with EF Core 5, apart from the EfSchemaCompare feature, which now has [separate library](https://github.com/JonPSmith/EfCore.SchemaCompare). To do this you have to load the EF Core 5's NuGet packaages, which will take precedence over the versions in the  EfCore.TestSupport library.
+
+If you are using EfCore.TestSupport's SqliteInMemory.CreateOptions` methods, then a lot of unit tests could break. Read the rest of this document to decide is you want to upgrade.
 
 ## Summary of the changes
 
