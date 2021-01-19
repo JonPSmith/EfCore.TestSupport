@@ -25,20 +25,36 @@ namespace Test.UnitTests.TestDataLayer
         }
 
         [Fact]
-        public void TestExampleSqlDatabaseOk()
+        public void TestSqlDatabaseEnsureCleanOk()
         {
             //SETUP
             var options = this.CreateUniqueClassOptions<BookContext>();
-            using (var context = new BookContext(options))
-            {
-                context.Database.EnsureClean();
+            using var context = new BookContext(options);
+            
+            context.Database.EnsureClean();
 
-                //ATTEMPT
-                context.SeedDatabaseFourBooks();
+            //ATTEMPT
+            context.SeedDatabaseFourBooks();
 
-                //VERIFY
-                context.Books.Count().ShouldEqual(4);
-            }
+            //VERIFY
+            context.Books.Count().ShouldEqual(4);
+        }
+
+        [Fact]
+        public void TestEnsureDeletedEnsureCreatedOk()
+        {
+            //SETUP
+            var options = this.CreateUniqueClassOptions<BookContext>();
+            using var context = new BookContext(options);
+            
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+
+            //ATTEMPT
+            context.SeedDatabaseFourBooks();
+
+            //VERIFY
+            context.Books.Count().ShouldEqual(4);
         }
 
         [Fact]
