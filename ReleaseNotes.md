@@ -9,7 +9,7 @@
    - Altered SqliteInMemory methods to return a IDisposable options (disposes connection at the end of the test). THIS WILL BREAK YOUR CODE.
   - Cosmos DB methods renames and extended
 - REMOVED FEATURES
-   - Removed EfSchemaCompare - going to its own library (but not there yet)
+   - Removed EfSchemaCompare - its in its own library, [EfCore.SchemaCompare](https://github.com/JonPSmith/EfCore.SchemaCompare).
    - Removed SeedDatabase - use old 3.2.0 EfCore.TestSupport version
    - Removed InMemory Database helper - use EF Core's In Memory database
 - New features
