@@ -4,7 +4,7 @@
 using System;
 using System.Linq;
 using DataLayer.BookApp;
-using DataLayer.EfCode.BookApp;
+using DataLayer.BookApp.EfCode;
 using DataLayer.SpecialisedEntities;
 using Microsoft.EntityFrameworkCore;
 using Test.Helpers;

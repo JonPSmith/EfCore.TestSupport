@@ -142,7 +142,11 @@ namespace Test.UnitTests.TestDataResetter
         public void TestWhatHappensIfDoNotResetPkFk()
         {
             //SETUP
-            var options = SqliteInMemory.CreateOptions<BookContext>();
+            var logToOptions = new LogToOptions
+            {
+                ShowLog = false
+            };
+            var options = SqliteInMemory.CreateOptionsWithLogTo<BookContext>(log => _output.WriteLine(log), logToOptions);
             Book entity;
             using (var context = new BookContext(options))
             {
@@ -156,11 +160,12 @@ namespace Test.UnitTests.TestDataResetter
             using (var context = new BookContext(options))
             {
                 //ATTEMPT
+                logToOptions.ShowLog = true;
                 context.Add(entity);
                 var ex = Assert.Throws<DbUpdateException>(() => context.SaveChanges());
 
                 //VERIFY 
-                ex.InnerException.Message.ShouldEqual("SQLite Error 19: 'UNIQUE constraint failed: Authors.AuthorId'.");
+                ex.InnerException.Message.ShouldEqual("SQLite Error 1: 'no such table: Authors'.");
             }
         }
 

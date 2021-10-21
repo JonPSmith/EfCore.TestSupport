@@ -3,7 +3,7 @@
 
 using System.Linq;
 using DataLayer.BookApp;
-using DataLayer.EfCode.BookApp;
+using DataLayer.BookApp.EfCode;
 using Microsoft.EntityFrameworkCore;
 using Test.Helpers;
 using TestSupport.EfHelpers;

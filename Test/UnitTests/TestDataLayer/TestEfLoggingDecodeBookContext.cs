@@ -107,7 +107,7 @@ namespace Test.UnitTests.TestDataLayer
                 sqlCommand[0].ShouldEqual(
                     "SELECT TOP(2) [b].[BookId], [b].[Description], [b].[ImageUrl], [b].[Price], [b].[PublishedOn], [b].[Publisher], [b].[SoftDeleted], [b].[Title]");
                 sqlCommand[1].ShouldEqual("FROM [Books] AS [b]");
-                sqlCommand[2].ShouldEqual("WHERE ([b].[SoftDeleted] <> CAST(1 AS bit)) AND ([b].[BookId] = '1')");
+                sqlCommand[2].ShouldEqual("WHERE ([b].[SoftDeleted] = CAST(0 AS bit)) AND ([b].[BookId] = '1')");
             }
         }
     }

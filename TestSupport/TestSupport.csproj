@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net6.0</TargetFrameworks>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,10 +19,6 @@
     <PackageReference Include="xunit.assert" Version="2.4.1" />
     <PackageReference Include="xunit.core" Version="2.4.1" />
   </ItemGroup>
-
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-  </PropertyGroup>
 
   <PropertyGroup>
     <PackageId>EfCore.TestSupport</PackageId>
@@ -64,14 +61,5 @@
   <ItemGroup>
     <None Include="EfCoreTestSupportNuGetIcon128.png" Pack="true" PackagePath="\" />
   </ItemGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\TestSupport.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
-    <DocumentationFile>TestSupport.xml</DocumentationFile>
-    <OutputPath>bin\Release\</OutputPath>
-  </PropertyGroup>
 
 </Project>
