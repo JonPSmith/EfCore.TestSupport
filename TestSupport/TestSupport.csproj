@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GenericServices.StatusGeneric" Version="1.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0-rc.2.21480.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0-rc.2.21480.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.0-rc.2.21480.5" />
@@ -30,24 +29,9 @@
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-      A serious cleanup to the this library with BREAKING CHANGES
-      BREAKING CHANGES
-      - Altered SqliteInMemory methods to return a IDisposable options (disposes connection at the end of the test). THIS WILL BREAK YOUR CODE.
-      - Cosmos DB methods renames and extended
-      REMOVED FEATURES
-      - Removed EfSchemaCompare - going to its own library (but not there yet)
-      - Removed SeedDatabase - use old 3.2.0 EfCore.TestSupport version
-      - Remove InMemory Database helper - use EF Core's In Memory database
-      NEW FEATURES
-      - Add `EnsureClean`. This clears the schema and data and set up new model (only for SQL Server)
-      - SqliteInMemory now has CreateOptionsWithLogTo extension method
-      - SqlServer now has CreateUniqueClassOptionsWithLogTo and CreateUniqueMethodOptionsWithLogTo extension methods
-      MARKED AS OBSOLETE
-      - CreateOptionsWithLogging - use ...ToLog version
-      - CreateUniqueClassOptionsWithLogging - use ...ToLog version
-      - CreateUniqueMethodOptionsWithLogging - use ...ToLog version
-      - CreateEmptyViaWipe - recommend `EnsureClean` or respawn
-    </PackageReleaseNotes>
+- Updated to Net6 preview
+- Added the Seed Database feature at request of users
+	</PackageReleaseNotes>
     <Copyright>Copyright (c) 2020 Jon P Smith. Licenced under MIT licence</Copyright>
     <PackageTags>Entity Framework Core, xUnit</PackageTags>
     <IsPackable>true</IsPackable>

@@ -1,9 +1,9 @@
 # Release notes
 
-## 6.0.0
+## 6.0.0-preview001
 
-- Updated to Net6
-- Added 
+- Updated to Net6 preview
+- Added the Seed Database feature at request of users
 
 ## 5.0.0
 
