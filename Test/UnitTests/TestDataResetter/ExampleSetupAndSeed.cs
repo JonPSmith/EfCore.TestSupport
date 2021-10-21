@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using DataLayer.BookApp;
 using DataLayer.BookApp.EfCode;
+using DataLayer.DddBookApp;
+using DataLayer.DddBookApp.EfCode;
 using Microsoft.EntityFrameworkCore;
 using RandomNameGeneratorLibrary;
 using Test.Helpers;
@@ -142,11 +144,8 @@ namespace Test.UnitTests.TestDataResetter
         public void TestWhatHappensIfDoNotResetPkFk()
         {
             //SETUP
-            var logToOptions = new LogToOptions
-            {
-                ShowLog = false
-            };
-            var options = SqliteInMemory.CreateOptionsWithLogTo<BookContext>(log => _output.WriteLine(log), logToOptions);
+            var options = SqliteInMemory.CreateOptions<BookContext>();
+            options.StopNextDispose();
             Book entity;
             using (var context = new BookContext(options))
             {
@@ -160,12 +159,12 @@ namespace Test.UnitTests.TestDataResetter
             using (var context = new BookContext(options))
             {
                 //ATTEMPT
-                logToOptions.ShowLog = true;
                 context.Add(entity);
                 var ex = Assert.Throws<DbUpdateException>(() => context.SaveChanges());
 
                 //VERIFY 
-                ex.InnerException.Message.ShouldEqual("SQLite Error 1: 'no such table: Authors'.");
+                //Odd error. Used to be "SQLite Error 19: 'UNIQUE constraint failed: Authors.AuthorId'." in EF Core 5
+                ex.InnerException.Message.ShouldEqual("SQLite Error 19: 'UNIQUE constraint failed: Authors.AuthorId'.");
             }
         }
 
@@ -193,6 +192,31 @@ namespace Test.UnitTests.TestDataResetter
                 context.Books.First().Title.ShouldEqual("new title");
                 context.Books.Count().ShouldEqual(4);
                 context.Authors.Count().ShouldEqual(3);
+            }
+        }
+
+        [Fact]
+        public void ExampleDDDSeedDatabase()
+        {
+            //SETUP
+            var options = SqliteInMemory.CreateOptions<DddBookContext>();
+            using (var context = new DddBookContext(options))
+            {
+                //2a. make sure you have an empty database
+                context.Database.EnsureCreated();
+                //2b. read the entities back from the JSON file
+                var entities = "DDDExampleDatabase".ReadSeedDataFromJsonFile<List<DddBook>>();
+                //2c. Add the data to the database and save
+                context.AddRange(entities);
+                context.SaveChanges();
+
+                //ATTEMPT
+                //... run your tests here
+
+                //VERIFY 
+                context.DddBooks.First().Title.ShouldEqual("Refactoring");
+                context.DddBooks.Count().ShouldEqual(4);
+                context.DddAuthors.Count().ShouldEqual(3);
             }
         }
 

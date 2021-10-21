@@ -58,37 +58,12 @@ namespace Test.UnitTests.TestDataResetter
         }
 
         [Fact]
-        public void TestDddSeedDatabaseFourBooksDataResetterAndSerialize()
-        {
-            //SETUP
-            var options = SqliteInMemory.CreateOptions<DddBookContext>();
-            using (var context = new DddBookContext(options))
-            {
-                context.Database.EnsureCreated();
-                context.SeedDatabaseFourBooks();
-
-                var entities = context.DddBooks
-                    .Include(x => x.Reviews)
-                    .Include(x => x.AuthorsLink)
-                        .ThenInclude(x => x.DddAuthor)
-                    .ToList();
-
-                //ATTEMPT
-               // entities[0].AuthorsLink.First().DddAuthor.BooksLink.Last().DddBook.ShouldEqual(entities[1]);
-               // entities[1].AuthorsLink.First().DddAuthor.BooksLink.First().DddBook.ShouldEqual(entities[0]);
-
-                var jsonString = entities.DefaultSerializeToJson();
-
-                //VERIFY
-            }
-        }
-
-        [Fact]
         public void TestDddSeedDatabaseFourBooksDataResetter()
         {
             List<DddBook> entities;
             //SETUP
             var options = SqliteInMemory.CreateOptions<DddBookContext>();
+            options.StopNextDispose();
             using (var context = new DddBookContext(options))
             {
                 context.Database.EnsureCreated();
@@ -97,7 +72,7 @@ namespace Test.UnitTests.TestDataResetter
                 entities = context.DddBooks
                     .Include(x => x.Reviews)
                     .Include(x => x.AuthorsLink)
-                    .ThenInclude(x => x.DddAuthor)
+                        .ThenInclude(x => x.DddAuthor)
                     .ToList();
             }
             using (var context = new DddBookContext(options))
@@ -229,6 +204,7 @@ namespace Test.UnitTests.TestDataResetter
         {
             //SETUP
             var options = SqliteInMemory.CreateOptions<DddBookContext>();
+            options.StopNextDispose();
             DddBook entity;
             using (var context = new DddBookContext(options))
             {
@@ -246,6 +222,7 @@ namespace Test.UnitTests.TestDataResetter
                 var ex = Assert.Throws<DbUpdateException>(() => context.SaveChanges());
 
                 //VERIFY 
+                //Odd error. Used to be "SQLite Error 19: 'UNIQUE constraint failed: DddAuthors.AuthorId'." in EF Core 5
                 ex.InnerException.Message.ShouldEqual("SQLite Error 19: 'UNIQUE constraint failed: DddAuthors.AuthorId'.");
             }
         }
