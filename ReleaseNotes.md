@@ -1,6 +1,9 @@
 # Release notes
 
-## TODO
+## 6.0.0
+
+- Updated to Net6
+- Added 
 
 ## 5.0.0
 
