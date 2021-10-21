@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using TestSupport.SeedDatabase.Internal;
 
 namespace TestSupport.SeedDatabase

@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using Microsoft.Data.SqlClient;
 #endif
 using System.Reflection;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using TestSupport.Helpers;
