@@ -1,9 +1,10 @@
 # Release notes
 
-## 6.0.0-preview001
+## 6.0.0-priview001
 
-- Updated to Net6 preview
-- Added the Seed Database feature at request of users
+- Updated to Net6-rc.2 preview
+- Added PostgreSQL database helpers
+- Added the Seed Database feature back in at request of users
 
 ## 5.0.0
 

@@ -3,6 +3,7 @@
 
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Npgsql;
 using TestSupport.Helpers;
 using Xunit;
 using Xunit.Extensions.AssertExtensions;
@@ -107,6 +108,53 @@ namespace Test.UnitTests.TestSupport
             var newDatabaseName = new SqlConnectionStringBuilder(con).InitialCatalog;
             newDatabaseName.ShouldEqual($"{orgDbName}_{typeof(TestAppSettings).Name}_ExtraMethodName");
         }
+
+        [Fact]
+        public void GetUniquePostgreSqlConnectionStringOk()
+        {
+            //SETUP
+            var config = AppSettings.GetConfiguration();
+            var orgDbName = new NpgsqlConnectionStringBuilder(config.GetConnectionString(AppSettings.PostgreSqlConnectionString)).Database;
+
+            //ATTEMPT
+            var con = this.GetUniquePostgreSqlConnectionString();
+
+            //VERIFY
+            var newDatabaseName = new NpgsqlConnectionStringBuilder(con).Database;
+            newDatabaseName.ShouldEqual($"{orgDbName}_{GetType().Name}");
+        }
+
+        [Fact]
+        public void GetUniquePostgreSqlConnectionStringDifferentSeperatorOk()
+        {
+            //SETUP
+            var config = AppSettings.GetConfiguration();
+            var orgDbName = new NpgsqlConnectionStringBuilder(config.GetConnectionString(AppSettings.PostgreSqlConnectionString)).Database;
+
+            //ATTEMPT
+            var con = this.GetUniquePostgreSqlConnectionString(null, '.');
+
+            //VERIFY
+            var newDatabaseName = new NpgsqlConnectionStringBuilder(con).Database;
+            newDatabaseName.ShouldEqual($"{orgDbName}.{GetType().Name}");
+        }
+
+        [Fact]
+        public void GetUniquePostgreSqlConnectionStringWithExtraMethodNameOk()
+        {
+            //SETUP
+            var config = AppSettings.GetConfiguration();
+            var orgDbName = new NpgsqlConnectionStringBuilder(config.GetConnectionString(AppSettings.PostgreSqlConnectionString)).Database;
+
+            //ATTEMPT
+            var con = this.GetUniquePostgreSqlConnectionString("ExtraMethodName");
+
+            //VERIFY
+            var newDatabaseName = new NpgsqlConnectionStringBuilder(con).Database;
+            newDatabaseName.ShouldEqual($"{orgDbName}_{typeof(TestAppSettings).Name}_ExtraMethodName");
+        }
+
+
 
         [Fact]
         public void GetMyIntOk()

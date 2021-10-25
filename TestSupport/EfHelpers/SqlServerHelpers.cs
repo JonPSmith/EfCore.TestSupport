@@ -17,11 +17,11 @@ namespace TestSupport.EfHelpers
     {
         /// <summary>
         /// This creates the DbContextOptions  options for a SQL server database, 
-        /// where the database name is formed using the appsetting's DefaultConnection with the class name as a prefix.
+        /// where the database name is formed using the appsetting's UnitTestConnection with the class name as a prefix.
         /// That is, the database is unique to the object provided
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="callingClass">this should be this, i.e. the class you are in</param>
+        /// <param name="callingClass">this should be this, i.e. the test class you are in</param>
         /// <param name="builder">Optional: action that allows you to add extra options to the builder</param>
         /// <returns></returns>
         public static DbContextOptions<T> CreateUniqueClassOptions<T>(this object callingClass, Action<DbContextOptionsBuilder<T>> builder = null)

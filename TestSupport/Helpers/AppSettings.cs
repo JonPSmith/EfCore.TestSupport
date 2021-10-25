@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Npgsql;
 
 namespace TestSupport.Helpers
 {
@@ -15,9 +16,14 @@ namespace TestSupport.Helpers
     public static class AppSettings
     {
         /// <summary>
-        /// This is the default connection name that the AppSetting class expects
+        /// This is the default SQL Server database connection name that the AppSetting class expects
         /// </summary>
         public const string UnitTestConnectionStringName = "UnitTestConnection";
+
+        /// <summary>
+        /// This is the default PostgreSql database connection name that the AppSetting class expects
+        /// </summary>
+        public const string PostgreSqlConnectionString = "PostgreSqlConnection";
 
         /// <summary>
         /// Your unit test database name must end with this string.
@@ -25,7 +31,10 @@ namespace TestSupport.Helpers
         /// </summary>
         public const string RequiredEndingToUnitTestDatabaseName = "Test";
 
-        private const string AppSettingFilename = "appsettings.json";
+        /// <summary>
+        /// This is the default appsettings file name where EfCore.TestSupport will look for connection strings
+        /// </summary>
+        public const string AppSettingFilename = "appsettings.json";
 
         /// <summary>
         /// This will look for a appsettings.json file in the top level of the calling assembly and read content
@@ -68,7 +77,7 @@ namespace TestSupport.Helpers
 
 
         /// <summary>
-        /// This creates a unique database name based on the test class name, and an optional extra name
+        /// This creates a unique SQL Server database name based on the test class name, and an optional extra name
         /// </summary>
         /// <param name="testClass">This should be 'this' in the test, which means the class name is added to the end of the database name</param>
         /// <param name="optionalMethodName">This is an optional string which, if present, is added to the end of the database name</param>
@@ -89,6 +98,32 @@ namespace TestSupport.Helpers
             if (!string.IsNullOrEmpty(optionalMethodName)) extraDatabaseName += $"{separator}{optionalMethodName}";
 
             builder.InitialCatalog += extraDatabaseName;
+
+            return builder.ToString();
+        }
+
+        /// <summary>
+        /// This creates a unique PostgreSql database name based on the test class name, and an optional extra name
+        /// </summary>
+        /// <param name="testClass">This should be 'this' in the test, which means the class name is added to the end of the database name</param>
+        /// <param name="optionalMethodName">This is an optional string which, if present, is added to the end of the database name</param>
+        /// <param name="separator">Optional (defaults to _). This is the character used to separate each part of the formed name</param>
+        /// <returns></returns>
+        public static string GetUniquePostgreSqlConnectionString(this object testClass, string optionalMethodName = null, char separator = '_')
+        {
+            var config = GetConfiguration(Assembly.GetAssembly(testClass.GetType()));
+            var orgConnect = config.GetConnectionString(PostgreSqlConnectionString);
+            if (string.IsNullOrEmpty(orgConnect))
+                throw new InvalidOperationException($"Your {AppSettingFilename} file isn't set up for the '{PostgreSqlConnectionString}'.");
+            var builder = new NpgsqlConnectionStringBuilder(orgConnect);
+            if (!builder.Database.EndsWith(RequiredEndingToUnitTestDatabaseName))
+                throw new InvalidOperationException($"The database name in your connection string must end with '{RequiredEndingToUnitTestDatabaseName}', but is '{builder.Database}'." +
+                    " This is a safety measure to help stop DeleteAllUnitTestDatabases from deleting production databases.");
+
+            var extraDatabaseName = $"{separator}{testClass.GetType().Name}";
+            if (!string.IsNullOrEmpty(optionalMethodName)) extraDatabaseName += $"{separator}{optionalMethodName}";
+
+            builder.Database += extraDatabaseName;
 
             return builder.ToString();
         }
