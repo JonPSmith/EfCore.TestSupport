@@ -3,10 +3,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 using Respawn;
@@ -21,6 +23,8 @@ namespace Test.Helpers
     /// </summary>
     public static class PostgreSqlHelpers
     {
+        private const string DefaultPostgreSqlSchemaName = "public";
+
         /// <summary>
         /// This creates the DbContextOptions  options for a PostgreSql database, 
         /// where the database name is formed using the appsetting's PostgreSqlConnection with the class name as a prefix.
@@ -99,13 +103,41 @@ namespace Test.Helpers
         {
             if(!context.Database.EnsureCreated())
             {
-                //Already created, so wipe it using respwan
+                //the database arealy exists, so we just need to empty the tables
+
                 var connectionString = context.Database.GetConnectionString();
-                using (var conn = new NpgsqlConnection(connectionString))
+                //THIS WAS SLOWER THAN USING RESPAWN
+                //var schemaNames = context.Model.GetEntityTypes().Select(entity =>
+                //    (string?)entity.GetAnnotation(RelationalAnnotationNames.Schema).Value)
+                //    .Distinct().ToList();
+                //if (schemaNames.Count() == 1)
+                //{
+                //    //There is only one schema name so we can use the quick way
+                //    //see https://stackoverflow.com/questions/3327312/how-can-i-drop-all-the-tables-in-a-postgresql-database
+
+                //    var schemaName = schemaNames[0] ?? DefaultPostgreSqlSchemaName;
+
+                //    //This removes all the tables
+                //    connectionString.ExecuteScalars(
+                //        $"DROP SCHEMA {schemaName} CASCADE",
+                //        $"CREATE SCHEMA {schemaName}",
+                //        $"GRANT ALL ON SCHEMA {schemaName} TO postgres",
+                //        $"GRANT ALL ON SCHEMA {schemaName} TO public"
+                //        );
+                //    //Now add the tables to the database
+                //    context.Database.EnsureCreated();
+                //}
+                //else
                 {
-                    await conn.OpenAsync();
-                    await EmptyCheckpoint.Reset(conn);
+                    //mutiple schema names, so use respawn approach
+                    using (var conn = new NpgsqlConnection(connectionString))
+                    {
+                        await conn.OpenAsync();
+                        await EmptyCheckpoint.Reset(conn);
+                    }
                 }
+
+
             };
         }
 
@@ -128,30 +160,33 @@ namespace Test.Helpers
             builder.Database = "postgres";
             foreach (var databaseName in databaseNamesToDelete)
             {
-                using (NpgsqlConnection conn = new NpgsqlConnection(builder.ToString()))
-                {
-                    void ExecuteScalar(string cmdText)
-                    {
-                        using (NpgsqlCommand cmd = new NpgsqlCommand(cmdText, conn))
-                        {
-                            var result = cmd.ExecuteScalar();
-                        }
-                    }
-
-                    conn.Open();
-                    //The following commands were taken from EF Core
-                    //also see https://www.postgresqltutorial.com/postgresql-drop-database/ for another form
-                    ExecuteScalar($"REVOKE CONNECT ON DATABASE \"{databaseName}\" FROM PUBLIC");                  
-                    ExecuteScalar("SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity " +
-                        $"WHERE datname = '{databaseName}'");
-                    ExecuteScalar($"DROP DATABASE \"{databaseName}\"");
-                }
+                builder.ToString().ExecuteScalars(
+                    $"REVOKE CONNECT ON DATABASE \"{databaseName}\" FROM PUBLIC",
+                    "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity " +
+                        $"WHERE datname = '{databaseName}'",
+                    $"DROP DATABASE \"{databaseName}\""
+                );
             }
             return databaseNamesToDelete.Count;
         }
 
         //------------------------------------
         //private methods
+
+        private static void ExecuteScalars(this string connectionString, params string[] commands)
+        {
+            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                foreach(var commandText in commands)
+                {
+                    using (NpgsqlCommand cmd = new NpgsqlCommand(commandText, conn))
+                    {
+                        var result = cmd.ExecuteScalar();
+                    }
+                }
+            }
+        }
 
         private static DbContextOptionsBuilder<T> CreatePostgreSqlOptionWithDatabaseName<T>(object callingClass,
             string callingMember, Action<DbContextOptionsBuilder<T>> extraOptions)
