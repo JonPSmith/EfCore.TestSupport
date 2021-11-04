@@ -38,7 +38,8 @@ namespace Test.UnitTests.TestDataLayer
 
                 //ATTEMPT
                 logToOptions.ShowLog = true;
-                context.Database.EnsureClean();
+                using (new TimeThings(_output, "Time to create a database"))
+                    context.Database.EnsureClean();
                 logToOptions.ShowLog = false;
 
                 //VERIFY
@@ -85,7 +86,8 @@ namespace Test.UnitTests.TestDataLayer
                 context.Dependents.Count().ShouldEqual(1);
 
                 //ATTEMPT
-                context.Database.EnsureClean();
+                using (new TimeThings(_output, "Time to clean a SQL database"))
+                    context.Database.EnsureClean();
 
                 //VERIFY
                 context.TopClasses.Count().ShouldEqual(0);
