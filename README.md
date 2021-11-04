@@ -1,17 +1,14 @@
 # EfCore.TestSupport
 
-This NuGet package containing methods to help you unit test applications that use [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/index) for database access. This readme provides links to the documentation in the [EfCore.TestSupport wiki](https://github.com/JonPSmith/EfCore.TestSupport/wiki). Also see [Release Notes](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/ReleaseNotes.md) for information on changes.
+This NuGet package containing methods to help test applications that use [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/index) for database access. This readme provides links to the documentation in the [EfCore.TestSupport wiki](https://github.com/JonPSmith/EfCore.TestSupport/wiki). Also see [Release Notes](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/ReleaseNotes.md) for information on changes.
 
-**NOTE:** *The first number in the version number of this library defines what version of EF Core it works for. e.g. EfCore.TestSupport version 5 is works with to EF Core 5. If are using the older versions of EF Core you need [EfCore.TestSupport, version 3.2.0](https://www.nuget.org/packages/EfCore.TestSupport/3.2.0).*
+_NOTE: Version 5.1.0 and above of this library supports multiple versions of EF Core 5._
+
+- _Version 5.1.0 supports EF Core 5.10 and EF Core 6._ 
 
 **WARNING: If you are updating from the original EfCore.TestSupport (2.1 or 3), then you should read the [Version5UpgradeDocs.md](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/Version5UpgradeDocs.md) file as there are some breaking changes in this version.**
 
-This project is open-source (MIT licence). 
-
-Please don't add a pull request without first contacting me via an issue containing the reason/idea first. 
-
-The EfCore.TestSupport library is available on [NuGet as EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/) and is an open-source library under the MIT licence. See [ReleaseNotes](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/ReleaseNotes.md) for details of changes and information on versions before EF Core 5.
-
+The EfCore.TestSupport library is available on [NuGet as EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/) and is an open-source library under the MIT license. See [ReleaseNotes](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/ReleaseNotes.md) for details of changes and information on versions before EF Core 5.
 
 ## Documentation
 
@@ -20,7 +17,7 @@ The NuGet package [EfCore.TestSupport](https://www.nuget.org/packages/EfCore.Tes
 *NOTE: The techniques are explained in much more details in chapter 17 of the book [Entity Framework in Action, second edition](https://bit.ly/EfCoreBookEd2).*
 
 Here is an image covering just a few of the methods available in this library.  
- 
+
 ![Examples of library methods in use](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/UnitTestExample.png)
 
 The various groups of tools are:
@@ -41,7 +38,4 @@ See [Test Data tools](https://github.com/JonPSmith/EfCore.TestSupport/wiki/6.-Te
 See [Run SQL Script](https://github.com/JonPSmith/EfCore.TestSupport/wiki/7.-Run-SQL-Script).
 9. Tools for capturing EF Core logging.  
 See [Capture EF Core logging](https://github.com/JonPSmith/EfCore.TestSupport/wiki/8.-Capture-EF-Core-logging).
-
-
-
 
