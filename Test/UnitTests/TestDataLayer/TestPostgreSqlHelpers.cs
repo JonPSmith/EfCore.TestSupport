@@ -81,7 +81,13 @@ namespace Test.UnitTests.TestDataLayer
         public async Task TestEnsureCreatedAndEmptyPostgreSqlOk()
         {
             //SETUP
-            var options = this.CreatePostgreSqlUniqueDatabaseOptions<BookContext>();
+            var logOptions = new LogToOptions
+            {
+                ShowLog = false,
+                LogLevel = Microsoft.Extensions.Logging.LogLevel.Debug,
+                LoggerOptions = Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.UtcTime
+            };
+            var options = this.CreatePostgreSqlUniqueClassOptionsWithLogTo<BookContext>(log => _output.WriteLine(log), logOptions);
             using (var context = new BookContext(options))
             {
                 context.Database.EnsureCreated();
@@ -90,10 +96,12 @@ namespace Test.UnitTests.TestDataLayer
             using (var context = new BookContext(options))
             {
                 //ATTEMPT
+                logOptions.ShowLog = true;
                 using (new TimeThings(_output, "Time to empty database"))
                 {
                     await context.EnsureCreatedAndEmptyPostgreSqlAsync();
                 }
+                logOptions.ShowLog = false;
 
                 //VERIFY
                 context.Books.Count().ShouldEqual(0);
