@@ -131,31 +131,6 @@ namespace Test.UnitTests.TestDataLayer
         }
 
         [Fact]
-        public void TestCreateEmptyViaWipe()
-        {
-            //SETUP
-            var options = this.CreateUniqueMethodOptions<BookContext>();
-            using (var context = new BookContext(options))
-            {
-                context.Database.EnsureCreated();
-                context.SeedDatabaseDummyBooks(100);
-            }
-            using (var context = new BookContext(options))
-            {
-                //ATTEMPT
-                using(new TimeThings(_output, "Time to wipe the database"))
-                {
-#pragma warning disable 618
-                    context.CreateEmptyViaWipe();
-#pragma warning restore 618
-                }
-
-                //VERIFY
-                context.Books.Count().ShouldEqual(0);
-            }
-        }
-
-        [Fact]
         public void TestAddExtraBuilderOptions()
         {
             //SETUP

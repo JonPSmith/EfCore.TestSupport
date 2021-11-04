@@ -1,10 +1,11 @@
 # Release notes
 
-## 6.0.0-priview001
+## 5.1.0-preview001
 
-- Updated to Net6-rc.2 preview
+- Updated to support Net5 and Net6-rc.2 preview
 - Added PostgreSQL database helpers
 - Added the Seed Database feature back in at request of users
+- Removed obsolete methods: ...OptionsWithLogging (use ...OptionsWithLogTo), CreateEmptyViaWipe (use EncureClean)
 
 ## 5.0.0
 

@@ -3,12 +3,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 using Respawn;
@@ -136,8 +134,6 @@ namespace Test.Helpers
                         await EmptyCheckpoint.Reset(conn);
                     }
                 }
-
-
             };
         }
 

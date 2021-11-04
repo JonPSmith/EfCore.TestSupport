@@ -27,22 +27,19 @@ namespace Test.UnitTests.TestDataLayer
         public void TestEnsureDeletedThenCreateDatabase1Ok()
         {
             //SETUP
-            var showLog = false;
-#pragma warning disable 618
-            var options = this.CreateUniqueClassOptionsWithLogging<DbContext1>(log =>
-#pragma warning restore 618
+            var logToOptions = new LogToOptions
             {
-                if (showLog)
-                    _output.WriteLine(log.Message);
-            });
+                ShowLog = false
+            };
+            var options = this.CreateUniqueClassOptionsWithLogTo<DbContext1>(log => _output.WriteLine(log), logToOptions);
             using (var context = new DbContext1(options))
             {
                 context.Database.EnsureDeleted();
 
                 //ATTEMPT
-                showLog = true;
+                logToOptions.ShowLog = true;
                 context.Database.EnsureClean();
-                showLog = false;
+                logToOptions.ShowLog = false;
 
                 //VERIFY
                 context.Add(new TopClass1());
@@ -54,22 +51,19 @@ namespace Test.UnitTests.TestDataLayer
         public void TestEnsureDeletedThenCreateDatabase2Ok()
         {
             //SETUP
-            var showLog = false;
-#pragma warning disable 618
-            var options = this.CreateUniqueClassOptionsWithLogging<DbContext2>(log =>
-#pragma warning restore 618
+            var logToOptions = new LogToOptions
             {
-                if (showLog)
-                    _output.WriteLine(log.Message);
-            });
+                ShowLog = false
+            };
+            var options = this.CreateUniqueClassOptionsWithLogTo<DbContext2>(log => _output.WriteLine(log), logToOptions);
             using (var context = new DbContext2(options))
             {
                 context.Database.EnsureDeleted();
 
                 //ATTEMPT
-                showLog = true;
+                logToOptions.ShowLog = true;
                 context.Database.EnsureClean();
-                showLog = false;
+                logToOptions.ShowLog = false;
 
                 //VERIFY
                 context.Add(new TopClass2());

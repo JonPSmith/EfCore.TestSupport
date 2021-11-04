@@ -28,25 +28,6 @@ namespace TestSupport.EfHelpers
         }
 
         /// <summary>
-        /// Created a Sqlite Options for in-memory database while capturing EF Core's logging output. 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="efLog">This is a method that receives a LogOutput whenever EF Core logs something</param>
-        /// <param name="logLevel">Optional: Sets the logLevel you want to capture. Defaults to Information</param>
-        /// <param name="builder">Optional: action that allows you to add extra options to the builder</param>
-        /// <returns></returns>
-        [Obsolete("Suggest using CreateOptionsWithLogTo<T> which gives more logging options")]
-        public static DbContextOptionsDisposable<T> CreateOptionsWithLogging<T>(Action<LogOutput> efLog,
-            LogLevel logLevel = LogLevel.Information, Action<DbContextOptionsBuilder<T>> builder = null)
-            where T : DbContext
-        {
-            return new DbContextOptionsDisposable<T>(
-                SetupConnectionAndBuilderOptions<T>(builder)
-                    .UseLoggerFactory(new LoggerFactory(new[] { new MyLoggerProviderActionOut(efLog, logLevel) }))
-                .Options);
-        }
-
-        /// <summary>
         /// Created a Sqlite Options for in-memory database while using LogTo to get the EF Core logging output. 
         /// </summary>
         /// <typeparam name="T"></typeparam>
