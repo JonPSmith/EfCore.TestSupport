@@ -9,7 +9,9 @@
 	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1'">
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.10" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="5.0.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="5.0.10">
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.10" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
@@ -25,7 +27,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0-rc.2.21480.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0-rc.2.21480.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.0-rc.2.21480.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="6.0.0-rc.2.21480.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="6.0.0-rc.2.21480.5">
+		<PrivateAssets>all</PrivateAssets>
+	</PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0-rc.2.21480.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0-rc.2.21480.5" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0-rc.2.21480.5" />
@@ -47,9 +51,10 @@
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-- Updated to support Net5 and Net6-rc.2 preview
+- Updated to support both EF Core 5 and EF Core 6-rc.2 preview
 - Added PostgreSQL database helpers
 - Added the Seed Database feature back in at request of users
+- Removed obsolete methods: ...OptionsWithLogging (use ...OptionsWithLogTo), CreateEmptyViaWipe (use EncureClean)
 	</PackageReleaseNotes>
     <Copyright>Copyright (c) 2020 Jon P Smith. Licenced under MIT licence</Copyright>
     <PackageTags>Entity Framework Core, xUnit</PackageTags>
