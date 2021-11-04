@@ -4,7 +4,6 @@
 using System;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using TestSupport.EfHelpers.Internal;
 
 namespace TestSupport.EfHelpers

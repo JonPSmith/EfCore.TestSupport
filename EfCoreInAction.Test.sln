@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30717.126
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31825.309
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataLayer\DataLayer.csproj", "{2451DCF6-EA52-434D-8A97-D23F4A8C6A72}"
 EndProject
@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestSupport", "TestSupport\TestSupport.csproj", "{0CB1A11C-6144-414D-81A9-F880DEB2C71A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFromSqlRaw", "TestFromSqlRaw\TestFromSqlRaw.csproj", "{AADA2740-B6C5-4915-8705-4AD3B40F00D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,6 +94,26 @@ Global
 		{0CB1A11C-6144-414D-81A9-F880DEB2C71A}.Release|x64.Build.0 = Release|Any CPU
 		{0CB1A11C-6144-414D-81A9-F880DEB2C71A}.Release|x86.ActiveCfg = Release|Any CPU
 		{0CB1A11C-6144-414D-81A9-F880DEB2C71A}.Release|x86.Build.0 = Release|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Debug|ARM.Build.0 = Debug|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Debug|x64.Build.0 = Debug|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Debug|x86.Build.0 = Debug|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Release|ARM.ActiveCfg = Release|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Release|ARM.Build.0 = Release|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Release|ARM64.Build.0 = Release|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Release|x64.ActiveCfg = Release|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Release|x64.Build.0 = Release|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Release|x86.ActiveCfg = Release|Any CPU
+		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
