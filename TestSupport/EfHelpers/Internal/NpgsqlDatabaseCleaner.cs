@@ -1,6 +1,6 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0.
-// Available at https://github.com/dotnet/efcore/blob/main/LICENSE.txt
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// Available at https://github.com/npgsql/efcore.pg/blob/main/LICENSE
 // Altered by Jon P Smith, GitHub @JonPSmith, https://www.thereformedprogrammer.net/
 
 using System.Collections.Generic;
