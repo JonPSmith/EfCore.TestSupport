@@ -43,7 +43,7 @@
 
   <PropertyGroup>
     <PackageId>EfCore.TestSupport</PackageId>
-    <PackageVersion>5.1.0-preview001</PackageVersion>
+    <PackageVersion>5.1.0-preview002</PackageVersion>
     <Version>5.1.0</Version>
     <AssemblyVersion>5.1.0.0</AssemblyVersion>
     <FileVersion>5.1.0.0</FileVersion>
@@ -52,7 +52,7 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
 - Updated to support both EF Core 5 and EF Core 6-rc.2 preview
-- Added PostgreSQL database helpers
+- Added PostgreSQL database helpers, including EnsureClean
 - Added the Seed Database feature back in at request of users
 - Removed obsolete methods: ...OptionsWithLogging (use ...OptionsWithLogTo), CreateEmptyViaWipe (use EncureClean)
 	</PackageReleaseNotes>

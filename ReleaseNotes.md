@@ -1,5 +1,12 @@
 # Release notes
 
+## 5.1.0-preview002
+
+- Updated to support both EF Core 5 and EF Core 6-rc.2 preview
+- Added PostgreSQL database helpers, including EnsureClean
+- Added the Seed Database feature back in at request of users
+- Removed obsolete methods: ...OptionsWithLogging (use ...OptionsWithLogTo), CreateEmptyViaWipe (use EncureClean)
+
 ## 5.1.0-preview001
 
 - Updated to support Net5 and Net6-rc.2 preview
