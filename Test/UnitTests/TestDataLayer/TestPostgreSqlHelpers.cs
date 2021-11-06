@@ -78,6 +78,49 @@ namespace Test.UnitTests.TestDataLayer
         }
 
         [Fact]
+        public void TestEnsureCleanExistingDatabaseOk()
+        {
+            //SETUP
+            var options = this.CreatePostgreSqlUniqueDatabaseOptions<BookContext>();
+            using var context = new BookContext(options);
+
+            context.Database.EnsureCreated();
+
+            using (new TimeThings(_output, "Time to EnsureClean"))
+            {
+                context.Database.EnsureClean();
+            }
+
+            //ATTEMPT
+            context.SeedDatabaseFourBooks();
+
+            //VERIFY
+            context.Books.Count().ShouldEqual(4);
+        }
+
+
+        [Fact]
+        public void TestEnsureCleanNoExistingDatabaseOk()
+        {
+            //SETUP
+            var options = this.CreatePostgreSqlUniqueDatabaseOptions<BookContext>();
+            using var context = new BookContext(options);
+
+            context.Database.EnsureDeleted();
+
+            using (new TimeThings(_output, "Time to EnsureClean"))
+            {
+                context.Database.EnsureClean();
+            }
+
+            //ATTEMPT
+            context.SeedDatabaseFourBooks();
+
+            //VERIFY
+            context.Books.Count().ShouldEqual(4);
+        }
+
+        [Fact]
         public async Task TestEnsureCreatedAndEmptyPostgreSqlOk()
         {
             //SETUP
@@ -90,6 +133,10 @@ namespace Test.UnitTests.TestDataLayer
             using (var context = new BookContext(options))
             {
                 //ATTEMPT
+<<<<<<< Updated upstream
+=======
+                //logOptions.ShowLog = true;
+>>>>>>> Stashed changes
                 using (new TimeThings(_output, "Time to empty database"))
                 {
                     await context.EnsureCreatedAndEmptyPostgreSqlAsync();

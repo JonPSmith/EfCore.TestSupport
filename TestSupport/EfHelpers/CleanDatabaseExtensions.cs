@@ -23,11 +23,16 @@ namespace TestSupport.EfHelpers
         /// <param name="setUpSchema">Optional: by default it will set the schema to match the current DbContext configuration. If false leaves the database empty</param>
         public static void EnsureClean(this DatabaseFacade databaseFacade, bool setUpSchema = true)
         {
-            if (!databaseFacade.IsSqlServer())
-                throw new InvalidOperationException("The EnsureClean method only works with ");
-
-            databaseFacade.CreateExecutionStrategy()
-                .Execute(databaseFacade, database => new SqlServerDatabaseCleaner(databaseFacade).Clean(database, setUpSchema));
+            if (databaseFacade.IsSqlServer())
+                //SQL Server
+                databaseFacade.CreateExecutionStrategy()
+                    .Execute(databaseFacade, database => new SqlServerDatabaseCleaner(databaseFacade).Clean(database, setUpSchema));
+            else if (databaseFacade.IsNpgsql())
+                //PostgreSQL
+                databaseFacade.CreateExecutionStrategy()
+                    .Execute(databaseFacade, database => new NpgsqlDatabaseCleaner(databaseFacade).Clean(database, setUpSchema));
+            else
+                throw new InvalidOperationException("The EnsureClean method only works with SQL Server or PostgreSQL databases.");
         }
     }
 }
