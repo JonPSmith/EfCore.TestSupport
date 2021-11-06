@@ -133,10 +133,7 @@ namespace Test.UnitTests.TestDataLayer
             using (var context = new BookContext(options))
             {
                 //ATTEMPT
-<<<<<<< Updated upstream
-=======
                 //logOptions.ShowLog = true;
->>>>>>> Stashed changes
                 using (new TimeThings(_output, "Time to empty database"))
                 {
                     await context.EnsureCreatedAndEmptyPostgreSqlAsync();
