@@ -63,18 +63,17 @@ namespace Test.UnitTests.TestDataLayer
             using var context = new BookContext(options);
 
             context.Database.EnsureCreated();
+            context.SeedDatabaseFourBooks();
 
+            //ATTEMPT
             using (new TimeThings(_output, "Time to EnsureDeleted and EnsureCreated"))
             {
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
             }
 
-            //ATTEMPT
-            context.SeedDatabaseFourBooks();
-
             //VERIFY
-            context.Books.Count().ShouldEqual(4);
+            context.Books.Count().ShouldEqual(0);
         }
 
         [Fact]
@@ -84,18 +83,17 @@ namespace Test.UnitTests.TestDataLayer
             var options = this.CreatePostgreSqlUniqueDatabaseOptions<BookContext>();
             using var context = new BookContext(options);
 
-            context.Database.EnsureCreated();
+            context.Database.EnsureCreated(); 
+            context.SeedDatabaseFourBooks();
 
+            //ATTEMPT
             using (new TimeThings(_output, "Time to EnsureClean"))
             {
                 context.Database.EnsureClean();
             }
 
-            //ATTEMPT
-            context.SeedDatabaseFourBooks();
-
             //VERIFY
-            context.Books.Count().ShouldEqual(4);
+            context.Books.Count().ShouldEqual(0);
         }
 
         [Fact]
