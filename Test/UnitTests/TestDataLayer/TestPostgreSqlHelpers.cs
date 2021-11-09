@@ -10,6 +10,7 @@ using Npgsql;
 using Test.Helpers;
 using TestSupport.Attributes;
 using TestSupport.EfHelpers;
+using TestSupport.Helpers;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Extensions.AssertExtensions;
@@ -91,6 +92,29 @@ namespace Test.UnitTests.TestDataLayer
             {
                 context.Database.EnsureClean();
             }
+
+            //VERIFY
+            context.Books.Count().ShouldEqual(0);
+        }
+
+
+        //This proves that PostgreSQL EnsureClean doesn't delete the default named migration history table
+        //but it does delete migration history tables 
+        //To check that it doesn't delete the default named migration history table remove the
+        //MigrationsHistoryTable settings. If you run it twice it will NOT update the database schema because its already applied
+        [RunnableInDebugOnly]
+        public void TestEnsureCleanApplyMigrationOk()
+        {
+            //SETUP
+            var connectionString = this.GetUniquePostgreSqlConnectionString();
+            var optionsBuilder = new DbContextOptionsBuilder<BookContext>();
+            optionsBuilder.UseNpgsql(connectionString, dbOptions =>
+                dbOptions.MigrationsHistoryTable("BookMigrationHistoryName"));
+            using var context = new BookContext(optionsBuilder.Options);
+
+            //ATTEMPT      
+            context.Database.EnsureClean(false);
+            context.Database.Migrate();
 
             //VERIFY
             context.Books.Count().ShouldEqual(0);

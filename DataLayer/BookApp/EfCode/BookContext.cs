@@ -38,7 +38,7 @@ namespace DataLayer.BookApp.EfCode
     * The steps are:
     * a) Make sure the default project is Test
     * b) Use the PMC command
-    *    Add-Migration Initial -Context BookContext -OutputDir BookApp
+    *    Add-Migration Initial -Project DataLayer -Context BookContext -OutputDir BookApp\Migrations
     *    
     * If you want to start afresh then:
     * a) Delete the current database

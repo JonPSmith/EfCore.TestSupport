@@ -6,16 +6,16 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace DataLayer.BookApp.EfCode
 {
-    public class DesignTimeContextFactory : IDesignTimeDbContextFactory<BookContext>
+    public class PostgreSqlContextFactory : IDesignTimeDbContextFactory<BookContext>
     {
         private const string connectionString =
-            "Server=(localdb)\\mssqllocaldb;Database=TestSupport;Trusted_Connection=True;MultipleActiveResultSets=true";
+            "host=localhost;Database=TestSupport-Migrate;Username=postgres;Password=LetMeIn";
 
         public BookContext CreateDbContext(string[] args)
         {
             var optionsBuilder =
                 new DbContextOptionsBuilder<BookContext>();
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.UseNpgsql(connectionString);
 
             return new BookContext(optionsBuilder.Options);
         }
