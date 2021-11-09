@@ -36,7 +36,7 @@ namespace DataLayer.BookApp.EfCode
     * 
     * 2. Using Package Manager Console commands
     * The steps are:
-    * a) Make sure the default project is DataLayer
+    * a) Make sure the default project is Test
     * b) Use the PMC command
     *    Add-Migration Initial -Context BookContext -OutputDir BookApp
     *    

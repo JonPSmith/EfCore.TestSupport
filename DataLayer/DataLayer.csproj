@@ -6,13 +6,15 @@
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1'">
 		<PackageReference Include="GenericServices.StatusGeneric" Version="1.1.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.10" />		
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0'">
 		<PackageReference Include="GenericServices.StatusGeneric" Version="1.1.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
 	</ItemGroup>
 
