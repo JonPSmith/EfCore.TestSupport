@@ -51,10 +51,11 @@
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-- Updated to support both EF Core 5 and EF Core 6-rc.2 preview
-- Added PostgreSQL database helpers, including EnsureClean
-- Added the Seed Database feature back in at request of users
-- Removed obsolete methods: ...OptionsWithLogging (use ...OptionsWithLogTo), CreateEmptyViaWipe (use EncureClean)
+- BREAKING CHANGE: Renamed DeleteAllUnitTestDatabases to DeleteAllSqlServerTestDatabases
+- REMOVED obsolete methods: ...OptionsWithLogging (use ...OptionsWithLogTo), CreateEmptyViaWipe (use EnsureClean)
+- NET6 Support: Updated to support both EF Core 5 and EF Core 6-rc.2 preview (see docs)
+- New Feature: Added PostgreSQL database helpers, including EnsureClean
+- Feature: Reinstated the Seed Database feature to this version due to requests from users
 	</PackageReleaseNotes>
     <Copyright>Copyright (c) 2020 Jon P Smith. Licenced under MIT licence</Copyright>
     <PackageTags>Entity Framework Core, xUnit</PackageTags>

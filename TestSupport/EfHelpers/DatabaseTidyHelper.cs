@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Npgsql;
 using TestSupport.Helpers;
 
 namespace TestSupport.EfHelpers
@@ -20,7 +21,7 @@ namespace TestSupport.EfHelpers
         /// WARNING: This will delete multiple databases - make sure your DefaultConnection database name is unique!!!
         /// </summary>
         /// <returns>Number of databases deleted</returns>
-        public static int DeleteAllUnitTestDatabases()
+        public static int DeleteAllSqlServerTestDatabases()
         {
             var config = AppSettings.GetConfiguration(Assembly.GetCallingAssembly());
             var builder = new SqlConnectionStringBuilder(config.GetConnectionString(AppSettings.UnitTestConnectionStringName));
@@ -89,6 +90,84 @@ namespace TestSupport.EfHelpers
             if (connectionString.ExecuteRowCount("sys.databases", $"WHERE [Name] = '{databaseName}'") == 1)
                 //it failed
                 throw new InvalidOperationException($"Failed to deleted {databaseName}. Did you have SSMS open or something?");
+        }
+
+
+        //---------------------------------------------------------------------------
+        //PostgreSQL version
+
+        /// <summary>
+        /// This will delete all PostgreSql databases that start with the database name in the default connection string
+        /// WARNING: This will delete multiple databases - make sure your <see cref="AppSettings.PostgreSqlConnectionString"/> database name is unique!!!
+        /// </summary>
+        /// <returns>Number of databases deleted</returns>
+        public static int DeleteAllPostgreSqlTestDatabases()
+        {
+            var config = AppSettings.GetConfiguration(Assembly.GetCallingAssembly());
+            var baseConnection = config.GetConnectionString(AppSettings.PostgreSqlConnectionString);
+            if (string.IsNullOrEmpty(baseConnection))
+                throw new InvalidOperationException(
+                    $"Your {AppSettings.AppSettingFilename} file isn't set up for the '{AppSettings.PostgreSqlConnectionString}'.");
+
+            var databaseNamesToDelete = baseConnection.GetAllPostgreUnitTestDatabases();
+
+            var builder = new NpgsqlConnectionStringBuilder(baseConnection);
+            builder.Database = "postgres";
+            foreach (var databaseName in databaseNamesToDelete)
+            {
+                builder.ToString().ExecuteScalars(
+                    $"REVOKE CONNECT ON DATABASE \"{databaseName}\" FROM PUBLIC",
+                    "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity " +
+                        $"WHERE datname = '{databaseName}'",
+                    $"DROP DATABASE \"{databaseName}\""
+                );
+            }
+            return databaseNamesToDelete.Count;
+        }
+
+        //------------------------------------
+        //private methods
+
+        private static void ExecuteScalars(this string connectionString, params string[] commands)
+        {
+            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                foreach (var commandText in commands)
+                {
+                    using (NpgsqlCommand cmd = new NpgsqlCommand(commandText, conn))
+                    {
+                        var result = cmd.ExecuteScalar();
+                    }
+                }
+            }
+        }
+
+        private static List<string> GetAllPostgreUnitTestDatabases(this string connectionString)
+        {
+            var builder = new NpgsqlConnectionStringBuilder(connectionString);
+            var orgDbStartsWith = builder.Database;
+            builder.Database = "postgres";
+            var newConnectionString = builder.ToString();
+
+            var result = new List<string>();
+            using (NpgsqlConnection conn = new NpgsqlConnection(newConnectionString))
+            {
+                conn.Open();
+                string cmdText = $"SELECT datName FROM pg_database WHERE datname LIKE '{orgDbStartsWith}%'";
+                using (NpgsqlCommand cmd = new NpgsqlCommand(cmdText, conn))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            result.Add(reader.GetString(0));
+                        }
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }
