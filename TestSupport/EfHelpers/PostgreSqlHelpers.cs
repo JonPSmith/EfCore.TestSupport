@@ -79,7 +79,7 @@ namespace Test.Helpers
         }
 
         //------------------------------------------------------------
-        //methods to provide empty PostgreSql databases and how to delete all the PostgreSql databases used for unit testing
+        //methods to provide empty PostgreSql databases
 
 
         /// <summary>
