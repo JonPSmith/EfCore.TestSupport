@@ -24,18 +24,18 @@
 	</ItemGroup>
 	
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0'">
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0-rc.2.21480.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0-rc.2.21480.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.0-rc.2.21480.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="6.0.0-rc.2.21480.5">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="6.0.0">
 		<PrivateAssets>all</PrivateAssets>
 	</PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0-rc.2.21480.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0-rc.2.21480.5" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0-rc.2.21480.5" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0-rc.2.21480.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="3.0.1" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.0-rc.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.0" />
     <PackageReference Include="Respawn" Version="4.0.0" />
     <PackageReference Include="xunit.assert" Version="2.4.1" />
     <PackageReference Include="xunit.core" Version="2.4.1" />
@@ -43,7 +43,7 @@
 
   <PropertyGroup>
     <PackageId>EfCore.TestSupport</PackageId>
-    <PackageVersion>5.1.0-preview001</PackageVersion>
+    <PackageVersion>5.1.0</PackageVersion>
     <Version>5.1.0</Version>
     <AssemblyVersion>5.1.0.0</AssemblyVersion>
     <FileVersion>5.1.0.0</FileVersion>
@@ -51,10 +51,11 @@
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-- Updated to support both EF Core 5 and EF Core 6-rc.2 preview
-- Added PostgreSQL database helpers
-- Added the Seed Database feature back in at request of users
-- Removed obsolete methods: ...OptionsWithLogging (use ...OptionsWithLogTo), CreateEmptyViaWipe (use EncureClean)
+- BREAKING CHANGE: Renamed DeleteAllUnitTestDatabases to DeleteAllSqlServerTestDatabases
+- REMOVED obsolete methods: ...OptionsWithLogging (use ...OptionsWithLogTo), CreateEmptyViaWipe (use EnsureClean)
+- NET6 Support: Updated to support both EF Core 5 and EF Core
+- New Feature: Added PostgreSQL database helpers, including EnsureClean (see docs)
+- Feature: Reinstated the Seed Database feature to this version due to requests from users
 	</PackageReleaseNotes>
     <Copyright>Copyright (c) 2020 Jon P Smith. Licenced under MIT licence</Copyright>
     <PackageTags>Entity Framework Core, xUnit</PackageTags>

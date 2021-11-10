@@ -23,7 +23,7 @@ namespace Test.UnitCommands
         public void DeleteAllSqlServerTestDatabasesOk() //#B
         {
             var numDeleted = DatabaseTidyHelper //#C
-                .DeleteAllUnitTestDatabases();//#C
+                .DeleteAllSqlServerTestDatabases();//#C
             _output.WriteLine(                              //#D
                 "This deleted {0} SQL Server databases.", numDeleted); //#D
         }
@@ -33,8 +33,8 @@ namespace Test.UnitCommands
         [RunnableInDebugOnly]  //#A
         public void DeleteAllPostgreSqlTestDatabasesOk()
         {
-            var numDeleted = PostgreSqlHelpers
-                .DeleteAllPostgreSqlUnitTestDatabases();
+            var numDeleted = DatabaseTidyHelper
+                .DeleteAllPostgreSqlTestDatabases();
             _output.WriteLine( 
                 "This deleted {0} PostgreSql databases.", numDeleted);
         }

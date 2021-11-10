@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.SqlServer.Design.Internal;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Design.Internal;
 
 #pragma warning disable EF1001 // Internal EF Core API usage.
 namespace TestSupport.EfHelpers.Internal
@@ -31,6 +32,9 @@ namespace TestSupport.EfHelpers.Internal
             if (databaseFacade.IsSqlServer())
                 //Only handles SQL Server
                 return new SqlServerDesignTimeServices();
+            else if (databaseFacade.IsNpgsql())
+                //Only handles SQL Server
+                return new NpgsqlDesignTimeServices();
 
             throw new InvalidOperationException("This is not a database provider that we currently support.");
         }

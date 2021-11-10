@@ -1,5 +1,13 @@
 # Release notes
 
+## 5.1.0
+
+- BREAKING CHANGE: Renamed DeleteAllUnitTestDatabases to DeleteAllSqlServerTestDatabases
+- REMOVED obsolete methods: ...OptionsWithLogging (use ...OptionsWithLogTo), CreateEmptyViaWipe (use EnsureClean)
+- NET6 Support: Updated to support both EF Core 5 and EF Core
+- New Feature: Added PostgreSQL database helpers, including EnsureClean (see docs)
+- Feature: Reinstated the Seed Database feature to this version due to requests from users
+
 ## 5.1.0-preview001
 
 - Updated to support Net5 and Net6-rc.2 preview

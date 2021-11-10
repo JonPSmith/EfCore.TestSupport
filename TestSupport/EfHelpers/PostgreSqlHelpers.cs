@@ -2,8 +2,6 @@
 // Licensed under MIT license. See License.txt in the project root for license information.
 
 using System;
-using System.Collections.Generic;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -81,12 +79,8 @@ namespace Test.Helpers
         }
 
         //------------------------------------------------------------
-        //methods to provide empty PostgreSql databases and how to delete all the PostgreSql databases used for unit testing
+        //methods to provide empty PostgreSql databases
 
-        static Checkpoint EmptyCheckpoint = new Checkpoint
-        {
-            DbAdapter = DbAdapter.Postgres
-        };
 
         /// <summary>
         /// This will ensure that there is a PostgreSql database, and that database has no rows in any tables
@@ -99,7 +93,12 @@ namespace Test.Helpers
         public async static Task EnsureCreatedAndEmptyPostgreSqlAsync<T>(this T context)
             where T : DbContext
         {
-            if(!context.Database.EnsureCreated())
+            Checkpoint EmptyCheckpoint = new Checkpoint
+            {
+                DbAdapter = DbAdapter.Postgres
+            };
+
+            if (!context.Database.EnsureCreated())
             {
                 //the database arealy exists, so we just need to empty the tables
 
@@ -137,52 +136,9 @@ namespace Test.Helpers
             };
         }
 
-        /// <summary>
-        /// This will delete all PostgreSql databases that start with the database name in the default connection string
-        /// WARNING: This will delete multiple databases - make sure your <see cref="AppSettings.PostgreSqlConnectionString"/> database name is unique!!!
-        /// </summary>
-        /// <returns>Number of databases deleted</returns>
-        public static int DeleteAllPostgreSqlUnitTestDatabases()
-        {
-            var config = AppSettings.GetConfiguration(Assembly.GetCallingAssembly());
-            var baseConnection = config.GetConnectionString(AppSettings.PostgreSqlConnectionString);
-            if (string.IsNullOrEmpty(baseConnection))
-                throw new InvalidOperationException(
-                    $"Your {AppSettings.AppSettingFilename} file isn't set up for the '{AppSettings.PostgreSqlConnectionString}'.");
-
-            var databaseNamesToDelete = baseConnection.GetAllPostgreUnitTestDatabases();
-
-            var builder = new NpgsqlConnectionStringBuilder(baseConnection);
-            builder.Database = "postgres";
-            foreach (var databaseName in databaseNamesToDelete)
-            {
-                builder.ToString().ExecuteScalars(
-                    $"REVOKE CONNECT ON DATABASE \"{databaseName}\" FROM PUBLIC",
-                    "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity " +
-                        $"WHERE datname = '{databaseName}'",
-                    $"DROP DATABASE \"{databaseName}\""
-                );
-            }
-            return databaseNamesToDelete.Count;
-        }
-
-        //------------------------------------
+        //------------------------------------------------
         //private methods
 
-        private static void ExecuteScalars(this string connectionString, params string[] commands)
-        {
-            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
-            {
-                conn.Open();
-                foreach(var commandText in commands)
-                {
-                    using (NpgsqlCommand cmd = new NpgsqlCommand(commandText, conn))
-                    {
-                        var result = cmd.ExecuteScalar();
-                    }
-                }
-            }
-        }
 
         private static DbContextOptionsBuilder<T> CreatePostgreSqlOptionWithDatabaseName<T>(object callingClass,
             string callingMember, Action<DbContextOptionsBuilder<T>> extraOptions)
@@ -197,31 +153,6 @@ namespace Test.Helpers
             return builder;
         }
 
-        private static List<string> GetAllPostgreUnitTestDatabases(this string connectionString)
-        {
-            var builder = new NpgsqlConnectionStringBuilder(connectionString);
-            var orgDbStartsWith = builder.Database;
-            builder.Database = "postgres";
-            var newConnectionString = builder.ToString();
 
-            var result = new List<string>();
-            using (NpgsqlConnection conn = new NpgsqlConnection(newConnectionString))
-            {
-                conn.Open();
-                string cmdText = $"SELECT datName FROM pg_database WHERE datname LIKE '{orgDbStartsWith}%'";
-                using (NpgsqlCommand cmd = new NpgsqlCommand(cmdText, conn))
-                {
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            result.Add(reader.GetString(0));
-                        }
-                    }
-                }
-            }
-
-            return result;
-        }
     }
 }

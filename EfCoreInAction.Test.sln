@@ -12,13 +12,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 		README.md = README.md
 		ReleaseNotes.md = ReleaseNotes.md
+		SeedFromProductionOverview.png = SeedFromProductionOverview.png
 		UnitTestExample.png = UnitTestExample.png
 		Version5UpgradeDocs.md = Version5UpgradeDocs.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestSupport", "TestSupport\TestSupport.csproj", "{0CB1A11C-6144-414D-81A9-F880DEB2C71A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFromSqlRaw", "TestFromSqlRaw\TestFromSqlRaw.csproj", "{AADA2740-B6C5-4915-8705-4AD3B40F00D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestFromSqlRaw", "TestFromSqlRaw\TestFromSqlRaw.csproj", "{AADA2740-B6C5-4915-8705-4AD3B40F00D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

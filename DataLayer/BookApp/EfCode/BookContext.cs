@@ -24,5 +24,26 @@ namespace DataLayer.BookApp.EfCode
             modelBuilder.ApplyConfiguration(new PriceOfferConfig()); 
         }
     }
+
+    /******************************************************************************
+    * NOTES ON MIGRATION:
+    * 
+    * see https://docs.microsoft.com/en-us/aspnet/core/data/ef-rp/migrations?tabs=visual-studio
+    * 
+    * The following NuGet libraries must be loaded
+    * 1. Add to DataLayer: "Microsoft.EntityFrameworkCore.Tools"
+    * 2. Add to DataLayer: "Microsoft.EntityFrameworkCore.SqlServer" (or another database provider)
+    * 
+    * 2. Using Package Manager Console commands
+    * The steps are:
+    * a) Make sure the default project is Test
+    * b) Use the PMC command
+    *    Add-Migration Initial -Project DataLayer -Context BookContext -OutputDir BookApp\Migrations
+    *    
+    * If you want to start afresh then:
+    * a) Delete the current database
+    * b) Delete all the class in the Migration directory
+    * c) follow the steps to add a migration
+    ******************************************************************************/
 }
 
