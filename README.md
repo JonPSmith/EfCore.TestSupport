@@ -4,7 +4,7 @@ This NuGet package containing methods to help test applications that use [Entity
 
 _NOTE: Version 5.1.0 and above of this library supports multiple versions of EF Core 5._
 
-- _Version 5.1.0 supports EF Core 5.10 and EF Core 6._ 
+- _Version 5.1.0 supports EF Core 5.10 and EF Core 6.0_ 
 
 **WARNING: If you are updating from the original EfCore.TestSupport (2.1 or 3), then you should read the [Version5UpgradeDocs.md](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/Version5UpgradeDocs.md) file as there are some breaking changes in this version.**
 
