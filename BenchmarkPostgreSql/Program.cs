@@ -75,5 +75,11 @@ END $$"
         _context.Database.EnsureClean();
     }
 
+    [Benchmark]
+    public async Task EnsureCreatedAndWipedByRespawn()
+    {
+        await _context.EnsureCreatedAndEmptyPostgreSqlAsync();
+    }
+
     static void Main(string[] args) => BenchmarkRunner.Run<Program>();
 }
