@@ -1,17 +1,14 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
-using DataLayer.BookApp;
 using DataLayer.BookApp.EfCode;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Test.Helpers;
 using TestSupport.EfHelpers;
-using TestSupport.Helpers;
 
 public class Program
 {
-    private const string ConnectionString = "Host=localhost;Username=test;Password=test";
-    private NpgsqlConnection _conn;
+        private NpgsqlConnection _conn;
     private BookContext _context;
 
     [GlobalSetup]
