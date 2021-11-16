@@ -1,5 +1,10 @@
 # Release notes
 
+## 5.2.0
+
+- BREAKING CHANGE from 5.1.0: changed CreatePostgreSqlUniqueDatabaseOptions to CreatePostgreSqlUniqueClassOptions to match other usages
+- Extra checks on the length of the PostgreSQL database as there is a 64 char limit
+
 ## 5.1.0
 
 - BREAKING CHANGE: Renamed DeleteAllUnitTestDatabases to DeleteAllSqlServerTestDatabases

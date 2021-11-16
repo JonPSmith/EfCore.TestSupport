@@ -43,19 +43,16 @@
 
   <PropertyGroup>
     <PackageId>EfCore.TestSupport</PackageId>
-    <PackageVersion>5.1.0</PackageVersion>
-    <Version>5.1.0</Version>
-    <AssemblyVersion>5.1.0.0</AssemblyVersion>
-    <FileVersion>5.1.0.0</FileVersion>
+    <PackageVersion>5.2.0</PackageVersion>
+    <Version>5.2.0</Version>
+    <AssemblyVersion>5.2.0.0</AssemblyVersion>
+    <FileVersion>5.2.0.0</FileVersion>
     <Authors>Jon P Smith</Authors>
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-- BREAKING CHANGE: Renamed DeleteAllUnitTestDatabases to DeleteAllSqlServerTestDatabases
-- REMOVED obsolete methods: ...OptionsWithLogging (use ...OptionsWithLogTo), CreateEmptyViaWipe (use EnsureClean)
-- NET6 Support: Updated to support both EF Core 5 and EF Core
-- New Feature: Added PostgreSQL database helpers, including EnsureClean (see docs)
-- Feature: Reinstated the Seed Database feature to this version due to requests from users
+- BREAKING CHANGE from 5.1.0: changed CreatePostgreSqlUniqueDatabaseOptions to CreatePostgreSqlUniqueClassOptions to match other usages
+- Extra checks on the length of the PostgreSQL database as there is a 64 char limit
 	</PackageReleaseNotes>
     <Copyright>Copyright (c) 2020 Jon P Smith. Licenced under MIT licence</Copyright>
     <PackageTags>Entity Framework Core, xUnit</PackageTags>
