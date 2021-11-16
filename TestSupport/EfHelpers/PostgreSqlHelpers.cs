@@ -5,7 +5,6 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Npgsql;
 using Respawn;
 using TestSupport.EfHelpers;
@@ -19,9 +18,7 @@ namespace Test.Helpers
     /// </summary>
     public static class PostgreSqlHelpers
     {
-        private const string DefaultPostgreSqlSchemaName = "public";
-
-        /// <summary>
+         /// <summary>
         /// This creates the DbContextOptions  options for a PostgreSql database, 
         /// where the database name is formed using the appsetting's PostgreSqlConnection with the class name as a prefix.
         /// That is, the database is unique to the object provided
@@ -30,7 +27,7 @@ namespace Test.Helpers
         /// <param name="callingClass">this should be this, i.e. the test class you are in</param>
         /// <param name="builder">Optional: action that allows you to add extra options to the builder</param>
         /// <returns></returns>
-        public static DbContextOptions<T> CreatePostgreSqlUniqueDatabaseOptions<T>(this object callingClass, 
+        public static DbContextOptions<T> CreatePostgreSqlUniqueClassOptions<T>(this object callingClass, 
             Action<DbContextOptionsBuilder<T>> builder = null)
             where T : DbContext
         {
@@ -78,9 +75,7 @@ namespace Test.Helpers
             return CreatePostgreSqlOptionWithDatabaseName<T>(callingClass, callingMember, builder).Options;
         }
 
-        //------------------------------------------------------------
-        //methods to provide empty PostgreSql databases
-
+        //------------------------------------------------
 
         /// <summary>
         /// This will ensure that there is a PostgreSql database, and that database has no rows in any tables
@@ -89,8 +84,9 @@ namespace Test.Helpers
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="context"></param>
+        /// <param name="thereIsAnExistingDatabase">Optional: If you know that there is a database, then set this to true for a quicker clear of all the tables</param>
         /// <returns></returns>
-        public async static Task EnsureCreatedAndEmptyPostgreSqlAsync<T>(this T context)
+        public async static Task EnsureCreatedAndEmptyPostgreSqlAsync<T>(this T context, bool thereIsAnExistingDatabase = false)
             where T : DbContext
         {
             Checkpoint EmptyCheckpoint = new Checkpoint
@@ -98,41 +94,14 @@ namespace Test.Helpers
                 DbAdapter = DbAdapter.Postgres
             };
 
-            if (!context.Database.EnsureCreated())
+            if (thereIsAnExistingDatabase || !context.Database.EnsureCreated())
             {
-                //the database arealy exists, so we just need to empty the tables
-
+                //the database already exists, so we just need to empty the tables
+                
                 var connectionString = context.Database.GetConnectionString();
-                //THIS WAS SLOWER THAN USING RESPAWN
-                //var schemaNames = context.Model.GetEntityTypes().Select(entity =>
-                //    (string?)entity.GetAnnotation(RelationalAnnotationNames.Schema).Value)
-                //    .Distinct().ToList();
-                //if (schemaNames.Count() == 1)
-                //{
-                //    //There is only one schema name so we can use the quick way
-                //    //see https://stackoverflow.com/questions/3327312/how-can-i-drop-all-the-tables-in-a-postgresql-database
-
-                //    var schemaName = schemaNames[0] ?? DefaultPostgreSqlSchemaName;
-
-                //    //This removes all the tables
-                //    connectionString.ExecuteScalars(
-                //        $"DROP SCHEMA {schemaName} CASCADE",
-                //        $"CREATE SCHEMA {schemaName}",
-                //        $"GRANT ALL ON SCHEMA {schemaName} TO postgres",
-                //        $"GRANT ALL ON SCHEMA {schemaName} TO public"
-                //        );
-                //    //Now add the tables to the database
-                //    context.Database.EnsureCreated();
-                //}
-                //else
-                {
-                    //mutiple schema names, so use respawn approach
-                    using (var conn = new NpgsqlConnection(connectionString))
-                    {
-                        await conn.OpenAsync();
-                        await EmptyCheckpoint.Reset(conn);
-                    }
-                }
+                using var conn = new NpgsqlConnection(connectionString);              
+                await conn.OpenAsync();
+                await EmptyCheckpoint.Reset(conn);          
             };
         }
 

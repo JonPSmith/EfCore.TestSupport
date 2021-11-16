@@ -30,7 +30,7 @@ namespace Test.UnitTests.TestDataLayer
         public void TestLargeDbEnsureDeletedEnsureCreatedOk()
         {
             //SETUP
-            var options = this.CreatePostgreSqlUniqueDatabaseOptions<LargeDbContext>();
+            var options = this.CreatePostgreSqlUniqueClassOptions<LargeDbContext>();
             using var context = new LargeDbContext(options);
 
             context.Database.EnsureCreated();
@@ -50,7 +50,7 @@ namespace Test.UnitTests.TestDataLayer
         public void TestLargeDbEnsureCleanExistingDatabaseOk()
         {
             //SETUP
-            var options = this.CreatePostgreSqlUniqueDatabaseOptions<LargeDbContext>();
+            var options = this.CreatePostgreSqlUniqueClassOptions<LargeDbContext>();
             using var context = new LargeDbContext(options);
 
             context.Database.EnsureCreated();
@@ -59,24 +59,6 @@ namespace Test.UnitTests.TestDataLayer
             using (new TimeThings(_output, "LargeDatabase to EnsureClean"))
             {
                 context.Database.EnsureClean();
-            }
-
-            //VERIFY
-        }
-
-        [Fact]
-        public async Task TestLargeDbEnsureCreatedAndEmptyPostgreSqlOk()
-        {
-            //SETUP
-            var options = this.CreatePostgreSqlUniqueDatabaseOptions<LargeDbContext>();
-            using var context = new LargeDbContext(options);
-
-            context.Database.EnsureCreated();
-
-            //ATTEMPT
-            using (new TimeThings(_output, "LargeDatabase to empty database"))
-            {
-                await context.EnsureCreatedAndEmptyPostgreSqlAsync();
             }
 
             //VERIFY

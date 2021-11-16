@@ -4,6 +4,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
+using System;
 using TestSupport.Helpers;
 using Xunit;
 using Xunit.Extensions.AssertExtensions;
@@ -154,6 +155,20 @@ namespace Test.UnitTests.TestSupport
             newDatabaseName.ShouldEqual($"{orgDbName}_{typeof(TestAppSettings).Name}_ExtraMethodName");
         }
 
+        [Fact]
+        public void GetUniquePostgreSqlConnectionStringTooLong()
+        {
+            //SETUP
+            var config = AppSettings.GetConfiguration();
+            var orgDbName = new NpgsqlConnectionStringBuilder(config.GetConnectionString(AppSettings.PostgreSqlConnectionString)).Database;
+
+            //ATTEMPT
+            var ex = Assert.Throws<InvalidOperationException>( () => this.GetUniquePostgreSqlConnectionString(
+                "VeryLongNameThatMakesItLongerThanThePostgreSQLLimit"));
+
+            //VERIFY
+            ex.Message.ShouldStartWith("PostgreSQL database names are limited to 64 chars, ");
+        }
 
 
         [Fact]

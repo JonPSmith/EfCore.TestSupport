@@ -3,9 +3,11 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using DataLayer.BookApp.EfCode;
 using DataLayer.Database1;
 using DataLayer.Database2;
 using Microsoft.EntityFrameworkCore;
+using TestSupport.Attributes;
 using TestSupport.EfHelpers;
 using TestSupport.Helpers;
 using Xunit;
@@ -14,11 +16,11 @@ using Xunit.Extensions.AssertExtensions;
 
 namespace Test.UnitTests.TestDataLayer
 {
-    public class TestEnsureClean
+    public class TestEnsureCleanSqlServer
     {
         private readonly ITestOutputHelper _output;
 
-        public TestEnsureClean(ITestOutputHelper output)
+        public TestEnsureCleanSqlServer(ITestOutputHelper output)
         {
             _output = output;
         }
@@ -163,6 +165,28 @@ namespace Test.UnitTests.TestDataLayer
                 context.Database.EnsureCreated();
                 CountTablesInDatabase(context).ShouldNotEqual(0);
             }
+        }
+
+        //This proves that SQL Server EnsureClean doesn't delete the default named migration history table
+        //but it does delete migration history tables 
+        //To check that it doesn't delete the default named migration history table remove the
+        //MigrationsHistoryTable settings. If you run it twice it will NOT update the database schema because its already applied
+        [RunnableInDebugOnly]
+        public void TestEnsureCleanApplyMigrationOk()
+        {
+            //SETUP
+            var connectionString = this.GetUniqueDatabaseConnectionString();
+            var optionsBuilder = new DbContextOptionsBuilder<BookContext>();
+            optionsBuilder.UseNpgsql(connectionString, dbOptions =>
+                dbOptions.MigrationsHistoryTable("BookMigrationHistoryName"));
+            using var context = new BookContext(optionsBuilder.Options);
+
+            //ATTEMPT      
+            context.Database.EnsureClean(false);
+            context.Database.Migrate();
+
+            //VERIFY
+            context.Books.Count().ShouldEqual(0);
         }
 
         private int CountTablesInDatabase(DbContext context)

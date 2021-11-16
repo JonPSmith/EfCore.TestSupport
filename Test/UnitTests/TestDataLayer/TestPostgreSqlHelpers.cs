@@ -31,7 +31,7 @@ namespace Test.UnitTests.TestDataLayer
         {
             //SETUP
             //ATTEMPT
-            var options = this.CreatePostgreSqlUniqueDatabaseOptions<BookContext>();
+            var options = this.CreatePostgreSqlUniqueClassOptions<BookContext>();
             using (var context = new BookContext(options))
             {
                 //VERIFY
@@ -60,7 +60,7 @@ namespace Test.UnitTests.TestDataLayer
         public void TestEnsureDeletedEnsureCreatedOk()
         {
             //SETUP
-            var options = this.CreatePostgreSqlUniqueDatabaseOptions<BookContext>();
+            var options = this.CreatePostgreSqlUniqueClassOptions<BookContext>();
             using var context = new BookContext(options);
 
             context.Database.EnsureCreated();
@@ -81,7 +81,7 @@ namespace Test.UnitTests.TestDataLayer
         public void TestEnsureCleanExistingDatabaseOk()
         {
             //SETUP
-            var options = this.CreatePostgreSqlUniqueDatabaseOptions<BookContext>();
+            var options = this.CreatePostgreSqlUniqueClassOptions<BookContext>();
             using var context = new BookContext(options);
 
             context.Database.EnsureCreated(); 
@@ -95,80 +95,6 @@ namespace Test.UnitTests.TestDataLayer
 
             //VERIFY
             context.Books.Count().ShouldEqual(0);
-        }
-
-
-        //This proves that PostgreSQL EnsureClean doesn't delete the default named migration history table
-        //but it does delete migration history tables 
-        //To check that it doesn't delete the default named migration history table remove the
-        //MigrationsHistoryTable settings. If you run it twice it will NOT update the database schema because its already applied
-        [RunnableInDebugOnly]
-        public void TestEnsureCleanApplyMigrationOk()
-        {
-            //SETUP
-            var connectionString = this.GetUniquePostgreSqlConnectionString();
-            var optionsBuilder = new DbContextOptionsBuilder<BookContext>();
-            optionsBuilder.UseNpgsql(connectionString, dbOptions =>
-                dbOptions.MigrationsHistoryTable("BookMigrationHistoryName"));
-            using var context = new BookContext(optionsBuilder.Options);
-
-            //ATTEMPT      
-            context.Database.EnsureClean(false);
-            context.Database.Migrate();
-
-            //VERIFY
-            context.Books.Count().ShouldEqual(0);
-        }
-
-        [Fact]
-        public void TestEnsureCleanNoExistingDatabaseOk()
-        {
-            //SETUP
-            var options = this.CreatePostgreSqlUniqueDatabaseOptions<BookContext>();
-            using var context = new BookContext(options);
-
-            context.Database.EnsureDeleted(); 
-
-            //ATTEMPT
-            using (new TimeThings(_output, "Time to EnsureClean"))
-            {
-                context.Database.EnsureClean();
-            }
-
-            //VERIFY
-            context.Books.Count().ShouldEqual(0);
-        }
-
-        [Fact]
-        public async Task TestEnsureCreatedAndEmptyPostgreSqlOk()
-        {
-            //SETUP
-            var logOptions = new LogToOptions
-            {
-                ShowLog = false,
-                LogLevel = Microsoft.Extensions.Logging.LogLevel.Debug,
-                LoggerOptions = Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.UtcTime
-            };
-            var options = this.CreatePostgreSqlUniqueClassOptionsWithLogTo<BookContext>(log => _output.WriteLine(log), logOptions);
-            using (var context = new BookContext(options))
-            {
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
-                context.SeedDatabaseFourBooks();
-            }
-            using (var context = new BookContext(options))
-            {
-                //ATTEMPT
-                //logOptions.ShowLog = true;
-                using (new TimeThings(_output, "Time to empty database"))
-                {
-                    await context.EnsureCreatedAndEmptyPostgreSqlAsync();
-                }
-                logOptions.ShowLog = false;
-
-                //VERIFY
-                context.Books.Count().ShouldEqual(0);
-            }
         }
 
         [RunnableInDebugOnly]
@@ -195,7 +121,7 @@ namespace Test.UnitTests.TestDataLayer
         public void TestAddExtraBuilderOptions()
         {
             //SETUP
-            var options1 = this.CreatePostgreSqlUniqueDatabaseOptions<BookContext>();
+            var options1 = this.CreatePostgreSqlUniqueClassOptions<BookContext>();
             using (var context = new BookContext(options1))
             {
                 context.Database.EnsureCreated();
@@ -205,7 +131,7 @@ namespace Test.UnitTests.TestDataLayer
                 context.Entry(book).State.ShouldEqual(EntityState.Unchanged);
             }
             //ATTEMPT
-            var options2 = this.CreatePostgreSqlUniqueDatabaseOptions<BookContext>(
+            var options2 = this.CreatePostgreSqlUniqueClassOptions<BookContext>(
                 builder => builder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
             using (var context = new BookContext(options2))
             {

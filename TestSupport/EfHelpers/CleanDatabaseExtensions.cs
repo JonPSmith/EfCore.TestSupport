@@ -5,6 +5,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Npgsql;
 using TestSupport.EfHelpers.Internal;
 
 namespace TestSupport.EfHelpers
@@ -29,10 +30,52 @@ namespace TestSupport.EfHelpers
                     .Execute(databaseFacade, database => new SqlServerDatabaseCleaner(databaseFacade).Clean(database, setUpSchema));
             else if (databaseFacade.IsNpgsql())
                 //PostgreSQL
-                databaseFacade.CreateExecutionStrategy()
-                    .Execute(databaseFacade, database => new NpgsqlDatabaseCleaner(databaseFacade).Clean(database, setUpSchema));
+                databaseFacade.FasterPostgreSqlEnsureClean(setUpSchema);
             else
                 throw new InvalidOperationException("The EnsureClean method only works with SQL Server or PostgreSQL databases.");
+        }
+
+        private static void FasterPostgreSqlEnsureClean(this DatabaseFacade databaseFacade, bool setUpSchema = true)
+        {
+            var connectionString = databaseFacade.GetDbConnection().ConnectionString;
+            if (connectionString.DatabaseExists())
+            {
+                var conn = new NpgsqlConnection(connectionString);
+                conn.Open();
+
+                var dropPublicSchemaCommand = new NpgsqlCommand
+                {
+                    Connection = conn,
+                    CommandText = @"
+DO $$
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN (SELECT nspname FROM pg_namespace WHERE nspname NOT IN ('pg_toast', 'pg_catalog', 'information_schema'))
+        LOOP
+            EXECUTE 'DROP SCHEMA ' || quote_ident(r.nspname) || ' CASCADE';
+        END LOOP;
+    EXECUTE 'CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO postgres; GRANT ALL ON SCHEMA public TO public';
+END $$"
+                };
+                dropPublicSchemaCommand.ExecuteNonQuery();
+            }
+
+            if(setUpSchema)
+                databaseFacade.EnsureCreated();
+        }
+
+        private static bool DatabaseExists(this string connectionString)
+        {
+            var builder = new NpgsqlConnectionStringBuilder(connectionString);
+            var orgDbStartsWith = builder.Database;
+            builder.Database = "postgres";
+            var newConnectionString = builder.ToString();
+            using var conn = new NpgsqlConnection(newConnectionString);
+            conn.Open();
+
+            using var cmd = new NpgsqlCommand($"SELECT COUNT(*) FROM pg_catalog.pg_database WHERE datname='{orgDbStartsWith}'", conn);
+            return (long)cmd.ExecuteScalar() == 1;
         }
     }
 }

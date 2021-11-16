@@ -3,12 +3,13 @@ using BenchmarkDotNet.Running;
 using DataLayer.BookApp.EfCode;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Respawn;
 using Test.Helpers;
 using TestSupport.EfHelpers;
 
 public class Program
 {
-        private NpgsqlConnection _conn;
+    private const string _connectionString = "host=localhost;Database=TestSupportBenchmark-TestSupport;Username=postgres;Password=LetMeIn";
     private BookContext _context;
 
     [GlobalSetup]
@@ -16,69 +17,41 @@ public class Program
     {
         NpgsqlConnection.ClearAllPools();
 
-        var options = this.CreatePostgreSqlUniqueDatabaseOptions<BookContext>();
-        _context = new BookContext(options);
+        var builder = new DbContextOptionsBuilder<BookContext>();
+        builder.UseNpgsql(_connectionString);
+        _context = new BookContext(builder.Options);
         _context.Database.EnsureCreated();
-
-        _conn = new NpgsqlConnection(_context.Database.GetDbConnection().ConnectionString);
-        _conn.Open();
     }
 
-    //[IterationSetup]
-    //public void CreateTables()
-    //{
-    //    _context.Database.EnsureCreated();
-    //}
-
-    [Benchmark]
-    public void DropPublicSchemaWithEnsureCreated()
+    [IterationSetup]
+    public void CreateTables()
     {
-        var dropPublicSchemaBatch = new NpgsqlBatch(_conn)
-        {
-            BatchCommands =
-            {
-                new ("DROP SCHEMA public CASCADE"),
-                new ("CREATE SCHEMA public"),
-                new ("GRANT ALL ON SCHEMA public TO postgres"),
-                new ("GRANT ALL ON SCHEMA public TO public")
-            }
-        };
-        dropPublicSchemaBatch.ExecuteNonQuery();
         _context.Database.EnsureCreated();
     }
 
     [Benchmark]
-    public void DropAllSchemasWithEnsureCreated()
-    {
-        var dropPublicSchemaCommand = new NpgsqlCommand
-        {
-            Connection = _conn,
-            CommandText = @"
-DO $$
-DECLARE
-    r RECORD;
-BEGIN
-    FOR r IN (SELECT nspname FROM pg_namespace WHERE nspname NOT IN ('pg_toast', 'pg_catalog', 'information_schema'))
-    LOOP
-        EXECUTE 'DROP SCHEMA ' || quote_ident(r.nspname) || ' CASCADE';
-    END LOOP;
-    EXECUTE 'CREATE SCHEMA public';
-END $$"
-        };
-        dropPublicSchemaCommand.ExecuteNonQuery();
-        _context.Database.EnsureCreated();
-    }
-
-    [Benchmark]
-    public void EnsureClean()
+    public void EnsureCleanUsingDropSchema()
     {
         _context.Database.EnsureClean();
     }
 
     [Benchmark]
-    public async Task EnsureCreatedAndWipedByRespawn()
+    public async Task WipedByRespawnNoCheckDbExists()
+    {
+        await _context.EnsureCreatedAndEmptyPostgreSqlAsync(true);
+    }
+
+    [Benchmark]
+    public async Task WipedByRespawnWithCheckForDbExists()
     {
         await _context.EnsureCreatedAndEmptyPostgreSqlAsync();
+    }
+
+    [Benchmark]
+    public void EnsureDeletedEnsureCreated()
+    {
+        _context.Database.EnsureDeleted();
+        _context.Database.EnsureCreated();
     }
 
     static void Main(string[] args) => BenchmarkRunner.Run<Program>();
