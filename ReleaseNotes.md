@@ -2,8 +2,9 @@
 
 ## 5.2.0
 
-- BREAKING CHANGE from 5.1.0: changed CreatePostgreSqlUniqueDatabaseOptions to CreatePostgreSqlUniqueClassOptions to match other usages
+- BREAKING CHANGE from 5.1.0: changed `CreatePostgreSqlUniqueDatabaseOptions` to `CreatePostgreSqlUniqueClassOptions` to match other usages
 - Extra checks on the length of the PostgreSQL database as there is a 64 char limit
+- Also improved the PostgreSQL `EnsureClean` code to make it easier for testing migrations in your tests
 
 ## 5.1.0
 
