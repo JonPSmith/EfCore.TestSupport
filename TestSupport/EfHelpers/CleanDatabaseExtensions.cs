@@ -61,7 +61,7 @@ END $$"
                 dropPublicSchemaCommand.ExecuteNonQuery();
             }
 
-            if(setUpSchema)
+            if (setUpSchema)
                 databaseFacade.EnsureCreated();
         }
 

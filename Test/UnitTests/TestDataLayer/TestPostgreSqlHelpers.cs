@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DataLayer.BookApp.EfCode;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal;
 using Test.Helpers;
 using TestSupport.Attributes;
 using TestSupport.EfHelpers;
@@ -75,6 +76,24 @@ namespace Test.UnitTests.TestDataLayer
 
             //VERIFY
             context.Books.Count().ShouldEqual(0);
+        }
+
+        [Fact]
+        public void TestEnsureCreatedExistingDbOk()
+        {
+            //SETUP
+            var options = this.CreatePostgreSqlUniqueClassOptions<BookContext>();
+            using var context = new BookContext(options);
+
+            context.Database.EnsureCreated();
+
+            //ATTEMPT
+            using (new TimeThings(_output, "EnsureCreated when database exists"))
+            {
+                context.Database.EnsureCreated();
+            }
+
+            //VERIFY
         }
 
         [Fact]

@@ -205,7 +205,7 @@ namespace Test.UnitTests.TestDataLayer
         }
 
         [Fact]
-        public async Task TestRespawnOk()
+        public async Task TestRespawnWithCheckDbExists()
         {
             //SETUP
             var options = this.CreatePostgreSqlUniqueMethodOptions<BookContext>();
@@ -213,8 +213,24 @@ namespace Test.UnitTests.TestDataLayer
             context.Database.EnsureCreated();
 
             //ATTEMPT
-            using(new TimeThings(_output))
+            using (new TimeThings(_output))
                 await context.EnsureCreatedAndEmptyPostgreSqlAsync();
+
+            //VERIFY
+            context.Books.Count().ShouldEqual(0);
+        }
+
+        [Fact]
+        public async Task TestRespawnNoCheckDbExists()
+        {
+            //SETUP
+            var options = this.CreatePostgreSqlUniqueMethodOptions<BookContext>();
+            using var context = new BookContext(options);
+            context.Database.EnsureCreated();
+
+            //ATTEMPT
+            using (new TimeThings(_output))
+                await context.EnsureCreatedAndEmptyPostgreSqlAsync(true);
 
             //VERIFY
             context.Books.Count().ShouldEqual(0);
