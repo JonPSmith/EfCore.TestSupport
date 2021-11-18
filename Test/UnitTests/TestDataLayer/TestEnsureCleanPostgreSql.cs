@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DataLayer.BookApp.EfCode;
 using DataLayer.Database1;
 using DataLayer.Database2;
+using DataLayer.MutipleSchema;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Test.Helpers;
@@ -165,6 +166,31 @@ namespace Test.UnitTests.TestDataLayer
                 context.Add(new TopClass2());
                 context.SaveChanges();
             }
+        }
+
+        [Fact]
+        public void TestMutipleSchemaCleared()
+        {
+            //SETUP
+            var options = this.CreatePostgreSqlUniqueMethodOptions<ManySchemaDbContext>();
+            using var context = new ManySchemaDbContext(options);
+            context.Database.EnsureCreated();
+            context.AddRange(new Class1(), new Class2(), new Class3(), new Class4());
+            context.SaveChanges();
+
+            //ATTEMPT
+            context.Database.EnsureClean();
+
+            //VERIFY
+            context.ChangeTracker.Clear();
+
+            context.Class1s.Any().ShouldBeFalse();
+            context.Class2s.Any().ShouldBeFalse();
+            context.Class3s.Any().ShouldBeFalse();
+            context.Class4s.Any().ShouldBeFalse();
+
+            context.AddRange(new Class1(), new Class2(), new Class3(), new Class4());
+            context.SaveChanges();         
         }
 
         [Fact]

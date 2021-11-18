@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataLayer.LargeDatabase
+namespace DataLayer.MutipleSchema
 {
-    public class SharedEntity
+    public class Class1
     {
         public int Id { get; set; }
 
