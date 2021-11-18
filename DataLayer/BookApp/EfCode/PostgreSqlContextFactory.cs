@@ -9,7 +9,7 @@ namespace DataLayer.BookApp.EfCode
     public class PostgreSqlContextFactory : IDesignTimeDbContextFactory<BookContext>
     {
         private const string connectionString =
-            "host=localhost;Database=TestSupport-Migrate;Username=postgres;Password=LetMeIn";
+            "host=127.0.0.1;Database=TestSupport-Migrate;Username=postgres;Password=LetMeIn";
 
         public BookContext CreateDbContext(string[] args)
         {
