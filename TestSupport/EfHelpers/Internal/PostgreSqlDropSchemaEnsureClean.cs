@@ -18,7 +18,7 @@ namespace TestSupport.EfHelpers.Internal
             var connectionString = databaseFacade.GetDbConnection().ConnectionString;
             if (connectionString.DatabaseExists())
             {
-                var conn = new NpgsqlConnection(connectionString);
+                using var conn = new NpgsqlConnection(connectionString);
                 conn.Open();
 
                 var dropPublicSchemaCommand = new NpgsqlCommand

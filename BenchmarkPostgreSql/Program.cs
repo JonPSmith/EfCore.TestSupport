@@ -38,11 +38,11 @@ public class Program
         await _context.EnsureCreatedAndEmptyPostgreSqlAsync(true);
     }
 
-    [Benchmark]
-    public async Task WipedByRespawnWithCheckForDbExists()
-    {
-        await _context.EnsureCreatedAndEmptyPostgreSqlAsync();
-    }
+    //[Benchmark]
+    //public async Task WipedByRespawnWithCheckForDbExists()
+    //{
+    //    await _context.EnsureCreatedAndEmptyPostgreSqlAsync();
+    //}
 
     [Benchmark]
     public void EnsureDeletedEnsureCreated()

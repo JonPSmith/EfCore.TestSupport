@@ -1,5 +1,10 @@
 # Release notes
 
+## 5.2.1
+
+- Bug Fix: PostgreSQL EnsureClean had a memory leak - now fixed
+
+
 ## 5.2.0
 
 - BREAKING CHANGE from 5.1.0: changed `CreatePostgreSqlUniqueDatabaseOptions` to `CreatePostgreSqlUniqueClassOptions` to match other usages
