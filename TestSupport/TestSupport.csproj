@@ -43,15 +43,15 @@
 
   <PropertyGroup>
     <PackageId>EfCore.TestSupport</PackageId>
-    <PackageVersion>5.2.1</PackageVersion>
-    <Version>5.2.1</Version>
-    <AssemblyVersion>5.2.1.0</AssemblyVersion>
-    <FileVersion>5.2.1.0</FileVersion>
+    <PackageVersion>5.2.2</PackageVersion>
+    <Version>5.2.2</Version>
+    <AssemblyVersion>5.2.2.0</AssemblyVersion>
+    <FileVersion>5.2.2.0</FileVersion>
     <Authors>Jon P Smith</Authors>
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-		- Bug Fix: PostgreSQL EnsureClean had a memory leak - now fixed
+	    - Bug Fix: Use 'current_user' instead of 'postgres' in PostgreSQL version of EnsureClean - see issue #48
 	</PackageReleaseNotes>
     <Copyright>Copyright (c) 2020 Jon P Smith. Licenced under MIT licence</Copyright>
     <PackageTags>Entity Framework Core, xUnit</PackageTags>

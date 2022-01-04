@@ -1,9 +1,12 @@
 # Release notes
 
+## 5.2.2
+
+- Bug Fix: Use 'current_user' instead of 'postgres' in PostgreSQL version of EnsureClean - see issue #48
+
 ## 5.2.1
 
 - Bug Fix: PostgreSQL EnsureClean had a memory leak - now fixed
-
 
 ## 5.2.0
 

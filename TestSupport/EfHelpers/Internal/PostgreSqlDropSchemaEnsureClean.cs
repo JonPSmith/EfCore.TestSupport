@@ -33,7 +33,7 @@ BEGIN
         LOOP
             EXECUTE 'DROP SCHEMA ' || quote_ident(r.nspname) || ' CASCADE';
         END LOOP;
-    EXECUTE 'CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO postgres; GRANT ALL ON SCHEMA public TO public';
+    EXECUTE 'CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO current_user; GRANT ALL ON SCHEMA public TO public';
 END $$"
                 };
                 dropPublicSchemaCommand.ExecuteNonQuery();
