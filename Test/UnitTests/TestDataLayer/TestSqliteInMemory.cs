@@ -8,12 +8,21 @@ using Microsoft.EntityFrameworkCore;
 using Test.Helpers;
 using TestSupport.EfHelpers;
 using Xunit;
+using Xunit.Abstractions;
 using Xunit.Extensions.AssertExtensions;
 
 namespace Test.UnitTests.TestDataLayer
 {
     public class TestSqliteInMemory
     {
+        private readonly ITestOutputHelper _output;
+
+        public TestSqliteInMemory(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
+
         [Fact]
         public void TestSqliteOk()
         {
@@ -22,7 +31,8 @@ namespace Test.UnitTests.TestDataLayer
                 .CreateOptions<BookContext>(); //#A
             using (var context = new BookContext(options)) //#B
             {
-                context.Database.EnsureCreated(); //#C
+                using(new TimeThings(_output))
+                    context.Database.EnsureCreated(); //#C
 
                 //ATTEMPT
                 context.SeedDatabaseFourBooks(); //#D
