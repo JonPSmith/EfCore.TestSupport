@@ -19,8 +19,8 @@
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="3.0.1" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
 		<PackageReference Include="Respawn" Version="4.0.0" />
-		<PackageReference Include="xunit.assert" Version="2.4.1" />
-		<PackageReference Include="xunit.core" Version="2.4.1" />
+		<PackageReference Include="xunit.assert" Version="2.4.2" />
+		<PackageReference Include="xunit.core" Version="2.4.2" />
 	</ItemGroup>
 	
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0'">
@@ -37,8 +37,8 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="3.0.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.0" />
     <PackageReference Include="Respawn" Version="4.0.0" />
-    <PackageReference Include="xunit.assert" Version="2.4.1" />
-    <PackageReference Include="xunit.core" Version="2.4.1" />
+    <PackageReference Include="xunit.assert" Version="2.4.2" />
+    <PackageReference Include="xunit.core" Version="2.4.2" />
   </ItemGroup>
 
   <PropertyGroup>
