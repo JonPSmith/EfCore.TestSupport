@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFrameworks>netstandard2.1;net6.0</TargetFrameworks>
+	  <TargetFrameworks>netstandard2.1;net6.0;net7.0</TargetFrameworks>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
@@ -19,8 +19,8 @@
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="3.0.1" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
 		<PackageReference Include="Respawn" Version="4.0.0" />
-		<PackageReference Include="xunit.assert" Version="2.4.1" />
-		<PackageReference Include="xunit.core" Version="2.4.1" />
+		<PackageReference Include="xunit.assert" Version="2.4.2" />
+		<PackageReference Include="xunit.core" Version="2.4.2" />
 	</ItemGroup>
 	
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0'">
@@ -37,9 +37,27 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="3.0.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.0" />
     <PackageReference Include="Respawn" Version="4.0.0" />
-    <PackageReference Include="xunit.assert" Version="2.4.1" />
-    <PackageReference Include="xunit.core" Version="2.4.1" />
+    <PackageReference Include="xunit.assert" Version="2.4.2" />
+    <PackageReference Include="xunit.core" Version="2.4.2" />
   </ItemGroup>
+
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net7.0'">
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="7.0.0">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.1" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.0" />
+        <PackageReference Include="Respawn" Version="4.0.0" />
+        <PackageReference Include="xunit.assert" Version="2.4.2" />
+        <PackageReference Include="xunit.core" Version="2.4.2" />
+    </ItemGroup>
 
   <PropertyGroup>
     <PackageId>EfCore.TestSupport</PackageId>
