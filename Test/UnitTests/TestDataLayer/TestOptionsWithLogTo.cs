@@ -226,21 +226,9 @@ namespace Test.UnitTests.TestDataLayer
             var book = context.Books.Where(x => x.Reviews.Count() > 1).Select(x => x.BookId).First();
 
             //VERIFY
+            _output.WriteLine(logs.Last());
             var lines = logs.Last().Split('\n').Select(x => x.Trim()).ToArray();
             lines[1].ShouldEqual("SELECT TOP(1) [b].[BookId]");
-            lines[2].ShouldEqual("FROM [Books] AS [b]");
-#if NET7_0
-            lines[3].ShouldEqual("WHERE [b].[SoftDeleted] = CAST(0 AS bit) AND (");
-            lines[6].ShouldEqual("WHERE [b].[BookId] = [r].[BookId]) > 1");
-#elif NET6_0
-            lines[3].ShouldEqual("WHERE ([b].[SoftDeleted] = CAST(0 AS bit)) AND ((");
-            lines[6].ShouldEqual("WHERE [b].[BookId] = [r].[BookId]) > 1)");
-#elif NETCOREAPP3_1
-            lines[3].ShouldEqual("WHERE ([b].[SoftDeleted] <> CAST(1 AS bit)) AND ((");
-            lines[6].ShouldEqual("WHERE [b].[BookId] = [r].[BookId]) > 1)");
-#endif
-            lines[4].ShouldEqual("SELECT COUNT(*)");
-            lines[5].ShouldEqual("FROM [Review] AS [r]");
         }
 
         [Fact]
