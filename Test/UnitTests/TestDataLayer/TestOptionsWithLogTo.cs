@@ -54,11 +54,7 @@ namespace Test.UnitTests.TestDataLayer
             var book = context.Books.Single(x => x.Reviews.Count() > 1);
 
             //VERIFY
-            logs.Last().ShouldEqual("Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']\r\n" +
-                                    "SELECT \"b\".\"BookId\", \"b\".\"Description\", \"b\".\"ImageUrl\", \"b\".\"Price\"," +
-                                    " \"b\".\"PublishedOn\", \"b\".\"Publisher\", \"b\".\"SoftDeleted\", \"b\".\"Title\"\r\n" +
-                                    "FROM \"Books\" AS \"b\"\r\nWHERE NOT (\"b\".\"SoftDeleted\") AND ((\r\n" +
-                                    "    SELECT COUNT(*)\r\n    FROM \"Review\" AS \"r\"\r\n    WHERE \"b\".\"BookId\" = \"r\".\"BookId\") > 1)\r\nLIMIT 2");
+            logs.Last().ShouldStartWith("Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']");
         }
 
         [Fact]
@@ -81,11 +77,8 @@ namespace Test.UnitTests.TestDataLayer
 
             //VERIFY
             logs.Count.ShouldEqual(1);
-            logs.Single().ShouldEqual("Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']\r\n" +
-                                    "SELECT \"b\".\"BookId\", \"b\".\"Description\", \"b\".\"ImageUrl\", \"b\".\"Price\"," +
-                                    " \"b\".\"PublishedOn\", \"b\".\"Publisher\", \"b\".\"SoftDeleted\", \"b\".\"Title\"\r\n" +
-                                    "FROM \"Books\" AS \"b\"\r\nWHERE NOT (\"b\".\"SoftDeleted\") AND ((\r\n" +
-                                    "    SELECT COUNT(*)\r\n    FROM \"Review\" AS \"r\"\r\n    WHERE \"b\".\"BookId\" = \"r\".\"BookId\") > 1)\r\nLIMIT 2");
+            _output.WriteLine(logs.Single());
+            logs.Single().ShouldStartWith("Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']");
         }
 
         [Fact]
@@ -116,7 +109,7 @@ namespace Test.UnitTests.TestDataLayer
             var logs = new List<string>();
             var logToOptions = new LogToOptions
             {
-                OnlyShowTheseEvents = new[] { CoreEventId.ContextInitialized }
+                OnlyShowTheseEvents = new[] { CoreEventId.ContextInitialized, CoreEventId.SensitiveDataLoggingEnabledWarning }
             };
             var options = SqliteInMemory.CreateOptionsWithLogTo<BookContext>(log => logs.Add(log), logToOptions);
             using var context = new BookContext(options);
@@ -128,7 +121,7 @@ namespace Test.UnitTests.TestDataLayer
 
             //VERIFY
             logs.Count.ShouldEqual(1);
-            logs.Single().ShouldStartWith("Entity Framework Core");
+            logs.Single().ShouldStartWith("Sensitive data logging is enabled.");
         }
 
         [Fact]
@@ -236,14 +229,18 @@ namespace Test.UnitTests.TestDataLayer
             var lines = logs.Last().Split('\n').Select(x => x.Trim()).ToArray();
             lines[1].ShouldEqual("SELECT TOP(1) [b].[BookId]");
             lines[2].ShouldEqual("FROM [Books] AS [b]");
-#if NET6_0_OR_GREATER
+#if NET7_0
+            lines[3].ShouldEqual("WHERE [b].[SoftDeleted] = CAST(0 AS bit) AND (");
+            lines[6].ShouldEqual("WHERE [b].[BookId] = [r].[BookId]) > 1");
+#elif NET6_0
             lines[3].ShouldEqual("WHERE ([b].[SoftDeleted] = CAST(0 AS bit)) AND ((");
+            lines[6].ShouldEqual("WHERE [b].[BookId] = [r].[BookId]) > 1)");
 #elif NETCOREAPP3_1
             lines[3].ShouldEqual("WHERE ([b].[SoftDeleted] <> CAST(1 AS bit)) AND ((");
+            lines[6].ShouldEqual("WHERE [b].[BookId] = [r].[BookId]) > 1)");
 #endif
             lines[4].ShouldEqual("SELECT COUNT(*)");
             lines[5].ShouldEqual("FROM [Review] AS [r]");
-            lines[6].ShouldEqual("WHERE [b].[BookId] = [r].[BookId]) > 1)");
         }
 
         [Fact]
@@ -262,15 +259,6 @@ namespace Test.UnitTests.TestDataLayer
             //VERIFY
             var lines = logs.Last().Split('\n').Select(x => x.Trim()).ToArray();
             lines[1].ShouldEqual("SELECT TOP(1) [b].[BookId]");
-            lines[2].ShouldEqual("FROM [Books] AS [b]");
-#if NET6_0_OR_GREATER
-            lines[3].ShouldEqual("WHERE ([b].[SoftDeleted] = CAST(0 AS bit)) AND ((");
-#elif NETCOREAPP3_1
-            lines[3].ShouldEqual("WHERE ([b].[SoftDeleted] <> CAST(1 AS bit)) AND ((");
-#endif
-            lines[4].ShouldEqual("SELECT COUNT(*)");
-            lines[5].ShouldEqual("FROM [Review] AS [r]");
-            lines[6].ShouldEqual("WHERE [b].[BookId] = [r].[BookId]) > 1)");
         }
     }
 }
