@@ -81,6 +81,7 @@ namespace Test.UnitTests.TestDataLayer
             var options = this.CreateUniqueMethodOptions<DbContext1>();
             using (var context = new DbContext1(options))
             {
+                context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
                 context.Add(new TopClass1 { Dependents = new List<Dependent1> { new Dependent1() } });
                 context.SaveChanges();
@@ -104,6 +105,7 @@ namespace Test.UnitTests.TestDataLayer
             var options = this.CreateUniqueMethodOptions<DbContext2>();
             using (var context = new DbContext2(options))
             {
+                context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
                 context.Add(new TopClass2 { Dependents = new List<Dependent2> { new Dependent2() } });
                 context.SaveChanges();
