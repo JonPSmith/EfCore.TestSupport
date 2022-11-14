@@ -56,7 +56,7 @@ namespace TestSupport.EfHelpers.Internal
         /// <returns></returns>
         public static string DecodeMessage(LogOutput log)
         {
-            if (log.EventId.Name != RelationalEventId.CommandExecuted.Name)
+            if (log.EventId.Name != RelationalEventId.CommandError.Name && log.EventId.Name != RelationalEventId.CommandExecuted.Name)
                 return log.Message;
 
             var messageLines = log.Message.Split('\n').Select(x => x.Trim()).ToArray();

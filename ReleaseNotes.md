@@ -1,5 +1,10 @@
 # Release notes
 
+## 5.3.0
+
+- Updated to support NET 7 - thanks to GitHub user @chrisbbe - see PR #54
+- Updated LogOutpur.DecodeMessage to handle errors - see issue #49
+
 ## 5.2.2
 
 - Bug Fix: Use 'current_user' instead of 'postgres' in PostgreSQL version of EnsureClean - see issue #48
