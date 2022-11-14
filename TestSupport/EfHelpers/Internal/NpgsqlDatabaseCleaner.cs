@@ -159,12 +159,18 @@ WHERE
 
         private void DropCollations(NpgsqlConnection conn)
         {
-#if NET6_0_OR_GREATER
+#if NET6_0
             if (conn.Settings.ServerCompatibilityMode == ServerCompatibilityMode.Redshift)
             {
                 return;
             }
 #endif
+
+#if NET7_0_OR_GREATER
+            var connectionStringBuilder = new NpgsqlConnectionStringBuilder(conn.ConnectionString);
+            if (connectionStringBuilder.ServerCompatibilityMode == ServerCompatibilityMode.Redshift) return;
+#endif
+
 
             const string getUserCollations = @"SELECT nspname, collname
 FROM pg_collation coll
