@@ -7,6 +7,7 @@ The EfCore.TestSupport library is available on [NuGet as EfCore.TestSupport](htt
 _NOTE: Version 5.1.0 and above of this library supports multiple versions of EF Core 5._
 
 - _Version 5.1.0 and above supports EF Core 5.10 and EF Core 6.0_ 
+- _Version 5.2.0 and above supports EF Core 5.10, EF Core 6.0 and EF Core 7.0_
 
 **WARNING: If you are updating from the original EfCore.TestSupport (2.1 or 3), then you should read the [Version5UpgradeDocs.md](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/Version5UpgradeDocs.md) file as there are some breaking changes in this version.**
 
