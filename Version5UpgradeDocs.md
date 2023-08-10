@@ -6,15 +6,15 @@ This document provides information when converting from EfCore.TestSupport versi
 
 ## You don't have to upgrade is you don't want to
 
-The first thing to say is you don't need to upgrade to EfCore.TestSupport version 5. [EfCore.TestSupport, version 3.2.0](https://www.nuget.org/packages/EfCore.TestSupport/3.2.0) will work with EF Core 5, apart from the EfSchemaCompare feature, which now has [separate library](https://github.com/JonPSmith/EfCore.SchemaCompare). To do this you have to load the EF Core 5's NuGet packaages, which will take precedence over the versions in the  EfCore.TestSupport library.
+The first thing to say is you don't need to upgrade to EfCore.TestSupport version 5. [EfCore.TestSupport, version 3.2.0](https://www.nuget.org/packages/EfCore.TestSupport/3.2.0) will work with EF Core 5, apart from the EfSchemaCompare feature, which now has [separate library](https://github.com/JonPSmith/EfCore.SchemaCompare). To do this you have to load the EF Core 5's NuGet packages, which will take precedence over the versions in the EfCore.TestSupport library.
 
-If you are using EfCore.TestSupport's SqliteInMemory.CreateOptions` methods, then a lot of unit tests could break. Read the rest of this document to decide is you want to upgrade.
+If you are using EfCore.TestSupport's `SqliteInMemory.CreateOptions` methods, then a lot of unit tests could break. Read the rest of this document to decide is you want to upgrade.
 
 ## Summary of the changes
 
 1. BREAKING CHANGE: The `SqliteInMemory.CreateOptions` etc. has changed and some of your unit tests might break. See section below.
 2. Nice new `EnsureClean` feature added for SQL Server. See docs on that.
-2. The EfSchemaCompare feature has been removed. If you need this then keep using the V3 version of EfCore.TestSupport (I do plan to create a library for EfSchemaCompare, but I haven't done that yet)
+2. The EfSchemaCompare feature has been removed. If you need this, you can keep using the V3 version of EfCore.TestSupport, or you can use the new [EfCore.SchemaCompare](https://github.com/JonPSmith/EfCore.SchemaCompare) library.
 3. Added SQLite/SQL Server options with logging using the new `LogTo` logging output and marked the `...WithLogging` versions as obsolete.
 4. Cosmos DB methods renames and extended.
 4. Removed InMemory Database helper as this provider isn't a good way to unit test. If you need it then use EF Core's In Memory database provider.
