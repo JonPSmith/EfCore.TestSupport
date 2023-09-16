@@ -3,15 +3,12 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using DataLayer.BookApp.EfCode;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal;
 using Test.Helpers;
 using TestSupport.Attributes;
 using TestSupport.EfHelpers;
-using TestSupport.Helpers;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Extensions.AssertExtensions;
@@ -37,6 +34,7 @@ namespace Test.UnitTests.TestDataLayer
             {
                 //VERIFY
                 var builder = new NpgsqlConnectionStringBuilder(context.Database.GetDbConnection().ConnectionString);
+                _output.WriteLine(builder.Database);
                 builder.Database.ShouldEndWith(GetType().Name);
             }
         }
