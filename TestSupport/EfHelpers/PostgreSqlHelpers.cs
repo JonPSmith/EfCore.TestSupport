@@ -5,8 +5,6 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
-using Respawn;
 using TestSupport.EfHelpers.Internal;
 using TestSupport.Helpers;
 
@@ -72,37 +70,6 @@ namespace TestSupport.EfHelpers
             [CallerMemberName] string callingMember = "") where T : DbContext
         {
             return CreatePostgreSqlOptionWithDatabaseName<T>(callingClass, callingMember, builder).Options;
-        }
-
-        //------------------------------------------------
-
-        /// <summary>
-        /// This will ensure that there is a PostgreSql database, and that database has no rows in any tables
-        /// NOTE: If you change anything that alters the database schema, then you must delete the database 
-        /// and have EF Core recreate the database
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="context"></param>
-        /// <param name="thereIsAnExistingDatabase">Optional: If you know that there is a database, then set this to true for a quicker clear of all the tables</param>
-        /// <returns></returns>
-        public async static Task EnsureCreatedAndEmptyPostgreSqlAsync<T>(this T context, bool thereIsAnExistingDatabase = false)
-            where T : DbContext
-        {
-            //see https://github.com/dotnet/efcore/issues/26541 for the solution
-            Checkpoint EmptyCheckpoint = new Checkpoint
-            {
-                DbAdapter = DbAdapter.Postgres
-            };
-
-            if (thereIsAnExistingDatabase || !context.Database.EnsureCreated())
-            {
-                //the database already exists, so we just need to empty the tables
-                
-                var connectionString = context.Database.GetConnectionString();
-                using var conn = new NpgsqlConnection(connectionString);              
-                await conn.OpenAsync();
-                await EmptyCheckpoint.Reset(conn);          
-            };
         }
 
         //------------------------------------------------

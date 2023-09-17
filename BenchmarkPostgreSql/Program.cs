@@ -2,7 +2,6 @@
 using BenchmarkDotNet.Running;
 using DataLayer.BookApp.EfCode;
 using Npgsql;
-using Test.Helpers;
 using TestSupport.EfHelpers;
 
 public class Program
@@ -31,18 +30,6 @@ public class Program
     {
         _context.Database.EnsureClean();
     }
-
-    [Benchmark]
-    public async Task WipedByRespawnNoCheckDbExists()
-    {
-        await _context.EnsureCreatedAndEmptyPostgreSqlAsync(true);
-    }
-
-    //[Benchmark]
-    //public async Task WipedByRespawnWithCheckForDbExists()
-    //{
-    //    await _context.EnsureCreatedAndEmptyPostgreSqlAsync();
-    //}
 
     [Benchmark]
     public void EnsureDeletedEnsureCreated()
