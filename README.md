@@ -4,12 +4,14 @@ This NuGet package containing methods to help test applications that use [Entity
 
 The EfCore.TestSupport library is available on [NuGet as EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/) and is an open-source library under the MIT license. See [ReleaseNotes](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/ReleaseNotes.md) for details of the changes in each vesion.
 
-_NOTE: Version 5.1.0 and above of this library supports multiple versions of EF Core 5._
 
-- _Version 5.1.0 and above supports EF Core 5.10 and EF Core 6.0_ 
-- _Version 5.2.0 and above supports EF Core 5.10, EF Core 6.0 and EF Core 7.0_
+## List of versions and which .NET framwork they support
 
-**WARNING: If you are updating from the original EfCore.TestSupport (2.1 or 3), then you should read the [Version5UpgradeDocs.md](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/Version5UpgradeDocs.md) file as there are some breaking changes in this version.**
+- Version 6.0.?: Supports NET 7 and 8
+- Version 5.2.0: Supports NET 5, 6 and 7
+- Version 5.1.0: Supports NET 5, 6
+
+_There are older versions of the EfCore.TestSupport library, but .NET lower than .NET 5 are not supported by Microsoft._
 
 ## Documentation
 

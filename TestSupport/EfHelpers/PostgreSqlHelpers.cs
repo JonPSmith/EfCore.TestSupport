@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Respawn;
-using TestSupport.EfHelpers;
 using TestSupport.EfHelpers.Internal;
 using TestSupport.Helpers;
 
-namespace Test.Helpers
+namespace TestSupport.EfHelpers
 {
     /// <summary>
     /// This static class contains extension methods to use with PostgreSql databases
@@ -89,6 +88,7 @@ namespace Test.Helpers
         public async static Task EnsureCreatedAndEmptyPostgreSqlAsync<T>(this T context, bool thereIsAnExistingDatabase = false)
             where T : DbContext
         {
+            //see https://github.com/dotnet/efcore/issues/26541 for the solution
             Checkpoint EmptyCheckpoint = new Checkpoint
             {
                 DbAdapter = DbAdapter.Postgres
