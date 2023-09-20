@@ -32,8 +32,7 @@
     <Description>Useful tools when unit testing applications that use Entity Framework Core. See readme file on github.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-		- Updated to support NET 7 - thanks to GitHub user @chrisbbe - see PR #54
-		- Updated LogOutput.DecodeMessage to handle errors - see issue #49
+		- New version to support NET 8 rc1
 	</PackageReleaseNotes>
     <Copyright>Copyright (c) 2020 Jon P Smith. Licenced under MIT licence</Copyright>
     <PackageTags>Entity Framework Core, xUnit</PackageTags>
