@@ -5,9 +5,9 @@
 
 - New version to support NET 8 - now supports NET 6, 7, and 8
 
-## 8.0.0-rc2-0001
+## 6.0.0-rc2-0001
 
-- First build using NET 8-rc2
+- First build using NET 8-rc2 - now supports NET 6, 7, and 8
 
 ## 8.0.0-rc1-0001
 
