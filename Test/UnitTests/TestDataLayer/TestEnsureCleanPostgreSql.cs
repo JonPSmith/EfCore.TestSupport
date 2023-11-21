@@ -124,6 +124,11 @@ namespace Test.UnitTests.TestDataLayer
         public void TestWipeDataDatabase2Ok()
         {
             //SETUP
+            //Test code to to make PostgreSql version 12 work.
+            //var connectionString = this.GetUniquePostgreSqlConnectionString();
+            //var options = this.CreatePostgreSqlUniqueMethodOptions<DbContext2>(builder => 
+            //    builder.UseNpgsql(connectionString,
+            //        o => o.SetPostgresVersion(12, 0)));
             var options = this.CreatePostgreSqlUniqueMethodOptions<DbContext2>();
             using (var context = new DbContext2(options))
             {
