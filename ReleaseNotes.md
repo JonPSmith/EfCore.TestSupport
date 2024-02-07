@@ -1,5 +1,12 @@
 # Release notes
 
+## 6.0.2
+
+- Fixed error in FasterPostgreSqlEnsureClean - needed password injected
+
+## 6.0.1
+
+- Microsoft.Data.SqlClient vulnerable update
 
 ## 6.0.0
 

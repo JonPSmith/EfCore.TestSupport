@@ -3,9 +3,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Configuration;
+using Npgsql;
 using TestSupport.EfHelpers.Internal;
+using TestSupport.Helpers;
 
 namespace TestSupport.EfHelpers
 {
@@ -28,8 +32,14 @@ namespace TestSupport.EfHelpers
                 databaseFacade.CreateExecutionStrategy()
                     .Execute(databaseFacade, database => new SqlServerDatabaseCleaner(databaseFacade).Clean(database, setUpSchema));
             else if (databaseFacade.IsNpgsql())
+            {
                 //PostgreSQL
-                databaseFacade.FasterPostgreSqlEnsureClean(setUpSchema);
+
+                //The databaseFacade doesn't have the Password, so we need to get it from the connection string in the appsettings.json file
+                var config = AppSettings.GetConfiguration(Assembly.GetCallingAssembly());
+                var password = new NpgsqlConnectionStringBuilder(config.GetConnectionString(AppSettings.PostgreSqlConnectionString)).Password;
+                databaseFacade.FasterPostgreSqlEnsureClean(password, setUpSchema);
+            }
             else
                 throw new InvalidOperationException("The EnsureClean method only works with SQL Server or PostgreSQL databases.");
         }

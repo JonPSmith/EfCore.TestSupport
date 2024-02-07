@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Npgsql;
+using TestSupport.Helpers;
 
 namespace TestSupport.EfHelpers.Internal
 {
@@ -12,10 +14,16 @@ namespace TestSupport.EfHelpers.Internal
         /// The SQL in this method was provided by Shay Rojansky, github @roji
         /// </summary>
         /// <param name="databaseFacade"></param>
+        /// <param name="password"></param>
         /// <param name="setUpSchema"></param>
-        public static void FasterPostgreSqlEnsureClean(this DatabaseFacade databaseFacade, bool setUpSchema = true)
+        public static void FasterPostgreSqlEnsureClean(this DatabaseFacade databaseFacade, string password, bool setUpSchema = true)
         {
-            var connectionString = databaseFacade.GetDbConnection().ConnectionString;
+            var builder = new NpgsqlConnectionStringBuilder(databaseFacade.GetDbConnection().ConnectionString)
+            {
+                Password = password
+            };
+            var connectionString = builder.ToString();
+
             if (connectionString.DatabaseExists())
             {
                 using var conn = new NpgsqlConnection(connectionString);
@@ -24,6 +32,7 @@ namespace TestSupport.EfHelpers.Internal
                 var dropPublicSchemaCommand = new NpgsqlCommand
                 {
                     Connection = conn,
+                    
                     CommandText = @"
 DO $$
 DECLARE
