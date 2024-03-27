@@ -21,8 +21,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestSupport", "TestSupport\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestFromSqlRaw", "TestFromSqlRaw\TestFromSqlRaw.csproj", "{AADA2740-B6C5-4915-8705-4AD3B40F00D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarkPostgreSql", "BenchmarkPostgreSql\BenchmarkPostgreSql.csproj", "{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,26 +115,6 @@ Global
 		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Release|x64.Build.0 = Release|Any CPU
 		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Release|x86.ActiveCfg = Release|Any CPU
 		{AADA2740-B6C5-4915-8705-4AD3B40F00D8}.Release|x86.Build.0 = Release|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Debug|ARM.Build.0 = Debug|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Debug|ARM64.ActiveCfg = Debug|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Debug|ARM64.Build.0 = Debug|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Debug|x64.Build.0 = Debug|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Debug|x86.Build.0 = Debug|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Release|ARM.ActiveCfg = Release|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Release|ARM.Build.0 = Release|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Release|ARM64.ActiveCfg = Release|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Release|ARM64.Build.0 = Release|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Release|x64.ActiveCfg = Release|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Release|x64.Build.0 = Release|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Release|x86.ActiveCfg = Release|Any CPU
-		{E12C6C5C-699B-4361-B717-7E4B40A9C1E1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

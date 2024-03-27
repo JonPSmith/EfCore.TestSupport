@@ -1,5 +1,11 @@
 # Release notes
 
+## 8.0.0
+
+- Simpified to one NET type. This makes it easier to update for future NET releases
+- Only supports .NET 8
+- Updated xunit NuGets to 2.5.3
+
 ## 6.0.2
 
 - Fixed error in FasterPostgreSqlEnsureClean - needed password injected
