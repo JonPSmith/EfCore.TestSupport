@@ -7,7 +7,7 @@ The EfCore.TestSupport library is available on [NuGet as EfCore.TestSupport](htt
 
 ## List of versions and which .NET framework they support
 
-- Version 8.0.0 supports NET 8 only (simpler to update to next NET release)
+- Version 8.?.? supports NET 8 only (simpler to update to next NET release)
 - Version 6.?.? supports NET 6, 7 and 8
 - Version 5.2.? supports NET 5, 6 and 7
 
