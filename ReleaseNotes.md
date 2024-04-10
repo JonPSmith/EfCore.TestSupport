@@ -1,5 +1,9 @@
 # Release notes
 
+## 8.0.1
+
+- Updated Microsoft.EntityFrameworkCore.* NuGets to 8.0.2 to remove the vulnerable Microsoft.Data.SqlClient version
+
 ## 8.0.0
 
 - Simpified to one NET type. This makes it easier to update for future NET releases
