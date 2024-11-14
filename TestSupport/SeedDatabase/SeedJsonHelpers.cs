@@ -3,10 +3,12 @@
 
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using TestSupport.Helpers;
 
+[assembly: InternalsVisibleTo("Test")]
 namespace TestSupport.SeedDatabase
 {
     /// <summary>
