@@ -1,5 +1,10 @@
 # Release notes
 
+## 9.0.0
+
+- .NET 9 version
+- NOTE: EnsureClean code now uses EnsuredDeleted, then EnsuredDeleted ro provide a new, empty database
+
 ## 8.0.1
 
 - Updated Microsoft.EntityFrameworkCore.* NuGets to 8.0.2 to remove the vulnerable Microsoft.Data.SqlClient version
