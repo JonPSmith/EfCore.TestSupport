@@ -14,6 +14,7 @@ namespace Test.UnitTests.TestDataLayer
 {
     public class ExampleTest 
     {
+
         private readonly ITestOutputHelper _output;
 
         public ExampleTest(ITestOutputHelper output)
