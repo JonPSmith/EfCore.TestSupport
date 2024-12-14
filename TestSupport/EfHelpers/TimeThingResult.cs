@@ -50,12 +50,12 @@ namespace TestSupport.EfHelpers
         private string TimeScaled(double timeMilliseconds)
         {
             if (timeMilliseconds > 5 * 1000)
-                return $"{timeMilliseconds / 1000:F3} sec.";
+                return $"{timeMilliseconds / 1000:F3} sec.";      //Seconds
             if (timeMilliseconds > 5)
-                return $"{timeMilliseconds:#,###.00} ms.";
+                return $"{timeMilliseconds:#,###.00} ms.";        //Milliseconds
             if (timeMilliseconds > 5 / 1000.0)
-                return $"{timeMilliseconds * 1000:#,###.00} us.";
-            return $"{timeMilliseconds * 1000_000:#,###.0} ns.";
+                return $"{timeMilliseconds * 1000:#,###.00} us."; //Microseconds
+            return $"{timeMilliseconds * 1000_000:#,###.0} ns.";  //Nanoseconds
         }
     }
 }
