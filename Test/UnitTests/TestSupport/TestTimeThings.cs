@@ -84,13 +84,13 @@ public class TestTimeThings(ITestOutputHelper output)
     [Fact]
     public void TestHowLongTimeThings()
     {
-        //SETUP                  
-        var mock = new MockOutput();
+        //SETUP
+        TimeThingResult result = null;
 
         //ATTEMPT
-        using (new TimeThings(output))
+        using (new TimeThings(output, "TimeThings", 2))
         {
-            using (new TimeThings(mock))
+            using (new TimeThings(x => result = x))
             {
 
             }
