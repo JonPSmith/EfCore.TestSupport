@@ -11,6 +11,8 @@ namespace Test.UnitTests.TestSupport;
 
 public class TestTimeThings(ITestOutputHelper output)
 {
+    private ITestOutputHelper _output = output;
+
     [Fact]                  
     public void TestNoSettings() 
     {
@@ -43,6 +45,25 @@ public class TestTimeThings(ITestOutputHelper output)
         //VERIFY
         mock.LastWriteLine.ShouldStartWith("This message took ");
         mock.LastWriteLine.ShouldEndWith("ms.");
+    }
+
+    [Theory]
+    [InlineData(10)]
+    [InlineData(100)]
+    [InlineData(1000)]
+    public void TestTime(int milliseconds)
+    {
+        //SETUP                  
+        var mock = new MockOutput();
+
+        //ATTEMPT
+        using (new TimeThings(mock))
+        {
+            Thread.Sleep(milliseconds);
+        }
+
+        //VERIFY
+        _output.WriteLine($"{milliseconds}: {mock.LastWriteLine}");
     }
 
     [Fact]
