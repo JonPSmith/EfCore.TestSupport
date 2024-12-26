@@ -120,6 +120,36 @@ public class TestTimeThings(ITestOutputHelper output)
         //VERIFY
     }
 
+    [Fact]
+    public void TestTimeThingsMany()
+    {
+        //SETUP
+        TimeThingResult result = null;
+        //_output.WriteLine("warm up _output");
+
+        //ATTEMPT
+        using (new TimeThings(output, "TimeThings direct 1"))
+        {
+            Thread.Sleep(10);
+        }
+        using (new TimeThings(output, "TimeThings direct 2"))
+        {
+            Thread.Sleep(10);
+        }
+        using (new TimeThings(x => result = x, "TimeThings redirect 1"))
+        {
+            Thread.Sleep(10);
+        }
+        _output.WriteLine(result.ToString());
+        using (new TimeThings(x => result = x, "TimeThings redirect 2"))
+        {
+            Thread.Sleep(10);
+        }
+        _output.WriteLine(result.ToString());
+
+        //VERIFY
+    }
+
 
     private class MockOutput : ITestOutputHelper
     {
