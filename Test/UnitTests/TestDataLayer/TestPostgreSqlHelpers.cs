@@ -33,7 +33,8 @@ namespace Test.UnitTests.TestDataLayer
             using (var context = new BookContext(options))
             {
                 //VERIFY
-                var builder = new NpgsqlConnectionStringBuilder(context.Database.GetDbConnection().ConnectionString);
+                var connectionString = context.Database.GetDbConnection().ConnectionString;
+                var builder = new NpgsqlConnectionStringBuilder(connectionString);
                 _output.WriteLine(builder.Database);
                 builder.Database.ShouldEndWith(GetType().Name);
             }
