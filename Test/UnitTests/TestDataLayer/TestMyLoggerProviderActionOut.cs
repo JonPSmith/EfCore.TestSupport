@@ -164,10 +164,12 @@ namespace Test.UnitTests.TestDataLayer
 
                 //VERIFY
                 var sqlCommand = decoded.Split('\n').Skip(1).Select(x => x.Trim()).ToArray();
+                sqlCommand.Length.ShouldEqual(4);
                 sqlCommand[0].ShouldEqual(
                     "SELECT \"b\".\"BookId\", \"b\".\"Description\", \"b\".\"ImageUrl\", \"b\".\"Price\", \"b\".\"PublishedOn\", \"b\".\"Publisher\", \"b\".\"SoftDeleted\", \"b\".\"Title\"");
                 sqlCommand[1].ShouldEqual("FROM \"Books\" AS \"b\"");
-                sqlCommand[2].ShouldContain("WHERE NOT (\"\"b\"\".\"\"SoftDeleted\"\") AND \"\"b\"\".\"\"BookId\"\" = @id\"\r\n");
+                sqlCommand[2].ShouldContain("WHERE NOT (\"b\".\"SoftDeleted\") AND \"b\".\"BookId\" = @id");
+                sqlCommand[3].ShouldContain("LIMIT 2");
             }
         }
     }
