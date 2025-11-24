@@ -2,16 +2,16 @@
 
 This NuGet package containing methods to help test applications that use [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/index) for database access using SQL Server, PostgreSQL, Cosmos DB, and a generic in-memory SQLite approach which works with every EF Core database provider (with limitations). This readme provides links to the documentation in the [EfCore.TestSupport wiki](https://github.com/JonPSmith/EfCore.TestSupport/wiki). Also see [Release Notes](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/ReleaseNotes.md) for information on changes.
 
-The EfCore.TestSupport library is available on [NuGet as EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/) and is an open-source library under the MIT license. See [ReleaseNotes](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/ReleaseNotes.md) for details of the changes in each vesion.
+The EfCore.TestSupport library is available on [NuGet as EfCore.TestSupport](https://www.nuget.org/packages/EfCore.TestSupport/) and is an open-source library under the MIT license. See [ReleaseNotes](https://github.com/JonPSmith/EfCore.TestSupport/blob/master/ReleaseNotes.md) for details of the changes in each version.
 
 ## List of versions and which .NET framework they support
 
 Since .NET 8 this library only supports one .NET. This change makes it easier to update to the next .NET release.
 
-- Version 10.?.? supports NET 9 only
-- Version  9.?.? supports NET 9 only
-- Version  8.?.? supports NET 8 only 
-- Version  6.?.? supports NET 6, 7 and 8
+- Version 10.?.? supports NET 10 only
+- Version  9.?.? supports NET  9 only
+- Version  8.?.? supports NET  8 only 
+- Version  6.?.? supports NET  6, 7 and 8
 
 _There are older versions of the EfCore.TestSupport library, but .NET lower than .NET 5 are not supported by Microsoft._
 

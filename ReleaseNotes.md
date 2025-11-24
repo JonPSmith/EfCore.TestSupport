@@ -1,5 +1,9 @@
 # Release notes
 
+## 10.0.0
+
+- .NET 10 version
+
 ## 9.0.0
 
 - .NET 9 version
